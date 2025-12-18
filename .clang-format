@@ -1,0 +1,10 @@
+BasedOnStyle: Google
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: None
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackParameters: true
+BinPackArguments: true
+PenaltyBreakFunctionDeclaration: 10000
+PenaltyBreakBeforeFirstCallParameter: 10000
+ColumnLimit: 160
+AlignAfterOpenBracket: DontAlign
