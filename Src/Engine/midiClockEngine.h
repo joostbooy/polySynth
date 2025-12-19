@@ -27,7 +27,7 @@ public:
 	}
 
 	bool tick() {
-		if (midi_->clock_source() == Midi::INTERNAL) {
+		if (midi_->clockSource() == Midi::INTERNAL) {
 			bpm_ = midi_->bpm();
 		} else {
 			bpm_ = ext_bpm_;

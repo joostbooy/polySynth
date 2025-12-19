@@ -52,7 +52,7 @@ public:
 	}
 
 	const char *clock_sync_text() {
-		return SettingsText::bool_to_on_off(clock_sync());
+		return SettingsText::boolToOnOff(clock_sync());
 	}
 
 	// Mode
@@ -81,7 +81,7 @@ public:
 		if (clock_sync()) {
 			return MidiSync::tempo_text(attack_time() * (MidiSync::NUM_TEMPOS - 1));
 		} else {
-			return SettingsText::float_to_text(attack_time(), 0, 100);
+			return SettingsText::floatToText(attack_time(), 0, 100);
 		}
 	}
 
@@ -103,7 +103,7 @@ public:
 	}
 
 	const char *attack_shape_text() {
-		return SettingsText::float_to_text(attack_shape(), -100, 100);
+		return SettingsText::floatToText(attack_shape(), -100, 100);
 	}
 
 	// Decay time
@@ -119,7 +119,7 @@ public:
 		if (clock_sync()) {
 			return MidiSync::tempo_text(decay_time() * (MidiSync::NUM_TEMPOS - 1));
 		} else {
-			return SettingsText::float_to_text(decay_time(), 0, 100);
+			return SettingsText::floatToText(decay_time(), 0, 100);
 		}
 	}
 
@@ -141,7 +141,7 @@ public:
 	}
 
 	const char *decay_shape_text() {
-		return SettingsText::float_to_text(decay_shape(), -100, 100);
+		return SettingsText::floatToText(decay_shape(), -100, 100);
 	}
 
 	// Hold time
@@ -162,7 +162,7 @@ public:
 			return MidiSync::tempo_text(hold_time() * (MidiSync::NUM_TEMPOS - 1));
 		} else {
 			size_t index = hold_time() * PHASE_TABLE_SIZE;
-			return SettingsText::hertz_to_text(lut_phase_length[index]);
+			return SettingsText::floatToText(lut_phase_length[index], "HZ");
 		}
 	}
 
@@ -185,7 +185,7 @@ public:
 	}
 
 	const char *sustain_level_text() {
-		return SettingsText::float_to_text(sustain_level(), 0, 100);
+		return SettingsText::floatToText(sustain_level(), 0, 100);
 	}
 
 	// Release time
@@ -201,7 +201,7 @@ public:
 		if (clock_sync()) {
 			return MidiSync::tempo_text(release_time() * (MidiSync::NUM_TEMPOS - 1));
 		} else {
-			return SettingsText::float_to_text(release_time(), 0, 100);
+			return SettingsText::floatToText(release_time(), 0, 100);
 		}
 	}
 
@@ -223,7 +223,7 @@ public:
 	}
 
 	const char *release_shape_text() {
-		return SettingsText::float_to_text(release_shape(), -100, 100);
+		return SettingsText::floatToText(release_shape(), -100, 100);
 	}
 
 	// Storage

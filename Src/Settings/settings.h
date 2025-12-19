@@ -1,94 +1,110 @@
 #ifndef Settings_h
 #define Settings_h
 
-#include "stringBuilder.h"
-#include "settingsUtils.h"
 #include "disk.h"
-#include "fileWriter.h"
+#include "envelope.h"
 #include "fileReader.h"
+#include "fileWriter.h"
+#include "lfo.h"
+#include "midi.h"
+#include "settingsUtils.h"
+#include "stringBuilder.h"
 
 class Settings {
+ public:
+  static const size_t kNumVoices = 8;
+  static const size_t kNumLfos = 2;
+  static const size_t kNumEnvelopes = 2;
 
-public:
+  void init(Disk* disk) {
+    disk_ = disk;
 
-	static const size_t kMaxVoices = 8;
-	static const size_t kNumInstruments = 8;
-	static const size_t kNumLfos = 4;
-	static const size_t kNumEnvelopes = 2;
+    selected_lfo_index_ = 0;
+    selected_envelope_index_ = 0;
 
-	void init(Disk *disk) {
-		disk_ = disk;
+    path.clear();
 
-		selected_sample_index_ = 0;
-		selected_lfo_index_ = 0;
-		selected_instrument_index_ = 0;
-		selected_envelope_index_ = 0;
-		selected_instrument_sample_index_ = 0;
+    for (size_t i = 0; i < kNumEnvelopes; i++) {
+      envelope(i).init();
+    }
 
-		path.clear();
+    for (size_t i = 0; i < kNumLfos; i++) {
+      lfo(i).init();
+    }
 
-		set_project_name("NEW.PRJ");
-	}
+    set_project_name("NEW.PRJ");
+  }
 
-	void init() {
-		if (disk_ != nullptr) {
-			init(disk_);
-		}
-	}
+  void init() {
+    if (disk_ != nullptr) {
+      init(disk_);
+    }
+  }
 
+  // save & load
+  bool save();
+  bool save(const char* new_path);
+  bool load(const char* new_path);
 
-	// save & load
-	bool save();
-	bool save(const char* new_path);
-	bool load(const char* new_path);
+  bool has_valid_path() {
+    char file_name[max_name_length()];
 
-	bool has_valid_path() {
-		char file_name[max_name_length()];
+    if (path.length() > 0) {
+      StringUtils::get_file_name_from_path(const_cast<char*>(path.read()), file_name);
+      return StringUtils::text_is_equal(file_name, project_name_);
+    }
+    return false;
+  }
 
-		if (path.length() > 0) {
-			StringUtils::get_file_name_from_path(const_cast<char*>(path.read()), file_name);
-			return StringUtils::text_is_equal(file_name, project_name_);
-		}
-		return false;
-	}
+  uint32_t current_version() {
+    return 0;
+  }
 
-	uint32_t current_version() {
-		return 0;
-	}
+  Disk* disk() {
+    return disk_;
+  }
 
-	Disk *disk() {
-		return disk_;
-	}
+  Midi& midi() {
+    return midi_;
+  }
 
-	// name
-	const char *project_name() {
-		return project_name_;
-	}
+  Envelope& envelope(int index) {
+    return envelope_[index];
+  }
 
-	void set_project_name(const char *value) {
-		return StringUtils::copy(project_name_, const_cast<char*>(value), max_name_length());
-	}
+  Lfo& lfo(int index) {
+    return lfo_[index];
+  }
 
-	const size_t max_name_length() {
-		return 13;
-	}
+  // name
+  const char* project_name() {
+    return project_name_;
+  }
 
+  void set_project_name(const char* value) {
+    return StringUtils::copy(project_name_, const_cast<char*>(value), max_name_length());
+  }
 
-private:
-	StringBuilderBase<63>path;
+  const size_t max_name_length() {
+    return 13;
+  }
 
-	FileWriter fileWriter;
-	FileReader fileReader;
+ private:
+  StringBuilderBase<63> path;
 
-	Disk *disk_ = nullptr;
+  FileWriter fileWriter;
+  FileReader fileReader;
 
-	int selected_lfo_index_;
-	int selected_sample_index_;
-	int selected_instrument_index_;
-	int selected_envelope_index_;
-	int selected_instrument_sample_index_;
+  Disk* disk_ = nullptr;
 
-	char project_name_[8];
+  int selected_lfo_index_;
+  int selected_envelope_index_;
+
+  char project_name_[8];
+
+  Midi midi_;
+  Lfo lfo_[kNumLfos];
+  Envelope envelope_[kNumEnvelopes];
 };
 
 #endif

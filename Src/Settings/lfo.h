@@ -40,7 +40,7 @@ public:
 			return MidiSync::tempo_text(speed() * (MidiSync::NUM_TEMPOS - 1));
 		} else {
 			size_t index = speed() * PHASE_TABLE_SIZE;
-			return SettingsText::hertz_to_text(lut_phase_length[index]);
+			return SettingsText::floatToText(lut_phase_length[index], "HZ");
 		}
 	}
 
@@ -62,7 +62,7 @@ public:
 	}
 
 	const char *shape_text() {
-		return SettingsText::float_to_text(shape(), -100, 100);
+		return SettingsText::floatToText(shape(), -100, 100);
 	}
 
 	// Skew
@@ -75,7 +75,7 @@ public:
 	}
 
 	const char *skew_text() {
-		return SettingsText::float_to_text(skew(), -100, 100);
+		return SettingsText::floatToText(skew(), -100, 100);
 	}
 
 	// Min
@@ -88,7 +88,7 @@ public:
 	}
 
 	const char *min_text() {
-		return SettingsText::float_to_text(min(), 0, 100);
+		return SettingsText::floatToText(min(), 0, 100);
 	}
 
 	// Max
@@ -101,7 +101,7 @@ public:
 	}
 
 	const char *max_text() {
-		return SettingsText::float_to_text(max(), 0, 100);
+		return SettingsText::floatToText(max(), 0, 100);
 	}
 
 	// Sync phase
@@ -114,7 +114,7 @@ public:
 	}
 
 	const char *sync_phase_text() {
-		return SettingsText::percentage_to_text(sync_phase() * 100, 100);
+		return SettingsText::percentageToText(sync_phase() * 100, 100);
 	}
 
 	// clock sync
@@ -127,7 +127,7 @@ public:
 	}
 
 	const char *clock_sync_text() {
-		return SettingsText::bool_to_on_off(clock_sync());
+		return SettingsText::boolToOnOff(clock_sync());
 	}
 
 	// Randomise
@@ -140,7 +140,7 @@ public:
 	}
 
 	const char *randomise_text() {
-		return SettingsText::bool_to_on_off(randomise());
+		return SettingsText::boolToOnOff(randomise());
 	}
 
 	// Retrigger port
@@ -153,7 +153,7 @@ public:
 	}
 
 	const char *retrigger_port_text() {
-		return Midi::port_text(retrigger_port());
+		return Midi::portText(retrigger_port());
 	}
 
 	bool retrigger_port_accepted(int port) {
@@ -171,7 +171,7 @@ public:
 	}
 
 	const char *retrigger_channel_text() {
-		return SettingsText::midi_channel_text(retrigger_channel());
+		return SettingsText::midiChannelText(retrigger_channel());
 	}
 
 	bool retrigger_channel_accepted(int channel) {

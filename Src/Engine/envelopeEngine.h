@@ -34,7 +34,7 @@ public:
 
 	void release() {
 		if (mode_ == Envelope::GATE) {
-			release_level_ = sample_;
+			releaseLevel_ = sample_;
 			phase_ = 0.0f;
 			stage_ = RELEASE;
 		}
@@ -86,14 +86,14 @@ public:
 				sample_ = envelope_->sustain_level();
 			} else {
 				phase_ = 0.f;
-				release_level_ = sample_;
+				releaseLevel_ = sample_;
 				stage_ = RELEASE;
 			}
 			break;
 		case RELEASE:
 			phase_ += envelope_->release_inc();
 			if (phase_ < 1.f) {
-				sample_ = Dsp::cross_fade(release_level_, 0.f, Curve::read(phase_, envelope_->release_shape()));
+				sample_ = Dsp::cross_fade(releaseLevel_, 0.f, Curve::read(phase_, envelope_->release_shape()));
 			} else {
 				phase_ = 0.f;
 				stage_ = IDLE;
@@ -110,7 +110,7 @@ private:
 	Stage stage_;
 	float phase_;
 	float sample_;
-	float release_level_;
+	float releaseLevel_;
 
 	uint8_t mode_;
 	Envelope *envelope_;

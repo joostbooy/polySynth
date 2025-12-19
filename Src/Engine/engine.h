@@ -6,6 +6,7 @@
 #include "midiEngine.h"
 #include "midiClockEngine.h"
 #include "settings.h"
+#include "voice.h"
 
 class Engine {
 
@@ -19,12 +20,12 @@ public:
 
 	void init(Settings*, Uart*, Usb*);
 
-	void add_request_blocking(Request type) {
-		add_request(type);
+	void addReqestBlocking(Request type) {
+		addRequest(type);
 		while (requests_ & type);
 	}
 
-	uint32_t processing_time_uS() {
+	uint32_t processingTimeUs() {
 		return processing_time_uS_;
 	}
 
@@ -38,28 +39,29 @@ private:
 	Settings *settings_;
 	MidiEngine midiEngine_;
 	MidiClockEngine midiClockEngine_;
+	Voice voice_[Settings::kNumVoices];
 
 	void start();
 	void stop();
-	void process_requests();
-	void process_midi();
-	void process_gates();
-	void note_on(MidiEngine::Event &e);
-	void note_off(MidiEngine::Event &e);
-	void pitch_bend(MidiEngine::Event &e);
+	void processRequests();
+	void processMidi();
+	void update();
+	void noteOn(MidiEngine::Event &e);
+	void noteOff(MidiEngine::Event &e);
+	void pitchBend(MidiEngine::Event &e);
 	void cc(MidiEngine::Event &e);
 
-	void send_midi_clock_start();
-	void send_midi_clock_stop();
-	void send_midi_clock_continue();
-	void send_midi_24PPQN_clock_tick();
+	void sendMidiClockStart();
+	void sendMidiClockStop();
+	void sendMidiClockContinue();
+	void sendMidi24PPQNClock_tick();
 
-	void add_request(Request type) {
+	void addRequest(Request type) {
 		uint8_t flags = requests_;
 		requests_ = flags | type;
 	}
 
-	void clear_request(Request type) {
+	void clearRequest(Request type) {
 		uint8_t flags = requests_;
 		requests_ = flags & ~type;
 	}

@@ -18,7 +18,7 @@ public:
 		NUM_PORTS
 	};
 
-	static const char *port_text(int port) {
+	static const char *portText(int port) {
 		switch (port)
 		{
 		case UART:	return "UART";
@@ -37,20 +37,20 @@ public:
 		NUM_CLOCK_SOURCES
 	};
 
-	static const char* clock_source_text(int value) {
+	static const char* clockSourceText(int value) {
 		if (value <= EXTERNAL) {
-			return Midi::port_text(value);
+			return Midi::portText(value);
 		} else {
 			return "INTERNAL";
 		}
 	}
 
 	void init() {
-		set_bpm(120);
-		set_clock_source(INTERNAL);
+		setBpm(120);
+		setClockSource(INTERNAL);
 
 		for (int i = 0; i < NUM_PORTS; ++i){
-			set_send_clock(i, true);
+			setSendClock(i, true);
 		}
 	}
 
@@ -59,72 +59,73 @@ public:
 		return bpm_;
 	}
 
-	void set_bpm(int value) {
+	void setBpm(int value) {
 		bpm_ = SettingsUtils::clip(MIN_BPM, MAX_BPM, value);
 	}
 
-	const char *bpm_text() {
+	const char *bpmText() {
 		return SettingsText::str.write(bpm(), " BPM");
 	}
 
 	// clock source
-	uint8_t clock_source() {
-		return clock_source_;
+	uint8_t clockSource() {
+		return clockSource_;
 	}
 
-	void set_clock_source(int value) {
-		clock_source_ = SettingsUtils::clip(0, NUM_CLOCK_SOURCES - 1, value);
+	void setClockSource(int value) {
+		clockSource_ = SettingsUtils::clip(0, NUM_CLOCK_SOURCES - 1, value);
 	}
 
-	const char* clock_source_text() {
-		return clock_source_text(clock_source());
+	const char* clockSourceText() {
+		return clockSourceText(clockSource());
 	}
 
 	// clock source
-	bool send_clock(int port) {
-		return send_clock_[port];
+	bool sendClock(int port) {
+		return sendClock_[port];
 	}
 
-	void set_send_clock(int port, bool value) {
-		send_clock_[port] = value;
+	void setSendClock(int port, bool value) {
+		sendClock_[port] = value;
 	}
 
-	const char* send_clock_text(int port) {
-		return SettingsText::bool_to_on_off(send_clock(port));
+	const char* sendClock_text(int port) {
+		return SettingsText::boolToOnOff(sendClock(port));
 	}
 
 	// Storage
 	void save(FileWriter &fileWriter) {
 		fileWriter.write(bpm_);
-		fileWriter.write(clock_source_);
+		fileWriter.write(clockSource_);
 
 		for (int i = 0; i < NUM_PORTS; ++i) {
-			fileWriter.write(send_clock_[i]);
+			fileWriter.write(sendClock_[i]);
 		}
 	}
 
 	void load(FileReader &fileReader) {
 		fileReader.read(bpm_);
-		fileReader.read(clock_source_);
+		fileReader.read(clockSource_);
 
 		for (int i = 0; i < NUM_PORTS; ++i) {
-			fileReader.read(send_clock_[i]);
+			fileReader.read(sendClock_[i]);
 		}
 	}
 
 	void paste(Midi *midi) {
 		bpm_ = midi->bpm();
-		clock_source_ = midi->clock_source();
+		clockSource_ = midi->clockSource();
 		
 		for (int i = 0; i < NUM_PORTS; ++i) {
-			send_clock_[i] = midi->send_clock(i);
+			sendClock_[i] = midi->sendClock(i);
 		}
 	}
 
 private:
 	uint16_t bpm_;
-	uint8_t clock_source_;
-	bool send_clock_[NUM_PORTS];
+	uint8_t clockSource_;
+	//uint8_t midiChannel_;
+	bool sendClock_[NUM_PORTS];
 };
 
 #endif
