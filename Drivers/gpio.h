@@ -2,16 +2,14 @@
 #define Gpio_h
 
 #include "stm32f4xx.h"
+#include "filter.h"
+#include "oscillator.h"
 
 class Gpio {
  public:
   void init();
 
-  enum FilterType { HP, BP, LP , NUM_FILTER_TYPES};
-  enum FilterRouting { SERIES, PARALEL, NUM_FILTER_ROUTINGS };
-  enum OscType { SAW = 0, TRIANGLE = 1, SINE = 2, NOISE = 2, SQUARE = 3 };
-
-  void setSelectedFilter(FilterType type, FilterRouting routing) {
+  void setSelectedFilter(Filter::Type type, Filter::Routing routing) {
     uint32_t data = 0;
     uint32_t value = (type * 2) + routing;
     data |= (value & 1) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;
@@ -28,7 +26,7 @@ class Gpio {
     GPIOB->BSRR = state ? GPIO_PIN_6 : GPIO_PIN_6 << 16;
   }
 
-  void setOsc1(OscType type) {
+  void setOsc1(Oscillator::Type type) {
     uint32_t data = 0;
     data |= (type & 1) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;
     data |= (type & 2) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;
@@ -40,7 +38,7 @@ class Gpio {
     GPIOB->BSRR = state ? GPIO_PIN_6 : GPIO_PIN_6 << 16;
   }
 
-  void setOsc2(OscType type) {
+  void setOsc2(Oscillator::Type type) {
     uint32_t data = 0;
     data |= (type & 1) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;
     data |= (type & 2) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;

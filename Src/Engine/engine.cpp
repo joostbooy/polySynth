@@ -91,13 +91,14 @@ void Engine::processRequests() {
 }
 
 void Engine::processSwitches() {
-  gpio_->setFmEnable(settings_->oscillator().fmEnable());
-  gpio_->setAmEnable(settings_->oscillator().amEnable());
-  gpio_->setMuteOsc1(settings_->oscillator().muteOsc1());
-  gpio_->setMuteOsc2(settings_->oscillator().muteOsc2());
-  gpio_->setOsc1(settings_->oscillator().selectedOsc1());
-  gpio_->setOsc2(settings_->oscillator().selectedOsc2());
-  gpio_->setSelectedFilter(settings_->filter().selectedType(), settings_->filter().selectedRouting());
+  Patch &p = settings_->selectedPatch();
+  gpio_->setFmEnable(p.oscillator().fmEnable());
+  gpio_->setAmEnable(p.oscillator().amEnable());
+  gpio_->setMuteOsc1(p.oscillator().muteOsc1());
+  gpio_->setMuteOsc2(p.oscillator().muteOsc2());
+  gpio_->setOsc1(p.oscillator().type1());
+  gpio_->setOsc2(p.oscillator().type2());
+  gpio_->setSelectedFilter(p.filter().type(), p.filter().routing());
 }
 
 void Engine::update() {

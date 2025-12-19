@@ -1,28 +1,70 @@
 #if !defined(Filter_h)
 #define Filter_h
 
-#include "gpio.h"
+#include "fileReader.h"
+#include "fileWriter.h"
+#include "settingsUtils.h"
 
 class Filter {
  public:
+  enum Type { HP, BP, LP, NUM_FILTER_TYPES };
+  enum Routing { SERIES, PARALEL, NUM_FILTER_ROUTINGS };
+
   void init() {
-    //
+    setType(HP);
+    setRouting(SERIES);
   }
 
-  Gpio::FilterType selectedType() {
-    return selectedType_;
+  const char* typeText(Type type) {
+    switch (type) {
+      case HP:
+        return "HP";
+      case BP:
+        return "BP";
+      case LP:
+        return "2PLP";
+      default:
+        break;
+    }
+    return nullptr;
   }
 
-  void setSelectedType(int value) {
-    selectedType_ = Gpio::FilterType(SettingsUtils::clip(0, Gpio::NUM_FILTER_TYPES - 1, value));
+  const char* routingText(Routing type) {
+    switch (type) {
+      case SERIES:
+        return "SERIES";
+      case PARALEL:
+        return "PARALEL";
+      default:
+        break;
+    }
+    return nullptr;
   }
 
-  Gpio::FilterRouting selectedRouting() {
-    return selectedRouting_;
+  // Type
+  Type type() {
+    return type_;
+  }
+
+  void setType(int value) {
+    type_ = Type(SettingsUtils::clip(0, NUM_FILTER_TYPES - 1, value));
+  }
+
+  const char* typeText() {
+    return typeText(type());
+  }
+
+  // Rourting
+  Routing routing() {
+    return routing_;
   }
 
   void setRouting(int value) {
-    selectedRouting_ = Gpio::FilterRouting(SettingsUtils::clip(0, Gpio::NUM_FILTER_ROUTINGS - 1, value));
+    routing_ = Routing(SettingsUtils::clip(0, NUM_FILTER_ROUTINGS - 1, value));
+  }
+
+  const char* routingText() {
+    return routingText(routing());
   }
 
   // Cutoff 1
@@ -56,8 +98,37 @@ class Filter {
   float resonance2() {
     return resonace2_;
   }
+
   void setResonace2(float value) {
     resonace2_ = value;
+  }
+
+  // Storage
+  void save(FileWriter& fileWriter) {
+    fileWriter.write(cutoff1_);
+    fileWriter.write(cutoff2_);
+    fileWriter.write(resonace1_);
+    fileWriter.write(resonace2_);
+    fileWriter.write(type_);
+    fileWriter.write(routing_);
+  }
+
+  void load(FileReader& fileReader) {
+    fileReader.read(cutoff1_);
+    fileReader.read(cutoff2_);
+    fileReader.read(resonace1_);
+    fileReader.read(resonace2_);
+    fileReader.read(type_);
+    fileReader.read(routing_);
+  }
+
+  void paste(Filter* filter) {
+    cutoff2_ = filter->cutoff2();
+    cutoff2_ = filter->cutoff2();
+    resonace1_ = filter->resonance1();
+    resonace2_ = filter->resonance2();
+    type_ = filter->type();
+    routing_ = filter->routing();
   }
 
  private:
@@ -65,8 +136,8 @@ class Filter {
   float cutoff2_;
   float resonace1_;
   float resonace2_;
-  Gpio::FilterType selectedType_;
-  Gpio::FilterRouting selectedRouting_;
+  Type type_;
+  Routing routing_;
 };
 
 #endif  // Filter_h

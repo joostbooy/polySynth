@@ -2,43 +2,29 @@
 #define Settings_h
 
 #include "disk.h"
-#include "envelope.h"
 #include "fileReader.h"
 #include "fileWriter.h"
-#include "filter.h"
-#include "lfo.h"
-#include "midi.h"
-#include "modMatrix.h"
-#include "oscillator.h"
+#include "patch.h"
 #include "settingsUtils.h"
 #include "stringBuilder.h"
 
 class Settings {
-  class Patch;
-
  public:
   static const size_t kNumVoices = 8;
-  static const size_t kNumLfos = 2;
   static const size_t kNumUserCc = 4;
   static const size_t kNumPatches = 255;
+  static const size_t kNumLfos = 2;
 
   void init(Disk* disk) {
     disk_ = disk;
 
-    selected_lfo_index_ = 0;
-    selectedPatchIndex_ = 0;
+    lfoIndex_ = 0;
+    patchIndex_ = 0;
 
     path.clear();
 
-    midi().init();
-    modMatrix().init();
-    ampEnvelope().init();
-    modEnvelope().init();
-    oscillator().init();
-    filter().init();
-
-    for (size_t i = 0; i < kNumLfos; i++) {
-      lfo(i).init();
+    for (size_t i = 0; i < kNumPatches; i++) {
+      patch(i).init();
     }
 
     set_project_name("NEW.PRJ");
@@ -69,40 +55,71 @@ class Settings {
     return 0;
   }
 
-  Patch& selectedePatch() {
-    return patch_[selectedPatchIndex_];
+  // Patch
+  Patch& patch(int index) {
+    return patch_[index];
+  }
+
+  Patch& selectedPatch() {
+    return patch_[patchIndex_];
+  }
+
+  int patchIndex() {
+    return patchIndex_;
+  }
+
+  void selectPatchIndex(int value) {
+    patchIndex_ = SettingsUtils::clip(0, kNumPatches - 1, value);
   }
 
   Disk* disk() {
     return disk_;
   }
 
+  // oscilator
   Oscillator& oscillator() {
-    return selectedePatch().oscillator_;
+    return selectedPatch().oscillator();
   }
 
+  // filter
   Filter& filter() {
-    return selectedePatch().filter_;
+    return selectedPatch().filter();
   }
 
+  // midi
   Midi& midi() {
-    return selectedePatch().midi_;
+    return selectedPatch().midi();
   }
 
+  // envelopes
   Envelope& ampEnvelope() {
-    return selectedePatch().ampEnvelope_;
+    return selectedPatch().ampEnvelope();
   }
 
   Envelope& modEnvelope() {
-    return selectedePatch().modEnvelope_;
+    return selectedPatch().modEnvelope();
   }
 
+  // Lfo
   Lfo& lfo(int index) {
-    return selectedePatch().lfo_[index];
+    return selectedPatch().lfo(index);
   }
 
+  int lfoIndex() {
+    return lfoIndex_;
+  }
+
+  void selectLfoIndex(int value) {
+    lfoIndex_ = SettingsUtils::clip(0, kNumLfos - 1, value);
+  }
+
+  Lfo& selectedLfo() {
+    return lfo(lfoIndex_);
+  }
+
+  // mod matrix
   ModMatrix& modMatrix() {
-    return selectedePatch().modMatrix_;
+    return selectedPatch().modMatrix();
   }
 
   // name
@@ -126,21 +143,10 @@ class Settings {
 
   Disk* disk_ = nullptr;
 
-  int selected_lfo_index_;
-  int selectedPatchIndex_;
+  int lfoIndex_;
+  int patchIndex_;
 
   char project_name_[8];
-
-  struct Patch {
-    Midi midi_;
-    Oscillator oscillator_;
-    Filter filter_;
-    Envelope ampEnvelope_;
-    Envelope modEnvelope_;
-    ModMatrix modMatrix_;
-    Lfo lfo_[kNumLfos];
-  };
-
   Patch patch_[kNumPatches];
 };
 

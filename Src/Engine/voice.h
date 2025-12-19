@@ -110,13 +110,14 @@ class Voice {
     modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
     ModMatrixEngine::Frame* frame = modMatrixEngine_->process();
 
+    Patch &p = settings_->selectedPatch();
     dac->set(0, (fade_phase_ * frame->data[ModMatrix::GAIN]) * 65535);
-    dac->set(1, (settings_->filter().resonance1() * frame->data[ModMatrix::RESONANCE_1]) * 65535);
-    dac->set(2, (settings_->filter().resonance2() * frame->data[ModMatrix::RESONANCE_2]) * 65535);
-    dac->set(3, (settings_->oscillator().shape1() * frame->data[ModMatrix::SHAPE_1]) * 65535);
-    dac->set(3, (settings_->oscillator().shape2() * frame->data[ModMatrix::SHAPE_2]) * 65535);
-    dac->set(5, (settings_->filter().cutoff1() * frame->data[ModMatrix::CUTOFF_1]) * 65535);
-    dac->set(5, (settings_->filter().cutoff2() * frame->data[ModMatrix::CUTOFF_2]) * 65535);
+    dac->set(1, (p.filter().resonance1() * frame->data[ModMatrix::RESONANCE_1]) * 65535);
+    dac->set(2, (p.filter().resonance2() * frame->data[ModMatrix::RESONANCE_2]) * 65535);
+    dac->set(3, (p.oscillator().shape1() * frame->data[ModMatrix::SHAPE_1]) * 65535);
+    dac->set(3, (p.oscillator().shape2() * frame->data[ModMatrix::SHAPE_2]) * 65535);
+    dac->set(5, (p.filter().cutoff1() * frame->data[ModMatrix::CUTOFF_1]) * 65535);
+    dac->set(5, (p.filter().cutoff2() * frame->data[ModMatrix::CUTOFF_2]) * 65535);
     dac->set(7, (calculatePitch() * frame->data[ModMatrix::PITCH]) * 65535);
   }
 

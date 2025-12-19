@@ -1,10 +1,10 @@
 #if !defined(Oscillator_h)
 #define Oscillator_h
 
-#include "gpio.h"
-
 class Oscillator {
  public:
+   enum Type { SAW, TRIANGLE, SQUARE, SINE, NOISE };
+
   void init() {
     //
   }
@@ -25,11 +25,15 @@ class Oscillator {
     return muteOsc2_;
   }
 
-  Gpio::OscType selectedOsc1() {
+  Type type1() {
     return selectedOsc1_;
   }
 
-  Gpio::OscType selectedOsc2() {
+int type1SwitchValue() {
+  return 0;
+}
+
+  Type type2() {
     return selectedOsc2_;
   }
 
@@ -48,8 +52,8 @@ class Oscillator {
   bool muteOsc2_;
   float shape1_;
   float shape2_;
-  Gpio::OscType selectedOsc1_;
-  Gpio::OscType selectedOsc2_;
+  Type selectedOsc1_;
+  Type selectedOsc2_;
 };
 
 #endif  // Oscilator_h
