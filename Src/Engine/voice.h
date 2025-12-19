@@ -12,7 +12,6 @@ class Voice {
 
   void init(Settings* settings, ModMatrixEngine* modMatrixEngine) {
     settings_ = settings;
-    pots_ = &settings_->pots();
     state_ = IDLE;
     key_pressed_ = false;
     stop_requested_ = false;
@@ -131,7 +130,6 @@ class Voice {
   State state_;
   float velocity_;
   float fade_phase_;
-  Pots* pots_;
   Settings* settings_;
   ModMatrixEngine* modMatrixEngine_;
   EnvelopeEngine ampEnvelopeEngine_;

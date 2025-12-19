@@ -7,8 +7,8 @@ class Gpio {
  public:
   void init();
 
-  enum FilterType { HP, BP, LP };
-  enum FilterRouting { SERIES, PARALEL };
+  enum FilterType { HP, BP, LP , NUM_FILTER_TYPES};
+  enum FilterRouting { SERIES, PARALEL, NUM_FILTER_ROUTINGS };
   enum OscType { SAW = 0, TRIANGLE = 1, SINE = 2, NOISE = 2, SQUARE = 3 };
 
   void setSelectedFilter(FilterType type, FilterRouting routing) {

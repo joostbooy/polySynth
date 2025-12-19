@@ -10,7 +10,6 @@
 #include "midi.h"
 #include "modMatrix.h"
 #include "oscillator.h"
-#include "pots.h"
 #include "settingsUtils.h"
 #include "stringBuilder.h"
 
@@ -78,11 +77,6 @@ class Settings {
     return disk_;
   }
 
-  // Dit depracten ??
-  Pots& pots() {
-    return pots_;
-  }
-
   Oscillator& oscillator() {
     return selectedePatch().oscillator_;
   }
@@ -136,8 +130,6 @@ class Settings {
   int selectedPatchIndex_;
 
   char project_name_[8];
-
-  Pots pots_;
 
   struct Patch {
     Midi midi_;

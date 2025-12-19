@@ -13,8 +13,16 @@ class Filter {
     return selectedType_;
   }
 
+  void setSelectedType(int value) {
+    selectedType_ = Gpio::FilterType(SettingsUtils::clip(0, Gpio::NUM_FILTER_TYPES - 1, value));
+  }
+
   Gpio::FilterRouting selectedRouting() {
     return selectedRouting_;
+  }
+
+  void setRouting(int value) {
+    selectedRouting_ = Gpio::FilterRouting(SettingsUtils::clip(0, Gpio::NUM_FILTER_ROUTINGS - 1, value));
   }
 
   // Cutoff 1
