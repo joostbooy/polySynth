@@ -1,7 +1,8 @@
 #include "engine.h"
 
-void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac) {
+void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac, Gpio* gpio) {
   dac_ = dac;
+  gpio_ = gpio;
   settings_ = settings;
   midiEngine_.init(uart, usb, &settings_->midi());
   modMatrixEngine_.init(settings_);
@@ -89,11 +90,22 @@ void Engine::processRequests() {
   }
 }
 
+void Engine::processSwitches() {
+  gpio_->setFmEnable(settings_->oscillator().fmEnable());
+  gpio_->setAmEnable(settings_->oscillator().amEnable());
+  gpio_->setMuteOsc1(settings_->oscillator().muteOsc1());
+  gpio_->setMuteOsc2(settings_->oscillator().muteOsc2());
+  gpio_->setOsc1(settings_->oscillator().selectedOsc1());
+  gpio_->setOsc2(settings_->oscillator().selectedOsc2());
+  gpio_->setSelectedFilter(settings_->filter().selectedType(), settings_->filter().selectedRouting());
+}
+
 void Engine::update() {
   processRequests();
 
   if (state_ == RUNNING) {
     processMidi();
+    processSwitches();
 
     while (voiceEngine_.available() && noteQue_.readable()) {
       voiceEngine_.assign_voice(noteQue_.read());

@@ -6,10 +6,9 @@
 #include "dac.h"
 #include "display.h"
 #include "disk.h"
-//#include "gate.h"
-//#include "sdram.h"
-//#include "timer.h"
 #include "sdio.h"
+#include "gpio.h"
+
 
 #include "disk.h"
 #include "settings.h"
@@ -27,6 +26,7 @@ Sys sys;
 Sdio sdio;
 Matrix matrix;
 Display display;
+Gpio gpio;
 
 Disk disk;
 Ui ui;
@@ -80,14 +80,13 @@ int main(void)
 	// adc.init();
 	matrix.init();
 	display.init();
-	//sdram.init();
 	sdio.init();
 
 	// Init engine, settings & ui
 	disk.init(&sdio);
-	//settings.init(&sdram, &disk);
-	//engine.init(&settings, &uart, &usb, &gate);
-	//ui.init(&settings, &engine, &matrix, &display);
+	settings.init(&disk);
+	engine.init(&settings, &uart, &usb, &dac, &gpio);
+	ui.init(&settings, &engine, &matrix, &display);
 
 	// Start timers
 	//dac.start(fill);

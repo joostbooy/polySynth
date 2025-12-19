@@ -5,9 +5,11 @@
 #include "envelope.h"
 #include "fileReader.h"
 #include "fileWriter.h"
+#include "filter.h"
 #include "lfo.h"
 #include "midi.h"
 #include "modMatrix.h"
+#include "oscillator.h"
 #include "pots.h"
 #include "settingsUtils.h"
 #include "stringBuilder.h"
@@ -33,6 +35,8 @@ class Settings {
     modMatrix().init();
     ampEnvelope().init();
     modEnvelope().init();
+    oscillator().init();
+    filter().init();
 
     for (size_t i = 0; i < kNumLfos; i++) {
       lfo(i).init();
@@ -74,8 +78,17 @@ class Settings {
     return disk_;
   }
 
+  // Dit depracten ??
   Pots& pots() {
     return pots_;
+  }
+
+  Oscillator& oscillator() {
+    return selectedePatch().oscillator_;
+  }
+
+  Filter& filter() {
+    return selectedePatch().filter_;
   }
 
   Midi& midi() {
@@ -128,11 +141,14 @@ class Settings {
 
   struct Patch {
     Midi midi_;
+    Oscillator oscillator_;
+    Filter filter_;
     Envelope ampEnvelope_;
     Envelope modEnvelope_;
     ModMatrix modMatrix_;
     Lfo lfo_[kNumLfos];
   };
+
   Patch patch_[kNumPatches];
 };
 

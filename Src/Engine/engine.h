@@ -1,14 +1,15 @@
 #ifndef Engine_h
 #define Engine_h
 
+#include "gpio.h"
 #include "micros.h"
 #include "midiClockEngine.h"
 #include "midiEngine.h"
 #include "modMatrixEngine.h"
-#include "voiceEngine.h"
 #include "settings.h"
 #include "uart.h"
 #include "voice.h"
+#include "voiceEngine.h"
 
 class Engine {
  public:
@@ -20,7 +21,7 @@ class Engine {
     KILL_VOICES = (1 << 2),
   };
 
-  void init(Settings*, Uart*, Usb*, Dac*);
+  void init(Settings*, Uart*, Usb*, Dac*, Gpio*);
 
   void addReqestBlocking(Request type) {
     addRequest(type);
@@ -38,6 +39,7 @@ class Engine {
   uint32_t processing_time_uS_;
 
   Dac* dac_;
+  Gpio* gpio_;
   Settings* settings_;
   MidiEngine midiEngine_;
   VoiceEngine voiceEngine_;
@@ -49,6 +51,7 @@ class Engine {
   void start();
   void stop();
   void processRequests();
+  void processSwitches();
   void processMidi();
   void update();
   void noteOn(MidiEngine::Event& e);
