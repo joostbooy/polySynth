@@ -4,8 +4,8 @@ void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac) {
   dac_ = dac;
   settings_ = settings;
   midiEngine_.init(uart, usb, &settings_->midi());
-  modulationMatrixEngine_.init(settings_);
-  voiceEngine_.init(settings_, &modulationMatrixEngine_);
+  modMatrixEngine_.init(settings_);
+  voiceEngine_.init(settings_, &modMatrixEngine_);
   // midiClockEngine_.init(&settings->midi());
   state_ = RUNNING;
 }
@@ -29,13 +29,13 @@ void Engine::noteOff(MidiEngine::Event& e) {
 
 void Engine::pitchBend(MidiEngine::Event& e) {
   float data = (1.f / 16383.f) * MidiEngine::read_14_bit(e);
-  modulationMatrixEngine_.set_midi_bend(data);
+  modMatrixEngine_.set_midi_bend(data);
 }
 
 void Engine::cc(MidiEngine::Event& e) {
   uint8_t number = e.data[0];
   float data = (1.f / 127.f) * e.data[1];
-  modulationMatrixEngine_.set_midi_cc(number, data);
+  modMatrixEngine_.set_midi_cc(number, data);
 }
 
 // low priority

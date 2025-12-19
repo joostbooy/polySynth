@@ -4,19 +4,19 @@
 #include "dac.h"
 #include "envelopeEngine.h"
 #include "lfoEngine.h"
-#include "modulationMatrixEngine.h"
+#include "modMatrixEngine.h"
 
 class Voice {
  public:
   enum State { BACKWARD = -1, IDLE = 0, FORWARD = 1 };
 
-  void init(Settings* settings, ModulationMatrixEngine* modulationMatrixEngine) {
+  void init(Settings* settings, ModMatrixEngine* modMatrixEngine) {
     settings_ = settings;
     state_ = IDLE;
     key_pressed_ = false;
     stop_requested_ = false;
     lastNote_ = 60;
-    modulationMatrixEngine_ = modulationMatrixEngine;
+    modMatrixEngine_ = modMatrixEngine;
     envelopeEngine_[0].init(&settings->envelope(0));
     envelopeEngine_[1].init(&settings->envelope(1));
     lfoEngine_[0].init(&settings->lfo(0));
@@ -83,12 +83,12 @@ class Voice {
   }
 
   void update(Dac* dac) {
-    modulationMatrixEngine_->set_midi_velocity(velocity_);
-    modulationMatrixEngine_->set_envelope(0, envelopeEngine_[0].next());
-    modulationMatrixEngine_->set_envelope(1, envelopeEngine_[1].next());
-    modulationMatrixEngine_->setLfo(0, lfoEngine_[0].next());
-    modulationMatrixEngine_->setLfo(1, lfoEngine_[1].next());
-    ModulationMatrixEngine::Frame* frame = modulationMatrixEngine_->process();
+    modMatrixEngine_->set_midi_velocity(velocity_);
+    modMatrixEngine_->set_envelope(0, envelopeEngine_[0].next());
+    modMatrixEngine_->set_envelope(1, envelopeEngine_[1].next());
+    modMatrixEngine_->setLfo(0, lfoEngine_[0].next());
+    modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
+    ModMatrixEngine::Frame* frame = modMatrixEngine_->process();
 
     if (stop_requested_) {
       if (fade_phase_ > 0.0f) {
@@ -98,8 +98,8 @@ class Voice {
         state_ = IDLE;
       }
     }
-    dac->set(0, (fade_phase_ * frame->data[ModulationMatrix::GAIN]));
-    // dac->set(1, (frame->data[ModulationMatrix::BEND]));
+    dac->set(0, (fade_phase_ * frame->data[ModMatrix::GAIN]));
+    // dac->set(1, (frame->data[ModMatrix::BEND]));
   }
 
  private:
@@ -113,7 +113,7 @@ class Voice {
   float velocity_;
   float fade_phase_;
   Settings* settings_;
-  ModulationMatrixEngine* modulationMatrixEngine_;
+  ModMatrixEngine* modMatrixEngine_;
   EnvelopeEngine envelopeEngine_[Settings::kNumEnvelopes];
   LfoEngine lfoEngine_[Settings::kNumLfos];
 };

@@ -4,11 +4,11 @@
 #include "micros.h"
 #include "midiClockEngine.h"
 #include "midiEngine.h"
-#include "modulationMatrixEngine.h"
+#include "modMatrixEngine.h"
+#include "voiceEngine.h"
 #include "settings.h"
 #include "uart.h"
 #include "voice.h"
-#include "voiceEngine.h"
 
 class Engine {
  public:
@@ -42,7 +42,7 @@ class Engine {
   MidiEngine midiEngine_;
   VoiceEngine voiceEngine_;
   MidiClockEngine midiClockEngine_;
-  ModulationMatrixEngine modulationMatrixEngine_;
+  ModMatrixEngine modMatrixEngine_;
   Voice voice_[Settings::kNumVoices];
   Que<MidiEngine::Event, 16> noteQue_;
 

@@ -1,9 +1,9 @@
-#ifndef ModulationMatrix_h
-#define ModulationMatrix_h
+#ifndef ModMatrix_h
+#define ModMatrix_h
 
 //#include "settings.h"
 
-class ModulationMatrix {
+class ModMatrix {
  public:
   enum Destination {
     PITCH,
@@ -140,11 +140,11 @@ class ModulationMatrix {
   //  }
   }
 
-  void paste(ModulationMatrix* modulationMatrix) {
+  void paste(ModMatrix* modMatrix) {
     clear();
     for (size_t y = 0; y < NUM_SOURCES; ++y) {
       for (size_t x = 0; x < NUM_DESTINATIONS; ++x) {
-        if (modulationMatrix->read(x, y)) {
+        if (modMatrix->read(x, y)) {
           toggle(x, y);
         }
       }

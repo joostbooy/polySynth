@@ -9,12 +9,12 @@
 
 class VoiceEngine {
  public:
-  void init(Settings* settings, ModulationMatrixEngine* modulationMatrixEngine) {
+  void init(Settings* settings, ModMatrixEngine* modMatrixEngine) {
     active_voices_.clear();
     available_voices_.clear();
 
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
-      voice_[i].init(settings, modulationMatrixEngine);
+      voice_[i].init(settings, modMatrixEngine);
       available_voices_.push(i);
     }
   }

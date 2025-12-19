@@ -7,7 +7,7 @@
 #include "fileWriter.h"
 #include "lfo.h"
 #include "midi.h"
-#include "modulationMatrix.h"
+#include "modMatrix.h"
 #include "settingsUtils.h"
 #include "stringBuilder.h"
 
@@ -27,7 +27,7 @@ class Settings {
     path.clear();
 
     midi().init();
-    modulationMatrix().init();
+    modMatrix().init();
 
     for (size_t i = 0; i < kNumEnvelopes; i++) {
       envelope(i).init();
@@ -81,8 +81,8 @@ class Settings {
     return lfo_[index];
   }
 
-  ModulationMatrix& modulationMatrix() {
-    return modulationMatrix_;
+  ModMatrix& modMatrix() {
+    return modMatrix_;
   }
 
   // name
@@ -112,7 +112,7 @@ class Settings {
   char project_name_[8];
 
   Midi midi_;
-  ModulationMatrix modulationMatrix_;
+  ModMatrix modMatrix_;
   Lfo lfo_[kNumLfos];
   Envelope envelope_[kNumEnvelopes];
 };
