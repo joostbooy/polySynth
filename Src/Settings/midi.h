@@ -1,131 +1,200 @@
 #ifndef Midi_h
 #define Midi_h
 
-#include "fileWriter.h"
 #include "fileReader.h"
+#include "fileWriter.h"
 #include "lookupTables.h"
 #include "settingsText.h"
 #include "settingsUtils.h"
 
 class Midi {
+ public:
+  enum Port {
+    UART,
+    USB,
 
-public:
+    NUM_PORTS
+  };
 
-	enum Port {
-		UART,
-		USB,
+  static const char* portText(int port) {
+    switch (port) {
+      case UART:
+        return "UART";
+      case USB:
+        return "USB";
+      default:
+        break;
+    }
+    return nullptr;
+  }
 
-		NUM_PORTS
-	};
+  enum ClockSource {
+    EXTERNAL = NUM_PORTS - 1,
+    INTERNAL,
 
-	static const char *portText(int port) {
-		switch (port)
-		{
-		case UART:	return "UART";
-		case USB:	return "USB";
-		default:
-			break;
-		}
-		return nullptr;
-	}
+    NUM_CLOCK_SOURCES
+  };
 
+  static const char* clockSourceText(int value) {
+    if (value <= EXTERNAL) {
+      return Midi::portText(value);
+    } else {
+      return "INTERNAL";
+    }
+  }
 
-	enum ClockSource {
-		EXTERNAL = NUM_PORTS - 1,
-		INTERNAL,
+  void init() {
+    setBpm(120);
+    setClockSource(INTERNAL);
 
-		NUM_CLOCK_SOURCES
-	};
+    // dont use setters for these 2, becasuse they depend on each other
+    keyRangeLow_ = 0;
+    keyRangeHigh_ = 127;
 
-	static const char* clockSourceText(int value) {
-		if (value <= EXTERNAL) {
-			return Midi::portText(value);
-		} else {
-			return "INTERNAL";
-		}
-	}
+    for (int i = 0; i < NUM_PORTS; ++i) {
+      setSendClock(i, true);
+    }
+  }
 
-	void init() {
-		setBpm(120);
-		setClockSource(INTERNAL);
+  // bpm
+  uint16_t bpm() {
+    return bpm_;
+  }
 
-		for (int i = 0; i < NUM_PORTS; ++i){
-			setSendClock(i, true);
-		}
-	}
+  void setBpm(int value) {
+    bpm_ = SettingsUtils::clip(MIN_BPM, MAX_BPM, value);
+  }
 
-	// bpm
-	uint16_t bpm() {
-		return bpm_;
-	}
+  const char* bpmText() {
+    return SettingsText::str.write(bpm(), " BPM");
+  }
 
-	void setBpm(int value) {
-		bpm_ = SettingsUtils::clip(MIN_BPM, MAX_BPM, value);
-	}
+  // clock source
+  uint8_t clockSource() {
+    return clockSource_;
+  }
 
-	const char *bpmText() {
-		return SettingsText::str.write(bpm(), " BPM");
-	}
+  void setClockSource(int value) {
+    clockSource_ = SettingsUtils::clip(0, NUM_CLOCK_SOURCES - 1, value);
+  }
 
-	// clock source
-	uint8_t clockSource() {
-		return clockSource_;
-	}
+  const char* clockSourceText() {
+    return clockSourceText(clockSource());
+  }
 
-	void setClockSource(int value) {
-		clockSource_ = SettingsUtils::clip(0, NUM_CLOCK_SOURCES - 1, value);
-	}
+  // clock source
+  bool sendClock(int port) {
+    return sendClock_[port];
+  }
 
-	const char* clockSourceText() {
-		return clockSourceText(clockSource());
-	}
+  void setSendClock(int port, bool value) {
+    sendClock_[port] = value;
+  }
 
-	// clock source
-	bool sendClock(int port) {
-		return sendClock_[port];
-	}
+  const char* sendClock_text(int port) {
+    return SettingsText::boolToOnOff(sendClock(port));
+  }
 
-	void setSendClock(int port, bool value) {
-		sendClock_[port] = value;
-	}
+  // channel receive
+  int channelReceive() {
+    return channelReceive_;
+  }
 
-	const char* sendClock_text(int port) {
-		return SettingsText::boolToOnOff(sendClock(port));
-	}
+  void setChannelReceive(int value) {
+    channelReceive_ = SettingsUtils::clip(0, 16, value);
+  }
 
-	// Storage
-	void save(FileWriter &fileWriter) {
-		fileWriter.write(bpm_);
-		fileWriter.write(clockSource_);
+  const char* channelReceiveText() {
+    return SettingsText::midiChannelText(channelReceive());
+  }
 
-		for (int i = 0; i < NUM_PORTS; ++i) {
-			fileWriter.write(sendClock_[i]);
-		}
-	}
+  // port receive
+  int portReceive() {
+    return portReceive_;
+  }
 
-	void load(FileReader &fileReader) {
-		fileReader.read(bpm_);
-		fileReader.read(clockSource_);
+  void setPortReceive(int value) {
+    portReceive_ = SettingsUtils::clip(0, NUM_PORTS - 1, value);
+  }
 
-		for (int i = 0; i < NUM_PORTS; ++i) {
-			fileReader.read(sendClock_[i]);
-		}
-	}
+  const char* portReceiveText() {
+    return portText(portReceive());
+  }
 
-	void paste(Midi *midi) {
-		bpm_ = midi->bpm();
-		clockSource_ = midi->clockSource();
-		
-		for (int i = 0; i < NUM_PORTS; ++i) {
-			sendClock_[i] = midi->sendClock(i);
-		}
-	}
+  // key range low
+  int keyRangeLow() {
+    return keyRangeLow_;
+  }
 
-private:
-	uint16_t bpm_;
-	uint8_t clockSource_;
-	//uint8_t midiChannel_;
-	bool sendClock_[NUM_PORTS];
+  void setKeyRangeLow(int value) {
+    keyRangeLow_ = SettingsUtils::clip(0, keyRangeHigh(), value);
+  }
+
+  const char* keyRangeLowText() {
+    return SettingsText::noteToText(keyRangeLow());
+  }
+
+  // key range low
+  int keyRangeHigh() {
+    return keyRangeHigh_;
+  }
+
+  void setKeyRangeHigh(int value) {
+    keyRangeLow_ = SettingsUtils::clip(keyRangeLow(), 127, value);
+  }
+
+  const char* keyRangeHighText() {
+    return SettingsText::noteToText(keyRangeHigh());
+  }
+
+  // Storage
+  void save(FileWriter& fileWriter) {
+    fileWriter.write(bpm_);
+    fileWriter.write(clockSource_);
+    fileWriter.write(channelReceive_);
+    fileWriter.write(portReceive_);
+    fileWriter.write(keyRangeLow_);
+    fileWriter.write(keyRangeHigh_);
+
+    for (int i = 0; i < NUM_PORTS; ++i) {
+      fileWriter.write(sendClock_[i]);
+    }
+  }
+
+  void load(FileReader& fileReader) {
+    fileReader.read(bpm_);
+    fileReader.read(clockSource_);
+    fileReader.read(channelReceive_);
+    fileReader.read(portReceive_);
+    fileReader.read(keyRangeLow_);
+    fileReader.read(keyRangeHigh_);
+
+    for (int i = 0; i < NUM_PORTS; ++i) {
+      fileReader.read(sendClock_[i]);
+    }
+  }
+
+  void paste(Midi* midi) {
+    bpm_ = midi->bpm();
+    clockSource_ = midi->clockSource();
+    channelReceive_ = midi->channelReceive();
+    portReceive_ = midi->portReceive();
+    keyRangeLow_ = midi->keyRangeLow();
+    keyRangeHigh_ = midi->keyRangeHigh();
+
+    for (int i = 0; i < NUM_PORTS; ++i) {
+      sendClock_[i] = midi->sendClock(i);
+    }
+  }
+
+ private:
+  uint16_t bpm_;
+  uint8_t clockSource_;
+  int channelReceive_;
+  int portReceive_;
+  int keyRangeLow_;
+  int keyRangeHigh_;
+  bool sendClock_[NUM_PORTS];
 };
 
 #endif

@@ -7,6 +7,7 @@
 #include "fileWriter.h"
 #include "lfo.h"
 #include "midi.h"
+#include "modulationMatrix.h"
 #include "settingsUtils.h"
 #include "stringBuilder.h"
 
@@ -15,6 +16,7 @@ class Settings {
   static const size_t kNumVoices = 8;
   static const size_t kNumLfos = 2;
   static const size_t kNumEnvelopes = 2;
+  static const size_t kNumUserCc = 4;
 
   void init(Disk* disk) {
     disk_ = disk;
@@ -23,6 +25,9 @@ class Settings {
     selected_envelope_index_ = 0;
 
     path.clear();
+
+    midi().init();
+    modulationMatrix().init();
 
     for (size_t i = 0; i < kNumEnvelopes; i++) {
       envelope(i).init();
@@ -76,6 +81,10 @@ class Settings {
     return lfo_[index];
   }
 
+  ModulationMatrix& modulationMatrix() {
+    return modulationMatrix_;
+  }
+
   // name
   const char* project_name() {
     return project_name_;
@@ -103,6 +112,7 @@ class Settings {
   char project_name_[8];
 
   Midi midi_;
+  ModulationMatrix modulationMatrix_;
   Lfo lfo_[kNumLfos];
   Envelope envelope_[kNumEnvelopes];
 };
