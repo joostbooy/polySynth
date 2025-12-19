@@ -1,13 +1,19 @@
 #ifndef ModMatrix_h
 #define ModMatrix_h
 
-//#include "settings.h"
-
 class ModMatrix {
  public:
+  static const size_t kNumUserCc = 4;
+
   enum Destination {
     PITCH,
     GAIN,
+    CUTOFF_1,
+    CUTOFF_2,
+    RESONANCE_1,
+    RESONANCE_2,
+    SHAPE_1,
+    SHAPE_2,
 
     NUM_DESTINATIONS
   };
@@ -20,6 +26,18 @@ class ModMatrix {
         return "PITCH";
       case GAIN:
         return "GAIN";
+      case CUTOFF_1:
+        return "CUTOFF 1";
+      case CUTOFF_2:
+        return "CUTOFF 2";
+      case RESONANCE_1:
+        return "RESONANCE 1";
+      case RESONANCE_2:
+        return "RESONANCE 2";
+      case SHAPE_1:
+        return "SHAPE 1";
+      case SHAPE_2:
+        return "SHAPE 2";
       default:
         break;
     }
@@ -29,8 +47,8 @@ class ModMatrix {
   enum Source {
     LFO_1,
     LFO_2,
-    ENVELOPE_1,
-    ENVELOPE_2,
+    AMP_ENVELOPE,
+    MOD_ENVELOPE,
     CV_1,
     CV_2,
     MIDI_BEND,
@@ -53,10 +71,10 @@ class ModMatrix {
         return "LFO 1";
       case LFO_2:
         return "LFO 2";
-      case ENVELOPE_1:
-        return "ENVELOPE 1";
-      case ENVELOPE_2:
-        return "ENVELOPE 2";
+      case AMP_ENVELOPE:
+        return "AMP ENVELOPE";
+      case MOD_ENVELOPE:
+        return "MOD ENVELOPE";
       case CV_1:
         return "CV 1";
       case CV_2:
@@ -66,29 +84,29 @@ class ModMatrix {
       case MIDI_VELOCITY:
         return "MIDI VELOCITY";
       case MIDI_CC_A:
-        return nullptr;//midi_cc_number_text(0);
+        return nullptr;  // midi_cc_number_text(0);
       case MIDI_CC_B:
-        return nullptr;//midi_cc_number_text(1);
+        return nullptr;  // midi_cc_number_text(1);
       case MIDI_CC_C:
-        return nullptr;//midi_cc_number_text(2);
+        return nullptr;  // midi_cc_number_text(2);
       case MIDI_CC_D:
-        return nullptr;//midi_cc_number_text(3);
+        return nullptr;  // midi_cc_number_text(3);
       default:
         break;
     }
     return nullptr;
   }
 
-
   void init() {
     clear();
-    toggle(MIDI_VELOCITY, GAIN);
-    toggle(MIDI_BEND, PITCH);
-    toggle(ENVELOPE_1, GAIN);
+    matrix_[MIDI_BEND] |= (1 << PITCH);
+    matrix_[MIDI_VELOCITY] |= (1 << GAIN);
+    matrix_[AMP_ENVELOPE] |= (1 << GAIN);
+    matrix_[MOD_ENVELOPE] |= (1 << CUTOFF_2);
 
-  //  for (size_t i = 0; i < Settings::kNumUserCc; ++i) {
-    //  set_midi_cc_number(i, i);
-   // }
+    for (size_t i = 0; i < kNumUserCc; ++i) {
+      set_midi_cc_number(i, i);
+    }
   }
 
   bool read(size_t src, size_t dest) {
@@ -101,9 +119,12 @@ class ModMatrix {
     }
   }
 
+  // Amp envelope & gain are always tied togheter!
   void toggle(size_t src, size_t dest) {
-    uint32_t data = matrix_[src];
-    matrix_[src] = data ^ (1 << dest);
+    if ((src != AMP_ENVELOPE && dest != GAIN)) {
+      uint32_t data = matrix_[src];
+      matrix_[src] = data ^ (1 << dest);
+    }
   }
 
   // Midi CC
@@ -125,9 +146,9 @@ class ModMatrix {
       fileWriter.write(matrix_[i]);
     }
 
-  //  for (size_t i = 0; i < Settings::kNumUserCc; ++i) {
-    //  fileWriter.write(midi_cc_number_[i]);
-  //  }
+    for (size_t i = 0; i < kNumUserCc; ++i) {
+      fileWriter.write(midi_cc_number_[i]);
+    }
   }
 
   void load(FileReader& fileReader) {
@@ -135,9 +156,9 @@ class ModMatrix {
       fileReader.read(matrix_[i]);
     }
 
- //   for (size_t i = 0; i < Settings::kNumUserCc; ++i) {
-  //    fileReader.read(midi_cc_number_[i]);
-  //  }
+    for (size_t i = 0; i < kNumUserCc; ++i) {
+      fileReader.read(midi_cc_number_[i]);
+    }
   }
 
   void paste(ModMatrix* modMatrix) {
@@ -145,19 +166,19 @@ class ModMatrix {
     for (size_t y = 0; y < NUM_SOURCES; ++y) {
       for (size_t x = 0; x < NUM_DESTINATIONS; ++x) {
         if (modMatrix->read(x, y)) {
-          toggle(x, y);
+          matrix_[y] |= (1 << x);
         }
       }
     }
 
-  //  for (size_t i = 0; i < Settings::kNumUserCc; ++i) {
-    //  midi_cc_number_[i] = midi_cc_number_[i];
-   // }
+    for (size_t i = 0; i < kNumUserCc; ++i) {
+      midi_cc_number_[i] = midi_cc_number_[i];
+    }
   }
 
  private:
   uint32_t matrix_[NUM_SOURCES];
-  uint8_t midi_cc_number_[4];//[Settings::kNumUserCc];
+  uint8_t midi_cc_number_[4];  //[kNumUserCc];
 };
 
 #endif

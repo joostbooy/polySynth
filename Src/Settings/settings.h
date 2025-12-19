@@ -8,30 +8,31 @@
 #include "lfo.h"
 #include "midi.h"
 #include "modMatrix.h"
+#include "pots.h"
 #include "settingsUtils.h"
 #include "stringBuilder.h"
 
 class Settings {
+  class Patch;
+
  public:
   static const size_t kNumVoices = 8;
   static const size_t kNumLfos = 2;
-  static const size_t kNumEnvelopes = 2;
   static const size_t kNumUserCc = 4;
+  static const size_t kNumPatches = 255;
 
   void init(Disk* disk) {
     disk_ = disk;
 
     selected_lfo_index_ = 0;
-    selected_envelope_index_ = 0;
+    selectedPatchIndex_ = 0;
 
     path.clear();
 
     midi().init();
     modMatrix().init();
-
-    for (size_t i = 0; i < kNumEnvelopes; i++) {
-      envelope(i).init();
-    }
+    ampEnvelope().init();
+    modEnvelope().init();
 
     for (size_t i = 0; i < kNumLfos; i++) {
       lfo(i).init();
@@ -65,24 +66,36 @@ class Settings {
     return 0;
   }
 
+  Patch& selectedePatch() {
+    return patch_[selectedPatchIndex_];
+  }
+
   Disk* disk() {
     return disk_;
   }
 
-  Midi& midi() {
-    return midi_;
+  Pots& pots() {
+    return pots_;
   }
 
-  Envelope& envelope(int index) {
-    return envelope_[index];
+  Midi& midi() {
+    return selectedePatch().midi_;
+  }
+
+  Envelope& ampEnvelope() {
+    return selectedePatch().ampEnvelope_;
+  }
+
+  Envelope& modEnvelope() {
+    return selectedePatch().modEnvelope_;
   }
 
   Lfo& lfo(int index) {
-    return lfo_[index];
+    return selectedePatch().lfo_[index];
   }
 
   ModMatrix& modMatrix() {
-    return modMatrix_;
+    return selectedePatch().modMatrix_;
   }
 
   // name
@@ -107,14 +120,20 @@ class Settings {
   Disk* disk_ = nullptr;
 
   int selected_lfo_index_;
-  int selected_envelope_index_;
+  int selectedPatchIndex_;
 
   char project_name_[8];
 
-  Midi midi_;
-  ModMatrix modMatrix_;
-  Lfo lfo_[kNumLfos];
-  Envelope envelope_[kNumEnvelopes];
+  Pots pots_;
+
+  struct Patch {
+    Midi midi_;
+    Envelope ampEnvelope_;
+    Envelope modEnvelope_;
+    ModMatrix modMatrix_;
+    Lfo lfo_[kNumLfos];
+  };
+  Patch patch_[kNumPatches];
 };
 
 #endif

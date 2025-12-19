@@ -37,9 +37,9 @@ class VoiceEngine {
 
   void update(Dac* dac) {
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
-   //   if (voice_[i].state() != Voice::IDLE) {
+      if (voice_[i].state() != Voice::IDLE) {
         voice_[i].update(dac);
-   //   }
+      }
     }
     update_available_voices();
   }

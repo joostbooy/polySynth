@@ -8,17 +8,20 @@
 
 class Voice {
  public:
-  enum State { BACKWARD = -1, IDLE = 0, FORWARD = 1 };
+  enum State { IDLE = 0, ACTIVE = 1 };
 
   void init(Settings* settings, ModMatrixEngine* modMatrixEngine) {
     settings_ = settings;
+    pots_ = &settings_->pots();
     state_ = IDLE;
     key_pressed_ = false;
     stop_requested_ = false;
     lastNote_ = 60;
     modMatrixEngine_ = modMatrixEngine;
-    envelopeEngine_[0].init(&settings->envelope(0));
-    envelopeEngine_[1].init(&settings->envelope(1));
+
+    ampEnvelopeEngine_.init(&settings->ampEnvelope());
+    modEnvelopeEngine_.init(&settings->modEnvelope());
+
     lfoEngine_[0].init(&settings->lfo(0));
     lfoEngine_[1].init(&settings->lfo(1));
   }
@@ -42,8 +45,12 @@ class Voice {
     return state_;
   }
 
-  EnvelopeEngine& envelopeEngine(int index) {
-    return envelopeEngine_[index];
+  EnvelopeEngine& ampEnvelopeEnginex() {
+    return ampEnvelopeEngine_;
+  }
+
+  EnvelopeEngine& modEnvelopeEnginex() {
+    return modEnvelopeEngine_;
   }
 
   LfoEngine& lfoEngine(int index) {
@@ -69,37 +76,49 @@ class Voice {
     stop_requested_ = false;
     fade_phase_ = 1.f;
 
-    lfoEngine_[0].reset();
-    lfoEngine_[1].reset();
+    lfoEngine_[0].retrigger();
+    lfoEngine_[1].retrigger();
 
-    envelopeEngine_[0].attack();
-    envelopeEngine_[1].attack();
+    ampEnvelopeEngine_.attack();
+    modEnvelopeEngine_.attack();
+
+    state_ = ACTIVE;
   }
 
   void note_off() {
     key_pressed_ = false;
-    envelopeEngine_[0].release();
-    envelopeEngine_[1].release();
+    ampEnvelopeEngine_.release();
+    modEnvelopeEngine_.release();
   }
 
   void update(Dac* dac) {
-    modMatrixEngine_->set_midi_velocity(velocity_);
-    modMatrixEngine_->set_envelope(0, envelopeEngine_[0].next());
-    modMatrixEngine_->set_envelope(1, envelopeEngine_[1].next());
-    modMatrixEngine_->setLfo(0, lfoEngine_[0].next());
-    modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
-    ModMatrixEngine::Frame* frame = modMatrixEngine_->process();
-
     if (stop_requested_) {
       if (fade_phase_ > 0.0f) {
         fade_phase_ -= 1000.f / (CONTROL_RATE * 4.f);
       } else {
-        stop_requested_ = false;
         state_ = IDLE;
       }
     }
-    dac->set(0, (fade_phase_ * frame->data[ModMatrix::GAIN]));
-    // dac->set(1, (frame->data[ModMatrix::BEND]));
+
+    if (ampEnvelopeEngine_.stage() == EnvelopeEngine::IDLE) {
+      state_ = IDLE;
+    }
+
+    modMatrixEngine_->set_midi_velocity(velocity_);
+    modMatrixEngine_->setAmpEnvelope(ampEnvelopeEngine_.next());
+    modMatrixEngine_->setModEnvelope(modEnvelopeEngine_.next());
+    modMatrixEngine_->setLfo(0, lfoEngine_[0].next());
+    modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
+    ModMatrixEngine::Frame* frame = modMatrixEngine_->process();
+
+    dac->set(0, (fade_phase_ * frame->data[ModMatrix::GAIN]) * 65535);
+    dac->set(1, (pots_->read(Pots::Resonace_1) * frame->data[ModMatrix::RESONANCE_1]) * 65535);
+    dac->set(2, (pots_->read(Pots::Resonace_2) * frame->data[ModMatrix::RESONANCE_2]) * 65535);
+    dac->set(3, (pots_->read(Pots::Shape_1) * frame->data[ModMatrix::SHAPE_1]) * 65535);
+    dac->set(4, (pots_->read(Pots::Shape_2) * frame->data[ModMatrix::SHAPE_2]) * 65535);
+    dac->set(5, (pots_->read(Pots::Cutoff_1) * frame->data[ModMatrix::CUTOFF_1]) * 65535);
+    dac->set(6, (pots_->read(Pots::Cutoff_2) * frame->data[ModMatrix::CUTOFF_2]) * 65535);
+    dac->set(7, (calculatePitch() * frame->data[ModMatrix::PITCH]) * 65535);
   }
 
  private:
@@ -112,10 +131,17 @@ class Voice {
   State state_;
   float velocity_;
   float fade_phase_;
+  Pots* pots_;
   Settings* settings_;
   ModMatrixEngine* modMatrixEngine_;
-  EnvelopeEngine envelopeEngine_[Settings::kNumEnvelopes];
+  EnvelopeEngine ampEnvelopeEngine_;
+  EnvelopeEngine modEnvelopeEngine_;
   LfoEngine lfoEngine_[Settings::kNumLfos];
+
+  float calculatePitch() {
+    // return settings_->calibration().note(note_);
+    return 0.f;
+  }
 };
 
 #endif

@@ -30,8 +30,8 @@ public:
 		set_stage(phase_ < lfo_->skew() ? RISING : FALLING, true);
 	}
 
-	void retrigger(MidiEngine::Event &e) {
-		if (lfo_->retrigger_accepted(e)) {
+	void retrigger() {
+		if (lfo_->retrigger()) {
 			reset();
 		}
 	}

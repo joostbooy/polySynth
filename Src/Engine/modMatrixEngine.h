@@ -13,8 +13,12 @@ class ModMatrixEngine {
     modMatrix_ = &settings->modMatrix();
   }
 
-  void set_envelope(int index, float value) {
-    source_[ModMatrix::ENVELOPE_1 + index] = value;
+  void setAmpEnvelope(float value) {
+    source_[ModMatrix::AMP_ENVELOPE] = value;
+  }
+
+    void setModEnvelope(float value) {
+    source_[ModMatrix::MOD_ENVELOPE] = value;
   }
 
     void setLfo(int index, float value) {
