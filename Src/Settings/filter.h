@@ -7,8 +7,18 @@
 
 class Filter {
  public:
-  enum Type { HP, BP, LP, NUM_FILTER_TYPES };
-  enum Routing { SERIES, PARALEL, NUM_FILTER_ROUTINGS };
+  enum Type { 
+    HP, 
+    BP, 
+    LP2P, 
+    NUM_FILTER_TYPES 
+  };
+  
+  enum Routing { 
+    SERIES, 
+    PARALEL,
+    NUM_FILTER_ROUTINGS
+   };
 
   void init() {
     setType(HP);
@@ -17,12 +27,9 @@ class Filter {
 
   const char* typeText(Type type) {
     switch (type) {
-      case HP:
-        return "HP";
-      case BP:
-        return "BP";
-      case LP:
-        return "2PLP";
+      case HP:    return "HP";
+      case BP:    return "BP";
+      case LP2P:  return "2PLP";
       default:
         break;
     }
@@ -31,10 +38,8 @@ class Filter {
 
   const char* routingText(Routing type) {
     switch (type) {
-      case SERIES:
-        return "SERIES";
-      case PARALEL:
-        return "PARALEL";
+      case SERIES:  return "SERIES";
+      case PARALEL: return "PARALEL";
       default:
         break;
     }

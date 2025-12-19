@@ -22,22 +22,14 @@ class ModMatrix {
 
   static const char* destination_text(int value) {
     switch (value) {
-      case PITCH:
-        return "PITCH";
-      case GAIN:
-        return "GAIN";
-      case CUTOFF_1:
-        return "CUTOFF 1";
-      case CUTOFF_2:
-        return "CUTOFF 2";
-      case RESONANCE_1:
-        return "RESONANCE 1";
-      case RESONANCE_2:
-        return "RESONANCE 2";
-      case SHAPE_1:
-        return "SHAPE 1";
-      case SHAPE_2:
-        return "SHAPE 2";
+      case PITCH:       return "PITCH";
+      case GAIN:        return "GAIN";
+      case CUTOFF_1:    return "CUTOFF 1";
+      case CUTOFF_2:    return "CUTOFF 2";
+      case RESONANCE_1: return "RESONANCE 1";
+      case RESONANCE_2: return "RESONANCE 2";
+      case SHAPE_1:     return "SHAPE 1";
+      case SHAPE_2:     return "SHAPE 2";
       default:
         break;
     }
@@ -65,32 +57,20 @@ class ModMatrix {
     NUM_SOURCES
   };
 
-  static const char* source_text(int value) {
+   const char* source_text(int value) {
     switch (value) {
-      case LFO_1:
-        return "LFO 1";
-      case LFO_2:
-        return "LFO 2";
-      case AMP_ENVELOPE:
-        return "AMP ENVELOPE";
-      case MOD_ENVELOPE:
-        return "MOD ENVELOPE";
-      case CV_1:
-        return "CV 1";
-      case CV_2:
-        return "CV 2";
-      case MIDI_BEND:
-        return "MIDI BEND";
-      case MIDI_VELOCITY:
-        return "MIDI VELOCITY";
-      case MIDI_CC_A:
-        return nullptr;  // midi_cc_number_text(0);
-      case MIDI_CC_B:
-        return nullptr;  // midi_cc_number_text(1);
-      case MIDI_CC_C:
-        return nullptr;  // midi_cc_number_text(2);
-      case MIDI_CC_D:
-        return nullptr;  // midi_cc_number_text(3);
+      case LFO_1:         return "LFO 1";
+      case LFO_2:         return "LFO 2";
+      case AMP_ENVELOPE:  return "AMP ENVELOPE";
+      case MOD_ENVELOPE:  return "MOD ENVELOPE";
+      case CV_1:          return "CV 1";
+      case CV_2:          return "CV 2";
+      case MIDI_BEND:     return "MIDI BEND";
+      case MIDI_VELOCITY: return "MIDI VELOCITY";
+      case MIDI_CC_A:     return midi_cc_number_text(0);
+      case MIDI_CC_B:     return midi_cc_number_text(1);
+      case MIDI_CC_C:     return midi_cc_number_text(2);
+      case MIDI_CC_D:     return midi_cc_number_text(3);
       default:
         break;
     }
@@ -178,7 +158,7 @@ class ModMatrix {
 
  private:
   uint32_t matrix_[NUM_SOURCES];
-  uint8_t midi_cc_number_[4];  //[kNumUserCc];
+  uint8_t midi_cc_number_[4];
 };
 
 #endif

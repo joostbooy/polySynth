@@ -28,6 +28,7 @@ class Voice {
   uint8_t port() {
     return port_;
   }
+
   uint8_t note() {
     return note_;
   }
@@ -65,8 +66,8 @@ class Voice {
   }
 
   void note_on(MidiEngine::Event& e) {
-    port_ = e.port;
     lastNote_ = note_;
+    port_ = e.port;
     note_ = e.data[0];
     channel_ = e.message & 0x0F;
     velocity_ = e.data[1] * (1.f / 127.f);
@@ -110,8 +111,7 @@ class Voice {
     modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
     ModMatrixEngine::Frame* frame = modMatrixEngine_->process();
 
-    Patch &p = settings_->selectedPatch();
-    dac->set(0, (fade_phase_ * frame->data[ModMatrix::GAIN]) * 65535);
+    Patch& p = settings_->selectedPatch();
     dac->set(1, (p.filter().resonance1() * frame->data[ModMatrix::RESONANCE_1]) * 65535);
     dac->set(2, (p.filter().resonance2() * frame->data[ModMatrix::RESONANCE_2]) * 65535);
     dac->set(3, (p.oscillator().shape1() * frame->data[ModMatrix::SHAPE_1]) * 65535);
@@ -119,6 +119,7 @@ class Voice {
     dac->set(5, (p.filter().cutoff1() * frame->data[ModMatrix::CUTOFF_1]) * 65535);
     dac->set(5, (p.filter().cutoff2() * frame->data[ModMatrix::CUTOFF_2]) * 65535);
     dac->set(7, (calculatePitch() * frame->data[ModMatrix::PITCH]) * 65535);
+    dac->set(0, (fade_phase_ * frame->data[ModMatrix::GAIN]) * 65535);
   }
 
  private:

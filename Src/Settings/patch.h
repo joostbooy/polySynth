@@ -10,6 +10,9 @@
 
 class Patch {
  public:
+
+  static const size_t kMaxNameLength = 16;
+
   void init() {
     lfo(0).init();
     lfo(1).init();
@@ -19,6 +22,15 @@ class Patch {
     ampEnvelope().init();
     modEnvelope().init();
     modMatrix().init();
+    setName("EMPTY PATCH");
+  }
+
+  const char* name() {
+    return name_;
+  }
+
+  void setName(const char* text) {
+    StringUtils::copy(name_, const_cast<char*>(text), kMaxNameLength);
   }
 
   Midi& midi() {
@@ -91,6 +103,7 @@ class Patch {
   Envelope modEnvelope_;
   ModMatrix modMatrix_;
   Lfo lfo_[2];
+  char name_[kMaxNameLength];
 };
 
 #endif  // Patch_h

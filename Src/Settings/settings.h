@@ -26,8 +26,6 @@ class Settings {
     for (size_t i = 0; i < kNumPatches; i++) {
       patch(i).init();
     }
-
-    set_project_name("NEW.PRJ");
   }
 
   void init() {
@@ -40,16 +38,6 @@ class Settings {
   bool save();
   bool save(const char* new_path);
   bool load(const char* new_path);
-
-  bool has_valid_path() {
-    char file_name[max_name_length()];
-
-    if (path.length() > 0) {
-      StringUtils::get_file_name_from_path(const_cast<char*>(path.read()), file_name);
-      return StringUtils::text_is_equal(file_name, project_name_);
-    }
-    return false;
-  }
 
   uint32_t current_version() {
     return 0;
@@ -122,19 +110,6 @@ class Settings {
     return selectedPatch().modMatrix();
   }
 
-  // name
-  const char* project_name() {
-    return project_name_;
-  }
-
-  void set_project_name(const char* value) {
-    return StringUtils::copy(project_name_, const_cast<char*>(value), max_name_length());
-  }
-
-  const size_t max_name_length() {
-    return 13;
-  }
-
  private:
   StringBuilderBase<63> path;
 
@@ -146,7 +121,6 @@ class Settings {
   int lfoIndex_;
   int patchIndex_;
 
-  char project_name_[8];
   Patch patch_[kNumPatches];
 };
 
