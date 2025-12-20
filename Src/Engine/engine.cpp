@@ -20,12 +20,12 @@ void Engine::stop() {
 void Engine::noteOn(MidiEngine::Event& e) {
   if (midiEngine_.messageAccepted(e) && midiEngine_.withinKeyRange(e)) {
     noteQue_.write(e);
-    voiceEngine_.request_voice();
+    voiceEngine_.requestVoice();
   }
 }
 
 void Engine::noteOff(MidiEngine::Event& e) {
-  voiceEngine_.note_off(e.port, e.message & 0x0F, e.data[0]);
+  voiceEngine_.noteOff(e.port, e.message & 0x0F, e.data[0]);
 }
 
 void Engine::pitchBend(MidiEngine::Event& e) {
@@ -83,7 +83,7 @@ void Engine::processRequests() {
 
   if (requests_ & STOP) {
     for (size_t i = 0; i < Settings::kNumVoices; i++) {
-      voiceEngine_.voice(i).request_stop();
+      voiceEngine_.voice(i).requestStop();
     }
     noteQue_.clear();
     state_ = STOPPED;
@@ -92,7 +92,7 @@ void Engine::processRequests() {
 
   if (requests_ & KILL_VOICES) {
     for (size_t i = 0; i < Settings::kNumVoices; i++) {
-      voiceEngine_.voice(i).request_stop();
+      voiceEngine_.voice(i).requestStop();
     }
     clearRequest(KILL_VOICES);
   }
@@ -109,6 +109,7 @@ void Engine::processSwitches() {
   gpio_->setSelectedFilter(p.filter().type(), p.filter().routing());
 }
 
+// 1Khz
 void Engine::update() {
   processRequests();
 
@@ -117,7 +118,7 @@ void Engine::update() {
     processSwitches();
 
     while (voiceEngine_.available() && noteQue_.readable()) {
-      voiceEngine_.assign_voice(noteQue_.read());
+      voiceEngine_.assignVoice(noteQue_.read());
     }
     voiceEngine_.update();
   }

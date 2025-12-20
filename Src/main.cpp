@@ -59,6 +59,7 @@ extern "C" {
 		}
 		TIM2->SR = ~TIM_IT_UPDATE;
 		ui.poll();
+		engine.update();
 	}
 } //extern "C"
 

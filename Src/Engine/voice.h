@@ -13,17 +13,18 @@ class Voice {
   void init(Settings* settings, ModMatrixEngine* modMatrixEngine, Dac *dac) {
     dac_ = dac;
     settings_ = settings;
-    state_ = IDLE;
-    key_pressed_ = false;
-    stop_requested_ = false;
-    lastNote_ = 60;
     modMatrixEngine_ = modMatrixEngine;
+    state_ = IDLE;
+    keyPressed_ = false;
+    stopRequested_ = false;
+    lastNote_ = 60;
 
     ampEnvelopeEngine_.init(&settings->ampEnvelope());
     modEnvelopeEngine_.init(&settings->modEnvelope());
 
     lfoEngine_[0].init(&settings->lfo(0));
     lfoEngine_[1].init(&settings->lfo(1));
+    index_ = counter_++;
   }
 
   uint8_t port() {
@@ -38,8 +39,8 @@ class Voice {
     return channel_;
   }
 
-  bool key_pressed() {
-    return key_pressed_;
+  bool keyPressed() {
+    return keyPressed_;
   }
 
   State state() {
@@ -58,24 +59,24 @@ class Voice {
     return lfoEngine_[index];
   }
 
-  void request_stop() {
-    stop_requested_ = true;
+  void requestStop() {
+    stopRequested_ = true;
   }
 
-  bool is_available() {
+  bool isAvailable() {
     return state_ == IDLE;
   }
 
-  void note_on(MidiEngine::Event& e) {
+  void noteOn(MidiEngine::Event& e) {
     lastNote_ = note_;
     port_ = e.port;
     note_ = e.data[0];
     channel_ = e.message & 0x0F;
     velocity_ = e.data[1] * (1.f / 127.f);
 
-    key_pressed_ = true;
-    stop_requested_ = false;
-    fade_phase_ = 1.f;
+    keyPressed_ = true;
+    stopRequested_ = false;
+    fadePhase_ = 1.f;
 
     lfoEngine_[0].retrigger();
     lfoEngine_[1].retrigger();
@@ -86,16 +87,16 @@ class Voice {
     state_ = ACTIVE;
   }
 
-  void note_off() {
-    key_pressed_ = false;
+  void noteOff() {
+    keyPressed_ = false;
     ampEnvelopeEngine_.release();
     modEnvelopeEngine_.release();
   }
 
   void update() {
-    if (stop_requested_) {
-      if (fade_phase_ > 0.0f) {
-        fade_phase_ -= 1000.f / (CONTROL_RATE * 4.f);
+    if (stopRequested_) {
+      if (fadePhase_ > 0.0f) {
+        fadePhase_ -= 1000.f / (CONTROL_RATE * 4.f);
       } else {
         state_ = IDLE;
       }
@@ -113,27 +114,28 @@ class Voice {
     ModMatrixEngine::Frame* frame = modMatrixEngine_->process();
 
     Patch& p = settings_->selectedPatch();
-    dac_->set(index_, 1, (p.filter().resonance1() * frame->data[ModMatrix::RESONANCE_1]) * 65535);
-    dac_->set(index_, 2, (p.filter().resonance2() * frame->data[ModMatrix::RESONANCE_2]) * 65535);
-    dac_->set(index_, 3, (p.oscillator().shape1() * frame->data[ModMatrix::SHAPE_1]) * 65535);
-    dac_->set(index_, 3, (p.oscillator().shape2() * frame->data[ModMatrix::SHAPE_2]) * 65535);
-    dac_->set(index_, 5, (p.filter().cutoff1() * frame->data[ModMatrix::CUTOFF_1]) * 65535);
+    dac_->set(index_, 0, (calculatePitch() * frame->data[ModMatrix::PITCH]) * 65535);
+    dac_->set(index_, 1, (p.oscillator().shape1() * frame->data[ModMatrix::SHAPE_1]) * 65535);
+    dac_->set(index_, 2, (p.oscillator().shape2() * frame->data[ModMatrix::SHAPE_2]) * 65535);
+    dac_->set(index_, 3, (p.filter().cutoff1() * frame->data[ModMatrix::CUTOFF_1]) * 65535);
+    dac_->set(index_, 4, (p.filter().resonance1() * frame->data[ModMatrix::RESONANCE_1]) * 65535);
     dac_->set(index_, 5, (p.filter().cutoff2() * frame->data[ModMatrix::CUTOFF_2]) * 65535);
-    dac_->set(index_, 7, (calculatePitch() * frame->data[ModMatrix::PITCH]) * 65535);
-    dac_->set(index_, 0, (fade_phase_ * frame->data[ModMatrix::GAIN]) * 65535);
+    dac_->set(index_, 6, (p.filter().resonance2() * frame->data[ModMatrix::RESONANCE_2]) * 65535);
+    dac_->set(index_, 7, (fadePhase_ * frame->data[ModMatrix::GAIN]) * 65535);
   }
 
  private:
- int index_;
-  bool key_pressed_;
-  bool stop_requested_;
+  int index_;
+  static inline int counter_;
+  bool keyPressed_;
+  bool stopRequested_;
   uint8_t note_;
   uint8_t lastNote_;
   uint8_t port_;
   uint8_t channel_;
   State state_;
   float velocity_;
-  float fade_phase_;
+  float fadePhase_;
   Dac* dac_;
   Settings* settings_;
   ModMatrixEngine* modMatrixEngine_;

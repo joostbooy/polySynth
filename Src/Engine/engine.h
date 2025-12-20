@@ -23,6 +23,7 @@ class Engine {
 
   void init(Settings*, Uart*, Usb*, Dac*, Gpio*);
   void tick();
+  void update();
 
   void addReqestBlocking(Request type) {
     addRequest(type);
@@ -54,7 +55,6 @@ class Engine {
   void processRequests();
   void processSwitches();
   void processMidi();
-  void update();
   void noteOn(MidiEngine::Event& e);
   void noteOff(MidiEngine::Event& e);
   void pitchBend(MidiEngine::Event& e);

@@ -45,9 +45,7 @@ void Dac::init() {
 	// sync_pin HIGH
 	GPIOA->BSRR = GPIO_PIN_4;
 	Micros::delay(1);
-	// delay 80 nS
 
-	
 	writeDac(RESET_POWER_ON, 0, 0, 0);
     Micros::delay(50);
  	writeDac(LOAD_CLEAR_CODE_REGISTER, 0, 0, ClearIgnore);
