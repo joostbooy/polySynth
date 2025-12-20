@@ -35,11 +35,11 @@ public:
 		int w = canvas_->width();
 		int h = (canvas_->height() - 20) / kNumRows;
 
-		canvas_->set_font(Font::SMALL);
+		canvas_->setFont(Font::SMALL);
 
 		for (int i = 0; i < kNumRows; ++i) {
 			int text__row = (top_row_ + i) % kNumRows;
-			canvas_->draw_text(x, y + (h * i), w, h, text_[text__row].read(), Canvas::LEFT, Canvas::CENTER);
+			canvas_->drawText(x, y + (h * i), w, h, text_[text__row].read(), Canvas::LEFT, Canvas::CENTER);
 		}
 	}
 

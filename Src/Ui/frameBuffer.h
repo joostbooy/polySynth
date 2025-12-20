@@ -52,7 +52,7 @@ private:
 	static constexpr int kWidth = 256;
 	static constexpr int kHeight = 64;
 	static constexpr size_t size_ = (kWidth * kHeight) / 2;
-	static uint8_t data_[size_] __attribute__((section(".dtcm")));
+	uint8_t data_[size_];
 };
 
 #endif

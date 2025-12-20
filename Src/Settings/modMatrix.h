@@ -128,11 +128,11 @@ class ModMatrix {
 
   // Midi CC
   int midiCcNumber(int index) {
-    return midi_cc_number_[index];
+    return midiCcNumber_[index];
   }
 
   void setMidiCcNumber(int index, int cc_number) {
-    midi_cc_number_[index] = SettingsUtils::clip(0, 127, cc_number);
+    midiCcNumber_[index] = SettingsUtils::clip(0, 127, cc_number);
   }
 
   const char* midiCcNumberText(int index) {
@@ -146,7 +146,7 @@ class ModMatrix {
     }
 
     for (size_t i = 0; i < kNumUserCc; ++i) {
-      fileWriter.write(midi_cc_number_[i]);
+      fileWriter.write(midiCcNumber_[i]);
     }
   }
 
@@ -156,7 +156,7 @@ class ModMatrix {
     }
 
     for (size_t i = 0; i < kNumUserCc; ++i) {
-      fileReader.read(midi_cc_number_[i]);
+      fileReader.read(midiCcNumber_[i]);
     }
   }
 
@@ -171,13 +171,13 @@ class ModMatrix {
     }
 
     for (size_t i = 0; i < kNumUserCc; ++i) {
-      midi_cc_number_[i] = midi_cc_number_[i];
+      midiCcNumber_[i] = midiCcNumber_[i];
     }
   }
 
  private:
   uint32_t matrix_[NUM_SOURCES];
-  uint8_t midi_cc_number_[4];
+  uint8_t midiCcNumber_[4];
 };
 
 #endif

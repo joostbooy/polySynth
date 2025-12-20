@@ -101,7 +101,7 @@ namespace EnvelopePage {
 
 		int index = settings_->selected_envelope_index();
 		float phase = engine_->voiceEngine().most_recent_voice().envelopeEngine(index).phase();
-		canvas_->vertical_line(x + (phase * w), y, h, Canvas::BLACK);
+		canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);
 	}
 
 	const size_t target_fps() {

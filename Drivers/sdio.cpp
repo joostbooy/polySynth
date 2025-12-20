@@ -58,7 +58,7 @@ const uint32_t kMemoryToPeripheral		= (1 << 6);
 const uint32_t kPeripheralFlowControl	= (1 << 5);
 const uint32_t kEnable_TC_interupt		= (1 << 4);
 
-void Sdio::init_dma(uint32_t buffer, DmaType dmaType) {
+void Sdio::initDma(uint32_t buffer, DmaType dmaType) {
 	DMA2_Stream3->CR &= ~DMA_SxCR_EN;			// disable stream & wait
 	while (DMA2_Stream3->CR & DMA_SxCR_EN) {};
 
@@ -81,7 +81,7 @@ void Sdio::init_dma(uint32_t buffer, DmaType dmaType) {
 	DMA2_Stream3->NDTR = 0;
 	DMA2_Stream3->CR |= DMA_SxCR_EN;		// enable stream
 
-	Sdio::sdio_->lock_dma();
+	Sdio::sdio_->lockDma();
 }
 
 extern "C" {
@@ -90,7 +90,7 @@ extern "C" {
 		DMA2->LIFCR |= DMA_LIFCR_CTCIF3 | DMA_LIFCR_CHTIF3;
 
 		if (flags & DMA_LISR_TCIF3) {
-			Sdio::sdio_->unlock_dma();
+			Sdio::sdio_->unlockDma();
 		}
 	}
 }

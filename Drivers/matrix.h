@@ -12,7 +12,7 @@ public:
 
 	void init();
 
-	void set_leds(uint8_t *led_data) {
+	void setLeds(uint8_t *led_data) {
 		for (int i = 0; i < kNumOfLedCollumns; ++i) {
 			led_row_[i] = *led_data++;
 		}
@@ -21,19 +21,19 @@ public:
 	void refresh(uint8_t *sw_buffer) {
 		// read switches
 		for (int i = 0; i < kNumOfSwitchCollumns; ++i) {
-			set_collumn(i);
+			setCollumn(i);
 
 			// latch switch rows
 			GPIOB->BSRR = GPIO_PIN_3 << 16;
 			Micros::delay(1);
 			GPIOB->BSRR = GPIO_PIN_3;
 
-			*sw_buffer++ = spi_transfer();
+			*sw_buffer++ = spiTransfer();
 		}
 
 		// write leds
-		set_collumn(led_coll_);
-		spi_transfer(led_row_[led_coll_]);
+		setCollumn(led_coll_);
+		spiTransfer(led_row_[led_coll_]);
 
 		++led_coll_;
 		if (led_coll_ >= kNumOfLedCollumns) {
@@ -54,7 +54,7 @@ private:
 	uint8_t led_coll_ = 0;
 	uint8_t led_row_[kNumOfLedCollumns];
 
-	void set_collumn(int coll) {
+	void setCollumn(int coll) {
 		uint32_t reg = 0;
 		coll & 0x01 ? reg |= GPIO_PIN_6 : reg |= GPIO_PIN_6 << 16;
 		coll & 0x02 ? reg |= GPIO_PIN_7 : reg |= GPIO_PIN_7 << 16;
@@ -63,7 +63,7 @@ private:
 		Micros::delay(1);
 	}
 
-	uint8_t spi_transfer(uint8_t send = 0xff) {
+	uint8_t spiTransfer(uint8_t send = 0xff) {
 		volatile uint8_t recv;
 
 		while (!(SPI4->SR & SPI_FLAG_TXE));

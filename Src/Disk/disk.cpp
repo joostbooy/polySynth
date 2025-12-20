@@ -52,7 +52,7 @@ DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void *buff) {
 	case CTRL_SYNC:
 		return RES_OK;
 	case GET_SECTOR_COUNT:
-		*static_cast<DWORD*>(buff) = Disk::sdio_->sector_count();
+		*static_cast<DWORD*>(buff) = Disk::sdio_->sectorCount();
 		return RES_OK;
 	case GET_SECTOR_SIZE:
 		*static_cast<WORD*>(buff) = 512;

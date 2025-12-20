@@ -115,7 +115,7 @@ extern "C" {
 		DMA1->HIFCR |= DMA_HIFCR_CTCIF4 | DMA_HIFCR_CHTIF4;
 
 		if (flags & DMA_HISR_TCIF4) {
-			Display::display_->unlock_dma();
+			Display::display_->unlockDma();
 		}
 	}
 }

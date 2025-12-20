@@ -49,18 +49,18 @@ class EnvelopeEngine {
         sample_ = 0.f;
         break;
       case ATTACK:
-        phase_ += envelope_->attack_inc();
+        phase_ += envelope_->attackInc();
         if (phase_ < 1.f) {
-          sample_ = Curve::read(phase_, envelope_->attack_shape());
+          sample_ = Curve::read(phase_, envelope_->attackShape());
         } else {
           phase_ = 0.f;
           stage_ = DECAY;
         }
         break;
       case DECAY:
-        phase_ += envelope_->decay_inc();
+        phase_ += envelope_->decayInc();
         if (phase_ < 1.f) {
-          sample_ = Dsp::cross_fade(1.f, envelope_->sustain_level(), Curve::read(phase_, envelope_->decay_shape()));
+          sample_ = Dsp::cross_fade(1.f, envelope_->sustainLevel(), Curve::read(phase_, envelope_->decayShape()));
         } else {
           if (mode_ == Envelope::GATE) {
             phase_ = 0.f;
@@ -72,12 +72,12 @@ class EnvelopeEngine {
         }
         break;
       case SUSTAIN:
-        sample_ = envelope_->sustain_level();
+        sample_ = envelope_->sustainLevel();
         break;
       case HOLD:
-        phase_ += envelope_->hold_inc();
+        phase_ += envelope_->holdInc();
         if (phase_ < 1.f) {
-          sample_ = envelope_->sustain_level();
+          sample_ = envelope_->sustainLevel();
         } else {
           phase_ = 0.f;
           releaseLevel_ = sample_;
@@ -85,9 +85,9 @@ class EnvelopeEngine {
         }
         break;
       case RELEASE:
-        phase_ += envelope_->release_inc();
+        phase_ += envelope_->releaseInc();
         if (phase_ < 1.f) {
-          sample_ = Dsp::cross_fade(releaseLevel_, 0.f, Curve::read(phase_, envelope_->release_shape()));
+          sample_ = Dsp::cross_fade(releaseLevel_, 0.f, Curve::read(phase_, envelope_->releaseShape()));
         } else {
           phase_ = 0.f;
           stage_ = IDLE;

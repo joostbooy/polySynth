@@ -237,7 +237,7 @@ namespace TextInputPage {
 			return;
 		}
 
-		switch (Controller::button_to_function(id))
+		switch (Controller::buttonToFunction(id))
 		{
 		case BACKSPACE:
 			backspace();
@@ -276,8 +276,8 @@ namespace TextInputPage {
 
 
 	void refresh_leds() {
-		leds_->set_footer_encoders(4);
-		leds_->set_footer_buttons(NUM_FOOTER_OPTIONS);
+		leds_->setFooterEncoders(4);
+		leds_->setFooterButtons(NUM_FOOTER_OPTIONS);
 	}
 
 	const size_t target_fps() {
@@ -286,11 +286,11 @@ namespace TextInputPage {
 
 	void draw() {
 		canvas_->clear();
-		canvas_->set_font(Font::SMALL);
+		canvas_->setFont(Font::SMALL);
 
 		//draw message
 		canvas_->fill(0, 0, canvas_->width(), 10, Canvas::BLACK);
-		canvas_->draw_text(0, 0, canvas_->width(), 10, message_.read(), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
+		canvas_->drawText(0, 0, canvas_->width(), 10, message_.read(), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
 
 		//draw char buffer
 		canvas_->fill(box_x_, 14, box_w_, 11, Canvas::DARK_GRAY);
@@ -300,11 +300,11 @@ namespace TextInputPage {
 		int char_y = 16;
 		int length = char_stack.size();
 
-		canvas_->set_font(Font::SMALL, Canvas::WHITE);
+		canvas_->setFont(Font::SMALL, Canvas::WHITE);
 
 		for (int i = 0; i < length; ++i) {
 			char c = char_stack.read(i);
-			canvas_->draw_char(char_x, char_y, c);
+			canvas_->drawChar(char_x, char_y, c);
 			char_x += canvas_->font().width(c);
 
 			if (i < text_cursor) {
@@ -316,7 +316,7 @@ namespace TextInputPage {
 		if (text_cursor_ticks_ < 500) {
 			uint8_t h = canvas_->font().height();
 			cursor_x = SettingsUtils::clipMin(box_x_, cursor_x - 1);
-			canvas_->vertical_line(cursor_x, char_y, h, Canvas::WHITE);
+			canvas_->verticalLine(cursor_x, char_y, h, Canvas::WHITE);
 		}
 
 		if ((text_cursor_ticks_ += target_fps()) >= 1000){
@@ -330,9 +330,9 @@ namespace TextInputPage {
 
 		for (int i = 0; i < kCharTableSize; ++i) {
 			color = char_cursor_ == i ? Canvas::BLACK : Canvas::LIGHT_GRAY;
-			canvas_->set_font(Font::SMALL, color);
-			canvas_->draw_char(x, y, char_table[i]);
-			x = canvas_->text_cursor() + 10;
+			canvas_->setFont(Font::SMALL, color);
+			canvas_->drawChar(x, y, char_table[i]);
+			x = canvas_->textCursor() + 10;
 			if ((i % kCharsPerRow) == (kCharsPerRow - 1)) {
 				x = 2;
 				y += 8;

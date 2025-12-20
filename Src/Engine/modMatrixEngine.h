@@ -25,19 +25,19 @@ class ModMatrixEngine {
     source_[ModMatrix::LFO_1 + index] = value;
   }
 
-  void set_cv(int channel, float value) {
+  void setCv(int channel, float value) {
     source_[ModMatrix::CV_1 + channel] = value;
   }
 
-  void set_midi_velocity(float value) {
+  void setMidiVelocity(float value) {
     source_[ModMatrix::MIDI_VELOCITY] = value;
   }
 
-  void set_midi_bend(float value) {
+  void setMidiBend(float value) {
     source_[ModMatrix::MIDI_BEND] = value;
   }
 
-  void set_midi_cc(uint8_t number, float value) {
+  void setMidiCc(uint8_t number, float value) {
     for (size_t i = 0; i < Settings::kNumUserCc; ++i) {
       if (number == modMatrix_->midiCcNumber(i)) {
         source_[i + ModMatrix::MIDI_CC_A] = value;

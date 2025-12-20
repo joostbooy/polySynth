@@ -94,10 +94,10 @@ namespace ListPage {
 	}
 
 	void on_encoder(int id, int state) {
-		int index = Controller::encoder_to_function(id);
+		int index = Controller::encoderToFunction(id);
 		if (index >= 0) {
-			bool pressed = Controller::encoder_is_pressed(id);
-			bool shifted = Controller::is_pressed(Controller::SHIFT_BUTTON);
+			bool pressed = Controller::encoderIsPressed(id);
+			bool shifted = Controller::isPressed(Controller::SHIFT_BUTTON);
 			list_->onEncoder(index, state, pressed || shifted);
 		}
 	}
@@ -105,9 +105,9 @@ namespace ListPage {
 	void refresh_leds() {
 		for (int i = 0; i < list_->collumns(); ++i) {
 			if ((i + list_->topItem()) < list_->numItems()) {
-				leds_->set_footer_encoder(i, Leds::RED);
+				leds_->setFooterEncoder(i, Leds::RED);
 			} else {
-				leds_->set_footer_encoder(i, Leds::BLACK);
+				leds_->setFooterEncoder(i, Leds::BLACK);
 			}
 		}
 	}
@@ -117,14 +117,14 @@ namespace ListPage {
 		const int y = canvas_->height() - h;
 		const int w = canvas_->width() / list_->collumns();
 
-		canvas_->set_font(Font::SMALL);
+		canvas_->setFont(Font::SMALL);
 
 		for (int i = 0; i < list_->collumns(); ++i) {
 			int item = i + list_->topItem();
 			if (item < list_->numItems()) {
 				int x = i * w;
-				canvas_->draw_text(x, y, w, h, list_->itemText(item), Canvas::CENTER, Canvas::CENTER);
-				canvas_->draw_text(x, y + 10, w, h, list_->valueText(item), Canvas::CENTER, Canvas::CENTER);
+				canvas_->drawText(x, y, w, h, list_->itemText(item), Canvas::CENTER, Canvas::CENTER);
+				canvas_->drawText(x, y + 10, w, h, list_->valueText(item), Canvas::CENTER, Canvas::CENTER);
 			}
 		}
 

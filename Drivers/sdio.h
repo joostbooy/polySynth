@@ -53,7 +53,7 @@ class Sdio {
     }
 
     if (!initialised_) {
-      initialised_ = init_card();
+      initialised_ = initCard();
     }
 
     return initialised_;
@@ -91,26 +91,26 @@ class Sdio {
     return !(GPIOA->IDR & GPIO_PIN_8);
   }
 
-  uint32_t sector_count() {
+  uint32_t sectorCount() {
     return cardInfo.size;
   }
 
-  uint32_t sector_size() {
+  uint32_t sectorSize() {
     return 512;
   }
 
-  volatile bool dma_busy() {
-    return dma_busy_;
+  volatile bool dmaBusy() {
+    return dmaBusy_;
   }
 
-  void unlock_dma() {
+  void unlockDma() {
     SDIO->DCTRL &= ~SDIO_DCTRL_DMAEN;
     DMA2_Stream3->CR &= ~DMA_SxCR_EN;
-    dma_busy_ = false;
+    dmaBusy_ = false;
   }
 
-  void lock_dma() {
-    dma_busy_ = true;
+  void lockDma() {
+    dmaBusy_ = true;
   }
 
  private:
@@ -125,9 +125,9 @@ class Sdio {
   CardInfo cardInfo;
   bool initialised_ = false;
   bool detected_ = false;
-  volatile bool dma_busy_ = false;
+  volatile bool dmaBusy_ = false;
 
-  void init_dma(uint32_t buffer, DmaType type);
+  void initDma(uint32_t buffer, DmaType type);
 
   void powerOff() {
     // if (initialised_ == false) {
@@ -152,7 +152,7 @@ class Sdio {
   // 0x00 // SDIO clock 24MHz
   //	}
 
-  bool init_card() {
+  bool initCard() {
     // Power down and start in 400 kHz, 1 bit mode
     // SDIO->POWER = 0;
     // while (SDIO->POWER);
@@ -367,7 +367,7 @@ class Sdio {
 
     SDIO->DCTRL = 0;
 
-    init_dma((uint32_t)buffer, SD_TO_MEM);
+    initDma((uint32_t)buffer, SD_TO_MEM);
 
     SDIO->DTIMER = 2400000;  // 100ms (on 24Mhz bus clock)
     SDIO->DLEN = 512 * count;
@@ -378,7 +378,7 @@ class Sdio {
       return false;
     }
 
-    while (dma_busy_) {
+    while (dmaBusy_) {
     };
 
     // stop transfer if needed
@@ -425,13 +425,13 @@ class Sdio {
 
     SDIO->DCTRL = 0;
 
-    init_dma((uint32_t)buffer, MEM_TO_SD);
+    initDma((uint32_t)buffer, MEM_TO_SD);
 
     SDIO->DTIMER = 12000000;  // 500ms (on 24Mhz bus clock)
     SDIO->DLEN = 512 * count;
     SDIO->DCTRL = (9 << 4) | SDIO_DCTRL_DTEN | SDIO_DCTRL_DMAEN;
 
-    while (dma_busy_) {
+    while (dmaBusy_) {
     };
 
     // stop transfer if needed

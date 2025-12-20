@@ -65,9 +65,9 @@ namespace TopPage {
 	}
 
 	void on_button(int id, int state) {
-		Controller::on_button(id, state);
+		Controller::onButton(id, state);
 
-		int chapter_id = Controller::button_to_chapter(id);
+		int chapter_id = Controller::buttonToChapter(id);
 
 		if (chapter_id >= 0) {
 			if (state) {
@@ -81,8 +81,6 @@ namespace TopPage {
 	}
 
 	void on_encoder(int id, int state) {
-		Controller::on_encoder(id);
-
 		if (pages_->num_open() == 0) {
 			int index = chapter_.entry()->page_index();
 			chapter_.entry()->set_page_index(index + state);
@@ -91,7 +89,7 @@ namespace TopPage {
 	}
 
 	void refresh_leds() {
-		leds_->set_chapter(chapter_.selected());
+		leds_->setChapter(chapter_.selected());
 	}
 
 	void draw() {
@@ -102,14 +100,14 @@ namespace TopPage {
 			const int x = (canvas_->width() - w) / 2;
 			const int y = (canvas_->height() - h) / 2;
 
-			canvas_->draw_text(x, 0, w, row_h, chapter_.name(), Canvas::CENTER, Canvas::CENTER);
+			canvas_->drawText(x, 0, w, row_h, chapter_.name(), Canvas::CENTER, Canvas::CENTER);
 
 			for (int i = 0; i < kMaxPageRows; ++i) {
 				int page = i + chapter_top_page_;
 				int page_y = (i * row_h) + y;
 
 				if (page < chapter_.entry()->size()) {
-					canvas_->draw_text(x + 4, page_y, chapter_.entry()->name(page));
+					canvas_->drawText(x + 4, page_y, chapter_.entry()->name(page));
 					if (page == chapter_.entry()->page_index()) {
 						canvas_->fill(x, page_y, w, row_h, Canvas::INVERTED);
 					}

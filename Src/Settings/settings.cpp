@@ -25,7 +25,7 @@ bool Settings::save() {
 
 	fileWriter.stop();
 
-	if (!fileWriter.write_ok()) {
+	if (!fileWriter.writeOk()) {
 		return false;
 	}
 
@@ -41,7 +41,7 @@ bool Settings::load(const char* new_path) {
 
 	fileReader.stop();
 
-	if (!fileReader.read_ok()) {
+	if (!fileReader.readOk()) {
 		init();
 		return false;
 	}

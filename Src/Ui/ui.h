@@ -14,16 +14,6 @@
 class Ui {
 
 public:
-	enum ControlType {
-		BUTTON,
-		ENCODER
-	};
-
-	struct Event {
-		Ui::ControlType type;
-		uint8_t id;
-		int8_t value;
-	};
 
 	Leds &leds() { return leds_; }
 	Pages &pages() { return pages_; }
@@ -32,10 +22,20 @@ public:
 	void init(Settings*, Engine*, Matrix*, Display*);
 	void poll();
 	void process();
-	void clear_que();
-	void send_display();
+	void sendDisplay();
 
 private:
+	enum ControlType {
+		BUTTON,
+		ENCODER
+	};
+
+	struct Event {
+		ControlType type;
+		uint8_t id;
+		int8_t value;
+	};
+
 	Canvas canvas_;
 	Pages pages_;
 	Leds leds_;
@@ -46,6 +46,9 @@ private:
 	uint32_t last_interval = 0;
 	uint32_t display_interval = 0;
 	uint8_t sw_raw[8 * 8];
+
+	Que<Ui::Event, 16> uiQue;
+	void addEvent(ControlType, uint8_t, int8_t);
 };
 
 #endif

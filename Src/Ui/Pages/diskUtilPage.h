@@ -41,7 +41,7 @@ namespace DiskUtilPage {
 	void remove(int option) {
 		if (option == ConfirmationPage::CONFIRM) {
 			if (disk_->directory().remove(entry_->name.read())) {
-				MessagePainter::show(entry_->is_dir ? "FOLDER DELETED" : "FILE DELETED");
+				MessagePainter::show(entry_->isDir ? "FOLDER DELETED" : "FILE DELETED");
 			} else {
 				MessagePainter::show("FAILED");
 			}

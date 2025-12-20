@@ -20,7 +20,7 @@ public:
 	struct List {
 		StringBuilderBase<16>name;
 		uint32_t size;
-		bool is_dir;
+		bool isDir;
 	};
 
 	static const int kMaxListSize = 8;
@@ -29,22 +29,22 @@ public:
 	void init(DIR* dir, FILINFO* fil_info, StringBuilder* dir_path) {
 		dir_ = dir;
 		fil_info_ = fil_info;
-		dir_path_ = dir_path;
+		dirPath_ = dir_path;
 	}
 
-	bool is_dir() {
+	bool isDir() {
 		return fil_info_->fattrib & AM_DIR;
 	}
 
-	bool is_read_only() {
+	bool isReadOnly() {
 		return fil_info_->fattrib & AM_RDO;
 	}
 
-	bool is_archive() {
+	bool isArchive() {
 		return fil_info_->fattrib & AM_ARC;
 	}
 
-	bool has_extension(const char* extension) {
+	bool hasExtension(const char* extension) {
 		return StringUtils::has_extension(name(), extension);
 	}
 
@@ -57,14 +57,14 @@ public:
 	}
 
 	const char* path() {
-		return path_.write(dir_path_->read(), "/", name());
+		return path_.write(dirPath_->read(), "/", name());
 	}
 
 	const char* path(const char* entry_name) {
-		return path_.write(dir_path_->read(), "/", entry_name);
+		return path_.write(dirPath_->read(), "/", entry_name);
 	}
 
-	bool is_visible() {
+	bool isVisible() {
 		if ((fil_info_->fattrib & AM_HID) || (fil_info_->fattrib & AM_SYS)) {
 			return false;
 		}
@@ -74,11 +74,11 @@ public:
 		case NONE:
 			return true;
 		case FOLDER:
-			return is_dir();
+			return isDir();
 		case PROJECT:
-			return is_dir() || has_extension(".PRJ");
+			return isDir() || hasExtension(".PRJ");
 		case WAV:
-			return is_dir() || has_extension(".WAV");
+			return isDir() || hasExtension(".WAV");
 		default:
 			break;
 		}
@@ -87,8 +87,8 @@ public:
 	}
 
 	bool rename(const char* old_name, const char* new_name) {
-		const char* old_path = buffer_.write(dir_path_->read(), "/", old_name);
-		const char* new_path = path_.write(dir_path_->read(), "/", new_name);
+		const char* old_path = buffer_.write(dirPath_->read(), "/", old_name);
+		const char* new_path = path_.write(dirPath_->read(), "/", new_name);
 		return f_rename(old_path, new_path) == FR_OK;
 	}
 
@@ -96,7 +96,7 @@ public:
 		return f_stat(path(name), fil_info_) == FR_OK;
 	}
 
-	const char* generate_duplicate_name(const char* name) {
+	const char* generateDuplicateName(const char* name) {
 		const int kMaxTries = 100;
 
 		buffer_.write(name);
@@ -121,45 +121,45 @@ public:
 		return (f_readdir(dir_, fil_info_) == FR_OK) && (fil_info_->fname[0] != '\0');
 	}
 
-	bool next_visible() {
+	bool nextVisible() {
 		while (next()) {
-			if (is_visible()) {
+			if (isVisible()) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	void set_list_filter(Filter filter) {
+	void setListFilter(Filter filter) {
 		filter_ = filter;
 	}
 
-	int num_visible() {
+	int numVisible() {
 		int num_entries = 0;
 
 		rewind();
 
-		while (next_visible() && (num_entries < 32767)) {
+		while (nextVisible() && (num_entries < 32767)) {
 			++num_entries;
 		}
 		return num_entries;
 	}
 
-	int num_visible_files() {
+	int numVisibleFiles() {
 		int num_entries = 0;
 
 		rewind();
 
-		while (next_visible() && (num_entries < 32767)) {
-			if (is_dir() == false) {
+		while (nextVisible() && (num_entries < 32767)) {
+			if (isDir() == false) {
 				++num_entries;
 			}
 		}
 		return num_entries;
 	}
 
-	void make_list(int offset, int size) {
-		list_size_ = 0;
+	void makeList(int offset, int size) {
+		listSize_ = 0;
 
 		if (size > kMaxListSize) {
 			size = kMaxListSize;
@@ -167,40 +167,40 @@ public:
 
 		rewind();
 
-		while (offset && next_visible()) {
+		while (offset && nextVisible()) {
 			--offset;
 		}
 
 		int i = 0;
-		while (next_visible() && size--) {
+		while (nextVisible() && size--) {
 			list[i].name.write(fil_info_->fname);
 			list[i].size = fil_info_->fsize;
-			list[i].is_dir = fil_info_->fattrib & AM_DIR;
+			list[i].isDir = fil_info_->fattrib & AM_DIR;
 			++i;
 		}
-		list_size_ = i;
+		listSize_ = i;
 	}
 
-	int list_size() {
-		return list_size_;
+	int listSize() {
+		return listSize_;
 	}
 
-	List* read_list(int idx) {
-		return idx >= list_size_ ? nullptr : &list[idx];
+	List* readList(int idx) {
+		return idx >= listSize_ ? nullptr : &list[idx];
 	}
 
 	void reset() {
-		list_size_ = 0;
+		listSize_ = 0;
 		filter_ = NONE;
 	}
 
 private:
 	DIR* dir_;
 	FILINFO* fil_info_;
-	StringBuilder* dir_path_;
+	StringBuilder* dirPath_;
 	StringBuilderBase<64>path_;
 	StringBuilderBase<64>buffer_;
-	int list_size_ = 0;
+	int listSize_ = 0;
 	Filter filter_ = NONE;
 };
 

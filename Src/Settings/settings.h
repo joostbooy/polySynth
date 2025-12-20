@@ -30,7 +30,6 @@ class Settings {
     selectPatchIndex(0);
   }
 
-
   void init() {
     if (disk_ != nullptr) {
       init(disk_);
@@ -55,13 +54,19 @@ class Settings {
     return selectedPatch_;
   }
 
+  Patch& selectedPatchOrignalState() {
+    return patch_[patchIndex_];
+  }
+
   int patchIndex() {
     return patchIndex_;
   }
 
   void selectPatchIndex(int value) {
-    patchIndex_ = SettingsUtils::clip(0, kNumPatches - 1, value);
-    selectedPatch_.paste(&patch_[patchIndex_]);
+    if (value >= 0 && value < int(kNumPatches)) {
+      patchIndex_ = SettingsUtils::clip(0, kNumPatches - 1, value);
+      selectedPatch_.paste(&patch_[patchIndex_]);
+    }
   }
 
   Disk* disk() {

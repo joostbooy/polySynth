@@ -28,12 +28,12 @@ class Display {
 
   void sendCommand(uint8_t cmd) {
     cd_low();
-    spi_write(cmd);
+    spiWrite(cmd);
   }
 
   void sendData(uint8_t data) {
     cd_high();
-    spi_write(data);
+    spiWrite(data);
   }
 
   void sendCommand(uint8_t cmd, uint8_t data) {
@@ -47,25 +47,25 @@ class Display {
     sendData(data_b);
   }
 
-  void set_col_address(uint8_t a, uint8_t b) {
+  void setColAdress(uint8_t a, uint8_t b) {
     sendCommand(0x15, a, b);
   }
 
-  void set_row_address(uint8_t a, uint8_t b) {
+  void setRowAdress(uint8_t a, uint8_t b) {
     sendCommand(0x75, a, b);
   }
 
-  void enable_write() {
+  void enableWrite() {
     sendCommand(0x5C);
   }
 
-  void unlock_dma() {
+  void unlockDma() {
     SPI2->CR2 &= ~SPI_CR2_TXDMAEN;
     DMA1_Stream4->CR &= ~DMA_SxCR_EN;
     dma_busy_ = false;
   }
 
-  volatile bool dma_busy() {
+  volatile bool dmaBusy() {
     return dma_busy_;
   }
 
@@ -74,9 +74,9 @@ class Display {
     };
     dummy = SPI2->DR;
 
-    set_col_address(0x1C, 0x5B);
-    set_row_address(0x00, 0x3F);
-    enable_write();
+    setColAdress(0x1C, 0x5B);
+    setRowAdress(0x00, 0x3F);
+    enableWrite();
 
     cd_high();
 
@@ -94,7 +94,7 @@ class Display {
   volatile uint8_t dummy;
   volatile bool dma_busy_;
 
-  void spi_write(uint8_t data) {
+  void spiWrite(uint8_t data) {
     while (!(SPI2->SR & SPI_FLAG_TXE));
     SPI2->DR = data;
 

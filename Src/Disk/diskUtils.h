@@ -9,11 +9,11 @@ class DiskUtils {
 
 public:
 
-	static void print_result(FRESULT result) {
+	static void printResult(FRESULT result) {
 		MessagePainter::show(result_text(result));
 	}
 
-	static void print_user_result(FRESULT result) {
+	static void printUserResult(FRESULT result) {
 		MessagePainter::show(user_result_text(result));
 	}
 

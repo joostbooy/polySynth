@@ -34,7 +34,7 @@ class Lfo {
 
   const char* speedText() {
     if (clockSync()) {
-      return MidiSync::tempo_text(speed() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::tempoText(speed() * (MidiSync::NUM_TEMPOS - 1));
     } else {
       size_t index = speed() * PHASE_TABLE_SIZE;
       return SettingsText::floatToText(lut_phase_length[index], "HZ");
@@ -43,7 +43,7 @@ class Lfo {
 
   float inc() {
     if (clockSync()) {
-      return MidiSync::read_inc(speed() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::readInc(speed() * (MidiSync::NUM_TEMPOS - 1));
     } else {
       return lut_phase_inc[int(speed() * (PHASE_TABLE_SIZE - 1))];
     }
@@ -103,11 +103,11 @@ class Lfo {
 
   // Sync phase
   float syncPhase() {
-    return sync_phase_;
+    return syncPhase_;
   }
 
   void setSyncPhase(float value) {
-    sync_phase_ = SettingsUtils::clipFloat(value);
+    syncPhase_ = SettingsUtils::clipFloat(value);
   }
 
   const char* syncPhaseText() {
@@ -160,7 +160,7 @@ class Lfo {
     fileWriter.write(speed_);
     fileWriter.write(min_);
     fileWriter.write(max_);
-    fileWriter.write(sync_phase_);
+    fileWriter.write(syncPhase_);
     fileWriter.write(randomise_);
     fileWriter.write(clockSync_);
     fileWriter.write(retrigger_);
@@ -172,7 +172,7 @@ class Lfo {
     fileReader.read(speed_);
     fileReader.read(min_);
     fileReader.read(max_);
-    fileReader.read(sync_phase_);
+    fileReader.read(syncPhase_);
     fileReader.read(randomise_);
     fileReader.read(clockSync_);
     fileReader.read(retrigger_);
@@ -184,7 +184,7 @@ class Lfo {
     speed_ = lfo->speed();
     min_ = lfo->min();
     max_ = lfo->max();
-    sync_phase_ = lfo->syncPhase();
+    syncPhase_ = lfo->syncPhase();
     randomise_ = lfo->randomise();
     clockSync_ = lfo->clockSync();
     retrigger_ = lfo->retrigger();
@@ -196,7 +196,7 @@ class Lfo {
   float speed_;
   float min_;
   float max_;
-  float sync_phase_;
+  float syncPhase_;
   bool randomise_;
   bool clockSync_;
   bool retrigger_;

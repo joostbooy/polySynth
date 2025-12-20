@@ -73,8 +73,8 @@ namespace HardwareTestPage {
 	void on_button(int id, int state) {
 		TextBufferPainter::write(str_.write(id_text(id), " ", state));
 
-		if (Controller::is_pressed(Controller::SHIFT_BUTTON)) {
-			switch (Controller::button_to_function(id))
+		if (Controller::isPressed(Controller::SHIFT_BUTTON)) {
+			switch (Controller::buttonToFunction(id))
 			{
 			case TOGGLE_LEDS:
 				if (state) {
@@ -102,9 +102,9 @@ namespace HardwareTestPage {
 
 	void refresh_leds() {
 		if (led_toggle_state_) {
-			leds_->set_all(Leds::BLACK);
+			leds_->setAll(Leds::BLACK);
 		} else {
-			leds_->set_all(Leds::RED);
+			leds_->setAll(Leds::RED);
 		}
 	}
 

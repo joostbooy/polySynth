@@ -106,7 +106,7 @@ class Voice {
       state_ = IDLE;
     }
 
-    modMatrixEngine_->set_midi_velocity(velocity_);
+    modMatrixEngine_->setMidiVelocity(velocity_);
     modMatrixEngine_->setAmpEnvelope(ampEnvelopeEngine_.next());
     modMatrixEngine_->setModEnvelope(modEnvelopeEngine_.next());
     modMatrixEngine_->setLfo(0, lfoEngine_[0].next());

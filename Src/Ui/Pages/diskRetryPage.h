@@ -48,7 +48,7 @@ namespace DiskRetryPage {
 			return;
 		}
 
-		switch (Controller::button_to_function(id))
+		switch (Controller::buttonToFunction(id))
 		{
 		case RETRY:
 			disk_->mount();
@@ -68,7 +68,7 @@ namespace DiskRetryPage {
 	}
 
 	void refresh_leds() {
-		leds_->set_footer_buttons(NUM_OPTIONS);
+		leds_->setFooterButtons(NUM_OPTIONS);
 	}
 
 	void msTick(uint16_t ticks) {
@@ -77,9 +77,9 @@ namespace DiskRetryPage {
 
 	// Bottom to top
 	void draw() {
-		canvas_->set_font(Font::SMALL);
+		canvas_->setFont(Font::SMALL);
 		canvas_->fill(0, 12, 256, 56, Canvas::WHITE);
-		canvas_->draw_text(0, 12, 256, 56, "NO CARD FOUND", Canvas::CENTER, Canvas::CENTER);
+		canvas_->drawText(0, 12, 256, 56, "NO CARD FOUND", Canvas::CENTER, Canvas::CENTER);
 		WindowPainter::draw_footer(footer_text, NUM_OPTIONS);
 	}
 

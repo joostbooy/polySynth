@@ -13,14 +13,14 @@ public:
 	};
 
 	void init() {
-		set_all(BLACK);
+		setAll(BLACK);
 	}
 
 	uint8_t* data() {
 		return &data_[0];
 	}
 
-	void set_all(Color color) {
+	void setAll(Color color) {
 		uint8_t value = color == RED ? 0xFF : 0x00;
 		for (size_t i = 0; i < kNumOfCollumns; ++i) {
 			data_[i] = value;
@@ -28,7 +28,7 @@ public:
 	}
 
 	// Chapter
-	void set_chapter(int index) {
+	void setChapter(int index) {
 		for (int i = 0; i < 6; ++i) {
 			Color color = i == index ? RED : BLACK;
 			set(chapter_leds_[i].x, chapter_leds_[i].y, color);
@@ -36,24 +36,24 @@ public:
 	}
 
 	// Footer buttons
-	void set_footer_button(int index, Color color) {
+	void setFooterButton(int index, Color color) {
 		set(footer_button_leds_[index].x, footer_button_leds_[index].y, color);
 	}
 
-	void set_footer_buttons(int num_active) {
+	void setFooterButtons(int num_active) {
 		for (int i = 0; i < 4; ++i) {
-			set_footer_button(i, i < num_active ? RED : BLACK);
+			setFooterButton(i, i < num_active ? RED : BLACK);
 		}
 	}
 
 	// Footer encoders
-	void set_footer_encoder(int index, Color color) {
+	void setFooterEncoder(int index, Color color) {
 		set(footer_encoder_leds_[index].x, footer_encoder_leds_[index].y, color);
 	}
 
-	void set_footer_encoders(int num_active) {
+	void setFooterEncoders(int num_active) {
 		for (int i = 0; i < 4; ++i) {
-			set_footer_encoder(i, i < num_active ? RED : BLACK);
+			setFooterEncoder(i, i < num_active ? RED : BLACK);
 		}
 	}
 

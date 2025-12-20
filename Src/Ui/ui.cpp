@@ -3,19 +3,17 @@
 #include "controller.h"
 
 
-Que<Ui::Event, 16> ui_que;
-
 static const int enc_a_row = 2;
 static const int enc_b_row = 3;
 static const int num_buttons_rows = 6;
 static const int buttons_rows[num_buttons_rows] = { 0, 1, 4, 5, 6, 7 };
 
-void addEvent(Ui::ControlType type, uint8_t id, int8_t value)  {
+void Ui::addEvent(ControlType type, uint8_t id, int8_t value)  {
 	Ui::Event e;
 	e.type = type;
 	e.id = id;
 	e.value = value;
-	ui_que.write(e);
+	uiQue.write(e);
 }
 
 void Ui::init(Settings *settings, Engine *engine, Matrix *matrix, Display *display) {
@@ -29,7 +27,7 @@ void Ui::init(Settings *settings, Engine *engine, Matrix *matrix, Display *displ
 	leds_.init();
 	pages_.init(settings, engine, this);
 
-	ui_que.clear();
+	uiQue.clear();
 }
 
 void Ui::poll() {
@@ -68,8 +66,8 @@ void Ui::poll() {
 }
 
 void Ui::process() {
-	while (ui_que.readable()) {
-		Ui::Event e = ui_que.read();
+	while (uiQue.readable()) {
+		Ui::Event e = uiQue.read();
 		switch (e.type)
 		{
 		case Ui::BUTTON:
@@ -87,25 +85,21 @@ void Ui::process() {
 
 	if (interval >= 1) {
 		last_interval += interval;
-		leds_.set_all(Leds::BLACK);
+		leds_.setAll(Leds::BLACK);
 		pages_.refresh_leds();
-		matrix_->set_leds(leds_.data());
+		matrix_->setLeds(leds_.data());
 	}
 
 	display_interval += interval;
 	if (display_interval >= pages_.target_fps()) {
-		send_display();
+		sendDisplay();
 	}
 }
 
-void Ui::send_display() {
-	while (display_->dma_busy());
+void Ui::sendDisplay() {
+	while (display_->dmaBusy());
 	display_interval = 0;
 	canvas_.clear();
 	pages_.draw();
 	display_->sendBuffer(canvas_.data(), canvas_.size());
-}
-
-void Ui::clear_que() {
-	ui_que.clear();
 }

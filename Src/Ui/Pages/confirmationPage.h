@@ -55,7 +55,7 @@ namespace ConfirmationPage {
 	}
 
 	void on_button(int id, int state) {
-		int selected_option = Controller::button_to_function(id);
+		int selected_option = Controller::buttonToFunction(id);
 		if (state >= 1 && selected_option >= 0 && selected_option < num_options_) {
 			callback_(selected_option);
 			pages_->close(Pages::CONFIRMATION_PAGE);
@@ -67,16 +67,16 @@ namespace ConfirmationPage {
 	}
 
 	void refresh_leds() {
-		leds_->set_footer_buttons(num_options_);
+		leds_->setFooterButtons(num_options_);
 	}
 
 	void draw() {
-		canvas_->set_font(Font::SMALL);
+		canvas_->setFont(Font::SMALL);
 		canvas_->fill(x + 4, y + 4, w, h, Canvas::SUBTRACTED);
 		canvas_->frame(x, y, w, h, Canvas::WHITE);
 		canvas_->fill(x + 1, y + 1, w - 2, h - 2, Canvas::BLACK);
 		canvas_->frame(x + 4, y + 4, w - 8, h - 8, Canvas::WHITE);
-		canvas_->draw_text(x, y, w, h, str.read(), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
+		canvas_->drawText(x, y, w, h, str.read(), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
 
 		WindowPainter::draw_footer(option_text, num_options_);
 	}

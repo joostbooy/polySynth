@@ -72,7 +72,7 @@ namespace OptionListPage {
 				return;
 			}
 
-			if (Controller::button_to_function(id) >= 0 || Controller::RIGHT_BUTTON == id) {
+			if (Controller::buttonToFunction(id) >= 0 || Controller::RIGHT_BUTTON == id) {
 				if (callback_) {
 					callback_(selected_);
 				}
@@ -83,8 +83,8 @@ namespace OptionListPage {
 	}
 
 	void refresh_leds() {
-		leds_->set_footer_encoders(4);
-		leds_->set_footer_buttons(4);
+		leds_->setFooterEncoders(4);
+		leds_->setFooterButtons(4);
 	}
 
 	void draw() {
@@ -94,7 +94,7 @@ namespace OptionListPage {
 		const int x = (canvas_->width() - w) / 2;
 		const int y = (canvas_->height() - h) / 2;
 
-		canvas_->set_font(Font::SMALL);
+		canvas_->setFont(Font::SMALL);
 		canvas_->fill(x + 5, y + 5, w, h, Canvas::SUBTRACTED);
 
 		canvas_->fill(x, y, w, h, Canvas::WHITE);
@@ -105,7 +105,7 @@ namespace OptionListPage {
 			int row_y = (i * row_h) + y;
 
 			if (row < count_) {
-				canvas_->draw_text(x + 4, row_y, w - 8, row_h, text_[row], Canvas::LEFT, Canvas::CENTER);
+				canvas_->drawText(x + 4, row_y, w - 8, row_h, text_[row], Canvas::LEFT, Canvas::CENTER);
 				if (row == selected_) {
 					canvas_->fill(x + 1, row_y + 1, w - 2, row_h - 2, Canvas::INVERTED);
 				}

@@ -18,16 +18,16 @@ public:
 		return &path;
 	}
 
-	uint8_t max_path_length() {
+	uint8_t maxPathLength() {
 		return kMaxPathLength;
 	}
 
-	const char* read_path() {
+	const char* readPath() {
 		const char* curr_path = path.read();
 		return buffer.write(curr_path);
 	}
 
-	bool open_path(const char* path_) {
+	bool openPath(const char* path_) {
 		const char* new_path_ = build_new_path(path_);
 		if (f_opendir(dir_, new_path_) == FR_OK) {
 			path.write(new_path_);
@@ -44,13 +44,13 @@ public:
 		return buffer.write(root_id_, ":");
 	}
 
-	bool has_root(const char* path_) {
+	bool hasRoot(const char* path_) {
 		return (path_[0] == (root_id_ + 48)) && (path_[1] == ':');
 	}
 
-	bool is_root() {
+	bool isRoot() {
 		const char* text = path.read();
-		return has_root(text) && (text[2] == '\0');
+		return hasRoot(text) && (text[2] == '\0');
 	}
 
 	bool reset() {
@@ -70,14 +70,14 @@ public:
 		buffer.append("/");
 		buffer.append(dir_name);
 
-		return open_path(buffer.read());
+		return openPath(buffer.read());
 	}
 
 	bool exit() {
 		const char* old_path = path.read();
 		uint8_t length = path.length();
 
-		if (is_root()) {
+		if (isRoot()) {
 			return 0;
 		}
 
@@ -89,7 +89,7 @@ public:
 
 				buffer.write(old_path);
 				buffer.truncate(length);
-				return open_path(buffer.read());
+				return openPath(buffer.read());
 			}
 		}
 		return 0;
@@ -117,7 +117,7 @@ private:
 	const char* build_new_path(const char* path_) {
 		new_path.write(path_);
 
-		if (has_root(new_path.read()) == false) {
+		if (hasRoot(new_path.read()) == false) {
 			new_path.prepend(root());
 		}
 

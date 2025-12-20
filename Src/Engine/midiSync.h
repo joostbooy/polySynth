@@ -34,7 +34,7 @@ public:
 		NUM_TEMPOS
 	};
 
-	static const char* tempo_text(int value) {
+	static const char* tempoText(int value) {
 		switch (value)
 		{
 		case _1_1_DOTTED:	return "1/1 D";
@@ -63,17 +63,17 @@ public:
 		return nullptr;
 	}
 
-	static size_t read_beat_length(int value) {
-		return lut_beat_length[MidiClockEngine::bpm() - MIN_BPM] * length_multiplier(value);
+	static size_t readBeatLength(int value) {
+		return lut_beat_length[MidiClockEngine::bpm() - MIN_BPM] * lengthMultiplier(value);
 	}
 
-	static float read_inc(int value) {
-		return lut_beat_length_inc[MidiClockEngine::bpm() - MIN_BPM] * inc_multiplier(value);
+	static float readInc(int value) {
+		return lut_beat_length_inc[MidiClockEngine::bpm() - MIN_BPM] * incMultiplier(value);
 	}
 
 private:
 
-	static float length_multiplier(int type) {
+	static float lengthMultiplier(int type) {
 		switch (type)
 		{
 		case _1_1_DOTTED:	return 6.f;
@@ -103,7 +103,7 @@ private:
 		return 0.f;
 	}
 
-	static float inc_multiplier(int type) {
+	static float incMultiplier(int type) {
 		switch (type)
 		{
 		case _1_1_DOTTED:	return 0.25f / 1.5f;

@@ -57,7 +57,7 @@ public:
 		file_.close();
 	}
 
-	void available_kb(uint32_t *total_blocks, uint32_t *free_blocks) {
+	void availableKb(uint32_t *total_blocks, uint32_t *free_blocks) {
 		FATFS* fs_ptr = &fs;
 		uint32_t free_clusters;
 

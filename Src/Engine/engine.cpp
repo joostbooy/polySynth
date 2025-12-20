@@ -30,13 +30,13 @@ void Engine::noteOff(MidiEngine::Event& e) {
 
 void Engine::pitchBend(MidiEngine::Event& e) {
   float data = (1.f / 16383.f) * MidiEngine::read14Bit(e);
-  modMatrixEngine_.set_midi_bend(data);
+  modMatrixEngine_.setMidiBend(data);
 }
 
 void Engine::cc(MidiEngine::Event& e) {
   uint8_t number = e.data[0];
   float data = (1.f / 127.f) * e.data[1];
-  modMatrixEngine_.set_midi_cc(number, data);
+  modMatrixEngine_.setMidiCc(number, data);
 }
 
 // 8Khz, keep short !

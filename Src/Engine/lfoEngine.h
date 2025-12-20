@@ -51,7 +51,7 @@ public:
 			skewPhase = (phase_ - skewAmount) * (1.0f / (1.0f - skewAmount));
 		}
 
-		value_ = Dsp::cross_fade(lastValue_, target_value_, Curve::read(skewPhase, lfo_->shape()));
+		value_ = Dsp::cross_fade(lastValue_, targetValue_, Curve::read(skewPhase, lfo_->shape()));
 
 		phase_ += lfo_->inc();
 		if (phase_ >= 1.f) {
@@ -67,7 +67,7 @@ private:
 	float phase_ = 0.f;
 	float value_ = 0.f;
 	float lastValue_ = 0.f;
-	float target_value_ = 1.f;
+	float targetValue_ = 1.f;
 
 	inline void setStage(Stage stage, bool force = false) {
 		if (stage_ != stage || force == true) {
@@ -76,9 +76,9 @@ private:
 			lastValue_ = value_;
 
 			if (lfo_->randomise()) {
-				target_value_ = Rng::reciprocal(lfo_->min(), lfo_->max());
+				targetValue_ = Rng::reciprocal(lfo_->min(), lfo_->max());
 			} else {
-				target_value_ = (stage_ == Rising) ? lfo_->max() : lfo_->min();
+				targetValue_ = (stage_ == Rising) ? lfo_->max() : lfo_->min();
 			}
 		}
 	}

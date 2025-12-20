@@ -112,10 +112,10 @@ namespace ModulationMatrixPage {
 	}
 
 	void refresh_leds() {
-		leds_->set_footer_encoder(0, Leds::RED);
-		leds_->set_footer_encoder(1, Leds::BLACK);
-		leds_->set_footer_encoder(2, Leds::BLACK);
-		leds_->set_footer_encoder(3, Leds::RED);
+		leds_->setFooterEncoder(0, Leds::RED);
+		leds_->setFooterEncoder(1, Leds::BLACK);
+		leds_->setFooterEncoder(2, Leds::BLACK);
+		leds_->setFooterEncoder(3, Leds::RED);
 
 		leds_->set_footer_button(0, Leds::RED);
 		leds_->set_footer_button(1, Leds::BLACK);
@@ -129,7 +129,7 @@ namespace ModulationMatrixPage {
 			int src_y = (i * row_h) + y;
 
 			if (src < ModulationMatrix::NUM_SOURCES) {
-				canvas_->draw_text(x + 4, src_y, coll_w, row_h, ModulationMatrix::source_text(src), Canvas::CENTER, Canvas::CENTER);
+				canvas_->drawText(x + 4, src_y, coll_w, row_h, ModulationMatrix::source_text(src), Canvas::CENTER, Canvas::CENTER);
 				if (src == src_) {
 					canvas_->fill(coll_w + 1, src_y + 1, w - 2, row_h - 2, Canvas::LIGHT_GRAY);
 				}
@@ -143,7 +143,7 @@ namespace ModulationMatrixPage {
 			int dest_x = (i * coll_w) + x;
 
 			if (dest < ModulationMatrix::NUM_DESTINATIONS) {
-				canvas_->draw_text(dest_x, y, coll_w, row_h, ModulationMatrix::destination_text(dest), Canvas::CENTER, Canvas::CENTER);
+				canvas_->drawText(dest_x, y, coll_w, row_h, ModulationMatrix::destination_text(dest), Canvas::CENTER, Canvas::CENTER);
 				if (dest == dest_) {
 					canvas_->fill(dest_x + 1, row_h + 1, coll_w - 2, h - 2, Canvas::LIGHT_GRAY);
 				}

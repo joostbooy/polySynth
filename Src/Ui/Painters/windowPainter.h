@@ -41,13 +41,13 @@ public:
 		}
 
 		canvas_->fill(0, y, canvas_->width(), h, Canvas::WHITE);
-		canvas_->horizontal_line(0, y, canvas_->width(), Canvas::BLACK);
+		canvas_->horizontalLine(0, y, canvas_->width(), Canvas::BLACK);
 
 		for (int i = 0; i < kMaxFooterOptions; ++i) {
 			int x = i * w;
-			canvas_->vertical_line(x, y, h, Canvas::BLACK);
+			canvas_->verticalLine(x, y, h, Canvas::BLACK);
 			if (i < num_options) {
-				canvas_->draw_text(x, y, w, h, text[i], Canvas::CENTER, Canvas::CENTER);
+				canvas_->drawText(x, y, w, h, text[i], Canvas::CENTER, Canvas::CENTER);
 			}
 		}
 	}
