@@ -29,35 +29,46 @@ class MidiEngine {
     uint8_t data[2];
   };
 
-  Que<uint8_t, 32> input_que;
-  Que<uint8_t, 32> output_que[Midi::NUM_PORTS];
-  Que<uint8_t, 8> clock_output_que[Midi::NUM_PORTS];
+  Que<uint8_t, 32> inputQue;
+  Que<uint8_t, 32> outputQue[Midi::NUM_PORTS];
+  Que<uint8_t, 8> clockOutputQue[Midi::NUM_PORTS];
 
   void init(Uart* uart, Usb* usb, Midi* midi) {
     usb_ = usb;
     uart_ = uart;
     midi_ = midi;
 
-    num_data_bytes_ = 0;
+    lastReceived_ = 0;
+    numDataBytes_ = 0;
   }
 
   void poll() {
-    if (uart_->readable() && input_que.writeable()) {
-      input_que.write(uart_->read());
+    if (uart_->readable() && inputQue.writeable()) {
+      lastReceived_ = uart_->read();
+      inputQue.write(lastReceived_);
     }
 
     if (uart_->writeable()) {
-      if (clock_output_que[Midi::UART].readable()) {
-        uart_->write(clock_output_que[Midi::UART].read());
-      } else if (output_que[Midi::UART].readable()) {
-        uart_->write(output_que[Midi::UART].read());
+      if (clockOutputQue[Midi::UART].readable()) {
+        uart_->write(clockOutputQue[Midi::UART].read());
+      } else if (outputQue[Midi::UART].readable()) {
+        uart_->write(outputQue[Midi::UART].read());
       }
     }
   }
 
+  bool getLastReceived(uint8_t* ptr) {
+    if (lastReceived_ != 0) {
+      *ptr = lastReceived_;
+      lastReceived_ = 0;
+      return true;
+    }
+    return false;
+  }
+
   bool pull(Event& e) {
-    while (input_que.readable()) {
-      if (parse(input_que.read())) {
+    while (inputQue.readable()) {
+      if (parse(inputQue.read())) {
         e = event_;
         return true;
       }
@@ -73,28 +84,28 @@ class MidiEngine {
     return e.data[0] >= midi_->keyRangeLow() && e.data[0] <= midi_->keyRangeHigh();
   }
 
-  static inline uint16_t read_14_bit(Event& e) {
+  static inline uint16_t read14Bit(Event& e) {
     return (e.data[0] & 0x7F) | (e.data[1] << 7);
   }
 
-  static inline bool is_clock_message(Event& e) {
+  static inline bool isClockMessage(Event& e) {
     return e.message >= 0xF8;
   }
 
-  static inline uint8_t read_message(Event& e) {
-    return is_clock_message(e) ? e.message : e.message & 0xF0;
+  static inline uint8_t readMessage(Event& e) {
+    return isClockMessage(e) ? e.message : e.message & 0xF0;
   }
 
-  bool write_output(Event& e) {
-    uint8_t size = e.message != last_message_[e.port] ? 3 : 2;
+  bool writeOutput(Event& e) {
+    uint8_t size = e.message != lastMessage_[e.port] ? 3 : 2;
 
-    if (output_que[e.port].available_size() >= size) {
+    if (outputQue[e.port].available_size() >= size) {
       if (size == 3) {
-        output_que[e.port].write(e.message);
-        last_message_[e.port] = e.message;
+        outputQue[e.port].write(e.message);
+        lastMessage_[e.port] = e.message;
       }
-      output_que[e.port].write(e.data[0]);
-      output_que[e.port].write(e.data[1]);
+      outputQue[e.port].write(e.data[0]);
+      outputQue[e.port].write(e.data[1]);
 
       return true;
     }
@@ -102,12 +113,12 @@ class MidiEngine {
     return false;
   }
 
-  bool write_clock(uint8_t port, uint8_t message) {
-    if (clock_output_que[port].writeable()) {
-      clock_output_que[port].write(message);
-      return true;
+  void writeClock(uint8_t message) {
+    for (size_t i = 0; i < Midi::NUM_PORTS; i++) {
+      if (clockOutputQue[i].writeable() && midi_->sendClock(i)) {
+        clockOutputQue[i].write(message);
+      }
     }
-    return false;
   }
 
  private:
@@ -116,19 +127,20 @@ class MidiEngine {
   Midi* midi_;
 
   Event event_;
-  uint8_t last_message_[Midi::NUM_PORTS];
-  uint8_t num_data_bytes_;
+  uint8_t lastReceived_;
+  uint8_t lastMessage_[Midi::NUM_PORTS];
+  uint8_t numDataBytes_;
 
   bool parse(uint8_t reading) {
     if (reading >= 0x80) {
       event_.message = reading;
-      num_data_bytes_ = 0;
+      numDataBytes_ = 0;
     } else {
-      event_.data[num_data_bytes_] = reading;
-      ++num_data_bytes_;
+      event_.data[numDataBytes_] = reading;
+      ++numDataBytes_;
 
-      if (num_data_bytes_ >= 2) {
-        num_data_bytes_ = 0;
+      if (numDataBytes_ >= 2) {
+        numDataBytes_ = 0;
         return true;
       }
     }

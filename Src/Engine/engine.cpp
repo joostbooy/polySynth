@@ -6,7 +6,7 @@ void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac, Gpio* gpio
   midiEngine_.init(uart, usb, &settings_->midi());
   modMatrixEngine_.init(settings_);
   voiceEngine_.init(settings_, &modMatrixEngine_, dac);
-  // midiClockEngine_.init(&settings->midi());
+  midiClockEngine_.init(&settings->midi());
   state_ = RUNNING;
 }
 
@@ -28,7 +28,7 @@ void Engine::noteOff(MidiEngine::Event& e) {
 }
 
 void Engine::pitchBend(MidiEngine::Event& e) {
-  float data = (1.f / 16383.f) * MidiEngine::read_14_bit(e);
+  float data = (1.f / 16383.f) * MidiEngine::read14Bit(e);
   modMatrixEngine_.set_midi_bend(data);
 }
 
@@ -38,7 +38,28 @@ void Engine::cc(MidiEngine::Event& e) {
   modMatrixEngine_.set_midi_cc(number, data);
 }
 
-// low priority
+void Engine::pollMidi() {
+  midiEngine_.poll();
+/*
+  uint8_t data;
+
+  if (midiEngine_->getLastReceived(&data)) {
+    if (data >= 0xF8 && settings_->midi().clockSource() == Midi::EXTERNAL) {
+      switch (data) {
+        case  Midi::CLOCK_PULSE:
+            midiClockEngine_.sync();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+*/
+  if (midiClockEngine_.tick()) {
+    midiEngine_.writeClock(MidiEngine::CLOCK_PULSE);
+  }
+}
+
 void Engine::processMidi() {
   MidiEngine::Event e;
 
@@ -90,7 +111,7 @@ void Engine::processRequests() {
 }
 
 void Engine::processSwitches() {
-  Patch &p = settings_->selectedPatch();
+  Patch& p = settings_->selectedPatch();
   gpio_->setFmEnable(p.oscillator().fmEnable());
   gpio_->setAmEnable(p.oscillator().amEnable());
   gpio_->setMuteOsc1(p.oscillator().muteOsc1());

@@ -11,15 +11,15 @@ public:
 	void init(Midi *midi) {
 		midi_ = midi;
 		bpm_ = 120;
-		ext_bpm_ = 120;
+		extBpm_ = 120;
 		reset();
 	}
 
 	void reset() {
 		ticks = 0;
-		isr_ticks = 0;
-		isr_average = 0;
-		tempo_phase = 0;
+		isrTicks_ = 0;
+		isrAverage_ = 0;
+		tempoPhase_ = 0;
 	}
 
 	static uint16_t bpm() {
@@ -30,35 +30,35 @@ public:
 		if (midi_->clockSource() == Midi::INTERNAL) {
 			bpm_ = midi_->bpm();
 		} else {
-			bpm_ = ext_bpm_;
+			bpm_ = extBpm_;
 		}
 
-		++isr_ticks;
-		tempo_phase += lut_bpm_inc[bpm_ - MIN_BPM];
-		return tempo_phase < tempo_inc;
+		++isrTicks_;
+		tempoPhase_ += lut_bpm_inc[bpm_ - MIN_BPM];
+		return tempoPhase_ < tempoInc_;
 	}
 
-	void sync_bpm() {
-		isr_average += isr_ticks;
+	void syncBpm() {
+		isrAverage_ += isrTicks_;
 
-		if (((++num_readings % 4) == 0) && isr_average > 0) {
-			ext_bpm_ = uint32_t(45000000UL * 60UL / 24UL / (kUpdatePeriod * (isr_average / 4)));
-			ext_bpm_ = SettingsUtils::clip(MIN_BPM, MAX_BPM, ext_bpm_);
-			isr_average = 0;
+		if (((++numReadings_ % 4) == 0) && isrAverage_ > 0) {
+			extBpm_ = uint32_t(45000000UL * 60UL / 24UL / (kUpdatePeriod * (isrAverage_ / 4)));
+			extBpm_ = SettingsUtils::clip(MIN_BPM, MAX_BPM, extBpm_);
+			isrAverage_ = 0;
 		}
 
-		isr_ticks = 0;
+		isrTicks_ = 0;
 	}
 
 private:
 	Midi *midi_;
-	uint8_t sync_port_;
-	static uint16_t bpm_;
-	static uint16_t bpm_fractional_;
+	uint8_t syncPort_;
+	static inline uint16_t bpm_;
+	static inline uint16_t bpmFractional_;
 
-	volatile uint16_t ext_bpm_;
-	volatile uint32_t tempo_inc, tempo_phase, ticks, isr_ticks, isr_average;
-	volatile uint8_t num_readings = 0;
+	volatile uint16_t extBpm_;
+	volatile uint32_t tempoInc_, tempoPhase_, ticks, isrTicks_, isrAverage_;
+	volatile uint8_t numReadings_ = 0;
 	static const uint32_t kUpdatePeriod = 45000000UL / CLOCK_ISR_FREQ;
 };
 

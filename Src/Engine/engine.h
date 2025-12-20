@@ -52,6 +52,7 @@ class Engine {
   void processRequests();
   void processSwitches();
   void processMidi();
+  void pollMidi();
   void update();
   void noteOn(MidiEngine::Event& e);
   void noteOff(MidiEngine::Event& e);
