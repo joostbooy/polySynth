@@ -47,8 +47,12 @@ void Dac::init() {
 	Micros::delay(1);
 	// delay 80 nS
 
-	reset();
-	setClearCode(ClearIgnore);
-	setInternalRef(true);
+	
+	writeDac(RESET_POWER_ON, 0, 0, 0);
+    Micros::delay(50);
+ 	writeDac(LOAD_CLEAR_CODE_REGISTER, 0, 0, ClearIgnore);
+	writeDac(SETUP_INTERNAL_REF, 0, 0, true ? 1 : 0);
 	writeDac(POWER_DOWN_UP_DAC, 0, 0, 0xff);
+
+	currMuxChannel_ = 0; 
 }

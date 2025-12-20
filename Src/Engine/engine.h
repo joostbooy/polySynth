@@ -22,6 +22,7 @@ class Engine {
   };
 
   void init(Settings*, Uart*, Usb*, Dac*, Gpio*);
+  void tick();
 
   void addReqestBlocking(Request type) {
     addRequest(type);
@@ -38,6 +39,7 @@ class Engine {
 
   uint32_t processing_time_uS_;
 
+  Dac *dac_;
   Gpio* gpio_;
   Settings* settings_;
   MidiEngine midiEngine_;
@@ -52,7 +54,6 @@ class Engine {
   void processRequests();
   void processSwitches();
   void processMidi();
-  void pollMidi();
   void update();
   void noteOn(MidiEngine::Event& e);
   void noteOff(MidiEngine::Event& e);

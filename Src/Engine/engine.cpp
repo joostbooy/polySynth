@@ -1,6 +1,7 @@
 #include "engine.h"
 
 void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac, Gpio* gpio) {
+  dac_ = dac;
   gpio_ = gpio;
   settings_ = settings;
   midiEngine_.init(uart, usb, &settings_->midi());
@@ -38,26 +39,13 @@ void Engine::cc(MidiEngine::Event& e) {
   modMatrixEngine_.set_midi_cc(number, data);
 }
 
-void Engine::pollMidi() {
+// 8Khz, keep short !
+void Engine::tick() {
   midiEngine_.poll();
-/*
-  uint8_t data;
-
-  if (midiEngine_->getLastReceived(&data)) {
-    if (data >= 0xF8 && settings_->midi().clockSource() == Midi::EXTERNAL) {
-      switch (data) {
-        case  Midi::CLOCK_PULSE:
-            midiClockEngine_.sync();
-          break;
-        default:
-          break;
-      }
-    }
-  }
-*/
   if (midiClockEngine_.tick()) {
     midiEngine_.writeClock(MidiEngine::CLOCK_PULSE);
   }
+  dac_->send();
 }
 
 void Engine::processMidi() {

@@ -20,6 +20,7 @@
 
 class Dac {
  public:
+ 
   enum ClearCode {
     ClearZeroScale = 0,
     ClearMidScale = 1,
@@ -29,27 +30,36 @@ class Dac {
 
   void init();
 
-  uint16_t value(uint8_t channel) {
-    return value_[channel];
+  void set(int muxChannel, int dacChannel, uint16_t value) {
+    muxChannel_[muxChannel].value[dacChannel] = value;
   }
 
-  void set(uint8_t channel, uint16_t value) {
-    value_[channel] = value;
-  }
-
-  void send(int muxChannel) {
+  void send() {
     deInhibit();
-    setMuxChannel(muxChannel);
-    for (int i = 0; i < kNumChannels; ++i) {
-      writeDac(i == 7 ? WRITE_INPUT_REGISTER_UPDATE_ALL : WRITE_INPUT_REGISTER, i, value_[i], 0);
+
+    setMuxChannel(currMuxChannel_);
+    MuxChannel& c = muxChannel_[currMuxChannel_];
+    if (++currMuxChannel_ >= kNumMuxChannels) {
+      currMuxChannel_ = 0;
     }
+
+    for (int i = 0; i < kNumDacChannels; ++i) {
+      writeDac(i == 7 ? WRITE_INPUT_REGISTER_UPDATE_ALL : WRITE_INPUT_REGISTER, i, c.value[i], 0);
+    }
+
     inhibit();
   }
 
  private:
-  static const int kNumChannels = 8;
-  uint16_t value_[kNumChannels];
+  static const int kNumDacChannels = 8;
+  static const int kNumMuxChannels = 8;
+
+  struct MuxChannel {
+    uint16_t value[kNumDacChannels];
+  } muxChannel_[kNumMuxChannels];
+
   volatile uint8_t dummy;
+  uint8_t currMuxChannel_;
 
   void deInhibit() {
     GPIOA->BSRR = GPIO_PIN_13;
@@ -86,19 +96,6 @@ class Dac {
     // sync_pin HIGH
     GPIOA->BSRR = GPIO_PIN_4;
     asm("NOP");
-  }
-
-  void reset() {
-    writeDac(RESET_POWER_ON, 0, 0, 0);
-    Micros::delay(50);
-  }
-
-  void setInternalRef(bool enabled) {
-    writeDac(SETUP_INTERNAL_REF, 0, 0, enabled ? 1 : 0);
-  }
-
-  void setClearCode(ClearCode code) {
-    writeDac(LOAD_CLEAR_CODE_REGISTER, 0, 0, code);
   }
 
   void spi_write(uint8_t data) {

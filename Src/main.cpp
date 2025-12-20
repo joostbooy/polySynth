@@ -43,13 +43,13 @@ extern "C" {
 	void PendSV_Handler() { }
 	void SysTick_Handler(void) { }
 
-	// Clock update freq (4kHz)
+	// 8Khz
 	void TIM3_IRQHandler(void) {
 		if (!(TIM3->SR & TIM_IT_UPDATE)) {
 			return;
 		}
 		TIM3->SR = ~TIM_IT_UPDATE;
-	//
+		engine.tick();
 	}
 
 	// 1Khz
