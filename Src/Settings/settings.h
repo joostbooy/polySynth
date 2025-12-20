@@ -1,6 +1,7 @@
 #ifndef Settings_h
 #define Settings_h
 
+#include "calibration.h"
 #include "disk.h"
 #include "fileReader.h"
 #include "fileWriter.h"
@@ -28,6 +29,11 @@ class Settings {
       patch(i).init();
     }
     selectPatchIndex(0);
+
+    if (!calibrationLoaded_) {
+      calibrationLoaded_ = true;
+      calibration_.load(fileReader);
+    }
   }
 
   void init() {
@@ -71,6 +77,10 @@ class Settings {
 
   Disk* disk() {
     return disk_;
+  }
+
+  Calibration& calibration() {
+    return calibration_;
   }
 
   // oscilator
@@ -129,6 +139,9 @@ class Settings {
 
   int lfoIndex_;
   int patchIndex_;
+
+  bool calibrationLoaded_ = false;
+  Calibration calibration_;
 
   Patch patch_[kNumPatches];
   Patch selectedPatch_;

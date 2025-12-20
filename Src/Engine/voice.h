@@ -121,6 +121,11 @@ class Voice {
     dac_->set(index, 5, (p.filter().cutoff2() * frame->data[ModMatrix::CUTOFF_2]) * 65535);
     dac_->set(index, 6, (p.filter().resonance2() * frame->data[ModMatrix::RESONANCE_2]) * 65535);
     dac_->set(index, 7, (fadePhase_ * frame->data[ModMatrix::GAIN]) * 65535);
+
+    if (settings_->calibration().enabled()) {
+        dac_->set(index, 0, settings_->calibration().min());
+        dac_->set(index, 1, settings_->calibration().max());
+    }
   }
 
  private:
