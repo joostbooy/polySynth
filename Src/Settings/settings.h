@@ -64,7 +64,7 @@ class Settings {
 
   void selectPatchIndex(int value) {
     if (value >= 0 && value < int(kNumPatches)) {
-      patchIndex_ = SettingsUtils::clip(0, kNumPatches - 1, value);
+      patchIndex_ = value;
       selectedPatch_.paste(&patch_[patchIndex_]);
     }
   }
