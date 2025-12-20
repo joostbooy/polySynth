@@ -24,7 +24,6 @@ class Voice {
 
     lfoEngine_[0].init(&settings->lfo(0));
     lfoEngine_[1].init(&settings->lfo(1));
-    index_ = counter_++;
   }
 
   uint8_t port() {
@@ -93,7 +92,7 @@ class Voice {
     modEnvelopeEngine_.release();
   }
 
-  void update() {
+  void update(int index) {
     if (stopRequested_) {
       if (fadePhase_ > 0.0f) {
         fadePhase_ -= 1000.f / (CONTROL_RATE * 4.f);
@@ -114,19 +113,17 @@ class Voice {
     ModMatrixEngine::Frame* frame = modMatrixEngine_->process();
 
     Patch& p = settings_->selectedPatch();
-    dac_->set(index_, 0, (calculatePitch() * frame->data[ModMatrix::PITCH]) * 65535);
-    dac_->set(index_, 1, (p.oscillator().shape1() * frame->data[ModMatrix::SHAPE_1]) * 65535);
-    dac_->set(index_, 2, (p.oscillator().shape2() * frame->data[ModMatrix::SHAPE_2]) * 65535);
-    dac_->set(index_, 3, (p.filter().cutoff1() * frame->data[ModMatrix::CUTOFF_1]) * 65535);
-    dac_->set(index_, 4, (p.filter().resonance1() * frame->data[ModMatrix::RESONANCE_1]) * 65535);
-    dac_->set(index_, 5, (p.filter().cutoff2() * frame->data[ModMatrix::CUTOFF_2]) * 65535);
-    dac_->set(index_, 6, (p.filter().resonance2() * frame->data[ModMatrix::RESONANCE_2]) * 65535);
-    dac_->set(index_, 7, (fadePhase_ * frame->data[ModMatrix::GAIN]) * 65535);
+    dac_->set(index, 0, (calculatePitch() * frame->data[ModMatrix::PITCH]) * 65535);
+    dac_->set(index, 1, (p.oscillator().shape1() * frame->data[ModMatrix::SHAPE_1]) * 65535);
+    dac_->set(index, 2, (p.oscillator().shape2() * frame->data[ModMatrix::SHAPE_2]) * 65535);
+    dac_->set(index, 3, (p.filter().cutoff1() * frame->data[ModMatrix::CUTOFF_1]) * 65535);
+    dac_->set(index, 4, (p.filter().resonance1() * frame->data[ModMatrix::RESONANCE_1]) * 65535);
+    dac_->set(index, 5, (p.filter().cutoff2() * frame->data[ModMatrix::CUTOFF_2]) * 65535);
+    dac_->set(index, 6, (p.filter().resonance2() * frame->data[ModMatrix::RESONANCE_2]) * 65535);
+    dac_->set(index, 7, (fadePhase_ * frame->data[ModMatrix::GAIN]) * 65535);
   }
 
  private:
-  int index_;
-  static inline int counter_;
   bool keyPressed_;
   bool stopRequested_;
   uint8_t note_;
