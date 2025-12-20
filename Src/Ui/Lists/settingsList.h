@@ -16,35 +16,35 @@ public:
 		return 4;
 	}
 
-	int top_item() {
-		return top_item_;
+	int topItem() {
+		return topItem_;
 	}
 
-	void set_top_item(int item) {
-		top_item_ = SettingsUtils::clip(0, num_items() - 1, item);
+	void setTopItem(int item) {
+		topItem_ = SettingsUtils::clip(0, numItems() - 1, item);
 	}
 
-	void on_up_button() {
-		int item = top_item() - collumns();
+	void onUpButton() {
+		int item = topItem() - collumns();
 		if (item >= 0)  {
-			set_top_item(item);
+			setTopItem(item);
 		}
 	}
 
-	void on_down_button() {
-		int item = top_item() + collumns();
-		if (item < num_items())  {
-			set_top_item(item);
+	void onDownButton() {
+		int item = topItem() + collumns();
+		if (item < numItems())  {
+			setTopItem(item);
 		}
 	}
 
-	void on_encoder(int index, int inc, bool shifted) {
-		edit(top_item() + index, inc, shifted);
+	void onEncoder(int index, int inc, bool shifted) {
+		edit(topItem() + index, inc, shifted);
 	}
 
-	virtual const int num_items();
-	virtual const char* item_text(int item);
-	virtual const char* value_text(int item);
+	virtual const int numItems();
+	virtual const char* itemText(int item);
+	virtual const char* valueText(int item);
 	virtual void edit(int item, int inc, bool shifted);
 
 protected:
@@ -52,7 +52,7 @@ protected:
 	Settings *settings_;
 
 private:
-	int top_item_ = 0;
+	int topItem_ = 0;
 };
 
 #endif

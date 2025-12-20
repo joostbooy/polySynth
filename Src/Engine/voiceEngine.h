@@ -9,12 +9,12 @@
 
 class VoiceEngine {
  public:
-  void init(Settings* settings, ModMatrixEngine* modMatrixEngine) {
+  void init(Settings* settings, ModMatrixEngine* modMatrixEngine, Dac* dac) {
     active_voices_.clear();
     available_voices_.clear();
 
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
-      voice_[i].init(settings, modMatrixEngine);
+      voice_[i].init(settings, modMatrixEngine, dac);
       available_voices_.push(i);
     }
   }
@@ -35,10 +35,10 @@ class VoiceEngine {
     return voice(most_recent_voice_);
   }
 
-  void update(Dac* dac) {
+  void update() {
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
       if (voice_[i].state() != Voice::IDLE) {
-        voice_[i].update(dac);
+        voice_[i].update();
       }
     }
     update_available_voices();

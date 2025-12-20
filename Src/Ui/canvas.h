@@ -72,7 +72,7 @@ public:
 			frameBuffer_.write(x, y, frameBuffer_.read(x, y) / 3);
 			break;
 		case MULTIPLIED:
-			frameBuffer_.write(x, y, SettingsUtils::clip_max(0xF, frameBuffer_.read(x, y) * 3));
+			frameBuffer_.write(x, y, SettingsUtils::clipMax(0xF, frameBuffer_.read(x, y) * 3));
 			break;
 		default:
 			break;
@@ -101,8 +101,8 @@ public:
 	}
 
 	void frame(int x, int y, int w, int h, Color color, int border = 1) {
-		int x2 = SettingsUtils::clip_min(0, x + w - 1);
-		int y2 = SettingsUtils::clip_min(0, y + h - 1);
+		int x2 = SettingsUtils::clipMin(0, x + w - 1);
+		int y2 = SettingsUtils::clipMin(0, y + h - 1);
 
 		for (int i = 0; i < border; ++i) {
 			horizontal_line(x, y + i, w, color);

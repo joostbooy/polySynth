@@ -12,14 +12,14 @@
 class Lfo {
  public:
   void init() {
-    set_speed(0);
-    set_shape(0.5f);
-    set_skew(0.5f);
-    set_min(0.0f);
-    set_max(1.0f);
-    set_sync_phase(0.0f);
-    set_clock_sync(false);
-    set_randomise(false);
+    setSpeed(0);
+    setShape(0.5f);
+    setSkew(0.5f);
+    setMin(0.0f);
+    setMax(1.0f);
+    setSyncPhase(0.0f);
+    setClockSync(false);
+    setRandomise(false);
     setRetrigger(true);
   }
 
@@ -28,12 +28,12 @@ class Lfo {
     return speed_;
   }
 
-  void set_speed(float value) {
-    speed_ = SettingsUtils::clip_float(value);
+  void setSpeed(float value) {
+    speed_ = SettingsUtils::clipFloat(value);
   }
 
-  const char* speed_text() {
-    if (clock_sync()) {
+  const char* speedText() {
+    if (clockSync()) {
       return MidiSync::tempo_text(speed() * (MidiSync::NUM_TEMPOS - 1));
     } else {
       size_t index = speed() * PHASE_TABLE_SIZE;
@@ -42,7 +42,7 @@ class Lfo {
   }
 
   float inc() {
-    if (clock_sync()) {
+    if (clockSync()) {
       return MidiSync::read_inc(speed() * (MidiSync::NUM_TEMPOS - 1));
     } else {
       return lut_phase_inc[int(speed() * (PHASE_TABLE_SIZE - 1))];
@@ -54,11 +54,11 @@ class Lfo {
     return shape_;
   }
 
-  void set_shape(float value) {
-    shape_ = SettingsUtils::clip_float(value);
+  void setShape(float value) {
+    shape_ = SettingsUtils::clipFloat(value);
   }
 
-  const char* shape_text() {
+  const char* shapeText() {
     return SettingsText::floatToText(shape(), -100, 100);
   }
 
@@ -67,11 +67,11 @@ class Lfo {
     return skew_;
   }
 
-  void set_skew(float value) {
-    skew_ = SettingsUtils::clip_float(value);
+  void setSkew(float value) {
+    skew_ = SettingsUtils::clipFloat(value);
   }
 
-  const char* skew_text() {
+  const char* skewText() {
     return SettingsText::floatToText(skew(), -100, 100);
   }
 
@@ -80,11 +80,11 @@ class Lfo {
     return min_;
   }
 
-  void set_min(float value) {
-    min_ = SettingsUtils::clip_float(value);
+  void setMin(float value) {
+    min_ = SettingsUtils::clipFloat(value);
   }
 
-  const char* min_text() {
+  const char* minText() {
     return SettingsText::floatToText(min(), 0, 100);
   }
 
@@ -93,38 +93,38 @@ class Lfo {
     return max_;
   }
 
-  void set_max(float value) {
-    max_ = SettingsUtils::clip_float(value);
+  void setMax(float value) {
+    max_ = SettingsUtils::clipFloat(value);
   }
 
-  const char* max_text() {
+  const char* maxText() {
     return SettingsText::floatToText(max(), 0, 100);
   }
 
   // Sync phase
-  float sync_phase() {
+  float syncPhase() {
     return sync_phase_;
   }
 
-  void set_sync_phase(float value) {
-    sync_phase_ = SettingsUtils::clip_float(value);
+  void setSyncPhase(float value) {
+    sync_phase_ = SettingsUtils::clipFloat(value);
   }
 
-  const char* sync_phase_text() {
-    return SettingsText::percentageToText(sync_phase() * 100, 100);
+  const char* syncPhaseText() {
+    return SettingsText::percentageToText(syncPhase() * 100, 100);
   }
 
   // clock sync
-  bool clock_sync() {
-    return clock_sync_;
+  bool clockSync() {
+    return clockSync_;
   }
 
-  void set_clock_sync(bool value) {
-    clock_sync_ = value;
+  void setClockSync(bool value) {
+    clockSync_ = value;
   }
 
-  const char* clock_sync_text() {
-    return SettingsText::boolToOnOff(clock_sync());
+  const char* clockSyncText() {
+    return SettingsText::boolToOnOff(clockSync());
   }
 
   // Randomise
@@ -132,11 +132,11 @@ class Lfo {
     return randomise_;
   }
 
-  void set_randomise(bool value) {
+  void setRandomise(bool value) {
     randomise_ = value;
   }
 
-  const char* randomise_text() {
+  const char* randomiseText() {
     return SettingsText::boolToOnOff(randomise());
   }
 
@@ -146,13 +146,13 @@ class Lfo {
   }
 
   void setRetrigger(bool value) {
-	retrigger_ = value;
+    retrigger_ = value;
   }
 
   const char* retriggerText() {
-	return SettingsText::boolToOnOff(retrigger());
+    return SettingsText::boolToOnOff(retrigger());
   }
-  
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(skew_);
@@ -162,7 +162,7 @@ class Lfo {
     fileWriter.write(max_);
     fileWriter.write(sync_phase_);
     fileWriter.write(randomise_);
-    fileWriter.write(clock_sync_);
+    fileWriter.write(clockSync_);
     fileWriter.write(retrigger_);
   }
 
@@ -174,7 +174,7 @@ class Lfo {
     fileReader.read(max_);
     fileReader.read(sync_phase_);
     fileReader.read(randomise_);
-    fileReader.read(clock_sync_);
+    fileReader.read(clockSync_);
     fileReader.read(retrigger_);
   }
 
@@ -184,9 +184,9 @@ class Lfo {
     speed_ = lfo->speed();
     min_ = lfo->min();
     max_ = lfo->max();
-    sync_phase_ = lfo->sync_phase();
+    sync_phase_ = lfo->syncPhase();
     randomise_ = lfo->randomise();
-    clock_sync_ = lfo->clock_sync();
+    clockSync_ = lfo->clockSync();
     retrigger_ = lfo->retrigger();
   }
 
@@ -198,7 +198,7 @@ class Lfo {
   float max_;
   float sync_phase_;
   bool randomise_;
-  bool clock_sync_;
+  bool clockSync_;
   bool retrigger_;
 };
 

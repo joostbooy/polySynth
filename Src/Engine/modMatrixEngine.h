@@ -17,11 +17,11 @@ class ModMatrixEngine {
     source_[ModMatrix::AMP_ENVELOPE] = value;
   }
 
-    void setModEnvelope(float value) {
+  void setModEnvelope(float value) {
     source_[ModMatrix::MOD_ENVELOPE] = value;
   }
 
-    void setLfo(int index, float value) {
+  void setLfo(int index, float value) {
     source_[ModMatrix::LFO_1 + index] = value;
   }
 
@@ -39,7 +39,7 @@ class ModMatrixEngine {
 
   void set_midi_cc(uint8_t number, float value) {
     for (size_t i = 0; i < Settings::kNumUserCc; ++i) {
-      if (number == modMatrix_->midi_cc_number(i)) {
+      if (number == modMatrix_->midiCcNumber(i)) {
         source_[i + ModMatrix::MIDI_CC_A] = value;
       }
     }

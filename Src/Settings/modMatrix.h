@@ -22,14 +22,22 @@ class ModMatrix {
 
   static const char* destination_text(int value) {
     switch (value) {
-      case PITCH:       return "PITCH";
-      case GAIN:        return "GAIN";
-      case CUTOFF_1:    return "CUTOFF 1";
-      case CUTOFF_2:    return "CUTOFF 2";
-      case RESONANCE_1: return "RESONANCE 1";
-      case RESONANCE_2: return "RESONANCE 2";
-      case SHAPE_1:     return "SHAPE 1";
-      case SHAPE_2:     return "SHAPE 2";
+      case PITCH:
+        return "PITCH";
+      case GAIN:
+        return "GAIN";
+      case CUTOFF_1:
+        return "CUTOFF 1";
+      case CUTOFF_2:
+        return "CUTOFF 2";
+      case RESONANCE_1:
+        return "RESONANCE 1";
+      case RESONANCE_2:
+        return "RESONANCE 2";
+      case SHAPE_1:
+        return "SHAPE 1";
+      case SHAPE_2:
+        return "SHAPE 2";
       default:
         break;
     }
@@ -57,20 +65,32 @@ class ModMatrix {
     NUM_SOURCES
   };
 
-   const char* source_text(int value) {
+  const char* source_text(int value) {
     switch (value) {
-      case LFO_1:         return "LFO 1";
-      case LFO_2:         return "LFO 2";
-      case AMP_ENVELOPE:  return "AMP ENVELOPE";
-      case MOD_ENVELOPE:  return "MOD ENVELOPE";
-      case CV_1:          return "CV 1";
-      case CV_2:          return "CV 2";
-      case MIDI_BEND:     return "MIDI BEND";
-      case MIDI_VELOCITY: return "MIDI VELOCITY";
-      case MIDI_CC_A:     return midi_cc_number_text(0);
-      case MIDI_CC_B:     return midi_cc_number_text(1);
-      case MIDI_CC_C:     return midi_cc_number_text(2);
-      case MIDI_CC_D:     return midi_cc_number_text(3);
+      case LFO_1:
+        return "LFO 1";
+      case LFO_2:
+        return "LFO 2";
+      case AMP_ENVELOPE:
+        return "AMP ENVELOPE";
+      case MOD_ENVELOPE:
+        return "MOD ENVELOPE";
+      case CV_1:
+        return "CV 1";
+      case CV_2:
+        return "CV 2";
+      case MIDI_BEND:
+        return "MIDI BEND";
+      case MIDI_VELOCITY:
+        return "MIDI VELOCITY";
+      case MIDI_CC_A:
+        return midiCcNumberText(0);
+      case MIDI_CC_B:
+        return midiCcNumberText(1);
+      case MIDI_CC_C:
+        return midiCcNumberText(2);
+      case MIDI_CC_D:
+        return midiCcNumberText(3);
       default:
         break;
     }
@@ -85,7 +105,7 @@ class ModMatrix {
     matrix_[MOD_ENVELOPE] |= (1 << CUTOFF_2);
 
     for (size_t i = 0; i < kNumUserCc; ++i) {
-      set_midi_cc_number(i, i);
+      setMidiCcNumber(i, i);
     }
   }
 
@@ -101,23 +121,22 @@ class ModMatrix {
 
   // Amp envelope & gain are always tied togheter!
   void toggle(size_t src, size_t dest) {
-    if ((src != AMP_ENVELOPE && dest != GAIN)) {
-      uint32_t data = matrix_[src];
-      matrix_[src] = data ^ (1 << dest);
-    }
+    uint32_t data = matrix_[src];
+    matrix_[src] = data ^ (1 << dest);
+    matrix_[AMP_ENVELOPE] |= (1 << GAIN);
   }
 
   // Midi CC
-  int midi_cc_number(int index) {
+  int midiCcNumber(int index) {
     return midi_cc_number_[index];
   }
 
-  void set_midi_cc_number(int index, int cc_number) {
+  void setMidiCcNumber(int index, int cc_number) {
     midi_cc_number_[index] = SettingsUtils::clip(0, 127, cc_number);
   }
 
-  const char* midi_cc_number_text(int index) {
-    return SettingsText::str.write("CC ", midi_cc_number(index));
+  const char* midiCcNumberText(int index) {
+    return SettingsText::str.write("CC ", midiCcNumber(index));
   }
 
   // Storage

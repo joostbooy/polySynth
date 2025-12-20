@@ -26,7 +26,7 @@ class Gpio {
     GPIOB->BSRR = state ? GPIO_PIN_6 : GPIO_PIN_6 << 16;
   }
 
-  void setOsc1(Oscillator::Type type) {
+  void setOsc1(Oscillator::Type1 type) {
     uint32_t data = 0;
     data |= (type & 1) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;
     data |= (type & 2) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;
@@ -38,7 +38,7 @@ class Gpio {
     GPIOB->BSRR = state ? GPIO_PIN_6 : GPIO_PIN_6 << 16;
   }
 
-  void setOsc2(Oscillator::Type type) {
+  void setOsc2(Oscillator::Type2 type) {
     uint32_t data = 0;
     data |= (type & 1) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;
     data |= (type & 2) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;

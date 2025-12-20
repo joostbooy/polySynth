@@ -315,7 +315,7 @@ namespace TextInputPage {
 		//draw text_cursor
 		if (text_cursor_ticks_ < 500) {
 			uint8_t h = canvas_->font().height();
-			cursor_x = SettingsUtils::clip_min(box_x_, cursor_x - 1);
+			cursor_x = SettingsUtils::clipMin(box_x_, cursor_x - 1);
 			canvas_->vertical_line(cursor_x, char_y, h, Canvas::WHITE);
 		}
 

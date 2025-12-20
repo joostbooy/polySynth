@@ -10,7 +10,8 @@ class Voice {
  public:
   enum State { IDLE = 0, ACTIVE = 1 };
 
-  void init(Settings* settings, ModMatrixEngine* modMatrixEngine) {
+  void init(Settings* settings, ModMatrixEngine* modMatrixEngine, Dac *dac) {
+    dac_ = dac;
     settings_ = settings;
     state_ = IDLE;
     key_pressed_ = false;
@@ -91,7 +92,7 @@ class Voice {
     modEnvelopeEngine_.release();
   }
 
-  void update(Dac* dac) {
+  void update() {
     if (stop_requested_) {
       if (fade_phase_ > 0.0f) {
         fade_phase_ -= 1000.f / (CONTROL_RATE * 4.f);
@@ -112,14 +113,14 @@ class Voice {
     ModMatrixEngine::Frame* frame = modMatrixEngine_->process();
 
     Patch& p = settings_->selectedPatch();
-    dac->set(1, (p.filter().resonance1() * frame->data[ModMatrix::RESONANCE_1]) * 65535);
-    dac->set(2, (p.filter().resonance2() * frame->data[ModMatrix::RESONANCE_2]) * 65535);
-    dac->set(3, (p.oscillator().shape1() * frame->data[ModMatrix::SHAPE_1]) * 65535);
-    dac->set(3, (p.oscillator().shape2() * frame->data[ModMatrix::SHAPE_2]) * 65535);
-    dac->set(5, (p.filter().cutoff1() * frame->data[ModMatrix::CUTOFF_1]) * 65535);
-    dac->set(5, (p.filter().cutoff2() * frame->data[ModMatrix::CUTOFF_2]) * 65535);
-    dac->set(7, (calculatePitch() * frame->data[ModMatrix::PITCH]) * 65535);
-    dac->set(0, (fade_phase_ * frame->data[ModMatrix::GAIN]) * 65535);
+    dac_->set(1, (p.filter().resonance1() * frame->data[ModMatrix::RESONANCE_1]) * 65535);
+    dac_->set(2, (p.filter().resonance2() * frame->data[ModMatrix::RESONANCE_2]) * 65535);
+    dac_->set(3, (p.oscillator().shape1() * frame->data[ModMatrix::SHAPE_1]) * 65535);
+    dac_->set(3, (p.oscillator().shape2() * frame->data[ModMatrix::SHAPE_2]) * 65535);
+    dac_->set(5, (p.filter().cutoff1() * frame->data[ModMatrix::CUTOFF_1]) * 65535);
+    dac_->set(5, (p.filter().cutoff2() * frame->data[ModMatrix::CUTOFF_2]) * 65535);
+    dac_->set(7, (calculatePitch() * frame->data[ModMatrix::PITCH]) * 65535);
+    dac_->set(0, (fade_phase_ * frame->data[ModMatrix::GAIN]) * 65535);
   }
 
  private:
@@ -132,6 +133,7 @@ class Voice {
   State state_;
   float velocity_;
   float fade_phase_;
+  Dac* dac_;
   Settings* settings_;
   ModMatrixEngine* modMatrixEngine_;
   EnvelopeEngine ampEnvelopeEngine_;

@@ -11,24 +11,24 @@ namespace ListPage {
 	using TopPage::leds_;
 
 	SettingsList *list_;
-	void(*clear_callback_)() = nullptr;
-	bool(*paste_callback_)() = nullptr;
-	void(*copy_callback_)() = nullptr;
+	void(*clearCallback_)() = nullptr;
+	bool(*pasteCallback_)() = nullptr;
+	void(*copyCallback_)() = nullptr;
 
-	void set_list(SettingsList *list) {
+	void setList(SettingsList *list) {
 		list_ = list;
 	}
 
-	void set_clear_callback(void(*callback)()) {
-		clear_callback_ = callback;
+	void setClearCallback(void(*callback)()) {
+		clearCallback_ = callback;
 	}
 
-	void set_paste_callback(bool(*callback)()) {
-		paste_callback_ = callback;
+	void setPasteCallback(bool(*callback)()) {
+		pasteCallback_ = callback;
 	}
 
-	void set_copy_callback(void(*callback)()) {
-		copy_callback_ = callback;
+	void setCopyCallback(void(*callback)()) {
+		copyCallback_ = callback;
 	}
 
 	void init() {
@@ -40,9 +40,9 @@ namespace ListPage {
 	}
 
 	void exit() {
-		clear_callback_ = nullptr;
-		paste_callback_ = nullptr;
-		copy_callback_ = nullptr;
+		clearCallback_ = nullptr;
+		pasteCallback_ = nullptr;
+		copyCallback_ = nullptr;
 	}
 
 	void on_button(int id, int state) {
@@ -53,32 +53,32 @@ namespace ListPage {
 		switch (id)
 		{
 		case Controller::UP_BUTTON:
-			list_->on_up_button();
+			list_->onUpButton();
 			break;
 		case Controller::DOWN_BUTTON:
-			list_->on_down_button();
+			list_->onDownButton();
 			break;
 		case Controller::CLEAR_BUTTON:
-			if (clear_callback_) {
+			if (clearCallback_) {
 				ConfirmationPage::set("CLEAR SETTINGS ?", [](int option) {
 					if (option == ConfirmationPage::CONFIRM) {
-						clear_callback_();
+						clearCallback_();
 					}
 				});
 				pages_->open(Pages::CONFIRMATION_PAGE);
 			}
 			break;
 		case Controller::COPY_BUTTON:
-			if (copy_callback_) {
-				copy_callback_();
+			if (copyCallback_) {
+				copyCallback_();
 				MessagePainter::show("SETTINGS COPIED");
 			}
 			break;
 		case Controller::PASTE_BUTTON:
-			if (paste_callback_) {
+			if (pasteCallback_) {
 				ConfirmationPage::set("OVERWRITE SETTINGS ?", [](int option) {
 					if (option == ConfirmationPage::CONFIRM) {
-						if (paste_callback_()) {
+						if (pasteCallback_()) {
 							MessagePainter::show("SETTINGS PASTED");
 						} else {
 							MessagePainter::show("FAILED! CLIPBOARD EMPTY");
@@ -98,13 +98,13 @@ namespace ListPage {
 		if (index >= 0) {
 			bool pressed = Controller::encoder_is_pressed(id);
 			bool shifted = Controller::is_pressed(Controller::SHIFT_BUTTON);
-			list_->on_encoder(index, state, pressed || shifted);
+			list_->onEncoder(index, state, pressed || shifted);
 		}
 	}
 
 	void refresh_leds() {
 		for (int i = 0; i < list_->collumns(); ++i) {
-			if ((i + list_->top_item()) < list_->num_items()) {
+			if ((i + list_->topItem()) < list_->numItems()) {
 				leds_->set_footer_encoder(i, Leds::RED);
 			} else {
 				leds_->set_footer_encoder(i, Leds::BLACK);
@@ -120,17 +120,17 @@ namespace ListPage {
 		canvas_->set_font(Font::SMALL);
 
 		for (int i = 0; i < list_->collumns(); ++i) {
-			int item = i + list_->top_item();
-			if (item < list_->num_items()) {
+			int item = i + list_->topItem();
+			if (item < list_->numItems()) {
 				int x = i * w;
-				canvas_->draw_text(x, y, w, h, list_->item_text(item), Canvas::CENTER, Canvas::CENTER);
-				canvas_->draw_text(x, y + 10, w, h, list_->value_text(item), Canvas::CENTER, Canvas::CENTER);
+				canvas_->draw_text(x, y, w, h, list_->itemText(item), Canvas::CENTER, Canvas::CENTER);
+				canvas_->draw_text(x, y + 10, w, h, list_->valueText(item), Canvas::CENTER, Canvas::CENTER);
 			}
 		}
 
 		const int bar_w = 6;
 		const int bar_x = canvas_->width() - bar_w;
-		WindowPainter::draw_vertical_scollbar(bar_x, y, bar_w, h, list_->top_item(), list_->num_items(), list_->collumns());
+		WindowPainter::draw_vertical_scollbar(bar_x, y, bar_w, h, list_->topItem(), list_->numItems(), list_->collumns());
 	}
 
 	const size_t target_fps() {

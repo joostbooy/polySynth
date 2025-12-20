@@ -5,11 +5,11 @@ class SettingsUtils {
 
 public:
 
-	static inline int clip_min(int min, int value) {
+	static inline int clipMin(int min, int value) {
 		return value > min ? value : min;
 	}
 
-	static inline int clip_max(int max, int value) {
+	static inline int clipMax(int max, int value) {
 		return value < max ? value : max;
 	}
 
@@ -17,7 +17,7 @@ public:
 		return value > max ? max : (value < min ? min : value);
 	}
 
-	static inline float clip_float(float value) {
+	static inline float clipFloat(float value) {
 		return value > 1.0f ? 1.0f : (value < 0.0f ? 0.0f : value);
 	}
 
@@ -33,7 +33,7 @@ public:
 		b = temp;
 	}
 
-	static inline float f_inc(int inc, bool shift) {
+	static inline float fInc(int inc, bool shift) {
 		return inc * (1.f / 100.f) * (shift ? 10.f : 1.f);
 	}
 };

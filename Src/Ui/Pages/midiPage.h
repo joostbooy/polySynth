@@ -38,10 +38,10 @@ namespace MidiPage {
 	}
 
 	void enter() {
-		ListPage::set_list(&midiList_);
-		ListPage::set_clear_callback(&clear);
-		ListPage::set_copy_callback(&copy);
-		ListPage::set_paste_callback(&paste);
+		ListPage::setList(&midiList_);
+		ListPage::setClearCallback(&clear);
+		ListPage::setCopyCallback(&copy);
+		ListPage::setPasteCallback(&paste);
 		ListPage::enter();
 	}
 

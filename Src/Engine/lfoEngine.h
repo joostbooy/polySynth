@@ -10,24 +10,24 @@ class LfoEngine {
 public:
 
 	enum Stage {
-		FALLING = 0,
-		RISING = 1,
+		Falling = 0,
+		Rising = 1,
 	};
 
 	void init(Lfo *lfo) {
 		lfo_ = lfo;
 		reset();
 
-		if (stage_ == RISING) {
-			last_value_ = lfo_->min();
+		if (stage_ == Rising) {
+			lastValue_ = lfo_->min();
 		} else {
-			last_value_ = lfo_->max();
+			lastValue_ = lfo_->max();
 		}
 	}
 
 	void reset() {
-		phase_ = lfo_->sync_phase();
-		set_stage(phase_ < lfo_->skew() ? RISING : FALLING, true);
+		phase_ = lfo_->syncPhase();
+		setStage(phase_ < lfo_->skew() ? Rising : Falling, true);
 	}
 
 	void retrigger() {
@@ -40,18 +40,18 @@ public:
 	float value() { return value_; }
 
 	float next() {
-		float skew_phase;
-		float skew_amount = lfo_->skew();
+		float skewPhase;
+		float skewAmount = lfo_->skew();
 
-		if (phase_ < skew_amount) {
-			set_stage(RISING);
-			skew_phase = phase_ * (1.0f / skew_amount);
+		if (phase_ < skewAmount) {
+			setStage(Rising);
+			skewPhase = phase_ * (1.0f / skewAmount);
 		} else {
-			set_stage(FALLING);
-			skew_phase = (phase_ - skew_amount) * (1.0f / (1.0f - skew_amount));
+			setStage(Falling);
+			skewPhase = (phase_ - skewAmount) * (1.0f / (1.0f - skewAmount));
 		}
 
-		value_ = Dsp::cross_fade(last_value_, target_value_, Curve::read(skew_phase, lfo_->shape()));
+		value_ = Dsp::cross_fade(lastValue_, target_value_, Curve::read(skewPhase, lfo_->shape()));
 
 		phase_ += lfo_->inc();
 		if (phase_ >= 1.f) {
@@ -63,22 +63,22 @@ public:
 
 private:
 	Lfo *lfo_;
-	Stage stage_ = RISING;
+	Stage stage_ = Rising;
 	float phase_ = 0.f;
 	float value_ = 0.f;
-	float last_value_ = 0.f;
+	float lastValue_ = 0.f;
 	float target_value_ = 1.f;
 
-	inline void set_stage(Stage stage, bool force = false) {
+	inline void setStage(Stage stage, bool force = false) {
 		if (stage_ != stage || force == true) {
 			stage_ = stage;
 
-			last_value_ = value_;
+			lastValue_ = value_;
 
 			if (lfo_->randomise()) {
 				target_value_ = Rng::reciprocal(lfo_->min(), lfo_->max());
 			} else {
-				target_value_ = (stage_ == RISING) ? lfo_->max() : lfo_->min();
+				target_value_ = (stage_ == Rising) ? lfo_->max() : lfo_->min();
 			}
 		}
 	}

@@ -38,7 +38,6 @@ class Engine {
 
   uint32_t processing_time_uS_;
 
-  Dac* dac_;
   Gpio* gpio_;
   Settings* settings_;
   MidiEngine midiEngine_;

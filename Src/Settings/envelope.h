@@ -74,7 +74,7 @@ public:
 	}
 
 	void set_attack_time(float value) {
-		attack_time_ = SettingsUtils::clip_float(value);
+		attack_time_ = SettingsUtils::clipFloat(value);
 	}
 
 	const char *attack_time_text() {
@@ -99,7 +99,7 @@ public:
 	}
 
 	void set_attack_shape(float value) {
-		attack_shape_ = SettingsUtils::clip_float(value);
+		attack_shape_ = SettingsUtils::clipFloat(value);
 	}
 
 	const char *attack_shape_text() {
@@ -112,7 +112,7 @@ public:
 	}
 
 	void set_decay_time(float value) {
-		attack_time_ = SettingsUtils::clip_float(value);
+		attack_time_ = SettingsUtils::clipFloat(value);
 	}
 
 	const char *decay_time_text() {
@@ -137,7 +137,7 @@ public:
 	}
 
 	void set_decay_shape(float value) {
-		decay_shape_ = SettingsUtils::clip_float(value);
+		decay_shape_ = SettingsUtils::clipFloat(value);
 	}
 
 	const char *decay_shape_text() {
@@ -151,7 +151,7 @@ public:
 
 	void set_hold_time(float value) {
 		if (mode() == TRIGGER) {
-			hold_time_ = SettingsUtils::clip_float(value);
+			hold_time_ = SettingsUtils::clipFloat(value);
 		}
 	}
 
@@ -181,7 +181,7 @@ public:
 	}
 
 	void set_sustain_level(float value) {
-		sustain_level_ = SettingsUtils::clip_float(value);
+		sustain_level_ = SettingsUtils::clipFloat(value);
 	}
 
 	const char *sustain_level_text() {
@@ -194,7 +194,7 @@ public:
 	}
 
 	void set_release_time(float value) {
-		release_time_ = SettingsUtils::clip_float(value);
+		release_time_ = SettingsUtils::clipFloat(value);
 	}
 
 	const char *release_time_text() {
@@ -219,7 +219,7 @@ public:
 	}
 
 	void set_release_shape(float value) {
-		release_shape_ = SettingsUtils::clip_float(value);
+		release_shape_ = SettingsUtils::clipFloat(value);
 	}
 
 	const char *release_shape_text() {

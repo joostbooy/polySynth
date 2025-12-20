@@ -1,12 +1,11 @@
 #include "engine.h"
 
 void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac, Gpio* gpio) {
-  dac_ = dac;
   gpio_ = gpio;
   settings_ = settings;
   midiEngine_.init(uart, usb, &settings_->midi());
   modMatrixEngine_.init(settings_);
-  voiceEngine_.init(settings_, &modMatrixEngine_);
+  voiceEngine_.init(settings_, &modMatrixEngine_, dac);
   // midiClockEngine_.init(&settings->midi());
   state_ = RUNNING;
 }
@@ -111,6 +110,6 @@ void Engine::update() {
     while (voiceEngine_.available() && noteQue_.readable()) {
       voiceEngine_.assign_voice(noteQue_.read());
     }
-    voiceEngine_.update(dac_);
+    voiceEngine_.update();
   }
 }

@@ -9,7 +9,6 @@
 #include "sdio.h"
 #include "gpio.h"
 
-
 #include "disk.h"
 #include "settings.h"
 #include "engine.h"
@@ -34,7 +33,6 @@ Engine engine;
 Settings settings;
 
 extern "C" {
-
 	void NMI_Handler() { }
 	void HardFault_Handler() { while (1); }
 	void MemManage_Handler() { while (1); }
@@ -51,7 +49,7 @@ extern "C" {
 			return;
 		}
 		TIM3->SR = ~TIM_IT_UPDATE;
-
+	//
 	}
 
 	// 1Khz
@@ -77,12 +75,11 @@ int main(void)
 	uart.init();
 	//gate.init();
 	// usb.init();
-	// adc.init();
+	adc.init();
 	matrix.init();
 	display.init();
 	sdio.init();
 
-	// Init engine, settings & ui
 	disk.init(&sdio);
 	settings.init(&disk);
 	engine.init(&settings, &uart, &usb, &dac, &gpio);
