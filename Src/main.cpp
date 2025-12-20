@@ -72,10 +72,10 @@ int main(void)
 	Debug::init();
 	Micros::init();
 
+	// usb.init();
 	dac.init();
 	uart.init();
-	//gate.init();
-	// usb.init();
+	gpio.init();
 	adc.init();
 	matrix.init();
 	display.init();
@@ -87,7 +87,6 @@ int main(void)
 	ui.init(&settings, &engine, &matrix, &display);
 
 	// Start timers
-	//dac.start(fill);
 	//timer.start_3(CLOCK_ISR_FREQ);
 	//timer.start_2(1000);
 

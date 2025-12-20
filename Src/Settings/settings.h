@@ -23,10 +23,13 @@ class Settings {
 
     path.clear();
 
+    selectedPatch_.init();
     for (size_t i = 0; i < kNumPatches; i++) {
       patch(i).init();
     }
+    selectPatchIndex(0);
   }
+
 
   void init() {
     if (disk_ != nullptr) {
@@ -49,7 +52,7 @@ class Settings {
   }
 
   Patch& selectedPatch() {
-    return patch_[patchIndex_];
+    return selectedPatch_;
   }
 
   int patchIndex() {
@@ -58,6 +61,7 @@ class Settings {
 
   void selectPatchIndex(int value) {
     patchIndex_ = SettingsUtils::clip(0, kNumPatches - 1, value);
+    selectedPatch_.paste(&patch_[patchIndex_]);
   }
 
   Disk* disk() {
@@ -122,6 +126,7 @@ class Settings {
   int patchIndex_;
 
   Patch patch_[kNumPatches];
+  Patch selectedPatch_;
 };
 
 #endif
