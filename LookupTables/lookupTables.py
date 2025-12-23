@@ -1,6 +1,6 @@
 import numpy
 import sys
-dir = '/Users/joostbooy/Desktop/Code/Atom/Python/armScripts'
+dir = '/Users/joostbooij/Desktop/Code/lib/scripts'
 sys.path.insert(0,dir)
 import lutCompiler
 
@@ -8,14 +8,13 @@ import lutCompiler
 #table variables
 tables = []
 
-block_size = 8
-sample_rate = 16000 #24000
-control_rate = sample_rate / block_size
-
 ppqn = 24
 min_bpm = 30
 max_bpm = 300
-clock_isr_freq = 4000
+clock_isr_freq = 8000
+
+num_mux_channels = 8
+control_rate = clock_isr_freq / num_mux_channels
 
 
 '''____________________
@@ -57,7 +56,7 @@ tables.append(steps.astype('float32'))
 _____________________________'''
 
 name = 'beat_length'
-values = sample_rate * (60 / bpm)
+values = control_rate * (60 / bpm)
 tables.append('float ' + name)
 tables.append(values.astype('float32'))
 
@@ -110,8 +109,6 @@ tables.append(values.astype('float32'))
 ________________________'''
 
 defines = [
-'BLOCK_SIZE '		+ str(int(block_size)),
-'SAMPLE_RATE '		+ str(int(sample_rate)),
 'CONTROL_RATE '		+ str(int(control_rate)),
 'MIN_BPM '			+ str(int(min_bpm)),
 'MAX_BPM '			+ str(int(max_bpm)),
