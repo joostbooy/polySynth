@@ -20,7 +20,6 @@
 
 class Dac {
  public:
- 
   enum ClearCode {
     ClearZeroScale = 0,
     ClearMidScale = 1,
@@ -44,14 +43,14 @@ class Dac {
     }
 
     for (int i = 0; i < kNumDacChannels; ++i) {
-      writeDac(i == 7 ? WRITE_INPUT_REGISTER_UPDATE_ALL : WRITE_INPUT_REGISTER, i, c.value[i], 0);
+      writeDac(WRITE_INPUT_REGISTER_UPDATE_N, i, c.value[i], 0);
     }
 
     inhibit();
   }
 
  private:
-  static const int kNumDacChannels = 8;
+  static const int kNumDacChannels = 12;
   static const int kNumMuxChannels = 8;
 
   struct MuxChannel {
@@ -79,26 +78,27 @@ class Dac {
 
   void writeDac(uint8_t command, uint8_t address, uint16_t data, uint8_t function) {
     uint8_t b1 = command;
-    uint8_t b2 = (address << 4) | (data >> 12);
+    uint8_t b2 = ((address % 8) << 4) | (data >> 12);
     uint8_t b3 = data >> 4;
     uint8_t b4 = (data & 0xf) << 4 | function;
 
     // sync_pin LOW
-    GPIOA->BSRR = GPIO_PIN_4 << 16;
+    GPIOA->BSRR = address < 8 ? GPIO_PIN_4 << 16 : GPIO_PIN_2 << 16;
+
     asm("NOP");
 
-    spi_write(b1);
-    spi_write(b2);
-    spi_write(b3);
-    spi_write(b4);
+    spiWrite(b1);
+    spiWrite(b2);
+    spiWrite(b3);
+    spiWrite(b4);
     asm("NOP");
 
     // sync_pin HIGH
-    GPIOA->BSRR = GPIO_PIN_4;
+    GPIOA->BSRR = address < 8 ? GPIO_PIN_4 : GPIO_PIN_2;
     asm("NOP");
   }
 
-  void spi_write(uint8_t data) {
+  void spiWrite(uint8_t data) {
     while (!(SPI1->SR & SPI_FLAG_TXE));
     SPI1->DR = data;
 
