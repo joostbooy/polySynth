@@ -82,9 +82,9 @@ class Dac {
     uint8_t b3 = data >> 4;
     uint8_t b4 = (data & 0xf) << 4 | function;
 
-    // sync_pin LOW
-    GPIOA->BSRR = address < 8 ? GPIO_PIN_4 << 16 : GPIO_PIN_2 << 16;
+    uint32_t syncPin = address < 8 ? GPIO_PIN_4 : GPIO_PIN_2;
 
+    GPIOA->BSRR = syncPin << 16;
     asm("NOP");
 
     spiWrite(b1);
@@ -93,8 +93,7 @@ class Dac {
     spiWrite(b4);
     asm("NOP");
 
-    // sync_pin HIGH
-    GPIOA->BSRR = address < 8 ? GPIO_PIN_4 : GPIO_PIN_2;
+    GPIOA->BSRR = syncPin;
     asm("NOP");
   }
 
