@@ -35,6 +35,7 @@ class Patch {
     modEnvelope().init();
     modMatrix().init();
     setName("EMPTY PATCH");
+    setVoiceMode(POLY);
   }
 
   const char* name() {
