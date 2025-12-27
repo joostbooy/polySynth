@@ -9,7 +9,9 @@
 
 class VoiceEngine {
  public:
+
   void init(Settings* settings, ModMatrixEngine* modMatrixEngine, Dac* dac) {
+    settings_ = settings;
     activeVoices_.clear();
     availableVoices_.clear();
 
@@ -45,10 +47,22 @@ class VoiceEngine {
   }
 
   void requestVoice() {
-    if (availableVoices_.size() == 0) {
-      uint8_t v = activeVoices_.pull();
-      voice_[v].requestStop();
-      activeVoices_.push(v);
+    switch (settings_->selectedPatch().voiceMode()) {
+      case Patch::MONO:
+      case Patch::UNISON:
+        for (size_t i = 0; i < Settings::kNumVoices; i++) {
+          voice_[i].requestStop();
+        }
+        break;
+      case Patch::POLY: {
+        if (availableVoices_.size() == 0) {
+          uint8_t v = activeVoices_.pull();
+          voice_[v].requestStop();
+          activeVoices_.push(v);
+        }
+      } break;
+      default:
+        break;
     }
   }
 
@@ -69,10 +83,26 @@ class VoiceEngine {
   }
 
   void assignVoice(MidiEngine::Event e) {
-    uint8_t v = availableVoices_.pop();
-    voice_[v].noteOn(e);
-    activeVoices_.push(v);
-    mostRecentVoice_ = v;
+    size_t count = 0;
+
+    switch (settings_->selectedPatch().voiceMode()) {
+      case Patch::MONO:
+      case Patch::POLY:
+        count = 1;
+        break;
+      case Patch::UNISON:
+        count = availableVoices_.size();
+        break;
+      default:
+        break;
+    }
+
+    for (size_t i = 0; i < count; i++) {
+      uint8_t v = availableVoices_.pop();
+      voice_[v].noteOn(e);
+      activeVoices_.push(v);
+      mostRecentVoice_ = v;
+    }
   }
 
   void killMidiChannel(uint8_t port, uint8_t channel) {
@@ -87,6 +117,7 @@ class VoiceEngine {
   }
 
  private:
+   Settings *settings_;
   Voice voice_[Settings::kNumVoices];
   Stack<uint8_t, Settings::kNumVoices> activeVoices_;
   Stack<uint8_t, Settings::kNumVoices> availableVoices_;

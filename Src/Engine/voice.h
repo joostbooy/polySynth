@@ -110,17 +110,17 @@ class Voice {
     modMatrixEngine_->setModEnvelope(modEnvelopeEngine_.next());
     modMatrixEngine_->setLfo(0, lfoEngine_[0].next());
     modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
-    ModMatrixEngine::Frame* frame = modMatrixEngine_->process();
+    float *data = modMatrixEngine_->process();
 
     Patch& p = settings_->selectedPatch();
-    dac_->set(index, 0, (calculatePitch() * frame->data[ModMatrix::PITCH]) * 65535);
-    dac_->set(index, 1, (p.oscillator().shape1() * frame->data[ModMatrix::SHAPE_1]) * 65535);
-    dac_->set(index, 2, (p.oscillator().shape2() * frame->data[ModMatrix::SHAPE_2]) * 65535);
-    dac_->set(index, 3, (p.filter().cutoff1() * frame->data[ModMatrix::CUTOFF_1]) * 65535);
-    dac_->set(index, 4, (p.filter().resonance1() * frame->data[ModMatrix::RESONANCE_1]) * 65535);
-    dac_->set(index, 5, (p.filter().cutoff2() * frame->data[ModMatrix::CUTOFF_2]) * 65535);
-    dac_->set(index, 6, (p.filter().resonance2() * frame->data[ModMatrix::RESONANCE_2]) * 65535);
-    dac_->set(index, 7, (fadePhase_ * frame->data[ModMatrix::GAIN]) * 65535);
+    dac_->set(index, 0, (calculatePitch() * data[ModMatrix::PITCH]) * 65535);
+    dac_->set(index, 1, (p.oscillator().shape1() * data[ModMatrix::SHAPE_1]) * 65535);
+    dac_->set(index, 2, (p.oscillator().shape2() * data[ModMatrix::SHAPE_2]) * 65535);
+    dac_->set(index, 3, (p.filter().cutoff1() * data[ModMatrix::CUTOFF_1]) * 65535);
+    dac_->set(index, 4, (p.filter().resonance1() * data[ModMatrix::RESONANCE_1]) * 65535);
+    dac_->set(index, 5, (p.filter().cutoff2() * data[ModMatrix::CUTOFF_2]) * 65535);
+    dac_->set(index, 6, (p.filter().resonance2() * data[ModMatrix::RESONANCE_2]) * 65535);
+    dac_->set(index, 7, (fadePhase_ * data[ModMatrix::GAIN]) * 65535);
 
     if (settings_->calibration().enabled()) {
         dac_->set(index, 0, settings_->calibration().min());

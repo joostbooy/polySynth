@@ -10,8 +10,20 @@
 
 class Patch {
  public:
-
   static const size_t kMaxNameLength = 16;
+
+  enum VoiceMode { MONO, POLY, UNISON, NUM_VOICE_MODES };
+
+  const char* voiceModeText(VoiceMode value) {
+    switch (value) {
+      case MONO:    return "MONO";
+      case POLY:    return "POLY";
+      case UNISON:  return "UNISON";
+      default:
+        break;
+    }
+    return nullptr;
+  }
 
   void init() {
     lfo(0).init();
@@ -31,6 +43,18 @@ class Patch {
 
   void setName(const char* text) {
     StringUtils::copy(name_, const_cast<char*>(text), kMaxNameLength);
+  }
+
+  VoiceMode voiceMode() {
+    return voiceMode_;
+  }
+
+  void setVoiceMode(int value) {
+    voiceMode_ = VoiceMode(SettingsUtils::clip(0, NUM_VOICE_MODES - 1, value));
+  }
+
+  const char *voiceModeText() {
+    return voiceModeText(voiceMode());
   }
 
   Midi& midi() {
@@ -63,6 +87,9 @@ class Patch {
 
   // Storage
   void save(FileWriter& fileWriter) {
+    fileWriter.write(name_);
+    fileWriter.write(voiceMode_);
+
     lfo_[0].save(fileWriter);
     lfo_[1].save(fileWriter);
     midi_.save(fileWriter);
@@ -74,6 +101,9 @@ class Patch {
   }
 
   void load(FileReader& fileReader) {
+    fileReader.read(name_);
+    fileReader.read(voiceMode_);
+
     lfo_[0].load(fileReader);
     lfo_[1].load(fileReader);
     midi_.load(fileReader);
@@ -85,6 +115,9 @@ class Patch {
   }
 
   void paste(Patch* patch) {
+    StringUtils::copy(name_, const_cast<char*>(patch->name()), kMaxNameLength);
+    voiceMode_ = patch->voiceMode();
+
     lfo_[0].paste(&patch->lfo(0));
     lfo_[1].paste(&patch->lfo(1));
     midi_.paste(&patch->midi());
@@ -104,6 +137,7 @@ class Patch {
   ModMatrix modMatrix_;
   Lfo lfo_[2];
   char name_[kMaxNameLength];
+  VoiceMode voiceMode_;
 };
 
 #endif  // Patch_h
