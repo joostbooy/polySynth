@@ -9,7 +9,6 @@
 
 class VoiceEngine {
  public:
-
   void init(Settings* settings, ModMatrixEngine* modMatrixEngine, Dac* dac) {
     settings_ = settings;
     activeVoices_.clear();
@@ -117,7 +116,7 @@ class VoiceEngine {
   }
 
  private:
-   Settings *settings_;
+  Settings* settings_;
   Voice voice_[Settings::kNumVoices];
   Stack<uint8_t, Settings::kNumVoices> activeVoices_;
   Stack<uint8_t, Settings::kNumVoices> availableVoices_;
