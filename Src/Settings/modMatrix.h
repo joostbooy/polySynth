@@ -6,7 +6,8 @@ class ModMatrix {
   static const size_t kNumUserCc = 4;
 
   enum Destination {
-    PITCH,
+    PITCH_1,
+    PITCH_2,
     GAIN,
     CUTOFF_1,
     CUTOFF_2,
@@ -14,6 +15,8 @@ class ModMatrix {
     RESONANCE_2,
     SHAPE_1,
     SHAPE_2,
+    FM_DEPTH,
+    PAN,
 
     NUM_DESTINATIONS
   };
@@ -22,22 +25,17 @@ class ModMatrix {
 
   static const char* destination_text(int value) {
     switch (value) {
-      case PITCH:
-        return "PITCH";
-      case GAIN:
-        return "GAIN";
-      case CUTOFF_1:
-        return "CUTOFF 1";
-      case CUTOFF_2:
-        return "CUTOFF 2";
-      case RESONANCE_1:
-        return "RESONANCE 1";
-      case RESONANCE_2:
-        return "RESONANCE 2";
-      case SHAPE_1:
-        return "SHAPE 1";
-      case SHAPE_2:
-        return "SHAPE 2";
+      case PITCH_1:     return "PITCH 1";
+      case PITCH_2:     return "PITCH 2";
+      case GAIN:        return "GAIN";
+      case CUTOFF_1:    return "CUTOFF 1";
+      case CUTOFF_2:    return "CUTOFF 2";
+      case RESONANCE_1: return "RESONANCE 1";
+      case RESONANCE_2: return "RESONANCE 2";
+      case SHAPE_1:     return "SHAPE 1";
+      case SHAPE_2:     return "SHAPE 2";
+      case FM_DEPTH:    return "FM DEPTH";
+      case PAN:         return "PAN";
       default:
         break;
     }
@@ -67,30 +65,18 @@ class ModMatrix {
 
   const char* source_text(int value) {
     switch (value) {
-      case LFO_1:
-        return "LFO 1";
-      case LFO_2:
-        return "LFO 2";
-      case AMP_ENVELOPE:
-        return "AMP ENVELOPE";
-      case MOD_ENVELOPE:
-        return "MOD ENVELOPE";
-      case CV_1:
-        return "CV 1";
-      case CV_2:
-        return "CV 2";
-      case MIDI_BEND:
-        return "MIDI BEND";
-      case MIDI_VELOCITY:
-        return "MIDI VELOCITY";
-      case MIDI_CC_A:
-        return midiCcNumberText(0);
-      case MIDI_CC_B:
-        return midiCcNumberText(1);
-      case MIDI_CC_C:
-        return midiCcNumberText(2);
-      case MIDI_CC_D:
-        return midiCcNumberText(3);
+      case LFO_1:         return "LFO 1";
+      case LFO_2:         return "LFO 2";
+      case AMP_ENVELOPE:  return "AMP ENVELOPE";
+      case MOD_ENVELOPE:  return "MOD ENVELOPE";
+      case CV_1:          return "CV 1";
+      case CV_2:          return "CV 2";
+      case MIDI_BEND:     return "MIDI BEND";
+      case MIDI_VELOCITY: return "MIDI VELOCITY";
+      case MIDI_CC_A:     return midiCcNumberText(0);
+      case MIDI_CC_B:     return midiCcNumberText(1);
+      case MIDI_CC_C:     return midiCcNumberText(2);
+      case MIDI_CC_D:     return midiCcNumberText(3);
       default:
         break;
     }
@@ -99,7 +85,8 @@ class ModMatrix {
 
   void init() {
     clear();
-    matrix_[MIDI_BEND] |= (1 << PITCH);
+    matrix_[MIDI_BEND] |= (1 << PITCH_1);
+    matrix_[MIDI_BEND] |= (1 << PITCH_2);
     matrix_[MIDI_VELOCITY] |= (1 << GAIN);
     matrix_[AMP_ENVELOPE] |= (1 << GAIN);
     matrix_[MOD_ENVELOPE] |= (1 << CUTOFF_2);

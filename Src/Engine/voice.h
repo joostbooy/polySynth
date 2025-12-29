@@ -113,7 +113,7 @@ class Voice {
     float *data = modMatrixEngine_->process();
 
     Patch& p = settings_->selectedPatch();
-    dac_->set(index, 0, (calculatePitch() * data[ModMatrix::PITCH]) * 65535);
+    dac_->set(index, 0, (calculatePitch() * data[ModMatrix::PITCH_1]) * 65535);
     dac_->set(index, 1, (p.oscillator().shape1() * data[ModMatrix::SHAPE_1]) * 65535);
     dac_->set(index, 2, (p.oscillator().shape2() * data[ModMatrix::SHAPE_2]) * 65535);
     dac_->set(index, 3, (p.filter().cutoff1() * data[ModMatrix::CUTOFF_1]) * 65535);
