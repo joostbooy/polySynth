@@ -31,13 +31,14 @@ class Patch {
     midi().init();
     oscillator().init();
     filter().init();
-    ampEnvelope().init();
-    modEnvelope().init();
+    envelope(0).init();
+    envelope(1).init();
     modMatrix().init();
     setName("EMPTY PATCH");
     setVoiceMode(POLY);
   }
 
+  // Name
   const char* name() {
     return name_;
   }
@@ -46,6 +47,7 @@ class Patch {
     StringUtils::copy(name_, const_cast<char*>(text), kMaxNameLength);
   }
 
+  // Voice mode
   VoiceMode voiceMode() {
     return voiceMode_;
   }
@@ -70,12 +72,12 @@ class Patch {
     return filter_;
   }
 
-  Envelope& ampEnvelope() {
-    return ampEnvelope_;
+  Envelope& envelope(int index) {
+    return envelope_[index];
   }
 
   Envelope& modEnvelope() {
-    return modEnvelope_;
+    return envelope_[1];
   }
 
   ModMatrix& modMatrix() {
@@ -96,8 +98,8 @@ class Patch {
     midi_.save(fileWriter);
     oscillator_.save(fileWriter);
     filter_.save(fileWriter);
-    ampEnvelope_.save(fileWriter);
-    modEnvelope_.save(fileWriter);
+    envelope_[0].save(fileWriter);
+    envelope_[1].save(fileWriter);
     modMatrix_.save(fileWriter);
   }
 
@@ -110,22 +112,22 @@ class Patch {
     midi_.load(fileReader);
     oscillator_.load(fileReader);
     filter_.load(fileReader);
-    ampEnvelope_.load(fileReader);
-    modEnvelope_.load(fileReader);
+    envelope_[0].load(fileReader);
+    envelope_[1].load(fileReader);
     modMatrix_.load(fileReader);
   }
 
   void paste(Patch* patch) {
     StringUtils::copy(name_, const_cast<char*>(patch->name()), kMaxNameLength);
     voiceMode_ = patch->voiceMode();
-
+    
     lfo_[0].paste(&patch->lfo(0));
     lfo_[1].paste(&patch->lfo(1));
     midi_.paste(&patch->midi());
     oscillator_.paste(&patch->oscillator());
     filter_.paste(&patch->filter());
-    ampEnvelope_.paste(&patch->ampEnvelope());
-    modEnvelope_.paste(&patch->modEnvelope());
+    envelope_[0].paste(&patch->envelope(0));
+    envelope_[1].paste(&patch->envelope(1));
     modMatrix_.paste(&patch->modMatrix());
   }
 
@@ -133,10 +135,9 @@ class Patch {
   Midi midi_;
   Oscillator oscillator_;
   Filter filter_;
-  Envelope ampEnvelope_;
-  Envelope modEnvelope_;
   ModMatrix modMatrix_;
   Lfo lfo_[2];
+  Envelope envelope_[2];
   char name_[kMaxNameLength];
   VoiceMode voiceMode_;
 };

@@ -45,8 +45,8 @@ class ModMatrix {
   enum Source {
     LFO_1,
     LFO_2,
-    AMP_ENVELOPE,
-    MOD_ENVELOPE,
+    ENVELOPE_1,
+    ENVELOPE_2,
     CV_1,
     CV_2,
     MIDI_BEND,
@@ -55,10 +55,7 @@ class ModMatrix {
     MIDI_CC_B,
     MIDI_CC_C,
     MIDI_CC_D,
-    // 13
-    // 14
-    // 15
-    // 16
+    USER_POT,
 
     NUM_SOURCES
   };
@@ -67,8 +64,8 @@ class ModMatrix {
     switch (value) {
       case LFO_1:         return "LFO 1";
       case LFO_2:         return "LFO 2";
-      case AMP_ENVELOPE:  return "AMP ENVELOPE";
-      case MOD_ENVELOPE:  return "MOD ENVELOPE";
+      case ENVELOPE_1:    return "ENVELOPE 1";
+      case ENVELOPE_2:    return "ENVELOPE 2";
       case CV_1:          return "CV 1";
       case CV_2:          return "CV 2";
       case MIDI_BEND:     return "MIDI BEND";
@@ -77,6 +74,7 @@ class ModMatrix {
       case MIDI_CC_B:     return midiCcNumberText(1);
       case MIDI_CC_C:     return midiCcNumberText(2);
       case MIDI_CC_D:     return midiCcNumberText(3);
+      case USER_POT:      return "USER POT";
       default:
         break;
     }
@@ -88,8 +86,8 @@ class ModMatrix {
     matrix_[MIDI_BEND] |= (1 << PITCH_1);
     matrix_[MIDI_BEND] |= (1 << PITCH_2);
     matrix_[MIDI_VELOCITY] |= (1 << GAIN);
-    matrix_[AMP_ENVELOPE] |= (1 << GAIN);
-    matrix_[MOD_ENVELOPE] |= (1 << CUTOFF_2);
+    matrix_[ENVELOPE_1] |= (1 << GAIN);
+    matrix_[ENVELOPE_2] |= (1 << CUTOFF_2);
 
     for (size_t i = 0; i < kNumUserCc; ++i) {
       setMidiCcNumber(i, i);
@@ -106,11 +104,10 @@ class ModMatrix {
     }
   }
 
-  // Amp envelope & gain are always tied togheter!
   void toggle(size_t src, size_t dest) {
     uint32_t data = matrix_[src];
     matrix_[src] = data ^ (1 << dest);
-    matrix_[AMP_ENVELOPE] |= (1 << GAIN);
+    matrix_[ENVELOPE_1] |= (1 << GAIN);   // Envelope 1 & gain are always tied togheter!
   }
 
   // Midi CC

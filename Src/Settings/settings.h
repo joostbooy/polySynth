@@ -13,14 +13,16 @@ class Settings {
  public:
   static const size_t kNumVoices = 8;
   static const size_t kNumUserCc = 4;
-  static const size_t kNumPatches = 255;
+  static const size_t kNumPatches = 128;
   static const size_t kNumLfos = 2;
+  static const size_t kNumEnvelopes = 2;
 
   void init(Disk* disk) {
     disk_ = disk;
 
     lfoIndex_ = 0;
     patchIndex_ = 0;
+    envelopeIndex_ = 0;
 
     path.clear();
 
@@ -28,11 +30,10 @@ class Settings {
     for (size_t i = 0; i < kNumPatches; i++) {
       patch(i).init();
     }
-    selectPatchIndex(0);
+    loadPatch();
 
     if (!calibrationLoaded_) {
-      calibrationLoaded_ = true;
-      calibration_.load(fileReader);
+      calibrationLoaded_ = loadCalibration();
     }
   }
 
@@ -69,18 +70,36 @@ class Settings {
   }
 
   void selectPatchIndex(int value) {
-    if (value >= 0 && value < int(kNumPatches)) {
-      patchIndex_ = value;
+    patchIndex_ = SettingsUtils::clip(0, kNumPatches - 1, value);
+  }
+
+  void loadPatch() {
       selectedPatch_.paste(&patch_[patchIndex_]);
-    }
+  }
+
+  void savePatch() {
+    patch_[patchIndex_].paste(&selectedPatch_);
+   //save();
   }
 
   Disk* disk() {
     return disk_;
   }
 
+  // Calibration
   Calibration& calibration() {
     return calibration_;
+  }
+
+  bool saveCalibration() {
+    calibration_.save(fileWriter);
+    return false;
+  }
+
+  bool loadCalibration() {
+    calibration_.init();
+    calibration_.load(fileReader);
+    return false;
   }
 
   // oscilator
@@ -98,13 +117,21 @@ class Settings {
     return selectedPatch().midi();
   }
 
-  // envelopes
-  Envelope& ampEnvelope() {
-    return selectedPatch().ampEnvelope();
+  // Envelope
+  Envelope& envelope(int index) {
+    return selectedPatch().envelope(index);
   }
 
-  Envelope& modEnvelope() {
-    return selectedPatch().modEnvelope();
+  Envelope& selectedEnvelope() {
+    return envelope(envelopeIndex_);
+  }
+
+  int envelopeIndex() {
+    return envelopeIndex_;
+  }
+
+  void setEnvelopeIndex(int value) {
+    envelopeIndex_ = SettingsUtils::clip(0, kNumEnvelopes - 1, value);
   }
 
   // Lfo
@@ -139,6 +166,7 @@ class Settings {
 
   int lfoIndex_;
   int patchIndex_;
+  int envelopeIndex_;
 
   bool calibrationLoaded_ = false;
   Calibration calibration_;

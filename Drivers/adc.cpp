@@ -58,4 +58,5 @@ void Adc::init() {
 	Micros::delay(5);
 	HAL_ADC_Start(&hadc1);
 	
+	convertNextPot();
 }

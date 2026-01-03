@@ -9,7 +9,15 @@ class Oscillator {
   enum Type2 { SAW2, TRIANGLE2, NOISE2, SQUARE2, NUM_TYPES2 };
 
   void init() {
-    //
+    setAmEnable(false);
+    setFmEnable(false);
+    setSyncEnable_(false);
+    setType1(SAW1);
+    setType2(SAW2);
+    setMuteOsc1(false);
+    setMuteOsc2(false);
+    setShape1(0.f);
+    setShape2(0.f);
   }
 
   static const char* type1Text(Type1 type) {
@@ -45,7 +53,7 @@ class Oscillator {
     type1_ = Type1(SettingsUtils::clip(0, NUM_TYPES1 - 1, value));
   }
 
-  const char *type1Text() {
+  const char* type1Text() {
     return type1Text(type1());
   }
 
@@ -58,7 +66,7 @@ class Oscillator {
     type2_ = Type2(SettingsUtils::clip(0, NUM_TYPES2 - 1, value));
   }
 
-  const char *type2Text() {
+  const char* type2Text() {
     return type2Text(type2());
   }
 
@@ -71,8 +79,21 @@ class Oscillator {
     fmEnable_ = value;
   }
 
-  const char *fmEnableText() {
+  const char* fmEnableText() {
     return SettingsText::boolToOnOff(fmEnable());
+  }
+
+  // sync enable
+  bool syncEnable() {
+    return syncEnable_;
+  }
+
+  void setSyncEnable_(bool value) {
+    syncEnable_ = value;
+  }
+
+  const char* syncEnableText() {
+    return SettingsText::boolToOnOff(syncEnable());
   }
 
   // AM enable
@@ -84,7 +105,7 @@ class Oscillator {
     amEnable_ = value;
   }
 
-  const char *amEnableText() {
+  const char* amEnableText() {
     return SettingsText::boolToOnOff(amEnable());
   }
 
@@ -97,11 +118,11 @@ class Oscillator {
     muteOsc1_ = value;
   }
 
-  const char *muteOsc1Text() {
+  const char* muteOsc1Text() {
     return SettingsText::boolToOnOff(muteOsc1());
   }
 
-   // Mute Osc 2
+  // Mute Osc 2
   bool muteOsc2() {
     return muteOsc2_;
   }
@@ -110,7 +131,7 @@ class Oscillator {
     muteOsc2_ = value;
   }
 
-  const char *muteOsc2Text() {
+  const char* muteOsc2Text() {
     return SettingsText::boolToOnOff(muteOsc2());
   }
 
@@ -123,7 +144,7 @@ class Oscillator {
     shape1_ = SettingsUtils::clipFloat(value);
   }
 
-  const char *shape1Text() {
+  const char* shape1Text() {
     return SettingsText::floatToText(shape1());
   }
 
@@ -136,7 +157,7 @@ class Oscillator {
     shape2_ = SettingsUtils::clipFloat(value);
   }
 
-  const char *shape2Text() {
+  const char* shape2Text() {
     return SettingsText::floatToText(shape2());
   }
 
@@ -150,6 +171,7 @@ class Oscillator {
     fileWriter.write(shape2_);
     fileWriter.write(type1_);
     fileWriter.write(type2_);
+    fileWriter.write(syncEnable_);
   }
 
   void load(FileReader& fileReader) {
@@ -161,6 +183,7 @@ class Oscillator {
     fileReader.read(shape2_);
     fileReader.read(type1_);
     fileReader.read(type2_);
+    fileReader.read(syncEnable_);
   }
 
   void paste(Oscillator* oscillator) {
@@ -172,9 +195,11 @@ class Oscillator {
     shape2_ = oscillator->shape2();
     type1_ = oscillator->type1();
     type2_ = oscillator->type2();
+    syncEnable_ = oscillator->syncEnable();
   }
 
  private:
+  bool syncEnable_;
   bool fmEnable_;
   bool amEnable_;
   bool muteOsc1_;

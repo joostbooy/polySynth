@@ -5,8 +5,12 @@ void Dac::init() {
 
   /**GPIO Configuration
   PA4     ------> Sync pin
+  PA5     ------> Mux A
+  PA6     ------> Mux B
+  PA7     ------> Mux C
+  PA8     ------> Mux inhibit
   */
-  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Pin = /*GPIO_PIN_4 | */ GPIO_PIN_3 | GPIO_PIN_2 | GPIO_PIN_10 | GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -17,6 +21,7 @@ void Dac::init() {
   PA6     ------> SPI1_MISO
   PA7     ------> SPI1_MOSI
   */
+ /*
   GPIO_InitStruct.Pin = GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -44,12 +49,12 @@ void Dac::init() {
   GPIOA->BSRR = GPIO_PIN_4;
   Micros::delay(1);
 
-  writeDac(RESET_POWER_ON, 0, 0, 0);
+  writeOctalDac(RESET_POWER_ON, 0, 0, 0);
   Micros::delay(50);
-  writeDac(LOAD_CLEAR_CODE_REGISTER, 0, 0, ClearIgnore);
-  writeDac(SETUP_INTERNAL_REF, 0, 0, true);
-  writeDac(POWER_DOWN_UP_DAC, 0, 0, 0xff);
-
+  writeOctalDac(LOAD_CLEAR_CODE_REGISTER, 0, 0, ClearIgnore);
+  writeOctalDac(SETUP_INTERNAL_REF, 0, 0, true);
+  writeOctalDac(POWER_DOWN_UP_DAC, 0, 0, 0xff);
+*/
   currMuxChannel_ = 0;
   
   for (size_t i = 0; i < kNumDacChannels; i++) {

@@ -5,20 +5,13 @@
 
 class ModMatrixEngine {
  public:
-  struct Frame {
-    float data[ModMatrix::NUM_DESTINATIONS];
-  };
 
   void init(Settings* settings) {
     modMatrix_ = &settings->modMatrix();
   }
 
-  void setAmpEnvelope(float value) {
-    source_[ModMatrix::AMP_ENVELOPE] = value;
-  }
-
-  void setModEnvelope(float value) {
-    source_[ModMatrix::MOD_ENVELOPE] = value;
+  void setEnvelope(int index, float value) {
+    source_[ModMatrix::ENVELOPE_1 + index] = value;
   }
 
   void setLfo(int index, float value) {
@@ -37,6 +30,10 @@ class ModMatrixEngine {
     source_[ModMatrix::MIDI_BEND] = value;
   }
 
+  void setUserPot(float value) {
+    source_[ModMatrix::USER_POT] = value;
+  }
+
   void setMidiCc(uint8_t number, float value) {
     for (size_t i = 0; i < Settings::kNumUserCc; ++i) {
       if (number == modMatrix_->midiCcNumber(i)) {
@@ -45,36 +42,22 @@ class ModMatrixEngine {
     }
   }
 
-  Frame* process() {
-    for (int y = 0; y < ModMatrix::NUM_DESTINATIONS; ++y) {
-      frame_.data[y] = 1.f;
-      for (int x = 0; x < ModMatrix::NUM_SOURCES; ++x) {
-        if (modMatrix_->read(x, y)) {
-          frame_.data[y] *= source_[x];
+  float* process() {
+    for (int dest = 0; dest < ModMatrix::NUM_DESTINATIONS; ++dest) {
+      destination_[dest] = 1.f;
+      for (int src = 0; src < ModMatrix::NUM_SOURCES; ++src) {
+        if (modMatrix_->read(src, dest)) {
+          destination_[dest] *= source_[src];
         }
       }
     }
 
-    return &frame_;
+    return &destination_[0];
   }
 
-  //	Frame* process(ModMatrix *matrix) {
-  //		std::fill(&frame_.data[0], &frame_.data[ModMatrix::NUM_DESTINATIONS], 1.0f);
-
-  //		for (int x = 0; x < ModMatrix::NUM_SOURCES; ++x) {
-  //			for (int y = 0; y < ModMatrix::NUM_DESTINATIONS; ++y) {
-  //				if (matrix->read(x, y)) {
-  //					frame_.data[y] *= source_[x];
-  //				}
-  //			}
-  //		}
-
-  //		return &frame_;
-  //	}
-
  private:
-  Frame frame_;
   ModMatrix* modMatrix_;
+  float destination_[ModMatrix::NUM_DESTINATIONS];
   float source_[ModMatrix::NUM_SOURCES];
 };
 

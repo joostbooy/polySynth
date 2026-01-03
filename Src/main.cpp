@@ -8,6 +8,7 @@
 #include "disk.h"
 #include "sdio.h"
 #include "gpio.h"
+#include "timer.h"
 
 #include "disk.h"
 #include "settings.h"
@@ -20,7 +21,7 @@ Usb usb;
 //Gate gate;
 Uart uart;
 Sys sys;
-//Timer timer;
+Timer timer;
 //Sdram sdram;
 Sdio sdio;
 Matrix matrix;
@@ -49,7 +50,11 @@ extern "C" {
 			return;
 		}
 		TIM3->SR = ~TIM_IT_UPDATE;
-		engine.tick();
+
+		Debug::write(1);
+		dac.send();
+		Debug::write(0);
+		//engine.tick();
 	}
 
 	// 1Khz
@@ -58,8 +63,8 @@ extern "C" {
 			return;
 		}
 		TIM2->SR = ~TIM_IT_UPDATE;
-		ui.poll();
-		engine.update();
+		//ui.poll();
+		// engine.update();
 	}
 } //extern "C"
 
@@ -70,27 +75,28 @@ int main(void)
 	sys.init();
 
 	Debug::init();
-	Micros::init();
+	//Micros::init();
 
 	// usb.init();
 	dac.init();
-	uart.init();
-	gpio.init();
-	adc.init();
-	matrix.init();
-	display.init();
-	sdio.init();
 
-	disk.init(&sdio);
-	settings.init(&disk);
-	engine.init(&settings, &uart, &usb, &dac, &gpio);
-	ui.init(&settings, &engine, &matrix, &display);
+	// uart.init();
+	// gpio.init();
+	// adc.init();
+	// matrix.init();
+	// display.init();
+	// sdio.init();
+
+	// disk.init(&sdio);
+	// settings.init(&disk);
+	// engine.init(&settings, &uart, &usb, &dac, &gpio);
+	// ui.init(&settings, &engine, &matrix, &display);
 
 	// Start timers
-	//timer.start_3(CLOCK_ISR_FREQ);
+	timer.start3(CLOCK_ISR_FREQ);
 	//timer.start_2(1000);
 
 	while (1) {
-		ui.process();
+		// ui.process();
 	}
 }

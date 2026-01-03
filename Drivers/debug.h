@@ -13,7 +13,7 @@ public:
 	}
 
 	static inline void write(bool state) {
-        GPIOB->BSRR = state ? GPIO_PIN_6 : GPIO_PIN_6 << 16;
+        GPIOC->BSRR = state ? GPIO_PIN_2 : GPIO_PIN_2 << 16;
     }
 
     static inline void toggle() {

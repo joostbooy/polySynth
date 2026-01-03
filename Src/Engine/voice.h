@@ -19,8 +19,8 @@ class Voice {
     stopRequested_ = false;
     lastNote_ = 60;
 
-    ampEnvelopeEngine_.init(&settings->ampEnvelope());
-    modEnvelopeEngine_.init(&settings->modEnvelope());
+    envelopeEngine_[0].init(&settings->envelope(0));
+    envelopeEngine_[1].init(&settings->envelope(1));
 
     lfoEngine_[0].init(&settings->lfo(0));
     lfoEngine_[1].init(&settings->lfo(1));
@@ -46,12 +46,8 @@ class Voice {
     return state_;
   }
 
-  EnvelopeEngine& ampEnvelopeEnginex() {
-    return ampEnvelopeEngine_;
-  }
-
-  EnvelopeEngine& modEnvelopeEnginex() {
-    return modEnvelopeEngine_;
+  EnvelopeEngine& envelopeEngine(int index) {
+    return envelopeEngine_[index];
   }
 
   LfoEngine& lfoEngine(int index) {
@@ -80,16 +76,16 @@ class Voice {
     lfoEngine_[0].retrigger();
     lfoEngine_[1].retrigger();
 
-    ampEnvelopeEngine_.attack();
-    modEnvelopeEngine_.attack();
+    envelopeEngine_[0].attack();
+    envelopeEngine_[1].attack();
 
     state_ = ACTIVE;
   }
 
   void noteOff() {
     keyPressed_ = false;
-    ampEnvelopeEngine_.release();
-    modEnvelopeEngine_.release();
+    envelopeEngine_[0].release();
+    envelopeEngine_[1].release();
   }
 
   void update(int index) {
@@ -101,18 +97,19 @@ class Voice {
       }
     }
 
-    if (ampEnvelopeEngine_.stage() == EnvelopeEngine::IDLE) {
+    Patch& p = settings_->selectedPatch();
+
+    if (envelopeEngine_[0].stage() == EnvelopeEngine::IDLE && p.envelope(0).invert() == false) {
       state_ = IDLE;
     }
 
     modMatrixEngine_->setMidiVelocity(velocity_);
-    modMatrixEngine_->setAmpEnvelope(ampEnvelopeEngine_.next());
-    modMatrixEngine_->setModEnvelope(modEnvelopeEngine_.next());
+    modMatrixEngine_->setEnvelope(0, envelopeEngine_[0].next());
+    modMatrixEngine_->setEnvelope(1, envelopeEngine_[1].next());
     modMatrixEngine_->setLfo(0, lfoEngine_[0].next());
     modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
     float *data = modMatrixEngine_->process();
 
-    Patch& p = settings_->selectedPatch();
     dac_->set(index, 0, (calculatePitch() * data[ModMatrix::PITCH_1]) * 65535);
     dac_->set(index, 1, (p.oscillator().shape1() * data[ModMatrix::SHAPE_1]) * 65535);
     dac_->set(index, 2, (p.oscillator().shape2() * data[ModMatrix::SHAPE_2]) * 65535);
@@ -141,8 +138,7 @@ class Voice {
   Dac* dac_;
   Settings* settings_;
   ModMatrixEngine* modMatrixEngine_;
-  EnvelopeEngine ampEnvelopeEngine_;
-  EnvelopeEngine modEnvelopeEngine_;
+  EnvelopeEngine envelopeEngine_[2];
   LfoEngine lfoEngine_[Settings::kNumLfos];
 
   float calculatePitch() {

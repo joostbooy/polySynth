@@ -37,20 +37,24 @@ class Dac {
     deInhibit();
 
     setMuxChannel(currMuxChannel_);
-    MuxChannel& c = muxChannel_[currMuxChannel_];
+   // MuxChannel& c = muxChannel_[currMuxChannel_];
     if (++currMuxChannel_ >= kNumMuxChannels) {
       currMuxChannel_ = 0;
     }
-
+/*
     for (int i = 0; i < kNumDacChannels; ++i) {
-      writeDac(WRITE_INPUT_REGISTER_UPDATE_N, i, c.value[i], 0);
+      if (i < 8) {
+        writeOctalDac(WRITE_INPUT_REGISTER_UPDATE_N, i, c.value[i], 0);
+      } else {
+        writeQuadDac(i - 8, c.value[i]);
+      }
     }
-
+*/
     inhibit();
   }
 
  private:
-  static const int kNumDacChannels = 12;
+  static const int kNumDacChannels = 11;
   static const int kNumMuxChannels = 8;
 
   struct MuxChannel {
@@ -61,30 +65,29 @@ class Dac {
   uint8_t currMuxChannel_;
 
   void deInhibit() {
-    GPIOA->BSRR = GPIO_PIN_13;
+    GPIOA->BSRR = GPIO_PIN_8;
   }
 
   void inhibit() {
-    GPIOA->BSRR = GPIO_PIN_13 << 16;
+    GPIOA->BSRR = GPIO_PIN_8 << 16;
   }
 
   void setMuxChannel(int channel) {
     uint32_t data = 0;
-    data |= (channel & 1) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;
-    data |= (channel & 2) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;
-    data |= (channel & 4) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;
+    data |= (channel & 1) ? GPIO_PIN_3 : GPIO_PIN_3 << 16;
+    data |= (channel & 2) ? GPIO_PIN_2 : GPIO_PIN_2 << 16;
+    data |= (channel & 4) ? GPIO_PIN_10 : GPIO_PIN_10 << 16;
     GPIOA->BSRR = data;
   }
 
-  void writeDac(uint8_t command, uint8_t address, uint16_t data, uint8_t function) {
+  // DAC8568
+  void writeOctalDac(uint8_t command, uint8_t address, uint16_t data, uint8_t function) {
     uint8_t b1 = command;
-    uint8_t b2 = ((address % 8) << 4) | (data >> 12);
+    uint8_t b2 = (address << 4) | (data >> 12);
     uint8_t b3 = data >> 4;
     uint8_t b4 = (data & 0xf) << 4 | function;
 
-    uint32_t syncPin = address < 8 ? GPIO_PIN_4 : GPIO_PIN_2;
-
-    GPIOA->BSRR = syncPin << 16;
+    GPIOA->BSRR = GPIO_PIN_4 << 16;
     asm("NOP");
 
     spiWrite(b1);
@@ -93,7 +96,25 @@ class Dac {
     spiWrite(b4);
     asm("NOP");
 
-    GPIOA->BSRR = syncPin;
+    GPIOA->BSRR = GPIO_PIN_4;
+    asm("NOP");
+  }
+
+  // DAC8564
+  void writeQuadDac(uint8_t address, uint16_t data) {
+    uint8_t b1 = (address << 1) | (1 << 4);
+    uint8_t b2 = data >> 8;
+    uint8_t b3 = data;
+
+    GPIOA->BSRR = GPIO_PIN_2 << 16;
+    asm("NOP");
+
+    spiWrite(b1);
+    spiWrite(b2);
+    spiWrite(b3);
+    asm("NOP");
+
+    GPIOA->BSRR = GPIO_PIN_2;
     asm("NOP");
   }
 

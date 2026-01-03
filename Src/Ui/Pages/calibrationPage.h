@@ -52,7 +52,7 @@ void on_button(int id, int state) {
     case SAVE:
       ConfirmationPage::set("OVERWRITE SETTINGS ?", [](uint8_t option) {
         if (option == ConfirmationPage::CONFIRM) {
-          if (settings_->calibration().save()) {
+          if (settings_->saveCalibration()) {
             MessagePainter::show("CALIBRATION SAVED");
           } else {
             MessagePainter::show("FAILED");
@@ -64,7 +64,7 @@ void on_button(int id, int state) {
     case LOAD:
       ConfirmationPage::set("OVERWRITE SETTINGS ?", [](uint8_t option) {
         if (option == ConfirmationPage::CONFIRM) {
-          if (settings_->calibration().load()) {
+          if (settings_->loadCalibration()) {
             MessagePainter::show("CALIBRATION LOADED");
           } else {
             MessagePainter::show("FAILED");

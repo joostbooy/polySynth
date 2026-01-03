@@ -21,14 +21,14 @@ class Adc {
   }
 
   inline void convertNextPot() {
+    if (++pot_ >= kNumPots) {
+      pot_ = 0;
+    }
+
     selectBank(pot_ / kPotsPerBank);
     selectChannel(pot_ % kPotsPerBank);
 
     ADC1->CR2 |= ADC_CR2_SWSTART;
-
-    if (++pot_ >= kNumPots) {
-      pot_ = 0;
-    }
   }
 
  private:
