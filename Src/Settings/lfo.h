@@ -11,9 +11,30 @@
 
 class Lfo {
  public:
+  enum Type {
+    LINEAR,
+    LOG_EXP,
+    EXP_LOG,
+    SQUARE,
+
+    NUM_TYPES
+  };
+
+  const char* typeText(Type type) {
+    switch (type) {
+      case LINEAR:  return "LINEAR";
+      case LOG_EXP: return "LOG EXP";
+      case EXP_LOG: return "EXP LOG";
+      case SQUARE:  return "SQUARE";
+      default:
+        break;
+    }
+    return nullptr;
+  }
+
   void init() {
+    setType(LINEAR);
     setSpeed(0);
-    setShape(0.5f);
     setSkew(0.5f);
     setMin(0.0f);
     setMax(1.0f);
@@ -21,6 +42,20 @@ class Lfo {
     setClockSync(false);
     setRandomise(false);
     setRetrigger(true);
+    setOneShot(false);
+  }
+
+  // Type
+  Type type() {
+    return type_;
+  }
+
+  void setType(int value) {
+    type_ = Type(SettingsUtils::clip(0, NUM_TYPES - 1, value));
+  }
+
+  const char* typeText() {
+    return typeText(type());
   }
 
   // speed
@@ -47,19 +82,6 @@ class Lfo {
     } else {
       return lut_phase_inc[int(speed() * (PHASE_TABLE_SIZE - 1))];
     }
-  }
-
-  // shape
-  float shape() {
-    return shape_;
-  }
-
-  void setShape(float value) {
-    shape_ = SettingsUtils::clipFloat(value);
-  }
-
-  const char* shapeText() {
-    return SettingsText::floatToText(shape(), -100, 100);
   }
 
   // Skew
@@ -153,10 +175,22 @@ class Lfo {
     return SettingsText::boolToOnOff(retrigger());
   }
 
+  // Retrigger
+  bool oneShot() {
+    return oneShot_;
+  }
+
+  void setOneShot(bool value) {
+    oneShot_ = value;
+  }
+
+  const char* oneShotText() {
+    return SettingsText::boolToOnOff(oneShot());
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(skew_);
-    fileWriter.write(shape_);
     fileWriter.write(speed_);
     fileWriter.write(min_);
     fileWriter.write(max_);
@@ -164,11 +198,12 @@ class Lfo {
     fileWriter.write(randomise_);
     fileWriter.write(clockSync_);
     fileWriter.write(retrigger_);
+    fileWriter.write(oneShot_);
+    fileWriter.write(type_);
   }
 
   void load(FileReader& fileReader) {
     fileReader.read(skew_);
-    fileReader.read(shape_);
     fileReader.read(speed_);
     fileReader.read(min_);
     fileReader.read(max_);
@@ -176,11 +211,12 @@ class Lfo {
     fileReader.read(randomise_);
     fileReader.read(clockSync_);
     fileReader.read(retrigger_);
+    fileReader.read(oneShot_);
+    fileReader.read(type_);
   }
 
   void paste(Lfo* lfo) {
     skew_ = lfo->skew();
-    shape_ = lfo->shape();
     speed_ = lfo->speed();
     min_ = lfo->min();
     max_ = lfo->max();
@@ -188,11 +224,13 @@ class Lfo {
     randomise_ = lfo->randomise();
     clockSync_ = lfo->clockSync();
     retrigger_ = lfo->retrigger();
+    oneShot_ = lfo->oneShot();
+    type_ = lfo->type();
   }
 
  private:
+  Type type_;
   float skew_;
-  float shape_;
   float speed_;
   float min_;
   float max_;
@@ -200,6 +238,7 @@ class Lfo {
   bool randomise_;
   bool clockSync_;
   bool retrigger_;
+  bool oneShot_;
 };
 
 #endif
