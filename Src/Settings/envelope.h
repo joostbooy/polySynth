@@ -40,6 +40,8 @@ public:
 		setSustainLevel(0.5f);
 		setReleaseTime(0);
 		setReleaseShape(0.5f);
+		setLoop(false);
+		setInvert(false);
 	}
 
 	// Clock sync
@@ -226,6 +228,32 @@ public:
 		return SettingsText::floatToText(releaseShape(), -100, 100);
 	}
 
+	// Loop 
+	bool loop() {
+		return loop_;
+	}
+
+	void setLoop(bool value) {
+		loop_ = value;
+	}
+
+	const char *loopText() {
+		return SettingsText::boolToOnOff(loop());
+	}
+
+	// Invert 
+	bool invert() {
+		return invert_;
+	}
+
+	void setInvert(bool value) {
+		invert_ = value;
+	}
+
+	const char *invertText() {
+		return SettingsText::boolToOnOff(invert());
+	}
+
 	// Storage
 	void save(FileWriter &fileWriter) {
 		fileWriter.write(clockSync_);
@@ -238,6 +266,8 @@ public:
 		fileWriter.write(sustainLevel_);
 		fileWriter.write(releaseTime_);
 		fileWriter.write(releaseShape_);
+		fileWriter.write(loop_);
+		fileWriter.write(invert_);
 	}
 
 	void load(FileReader &fileReader) {
@@ -251,6 +281,8 @@ public:
 		fileReader.read(sustainLevel_);
 		fileReader.read(releaseTime_);
 		fileReader.read(releaseShape_);
+		fileReader.read(loop_);
+		fileReader.read(invert_);
 	}
 
 	void paste(Envelope *envelope) {
@@ -264,11 +296,15 @@ public:
 		sustainLevel_ = envelope->sustainLevel();
 		releaseTime_ = envelope->releaseTime();
 		releaseShape_ = envelope->releaseShape();
+		loop_ = envelope->loop();
+		invert_ = envelope->invert();
 	}
 
 private:
-	bool clockSync_;
 	int mode_;
+	bool loop_;
+	bool invert_;
+	bool clockSync_;
 	float decayTime_;
 	float attackShape_;
 	float decay_time_;

@@ -25,7 +25,7 @@ class EnvelopeEngine {
 
   void release() {
     if (mode_ == Envelope::GATE) {
-      releaseLevel_ = sample_;
+      releaseLevel_ = sample();
       phase_ = 0.0f;
       stage_ = RELEASE;
     }
@@ -40,7 +40,7 @@ class EnvelopeEngine {
   }
 
   float sample() {
-    return sample_;
+    return envelope_->invert() ? 1.f - sample_ : sample_;
   }
 
   float next() {
@@ -90,14 +90,14 @@ class EnvelopeEngine {
           sample_ = Dsp::cross_fade(releaseLevel_, 0.f, Curve::read(phase_, envelope_->releaseShape()));
         } else {
           phase_ = 0.f;
-          stage_ = IDLE;
+          stage_ = envelope_->loop() ? ATTACK : IDLE;
         }
         break;
       default:
         break;
     }
 
-    return sample_;
+    return sample();
   }
 
  private:
