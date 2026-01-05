@@ -18,6 +18,8 @@ class Oscillator {
     setMuteOsc2(false);
     setShape1(0.f);
     setShape2(0.f);
+    setTrackNote1(true);
+    setTrackNote2(true);
   }
 
   static const char* type1Text(Type1 type) {
@@ -161,6 +163,32 @@ class Oscillator {
     return SettingsText::floatToText(shape2());
   }
 
+    // Track note Osc 1
+  bool trackNote1() {
+    return trackNote1_;
+  }
+
+  void setTrackNote1(bool value) {
+    trackNote1_ = value;
+  }
+
+  const char* trackNote1Text() {
+    return SettingsText::boolToOnOff(trackNote1());
+  }
+
+  // Track note Osc 2
+  bool trackNote2() {
+    return trackNote2_;
+  }
+
+  void setTrackNote2(bool value) {
+    trackNote2_ = value;
+  }
+
+  const char* trackNote2Text() {
+    return SettingsText::boolToOnOff(trackNote2());
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(fmEnable_);
@@ -172,6 +200,8 @@ class Oscillator {
     fileWriter.write(type1_);
     fileWriter.write(type2_);
     fileWriter.write(syncEnable_);
+    fileWriter.write(trackNote1_);
+    fileWriter.write(trackNote2_);
   }
 
   void load(FileReader& fileReader) {
@@ -184,6 +214,8 @@ class Oscillator {
     fileReader.read(type1_);
     fileReader.read(type2_);
     fileReader.read(syncEnable_);
+    fileReader.read(trackNote1_);
+    fileReader.read(trackNote2_);
   }
 
   void paste(Oscillator* oscillator) {
@@ -196,9 +228,13 @@ class Oscillator {
     type1_ = oscillator->type1();
     type2_ = oscillator->type2();
     syncEnable_ = oscillator->syncEnable();
+    trackNote1_ = oscillator->trackNote1();
+    trackNote2_ = oscillator->trackNote2();
   }
 
  private:
+  bool trackNote1_;
+  bool trackNote2_;
   bool syncEnable_;
   bool fmEnable_;
   bool amEnable_;
