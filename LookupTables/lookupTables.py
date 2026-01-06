@@ -14,7 +14,7 @@ max_bpm = 300
 clock_isr_freq = 8000
 
 num_mux_channels = 8
-control_rate = clock_isr_freq / num_mux_channels
+sample_rate = clock_isr_freq / num_mux_channels
 
 
 '''____________________
@@ -44,8 +44,8 @@ tables.append('float ' + name)
 tables.append(steps.astype('float32'))
 
 name = 'phase_inc'
-freq_inc_min = freq_min / control_rate
-freq_inc_max = freq_max / control_rate
+freq_inc_min = freq_min / sample_rate
+freq_inc_max = freq_max / sample_rate
 steps = numpy.linspace(freq_inc_min, freq_inc_max, phase_table_size)
 
 tables.append('float ' + name)
@@ -56,12 +56,12 @@ tables.append(steps.astype('float32'))
 _____________________________'''
 
 name = 'beat_length'
-values = control_rate * (60 / bpm)
+values = sample_rate * (60 / bpm)
 tables.append('float ' + name)
 tables.append(values.astype('float32'))
 
 name = 'beat_length_inc'
-values = 1.0 / (control_rate * (60 / bpm))
+values = 1.0 / (sample_rate * (60 / bpm))
 tables.append('float ' + name)
 tables.append(values.astype('float32'))
 
@@ -109,7 +109,7 @@ tables.append(values.astype('float32'))
 ________________________'''
 
 defines = [
-'CONTROL_RATE '		+ str(int(control_rate)),
+'SAMPLE_RATE '		+ str(int(sample_rate)),
 'MIN_BPM '			+ str(int(min_bpm)),
 'MAX_BPM '			+ str(int(max_bpm)),
 'CLOCK_ISR_FREQ '	+ str(int(clock_isr_freq)),

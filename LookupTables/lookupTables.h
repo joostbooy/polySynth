@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define CONTROL_RATE 1000
+#define SAMPLE_RATE 1000
 #define MIN_BPM 30
 #define MAX_BPM 300
 #define CLOCK_ISR_FREQ 8000

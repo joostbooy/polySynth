@@ -91,7 +91,7 @@ class Voice {
   void update(int index) {
     if (stopRequested_) {
       if (fadePhase_ > 0.0f) {
-        fadePhase_ -= 1000.f / (CONTROL_RATE * 4.f);
+        fadePhase_ -= 1000.f / (SAMPLE_RATE * 4.f);
       } else {
         state_ = IDLE;
       }
@@ -110,7 +110,7 @@ class Voice {
     modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
     float *data = modMatrixEngine_->process();
 
-    dac_->set(index, 0, (calculatePitch() * data[ModMatrix::PITCH_1]) * 65535);
+    dac_->set(index, 0, (calculatePitchOsc1() * data[ModMatrix::PITCH_1]) * 65535);
     dac_->set(index, 1, (p.oscillator().shape1() * data[ModMatrix::SHAPE_1]) * 65535);
     dac_->set(index, 2, (p.oscillator().shape2() * data[ModMatrix::SHAPE_2]) * 65535);
     dac_->set(index, 3, (p.filter().cutoff1() * data[ModMatrix::CUTOFF_1]) * 65535);
@@ -141,8 +141,10 @@ class Voice {
   EnvelopeEngine envelopeEngine_[2];
   LfoEngine lfoEngine_[Settings::kNumLfos];
 
-  float calculatePitch() {
+  float calculatePitchOsc1() {
+    //  if (settings_->oscillator().trackNote1()) {
     // return settings_->calibration().note(note_);
+   // }
     return 0.f;
   }
 };
