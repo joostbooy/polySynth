@@ -30,10 +30,6 @@ class ModMatrixEngine {
     source_[ModMatrix::MIDI_BEND] = value;
   }
 
-  void setUserPot(float value) {
-    source_[ModMatrix::USER_POT] = value;
-  }
-
   void setMidiCc(uint8_t number, float value) {
     for (size_t i = 0; i < Settings::kNumUserCc; ++i) {
       if (number == modMatrix_->midiCcNumber(i)) {

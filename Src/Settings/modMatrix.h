@@ -55,7 +55,6 @@ class ModMatrix {
     MIDI_CC_B,
     MIDI_CC_C,
     MIDI_CC_D,
-    USER_POT,
 
     NUM_SOURCES
   };
@@ -74,7 +73,6 @@ class ModMatrix {
       case MIDI_CC_B:     return midiCcNumberText(1);
       case MIDI_CC_C:     return midiCcNumberText(2);
       case MIDI_CC_D:     return midiCcNumberText(3);
-      case USER_POT:      return "USER POT";
       default:
         break;
     }
