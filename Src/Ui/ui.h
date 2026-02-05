@@ -8,6 +8,7 @@
 #include "engine.h"
 #include "matrix.h"
 #include "display.h"
+#include "switches.h"
 #include "leds.h"
 #include <stdint.h>
 
@@ -19,7 +20,7 @@ public:
 	Pages &pages() { return pages_; }
 	Canvas &canvas() { return canvas_; }
 
-	void init(Settings*, Engine*, Matrix*, Display*);
+	void init(Settings*, Engine*, Matrix*, Display*, Switches*);
 	void poll();
 	void process();
 	void sendDisplay();
@@ -42,10 +43,12 @@ private:
 
 	Matrix *matrix_;
 	Display *display_;
+	Switches *switches_;
 
-	uint32_t last_interval = 0;
-	uint32_t display_interval = 0;
-	uint8_t sw_raw[8 * 8];
+	uint32_t lastInterval_ = 0;
+	uint32_t displayInterval_ = 0;
+	uint8_t encoderRaw_[4];
+	bool lastState_[8 * 6];
 
 	Que<Ui::Event, 16> uiQue;
 	void addEvent(ControlType, uint8_t, int8_t);

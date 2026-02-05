@@ -1,7 +1,7 @@
 #ifndef Engine_h
 #define Engine_h
 
-#include "gpio.h"
+#include "switches.h"
 #include "micros.h"
 #include "midiClockEngine.h"
 #include "midiEngine.h"
@@ -21,7 +21,7 @@ class Engine {
     KILL_VOICES = (1 << 2),
   };
 
-  void init(Settings*, Uart*, Usb*, Dac*, Gpio*);
+  void init(Settings*, Uart*, Usb*, Dac*, Switches*);
   void tick();
   void update();
 
@@ -41,7 +41,7 @@ class Engine {
   uint32_t processing_time_uS_;
 
   Dac *dac_;
-  Gpio* gpio_;
+  Switches* switches_;
   Settings* settings_;
   MidiEngine midiEngine_;
   VoiceEngine voiceEngine_;

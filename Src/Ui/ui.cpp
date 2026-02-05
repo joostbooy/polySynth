@@ -16,12 +16,13 @@ void Ui::addEvent(ControlType type, uint8_t id, int8_t value)  {
 	uiQue.write(e);
 }
 
-void Ui::init(Settings *settings, Engine *engine, Matrix *matrix, Display *display) {
+void Ui::init(Settings *settings, Engine *engine, Matrix *matrix, Display *display, Switches *switches) {
 	matrix_ = matrix;
 	display_ = display;
+	switches_ = switches;
 
-	last_interval = 0;
-	display_interval = 0;
+	lastInterval_ = 0;
+	displayInterval_ = 0;
 
 	canvas_.init();
 	leds_.init();
@@ -31,37 +32,35 @@ void Ui::init(Settings *settings, Engine *engine, Matrix *matrix, Display *displ
 }
 
 void Ui::poll() {
-	uint8_t reading[8];
-	matrix_->refresh(&reading[0]);
+  uint8_t reading;
+  matrix_->refresh(&reading);
 
-	for (int x = 0; x < 8; ++x) {
-		for (int y = 0; y < 8; ++y) {
-			uint8_t sw = y + (x * 8);
-			sw_raw[sw] <<= 1;
-			if (reading[x] & (1 << y)) {
-				sw_raw[sw] |= 1;
-			}
-		}
-	}
+  for (int i = 0; i < 6; i++) {
+    int index = i + matrix_->currentCollumn();
+    bool state = reading & (1 << i);
+    if (state != lastState_[index]) {
+      lastState_[index] = state;
+      addEvent(Ui::BUTTON, index, state);
+    }
+  }
 
-	for (int x = 0; x < 8 * 8; x += 8) {
-		for (int y = 0; y < num_buttons_rows; ++y) {
-			uint8_t button = buttons_rows[y] + x;
-			if (sw_raw[button] == 0x80) {
-				addEvent(Ui::BUTTON, button, 1);
-			} else if (sw_raw[button] == 0x01) {
-				addEvent(Ui::BUTTON, button, 0);
-			}
-		}
+  for (int i = 0; i < 4; ++i) {
+    encoderRaw_[i] <<= 1;
+    if (switches_->readEncoders(i)) {
+      encoderRaw_[i] |= 1;
+    }
+  }
 
-		uint8_t a = enc_a_row + x;
-		uint8_t b = enc_b_row + x;
-		if ((sw_raw[b] & 0x03) == 0x02 && (sw_raw[a] & 0x03) == 0x00) {
-			addEvent(Ui::ENCODER, a, -1);
-		} else if ((sw_raw[a] & 0x03) == 0x02 && (sw_raw[b] & 0x03) == 0x00) {
-			addEvent(Ui::ENCODER, a, 1);
-		}
-	}
+  for (size_t i = 0; i < 2; i++) { 
+	int a = (i * 3);
+	int b = (i * 3) + 1;
+
+    if ((encoderRaw_[a] & 0x03) == 0x02 && (encoderRaw_[b] & 0x03) == 0x00) {
+      addEvent(Ui::ENCODER, 0, -1);
+    } else if ((encoderRaw_[b] & 0x03) == 0x02 && (encoderRaw_[a] & 0x03) == 0x00) {
+      addEvent(Ui::ENCODER, 0, 1);
+    }
+}
 
 }
 
@@ -81,24 +80,24 @@ void Ui::process() {
 		}
 	}
 
-	uint32_t interval = (Micros::read() / 1000) - last_interval;
+	uint32_t interval = (Micros::read() / 1000) - lastInterval_;
 
 	if (interval >= 1) {
-		last_interval += interval;
+		lastInterval_ += interval;
 		leds_.setAll(Leds::BLACK);
 		pages_.refresh_leds();
 		matrix_->setLeds(leds_.data());
 	}
 
-	display_interval += interval;
-	if (display_interval >= pages_.target_fps()) {
+	displayInterval_ += interval;
+	if (displayInterval_ >= pages_.target_fps()) {
 		sendDisplay();
 	}
 }
 
 void Ui::sendDisplay() {
 	while (display_->dmaBusy());
-	display_interval = 0;
+	displayInterval_ = 0;
 	canvas_.clear();
 	pages_.draw();
 	display_->sendBuffer(canvas_.data(), canvas_.size());

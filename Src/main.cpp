@@ -7,7 +7,7 @@
 #include "display.h"
 #include "disk.h"
 #include "sdio.h"
-#include "gpio.h"
+#include "switches.h"
 #include "timer.h"
 
 #include "disk.h"
@@ -26,7 +26,7 @@ Timer timer;
 Sdio sdio;
 Matrix matrix;
 Display display;
-Gpio gpio;
+Switches switches_;
 
 Disk disk;
 Ui ui;
@@ -81,7 +81,7 @@ int main(void)
 	dac.init();
 
 	// uart.init();
-	// gpio.init();
+	// switches_.init();
 	// adc.init();
 	// matrix.init();
 	// display.init();
@@ -89,8 +89,8 @@ int main(void)
 
 	// disk.init(&sdio);
 	// settings.init(&disk);
-	// engine.init(&settings, &uart, &usb, &dac, &gpio);
-	// ui.init(&settings, &engine, &matrix, &display);
+	// engine.init(&settings, &uart, &usb, &dac, &switches_);
+	// ui.init(&settings, &engine, &matrix, &display, &switches_);
 
 	// Start timers
 	timer.start3(CLOCK_ISR_FREQ);

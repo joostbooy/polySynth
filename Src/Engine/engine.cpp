@@ -1,8 +1,8 @@
 #include "engine.h"
 
-void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac, Gpio* gpio) {
+void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac, Switches* switches) {
   dac_ = dac;
-  gpio_ = gpio;
+  switches_ = switches;
   settings_ = settings;
   midiEngine_.init(uart, usb, &settings_->midi());
   modMatrixEngine_.init(settings_);
@@ -12,6 +12,11 @@ void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac, Gpio* gpio
 }
 
 void Engine::start() {
+  for (size_t i = 0; i < Settings::kNumVoices; i++) {
+    for (size_t j = 0; j < Settings::kNumLfos; j++) {
+      voiceEngine_.voice(i).lfoEngine(j).reset();
+    }
+  }
 }
 
 void Engine::stop() {
@@ -42,9 +47,21 @@ void Engine::cc(MidiEngine::Event& e) {
 // 8Khz, keep short !
 void Engine::tick() {
   midiEngine_.poll();
-  if (midiClockEngine_.tick()) {
-    midiEngine_.writeClock(MidiEngine::CLOCK_PULSE);
+
+  uint8_t data = 0;
+  midiEngine_.getLastReceived(&data);
+  if (data == MidiEngine::CLOCK_PULSE) {
+    midiClockEngine_.syncBpm();
   }
+
+  if (midiClockEngine_.tick()) {
+    for (size_t i = 0; i < Midi::NUM_PORTS; i++) {
+      if (settings_->midi().sendClock(i)) {
+        //   midiEngine_.writeClock(MidiEngine::CLOCK_PULSE);
+      }
+    }
+  }
+
   dac_->send();
 }
 
@@ -64,6 +81,9 @@ void Engine::processMidi() {
         break;
       case MidiEngine::CONTROLLER_CHANGE:
         cc(e);
+        break;
+      case MidiEngine::CLOCK_START:
+        start();
         break;
       default:
         break;
@@ -100,13 +120,13 @@ void Engine::processRequests() {
 
 void Engine::processSwitches() {
   Patch& p = settings_->selectedPatch();
-  gpio_->setFmEnable(p.oscillator().fmEnable());
-  gpio_->setAmEnable(p.oscillator().amEnable());
-  gpio_->setMuteOsc1(p.oscillator().muteOsc1());
-  gpio_->setMuteOsc2(p.oscillator().muteOsc2());
-  gpio_->setOsc1(p.oscillator().type1());
-  gpio_->setOsc2(p.oscillator().type2());
-  gpio_->setSelectedFilter(p.filter().type(), p.filter().routing());
+  switches_->setFmEnable(p.oscillator().fmEnable());
+  switches_->setAmEnable(p.oscillator().amEnable());
+  switches_->setMuteOsc1(p.oscillator().muteOsc1());
+  switches_->setMuteOsc2(p.oscillator().muteOsc2());
+  switches_->setOsc1(p.oscillator().type1());
+  switches_->setOsc2(p.oscillator().type2());
+  switches_->setSelectedFilter(p.filter().type(), p.filter().routing());
 }
 
 // 1Khz
