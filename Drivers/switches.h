@@ -1,11 +1,11 @@
-#if !defined(Gpio_h)
-#define Gpio_h
+#if !defined(Switches_h)
+#define Switches_h
 
 #include "stm32f4xx.h"
 #include "filter.h"
 #include "oscillator.h"
 
-class Gpio {
+class Switches {
  public:
   void init();
 
@@ -48,6 +48,22 @@ class Gpio {
 
   void setMuteOsc2(bool state) {
     GPIOB->BSRR = state ? GPIO_PIN_6 : GPIO_PIN_6 << 16;
+  }
+
+  bool readEncoders(int index) {
+    switch (index) {
+      case 0:
+        return GPIOB->IDR & GPIO_PIN_7;
+      case 1:
+        return GPIOB->IDR & GPIO_PIN_7;
+      case 2:
+        return GPIOB->IDR & GPIO_PIN_7;
+      case 3:
+        return GPIOB->IDR & GPIO_PIN_7;
+      default:
+        break;
+    }
+    return 0;
   }
 
  private:
