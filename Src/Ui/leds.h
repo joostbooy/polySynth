@@ -16,7 +16,7 @@ public:
 		setAll(BLACK);
 	}
 
-	uint8_t* data() {
+	uint16_t* data() {
 		return &data_[0];
 	}
 
@@ -59,10 +59,10 @@ public:
 
 private:
 	static const size_t kNumOfCollumns = 7;
-	uint8_t data_[kNumOfCollumns];
+	uint16_t data_[kNumOfCollumns];
 
 	void set(int x, int y, Color color) {
-		uint8_t value = data_[x] & ~(1 << y);
+		uint16_t value = data_[x] & ~(1 << y);
 		data_[x] = value | (color << y);
 	}
 
