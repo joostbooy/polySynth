@@ -1,4 +1,4 @@
-# AUDIO SAMPLER
+# 8 VOICE ANALOG SYNTHESIZER
 Work in progress
 
 ## Features
