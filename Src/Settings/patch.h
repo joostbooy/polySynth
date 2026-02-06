@@ -7,6 +7,7 @@
 #include "midi.h"
 #include "modMatrix.h"
 #include "oscillator.h"
+#include "amp.h"
 
 class Patch {
  public:
@@ -34,6 +35,7 @@ class Patch {
     envelope(0).init();
     envelope(1).init();
     modMatrix().init();
+    amp().init();
     setName("EMPTY PATCH");
     setVoiceMode(POLY);
   }
@@ -88,6 +90,10 @@ class Patch {
     return lfo_[index];
   }
 
+  Amp& amp() {
+    return amp_;
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(name_);
@@ -101,6 +107,7 @@ class Patch {
     envelope_[0].save(fileWriter);
     envelope_[1].save(fileWriter);
     modMatrix_.save(fileWriter);
+    amp_.save(fileWriter);
   }
 
   void load(FileReader& fileReader) {
@@ -115,6 +122,7 @@ class Patch {
     envelope_[0].load(fileReader);
     envelope_[1].load(fileReader);
     modMatrix_.load(fileReader);
+    amp_.load(fileReader);
   }
 
   void paste(Patch* patch) {
@@ -129,6 +137,7 @@ class Patch {
     envelope_[0].paste(&patch->envelope(0));
     envelope_[1].paste(&patch->envelope(1));
     modMatrix_.paste(&patch->modMatrix());
+    amp_.paste(&patch->amp());
   }
 
  private:
@@ -136,6 +145,7 @@ class Patch {
   Oscillator oscillator_;
   Filter filter_;
   ModMatrix modMatrix_;
+  Amp amp_;
   Lfo lfo_[2];
   Envelope envelope_[2];
   char name_[kMaxNameLength];

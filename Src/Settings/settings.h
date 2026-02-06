@@ -156,6 +156,11 @@ class Settings {
     return selectedPatch().modMatrix();
   }
 
+  // Amp
+  Amp& amp() {
+    return selectedPatch().amp();
+  }
+
  private:
   StringBuilderBase<63> path;
 
