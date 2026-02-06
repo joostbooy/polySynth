@@ -20,14 +20,24 @@ class Oscillator {
     setShape2(0.f);
     setTrackNote1(true);
     setTrackNote2(true);
+    setModDepth(0.f);
+    setSlideAmmount1(0.f);
+    setSlideAmmount2(0.f);
+    setLinkSlideAmmount(true);
+    setSlideEnable1(false);
+    setSlideEnable2(false);
   }
 
   static const char* type1Text(Type1 type) {
     switch (type) {
-      case SAW1:      return "SAW";
-      case TRIANGLE1: return "TRIANGLE";
-      case SINE1:     return "SINE";
-      case SQUARE1:   return "SQUARE";
+      case SAW1:
+        return "SAW";
+      case TRIANGLE1:
+        return "TRIANGLE";
+      case SINE1:
+        return "SINE";
+      case SQUARE1:
+        return "SQUARE";
       default:
         break;
     }
@@ -36,10 +46,14 @@ class Oscillator {
 
   static const char* type2Text(Type2 type) {
     switch (type) {
-      case SAW2:      return "SAW";
-      case TRIANGLE2: return "TRIANGLE";
-      case NOISE2:    return "NOISE";
-      case SQUARE2:   return "SQUARE";
+      case SAW2:
+        return "SAW";
+      case TRIANGLE2:
+        return "TRIANGLE";
+      case NOISE2:
+        return "NOISE";
+      case SQUARE2:
+        return "SQUARE";
       default:
         break;
     }
@@ -52,7 +66,7 @@ class Oscillator {
   }
 
   void setType1(int value) {
-    type1_ = Type1(SettingsUtils::clip(0, NUM_TYPES1 - 1, value));
+    type1_ = Type1(value % NUM_TYPES1);
   }
 
   const char* type1Text() {
@@ -65,7 +79,7 @@ class Oscillator {
   }
 
   void setType2(int value) {
-    type2_ = Type2(SettingsUtils::clip(0, NUM_TYPES2 - 1, value));
+    type2_ = Type2(value % NUM_TYPES2);
   }
 
   const char* type2Text() {
@@ -163,7 +177,7 @@ class Oscillator {
     return SettingsText::floatToText(shape2());
   }
 
-    // Track note Osc 1
+  // Track note Osc 1
   bool trackNote1() {
     return trackNote1_;
   }
@@ -189,6 +203,84 @@ class Oscillator {
     return SettingsText::boolToOnOff(trackNote2());
   }
 
+  // Mod depth
+  float modDepth() {
+    return modDepth_;
+  }
+
+  void setModDepth(float value) {
+    modDepth_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* modDepthText() {
+    return SettingsText::floatToText(modDepth());
+  }
+
+  // Slide enablbe 1
+  bool slideEnable1() {
+    return slideEnable1_;
+  }
+
+  void setSlideEnable1(bool value) {
+    slideEnable1_ = value;
+  }
+
+  const char* slideEnable1Text() {
+    return SettingsText::boolToOnOff(slideEnable1());
+  }
+
+  // Slide enablbe 2
+  bool slideEnable2() {
+    return slideEnable2_;
+  }
+
+  void setSlideEnable2(bool value) {
+    slideEnable2_ = value;
+  }
+
+  const char* slideEnable2Text() {
+    return SettingsText::boolToOnOff(slideEnable2());
+  }
+
+    // Link slide ammount
+  bool linkSlideAmmount() {
+    return linkSlideAmmount_;
+  }
+
+  void setLinkSlideAmmount(bool value) {
+    linkSlideAmmount_ = value;
+  }
+
+  const char* linkSlideAmmountText() {
+    return SettingsText::boolToOnOff(linkSlideAmmount());
+  }
+
+  // Slide ammount 1
+  float slideAmmount1() {
+    return slideAmmount1_;
+  }
+
+  void setSlideAmmount1(float value) {
+    slideAmmount1_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* slideAmmount1Text() {
+    return SettingsText::floatToText(slideAmmount1());
+  }
+
+    // Slide ammount 2
+  float slideAmmount2() {
+    return linkSlideAmmount() ? slideAmmount1_ : slideAmmount2_;
+  }
+
+  void setSlideAmmount2(float value) {
+    slideAmmount2_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* slideAmmount2Text() {
+    return SettingsText::floatToText(slideAmmount2());
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(fmEnable_);
@@ -202,6 +294,12 @@ class Oscillator {
     fileWriter.write(syncEnable_);
     fileWriter.write(trackNote1_);
     fileWriter.write(trackNote2_);
+    fileWriter.write(modDepth_);
+    fileWriter.write(slideAmmount1_);
+    fileWriter.write(slideAmmount2_);
+    fileWriter.write(linkSlideAmmount_);
+    fileWriter.write(slideEnable1_);
+    fileWriter.write(slideEnable2_);
   }
 
   void load(FileReader& fileReader) {
@@ -216,6 +314,12 @@ class Oscillator {
     fileReader.read(syncEnable_);
     fileReader.read(trackNote1_);
     fileReader.read(trackNote2_);
+    fileReader.read(modDepth_);
+    fileReader.read(slideAmmount1_);
+    fileReader.read(slideAmmount2_);
+    fileReader.read(linkSlideAmmount_);
+    fileReader.read(slideEnable1_);
+    fileReader.read(slideEnable2_);
   }
 
   void paste(Oscillator* oscillator) {
@@ -230,6 +334,12 @@ class Oscillator {
     syncEnable_ = oscillator->syncEnable();
     trackNote1_ = oscillator->trackNote1();
     trackNote2_ = oscillator->trackNote2();
+    modDepth_ = oscillator->modDepth();
+    slideAmmount1_ = oscillator->slideAmmount1();
+    slideAmmount2_ = oscillator->slideAmmount2();
+    linkSlideAmmount_ = oscillator->linkSlideAmmount();
+    slideEnable1_ = oscillator->slideEnable1();
+    slideEnable2_ = oscillator->slideEnable2();
   }
 
  private:
@@ -242,6 +352,12 @@ class Oscillator {
   bool muteOsc2_;
   float shape1_;
   float shape2_;
+  float modDepth_;
+  bool slideEnable1_;
+  bool slideEnable2_;
+  bool linkSlideAmmount_;
+  float slideAmmount1_;
+  float slideAmmount2_;
   Type1 type1_;
   Type2 type2_;
 };
