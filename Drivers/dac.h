@@ -37,11 +37,11 @@ class Dac {
     deInhibit();
 
     setMuxChannel(currMuxChannel_);
-   // MuxChannel& c = muxChannel_[currMuxChannel_];
+    MuxChannel& c = muxChannel_[currMuxChannel_];
     if (++currMuxChannel_ >= kNumMuxChannels) {
       currMuxChannel_ = 0;
     }
-/*
+
     for (int i = 0; i < kNumDacChannels; ++i) {
       if (i < 8) {
         writeOctalDac(WRITE_INPUT_REGISTER_UPDATE_N, i, c.value[i], 0);
@@ -49,12 +49,12 @@ class Dac {
         writeQuadDac(i - 8, c.value[i]);
       }
     }
-*/
+
     inhibit();
   }
 
  private:
-  static const int kNumDacChannels = 11;
+  static const int kNumDacChannels = 12;
   static const int kNumMuxChannels = 8;
 
   struct MuxChannel {
@@ -74,8 +74,8 @@ class Dac {
 
   void setMuxChannel(int channel) {
     uint32_t data = 0;
-    data |= (channel & 1) ? GPIO_PIN_3 : GPIO_PIN_3 << 16;
-    data |= (channel & 2) ? GPIO_PIN_2 : GPIO_PIN_2 << 16;
+    data |= (channel & 1) ? GPIO_PIN_1 : GPIO_PIN_1 << 16;
+    data |= (channel & 2) ? GPIO_PIN_4 : GPIO_PIN_4 << 16;
     data |= (channel & 4) ? GPIO_PIN_10 : GPIO_PIN_10 << 16;
     GPIOA->BSRR = data;
   }
