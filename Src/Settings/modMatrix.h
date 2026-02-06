@@ -6,8 +6,8 @@ class ModMatrix {
   static const size_t kNumUserCc = 4;
 
   enum Destination {
-    PITCH_1,
-    PITCH_2,
+    TUNE_1,
+    TUNE_2,
     GAIN,
     CUTOFF_1,
     CUTOFF_2,
@@ -15,8 +15,9 @@ class ModMatrix {
     RESONANCE_2,
     SHAPE_1,
     SHAPE_2,
-    FM_DEPTH,
+    VCO_MOD_DEPTH,
     PAN,
+    DRIVE,
 
     NUM_DESTINATIONS
   };
@@ -25,17 +26,18 @@ class ModMatrix {
 
   static const char* destination_text(int value) {
     switch (value) {
-      case PITCH_1:     return "PITCH 1";
-      case PITCH_2:     return "PITCH 2";
-      case GAIN:        return "GAIN";
-      case CUTOFF_1:    return "CUTOFF 1";
-      case CUTOFF_2:    return "CUTOFF 2";
-      case RESONANCE_1: return "RESONANCE 1";
-      case RESONANCE_2: return "RESONANCE 2";
-      case SHAPE_1:     return "SHAPE 1";
-      case SHAPE_2:     return "SHAPE 2";
-      case FM_DEPTH:    return "FM DEPTH";
-      case PAN:         return "PAN";
+      case TUNE_1:        return "TUNE 1";
+      case TUNE_2:        return "TUNE 2";
+      case GAIN:          return "GAIN";
+      case CUTOFF_1:      return "CUTOFF 1";
+      case CUTOFF_2:      return "CUTOFF 2";
+      case RESONANCE_1:   return "RESONANCE 1";
+      case RESONANCE_2:   return "RESONANCE 2";
+      case SHAPE_1:       return "SHAPE 1";
+      case SHAPE_2:       return "SHAPE 2";
+      case VCO_MOD_DEPTH: return "VCO MOD DEPTH";
+      case PAN:           return "PAN";
+      case DRIVE:         return "DRIVE";
       default:
         break;
     }
@@ -55,6 +57,7 @@ class ModMatrix {
     MIDI_CC_B,
     MIDI_CC_C,
     MIDI_CC_D,
+    MIDI_NOTE,
 
     NUM_SOURCES
   };
@@ -73,6 +76,7 @@ class ModMatrix {
       case MIDI_CC_B:     return midiCcNumberText(1);
       case MIDI_CC_C:     return midiCcNumberText(2);
       case MIDI_CC_D:     return midiCcNumberText(3);
+      case MIDI_NOTE:     return "MIDI NOTE";
       default:
         break;
     }
@@ -81,10 +85,11 @@ class ModMatrix {
 
   void init() {
     clear();
-    matrix_[MIDI_BEND] |= (1 << PITCH_1);
-    matrix_[MIDI_BEND] |= (1 << PITCH_2);
+    matrix_[MIDI_BEND] |= (1 << TUNE_1);
+    matrix_[MIDI_BEND] |= (1 << TUNE_2);
     matrix_[MIDI_VELOCITY] |= (1 << GAIN);
     matrix_[ENVELOPE_1] |= (1 << GAIN);
+    matrix_[ENVELOPE_2] |= (1 << CUTOFF_1);
     matrix_[ENVELOPE_2] |= (1 << CUTOFF_2);
 
     for (size_t i = 0; i < kNumUserCc; ++i) {
@@ -105,7 +110,6 @@ class ModMatrix {
   void toggle(size_t src, size_t dest) {
     uint32_t data = matrix_[src];
     matrix_[src] = data ^ (1 << dest);
-    matrix_[ENVELOPE_1] |= (1 << GAIN);   // Envelope 1 & gain are always tied togheter!
   }
 
   // Midi CC
