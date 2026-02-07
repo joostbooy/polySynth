@@ -390,7 +390,7 @@ class Sdio {
 
     // check errors
     const uint32_t succes_flags = SDIO_STA_DBCKEND | SDIO_STA_DATAEND;
-    const uint32_t error_flags = SDIO_STA_DCRCFAIL | SDIO_STA_RXOVERR | SDIO_STA_DTIMEOUT | SDIO_STA_STBITERR;
+    const uint32_t error_flags = SDIO_STA_DCRCFAIL | SDIO_STA_RXOVERR | SDIO_STA_DTIMEOUT;  //SDIO_STA_STBITERR;
 
     while (true) {
       volatile uint32_t flags = SDIO->STA;
@@ -443,7 +443,7 @@ class Sdio {
 
     // check errors
     const uint32_t succes_flags = SDIO_STA_DBCKEND | SDIO_STA_DATAEND;
-    const uint32_t error_flags = SDIO_STA_DCRCFAIL | SDIO_STA_TXUNDERR | SDIO_STA_DTIMEOUT | SDIO_STA_STBITERR;
+    const uint32_t error_flags = SDIO_STA_DCRCFAIL | SDIO_STA_TXUNDERR | SDIO_STA_DTIMEOUT;  //SDIO_STA_STBITERR
 
     while (true) {
       volatile uint32_t flags = SDIO->STA;

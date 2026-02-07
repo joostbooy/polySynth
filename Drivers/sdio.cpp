@@ -9,43 +9,34 @@ void Sdio::init() {
 
 	//powerOff();
 
-	/**GPIO Configuration
-	PA8     ------> Card detect
-	*/
-	GPIO_InitStruct.Pin = GPIO_PIN_8;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    /**SDIO GPIO Configuration
+    PC8     ------> SDIO_D0
+    PC9     ------> SDIO_D1
+    PC10     ------> SDIO_D2
+    PC11     ------> SDIO_D3
+    PC12     ------> SDIO_CK
+    PD2     ------> SDIO_CMD
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF12_SDIO;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-
-	/**SDIO GPIO Configuration
-	PC8     ------> SDIO_D0
-	PC9     ------> SDIO_D1
-	PC10     ------> SDIO_D2
-	PC11     ------> SDIO_D3
-	PC12     ------> SDIO_CK
-	PD2     ------> SDIO_CMD
-	*/
-	GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	GPIO_InitStruct.Alternate = GPIO_AF12_SDIO;
-	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = GPIO_PIN_2;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	GPIO_InitStruct.Alternate = GPIO_AF12_SDIO;
-	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+    GPIO_InitStruct.Pin = GPIO_PIN_2;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF12_SDIO;
+    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
 	// Enable dma interrupt
 	HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
 }
 
 
-// DMA2 steam 3 Channel 4
+// DMA2 stream 3 Channel 4
 const uint32_t kChannel4				= (4 << 25);
 const uint32_t kMemoryBurst_inc4		= (1 << 23);
 const uint32_t kPeripheralBurst_inc4	= (1 << 21);

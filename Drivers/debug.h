@@ -8,12 +8,8 @@ class Debug {
 public:
     static void init();
 
-	static inline bool read() {
-		return GPIOB->IDR & GPIO_PIN_7;
-	}
-
 	static inline void write(bool state) {
-        GPIOC->BSRR = state ? GPIO_PIN_2 : GPIO_PIN_2 << 16;
+        GPIOA->BSRR = state ? GPIO_PIN_15 : GPIO_PIN_15 << 16;
     }
 
     static inline void toggle() {

@@ -9,40 +9,40 @@ void Display::init() {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 	/**GPIO Configuration
-	PD7     ------> DC
-	PB5     ------> CS
-	PB7     ------> RESET
+	PC15     ------> DC
+	PC14     ------> CS
+	PE3     ------> RESET
 	*/
-	GPIO_InitStruct.Pin = GPIO_PIN_7;
+	GPIO_InitStruct.Pin = GPIO_PIN_15 | GPIO_PIN_14;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = GPIO_PIN_5 | GPIO_PIN_7;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-	/**SPI2 GPIO Configuration
-	PC2     ------> SPI2_MISO
-	PC3     ------> SPI2_MOSI
-	PD3     ------> SPI2_SCK
-	*/
-	GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
 	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = GPIO_PIN_3;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
-	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+    /**SPI2 GPIO Configuration
+    PC1     ------> SPI2_MOSI
+    PC2     ------> SPI2_MISO
+    PD3     ------> SPI2_SCK
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_1;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF7_SPI2;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = GPIO_PIN_3;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
+    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
 	// SPI 2
 	SPI_HandleTypeDef hspi2;
@@ -73,9 +73,9 @@ void Display::init() {
 	// Select, Reset & wait
 	select();
 
-	GPIOB->BSRR = GPIO_PIN_7 << 16;
+	GPIOE->BSRR = GPIO_PIN_3 << 16;
 	Micros::delay(150 * 1000);
-	GPIOB->BSRR = GPIO_PIN_7;
+	GPIOE->BSRR = GPIO_PIN_3;
 	Micros::delay(150 * 1000);
 
 	// Start lcd configuration

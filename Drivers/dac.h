@@ -65,19 +65,19 @@ class Dac {
   uint8_t currMuxChannel_;
 
   void deInhibit() {
-    GPIOA->BSRR = GPIO_PIN_8;
+    GPIOB->BSRR = GPIO_PIN_10;
   }
 
   void inhibit() {
-    GPIOA->BSRR = GPIO_PIN_8 << 16;
+    GPIOB->BSRR = GPIO_PIN_10 << 16;
   }
 
   void setMuxChannel(int channel) {
     uint32_t data = 0;
-    data |= (channel & 1) ? GPIO_PIN_1 : GPIO_PIN_1 << 16;
-    data |= (channel & 2) ? GPIO_PIN_4 : GPIO_PIN_4 << 16;
-    data |= (channel & 4) ? GPIO_PIN_10 : GPIO_PIN_10 << 16;
-    GPIOA->BSRR = data;
+    data |= (channel & 1) ? GPIO_PIN_12 : GPIO_PIN_12 << 16;
+    data |= (channel & 2) ? GPIO_PIN_11 : GPIO_PIN_11 << 16;
+    data |= (channel & 4) ? GPIO_PIN_13 : GPIO_PIN_13 << 16;
+    GPIOE->BSRR = data;
   }
 
   // DAC8568
@@ -87,7 +87,7 @@ class Dac {
     uint8_t b3 = data >> 4;
     uint8_t b4 = (data & 0xf) << 4 | function;
 
-    GPIOA->BSRR = GPIO_PIN_4 << 16;
+    GPIOC->BSRR = GPIO_PIN_13 << 16;
     asm("NOP");
 
     spiWrite(b1);
@@ -96,7 +96,7 @@ class Dac {
     spiWrite(b4);
     asm("NOP");
 
-    GPIOA->BSRR = GPIO_PIN_4;
+    GPIOC->BSRR = GPIO_PIN_13;
     asm("NOP");
   }
 
@@ -106,7 +106,7 @@ class Dac {
     uint8_t b2 = data >> 8;
     uint8_t b3 = data;
 
-    GPIOA->BSRR = GPIO_PIN_2 << 16;
+    GPIOE->BSRR = GPIO_PIN_4 << 16;
     asm("NOP");
 
     spiWrite(b1);
@@ -114,16 +114,16 @@ class Dac {
     spiWrite(b3);
     asm("NOP");
 
-    GPIOA->BSRR = GPIO_PIN_2;
+    GPIOE->BSRR = GPIO_PIN_4;
     asm("NOP");
   }
 
   void spiWrite(uint8_t data) {
-    while (!(SPI1->SR & SPI_FLAG_TXE));
-    SPI1->DR = data;
+    while (!(SPI4->SR & SPI_FLAG_TXE));
+    SPI4->DR = data;
 
-    while (!(SPI1->SR & SPI_FLAG_RXNE));
-    dummy = SPI1->DR;
+    while (!(SPI4->SR & SPI_FLAG_RXNE));
+    dummy = SPI4->DR;
   }
 };
 

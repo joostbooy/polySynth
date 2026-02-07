@@ -1,40 +1,46 @@
 #include "matrix.h"
 
+
 void Matrix::init() {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 	/**GPIO Configuration
-	PB6     ------> Col 0
-	PB7     ------> Col 1
-	PB8     ------> Col 2
-	PB3     ------> Latch SW row
-	PB4     ------> Latch LED row
-	PB5     ------> Latch LED col
+	PD0     ------> Col 0
+	PD1     ------> Col 1
+	PD4     ------> Col 2
+	PB7     ------> Latch SW row
+	PB8     ------> Latch LED row
+	PB6     ------> Latch LED col
 	*/
-	GPIO_InitStruct.Pin =  GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8;
+	GPIO_InitStruct.Pin =  GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_4;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin =  GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_6;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-	GPIOB->BSRR = GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5;
+	GPIOB->BSRR = GPIO_PIN_7 | GPIO_PIN_6 | GPIO_PIN_8;
 
-	/**SPI4 GPIO Configuration
-	PE2     ------> SPI4_SCK
-	PE5     ------> SPI4_MISO
-	PE6     ------> SPI4_MOSI
-	*/
-	GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_5|GPIO_PIN_6;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	GPIO_InitStruct.Alternate = GPIO_AF5_SPI4;
-	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+    /**SPI3 GPIO Configuration
+    PB3     ------> SPI3_SCK
+    PB4     ------> SPI3_MISO
+    PB5     ------> SPI3_MOSI
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-	// SPI4
+	// SPI3
 	SPI_HandleTypeDef hspi4;
-
-	hspi4.Instance = SPI4;
+	hspi4.Instance = SPI3;
 	hspi4.Init.Mode = SPI_MODE_MASTER;
 	hspi4.Init.Direction = SPI_DIRECTION_2LINES;
 	hspi4.Init.DataSize = SPI_DATASIZE_8BIT;
@@ -46,9 +52,6 @@ void Matrix::init() {
 	hspi4.Init.TIMode = SPI_TIMODE_DISABLE;
 	hspi4.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
 	hspi4.Init.CRCPolynomial = 10;
-	//hspi4.Init.CRCPolynomial = 7;
-	//hspi4.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
-	//hspi4.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
 	HAL_SPI_Init(&hspi4);
 	__HAL_SPI_ENABLE(&hspi4);
 }

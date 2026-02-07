@@ -30,7 +30,7 @@ FILESYSTEM_DIR = Src/Disk
 # model specifics
 #######################################
 
-MODEL_DEF = -DSTM32F401xE
+MODEL_DEF = -DSTM32F446xx
 F_CPU = 168000000UL
 
 CMSIS_DIR = $(STM_REPO)/Drivers/CMSIS
@@ -38,8 +38,8 @@ HAL_DIR = $(STM_REPO)/Drivers/STM32F4xx_HAL_Driver
 DEVICE_DIR = $(CMSIS_DIR)/Device/ST/STM32F4xx
 
 CPU = -mcpu=cortex-m4
-LDSCRIPT = stm32/STM32F401RETx_FLASH.ld
-STARTUP = stm32/startup_stm32f401xe.s
+LDSCRIPT = stm32/STM32F446XX_FLASH.ld
+STARTUP = stm32/startup_stm32f446xx.s
 SYSTEM = $(DEVICE_DIR)/Source/Templates/system_stm32f4xx.c
 
 FPU = -mfpu=fpv4-sp-d16

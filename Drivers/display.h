@@ -11,19 +11,19 @@ class Display {
   static Display* display_;
 
   inline void select() {
-    GPIOB->BSRR = GPIO_PIN_5 << 16;
+    GPIOC->BSRR = GPIO_PIN_14 << 16;
   }
 
   inline void deselect() {
-    GPIOB->BSRR = GPIO_PIN_5;
+    GPIOC->BSRR = GPIO_PIN_14;
   }
 
   inline void cd_high() {
-    GPIOD->BSRR = GPIO_PIN_7;
+    GPIOC->BSRR = GPIO_PIN_15;
   }
 
   inline void cd_low() {
-    GPIOD->BSRR = GPIO_PIN_7 << 16;
+    GPIOC->BSRR = GPIO_PIN_15 << 16;
   }
 
   void sendCommand(uint8_t cmd) {
