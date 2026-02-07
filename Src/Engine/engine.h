@@ -34,6 +34,10 @@ class Engine {
     return processing_time_uS_;
   }
 
+  ModMatrixEngine &modMatrixEngine() {
+    return modMatrixEngine_;
+  }
+
  private:
   State state_;
   volatile uint8_t requests_ = 0x00;
