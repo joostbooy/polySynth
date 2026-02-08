@@ -3,6 +3,8 @@
 #include "micros.h"
 
 void Adc::init() {
+  currBank_ = GPIO_PIN_7;
+
   ADC_HandleTypeDef hadc1, hadc2;
   ADC_ChannelConfTypeDef sConfig = {0};
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -21,6 +23,9 @@ void Adc::init() {
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  // all inihbit pins high
+  GPIOA->BSRR = GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7;
 
   /**ADC1 GPIO Configuration
   PB0     ------> ADC1_IN8 CV1
