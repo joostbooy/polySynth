@@ -46,7 +46,10 @@ class Adc {
   }
 
   inline void convertNextCv() {
-    ADC1->SQR3 = (++cv_ == 0) ? ADC_CHANNEL_8 : ADC_CHANNEL_9;
+    if (++cv_ >= kNumCvs) {
+      cv_ = 0;
+    }
+    ADC1->SQR3 = (cv_ == 0) ? ADC_CHANNEL_8 : ADC_CHANNEL_9;
     ADC1->CR2 |= ADC_CR2_SWSTART;
   }
 
@@ -54,6 +57,7 @@ class Adc {
   size_t cv_ = 0;
   size_t pot_ = 0;
   uint32_t currBank_ = 0;
+  static const size_t kNumCvs = 2;
   static const size_t kNumPots = 32;
   static const size_t kPotsPerBank = 8;
 
