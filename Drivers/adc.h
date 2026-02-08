@@ -46,7 +46,7 @@ class Adc {
   }
 
   inline void convertNextCv() {
-    ++cv_ == 0 ? ADC1->SQR3 = ADC_CHANNEL_8 : ADC1->SQR3 = ADC_CHANNEL_9;
+    ADC1->SQR3 = (++cv_ == 0) ? ADC_CHANNEL_8 : ADC_CHANNEL_9;
     ADC1->CR2 |= ADC_CR2_SWSTART;
   }
 
