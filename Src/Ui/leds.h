@@ -198,6 +198,10 @@ class Leds {
   }
 
   // Osc 2
+  void setOsc2Sync(bool state) {
+    set(1, 14, state ? RED : BLACK);
+  }
+
   void setOsc2Type(Oscillator::Type2 type) {
     switch (type) {
       case Oscillator::SAW2:
@@ -230,6 +234,10 @@ class Leds {
   }
 
   // Lfo 1
+  void setLfo1Tempo(bool state) {
+    set(5, 13, state ? RED : BLACK);
+  }
+
   void setLfo1Type(Lfo::Type type) {
     switch (type) {
       case Lfo::LINEAR:
@@ -262,6 +270,10 @@ class Leds {
   }
 
   // Lfo 2
+  void setLfo2Tempo(bool state) {
+    set(7, 13, state ? RED : BLACK);
+  }
+
   void setLfo2Type(Lfo::Type type) {
     switch (type) {
       case Lfo::LINEAR:
