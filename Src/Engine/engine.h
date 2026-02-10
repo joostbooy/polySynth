@@ -57,7 +57,6 @@ class Engine {
   void start();
   void stop();
   void processRequests();
-  void processSwitches();
   void processMidi();
   void noteOn(MidiEngine::Event& e);
   void noteOff(MidiEngine::Event& e);

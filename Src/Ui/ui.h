@@ -49,6 +49,7 @@ private:
 	Pots pots_;
 
 	Engine *engine_;
+	Settings *settings_;
 	Matrix *matrix_;
 	Display *display_;
 	Switches *switches_;
@@ -61,6 +62,7 @@ private:
 
 	Que<Ui::Event, 16> uiQue;
 	void addEvent(ControlType, uint8_t, int8_t);
+	void processSwitches();
 };
 
 #endif

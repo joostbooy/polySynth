@@ -122,8 +122,8 @@ class Voice {
     dac_->set(index, 11, (p.filter().resonance1() * data[ModMatrix::RESONANCE_1]) * 65535);
 
     if (settings_->calibration().enabled()) {
-        dac_->set(index, 0, settings_->calibration().min());
-        dac_->set(index, 1, settings_->calibration().max());
+        dac_->set(index, 3, settings_->calibration().min());
+        dac_->set(index, 7, settings_->calibration().max());
     }
   }
 

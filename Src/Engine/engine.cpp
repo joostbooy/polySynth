@@ -117,29 +117,12 @@ void Engine::processRequests() {
     clearRequest(KILL_VOICES);
   }
 }
-
-void Engine::processSwitches() {
-  Patch& p = settings_->selectedPatch();
-  switches_->setAmEnable(p.amp().amEnable());
-  switches_->setSync(p.oscillator().syncEnable());
-  switches_->setOsc1(p.oscillator().type1());
-  switches_->setOsc2(p.oscillator().type2());
-  switches_->setFmEnable(p.oscillator().fmEnable());
-  switches_->setMuteOsc1(p.oscillator().muteOsc1());
-  switches_->setMuteOsc2(p.oscillator().muteOsc2());
-  switches_->setVcoModSource(p.oscillator().modSource());
-  switches_->setFmFilter1Enable(p.filter().fmEnable1());
-  switches_->setFmFilter2Enable(p.filter().fmEnable2());
-  switches_->setSelectedFilter(p.filter().type(), p.filter().routing());
-}
-
 // 1Khz
 void Engine::update() {
   processRequests();
 
   if (state_ == RUNNING) {
     processMidi();
-    processSwitches();
 
     while (voiceEngine_.available() && noteQue_.readable()) {
       voiceEngine_.assignVoice(noteQue_.read());
