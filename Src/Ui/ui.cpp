@@ -1,6 +1,5 @@
 #include "ui.h"
 
-#include "controller.h"
 #include "que.h"
 
 static const int enc_a_row = 2;
@@ -27,9 +26,10 @@ void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* displ
   displayInterval_ = 0;
 
   canvas_.init();
+  pots_.init();
   leds_.init();
+  buttons_.init();
   pages_.init(settings, engine, this);
-  Pots::init();
 
   uiQue.clear();
 }
@@ -72,7 +72,7 @@ void Ui::poll() {
   // Pots
   if (adc_->potReady()) {
     float value = adc_->readPot() * (1.f / 1023.f);
-    Pots::write(adc_->currentPot(), value);
+    pots_.write(adc_->currentPot(), value);
     adc_->convertNextPot();
   }
 
@@ -89,6 +89,7 @@ void Ui::process() {
     Ui::Event e = uiQue.read();
     switch (e.type) {
       case Ui::BUTTON:
+        buttons_.write(e.id, e.value);
         pages_.on_button(e.id, e.value);
         break;
       case Ui::ENCODER:

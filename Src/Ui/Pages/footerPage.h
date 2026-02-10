@@ -38,13 +38,13 @@ namespace FooterPage {
 	}
 
 	void on_button(int id, int state) {
-		int index = Controller::buttonToFunction(id);
+		int index = Buttons::toFuncion(id);
 
 		if (index < 0) {
 			return;
 		}
 
-		if (Controller::isPressed(Controller::SHIFT) && numOptions_ > 4) {
+		if (Buttons::read(Buttons::SHIFT) && numOptions_ > 4) {
 			index += 4;
 		} 
 		
@@ -62,7 +62,7 @@ namespace FooterPage {
 	}
 
 	void draw() {
-		if (Controller::isPressed(Controller::SHIFT) && numOptions_ > 4) {
+		if (Buttons::read(Buttons::SHIFT) && numOptions_ > 4) {
 			WindowPainter::draw_footer(&text_[4], numOptions_ - 4);
 		} else {
 			WindowPainter::draw_footer(text_, numOptions_ >= 4 ? 4 : numOptions_);

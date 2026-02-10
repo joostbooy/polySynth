@@ -58,22 +58,22 @@ namespace OptionListPage {
 	void on_button(int id, int state) {
 		/*
 		if (state) {
-			if (Controller::UP_BUTTON == id) {
+			if (Buttons::UP_BUTTON == id) {
 				on_encoder(0, -1);
 				return;
 			}
 
-			if (Controller::DOWN_BUTTON == id) {
+			if (Buttons::DOWN_BUTTON == id) {
 				on_encoder(0, 1);
 				return;
 			}
 
-			if (Controller::MENU_BUTTON == id || Controller::LEFT_BUTTON == id) {
+			if (Buttons::MENU_BUTTON == id || Buttons::LEFT_BUTTON == id) {
 				pages_->close(Pages::OPTION_LIST_PAGE);
 				return;
 			}
 
-			if (Controller::buttonToFunction(id) >= 0 || Controller::RIGHT_BUTTON == id) {
+			if (Buttons::buttonToFunction(id) >= 0 || Buttons::RIGHT_BUTTON == id) {
 				if (callback_) {
 					callback_(selected_);
 				}

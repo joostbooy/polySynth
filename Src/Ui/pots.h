@@ -42,25 +42,25 @@ class Pots {
     NUM_POTS
   };
 
-  static void init() {
+   void init() {
     std::fill(&raw_[0], &raw_[NUM_POTS], 0.f);
     std::fill(&filtered_[0], &filtered_[NUM_POTS], 0.f);
   }
 
-  static void write(float value, int id) {
+   void write(float value, int id) {
     raw_[id] = value;
     for (size_t i = 0; i < NUM_POTS; ++i) {
       filtered_[i] += 0.01f * (raw_[i] - filtered_[i]);
     }
   }
 
- static float read(int id) {
+  float read(int id) {
     return filtered_[id];
   }
 
  private:
-  static inline float raw_[NUM_POTS];
-  static inline float filtered_[NUM_POTS];
+    float raw_[NUM_POTS];
+    float filtered_[NUM_POTS];
 };
 
 #endif  // Pots_h

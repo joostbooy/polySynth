@@ -9,6 +9,7 @@ namespace DiskRetryPage {
 	using TopPage::canvas_;
 	using TopPage::pages_;
 	using TopPage::leds_;
+	using TopPage::buttons_;
 	using TopPage::disk_;
 
 	typedef void (*Callback)();
@@ -48,7 +49,7 @@ namespace DiskRetryPage {
 			return;
 		}
 
-		switch (Controller::buttonToFunction(id))
+		switch (buttons_->toFunction(id))
 		{
 		case RETRY:
 			disk_->mount();

@@ -81,12 +81,12 @@ namespace LfoPage {
 
 		for (int x2 = 0; x2 < w; ++x2) {
 			int y2 = h * (1.f - lfoEngine.next());
-			canvas_->draw_pixel(x + x2, y + y2, Canvas::BLACK);
+			canvas_->drawPixel(x + x2, y + y2, Canvas::BLACK);
 		}
 
-		int index = settings_->selected_lfo_index();
-		float phase = engine_->modulationEngine().lfoEngine(index).phase();
-		canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);
+	//	int index = settings_->selectedLfoIndex();
+	//	float phase = engine_->voiceEngine().lfoEngine(index).phase();
+	//	canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);
 	}
 
 	const size_t target_fps() {

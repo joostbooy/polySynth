@@ -6,6 +6,7 @@ namespace TextInputPage {
 using TopPage::canvas_;
 using TopPage::disk_;
 using TopPage::leds_;
+using TopPage::buttons_;
 using TopPage::pages_;
 
 uint8_t box_x_;
@@ -180,15 +181,15 @@ void on_button(int id, int state) {
   }
 
   switch (id) {
-    case Controller::ENC_X:
-    case Controller::ENC_Y:
+    case Buttons::ENC_X:
+    case Buttons::ENC_Y:
       insert(char_table[char_cursor_]);
       return;
     default:
       break;
   }
 
-  switch (Controller::buttonToFunction(id)) {
+  switch (buttons_->toFunction(id)) {
     case BACKSPACE:
       backspace();
       break;

@@ -11,6 +11,7 @@ namespace DiskNavigatorPage {
 	using TopPage::pages_;
 	using TopPage::str_;
 	using TopPage::leds_;
+	using TopPage::buttons_;
 	using TopPage::settings_;
 	using TopPage::disk_;
 
@@ -112,25 +113,25 @@ namespace DiskNavigatorPage {
 
 			switch (id)
 			{
-			case Controller::UP_BUTTON:
+			case Buttons::UP_BUTTON:
 				on_encoder(0, -1);
 				break;
-			case Controller::DOWN_BUTTON:
+			case Buttons::DOWN_BUTTON:
 				on_encoder(0, 1);
 				break;
-			case Controller::LEFT_BUTTON:
+			case Buttons::LEFT_BUTTON:
 				if (disk_->directory().exit()) {
 					scroll_to_row(0, true);
 				}
 				break;
-			case Controller::RIGHT_BUTTON:
+			case Buttons::RIGHT_BUTTON:
 				if (e != nullptr && e->is_dir) {
 					if (disk_->directory().enter(e->name.read())) {
 						scroll_to_row(0, true);
 					}
 				}
 				break;
-			case Controller::MENU_BUTTON:
+			case Buttons::MENU_BUTTON:
 				DiskUtilPage::set_entry(e);
 				DiskUtilPage::set_callback(&refresh_dir);
 				pages_->open(Pages::DISK_UTIL_PAGE);
@@ -139,7 +140,7 @@ namespace DiskNavigatorPage {
 				break;
 			}
 
-			int function = Controller::buttonToFunction(id);
+			int function = buttons_->toFunction(id);
 			if (function >= 0 && function < num_footer_options_) {
 				if (footer_callback_) {
 					footer_callback_(function);

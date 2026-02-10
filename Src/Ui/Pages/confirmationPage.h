@@ -6,6 +6,7 @@ namespace ConfirmationPage {
 	using TopPage::canvas_;
 	using TopPage::pages_;
 	using TopPage::leds_;
+	using TopPage::buttons_;
 
 	enum Option {
 		CONFIRM,
@@ -55,7 +56,7 @@ namespace ConfirmationPage {
 	}
 
 	void on_button(int id, int state) {
-		int selected_option = Controller::buttonToFunction(id);
+		int selected_option = buttons_->toFunction(id);
 		if (state >= 1 && selected_option >= 0 && selected_option < num_options_) {
 			callback_(selected_option);
 			pages_->close(Pages::CONFIRMATION_PAGE);

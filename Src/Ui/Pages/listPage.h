@@ -9,6 +9,7 @@ namespace ListPage {
 	using TopPage::canvas_;
 	using TopPage::pages_;
 	using TopPage::leds_;
+	using TopPage::buttons_;
 
 	SettingsList *list_;
 	void(*clearCallback_)() = nullptr;
@@ -53,13 +54,13 @@ namespace ListPage {
 
 		switch (id)
 		{
-		case Controller::UP_BUTTON:
+		case Buttons::UP_BUTTON:
 			list_->onUpButton();
 			break;
-		case Controller::DOWN_BUTTON:
+		case Buttons::DOWN_BUTTON:
 			list_->onDownButton();
 			break;
-		case Controller::CLEAR_BUTTON:
+		case Buttons::CLEAR_BUTTON:
 			if (clearCallback_) {
 				ConfirmationPage::set("CLEAR SETTINGS ?", [](int option) {
 					if (option == ConfirmationPage::CONFIRM) {
@@ -69,13 +70,13 @@ namespace ListPage {
 				pages_->open(Pages::CONFIRMATION_PAGE);
 			}
 			break;
-		case Controller::COPY_BUTTON:
+		case Buttons::COPY_BUTTON:
 			if (copyCallback_) {
 				copyCallback_();
 				MessagePainter::show("SETTINGS COPIED");
 			}
 			break;
-		case Controller::PASTE_BUTTON:
+		case Buttons::PASTE_BUTTON:
 			if (pasteCallback_) {
 				ConfirmationPage::set("OVERWRITE SETTINGS ?", [](int option) {
 					if (option == ConfirmationPage::CONFIRM) {
@@ -97,10 +98,10 @@ namespace ListPage {
 
 	void on_encoder(int id, int state) {
 		/*
-		int index = Controller::encoderToFunction(id);
+		int index = Buttons::encoderToFunction(id);
 		if (index >= 0) {
-			bool pressed = Controller::encoderIsPressed(id);
-			bool shifted = Controller::isPressed(Controller::SHIFT);
+			bool pressed = Buttons::encoderIsPressed(id);
+			bool shifted = buttons_->isPressed(Buttons::SHIFT);
 			list_->onEncoder(index, state, pressed || shifted);
 		}
 			*/

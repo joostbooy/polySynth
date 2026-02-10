@@ -3,22 +3,22 @@
 #include "emptyPage.h"
 #include "listPage.h"
 #include "confirmationPage.h"
-//#include "midiPage.h"
 #include "optionListPage.h"
 #include "hardwareTestPage.h"
 #include "textInputPage.h"
 #include "diskRetryPage.h"
 #include "diskUtilPage.h"
+//#include "lfoPage.h"
 
 Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::EMPTY_PAGE]						= &EmptyPage::page,
-	// [Pages::MIDI_PAGE]						= &MidiPage::page,
 	[Pages::CONFIRMATION_PAGE]				= &ConfirmationPage::page,
 	[Pages::OPTION_LIST_PAGE]				= &OptionListPage::page,
 	[Pages::HARDWARE_TEST_PAGE]				= &HardwareTestPage::page,
 	[Pages::TEXT_INPUT_PAGE]				= &TextInputPage::page,
 	[Pages::DISK_RETRY_PAGE]				= &DiskRetryPage::page,
 	[Pages::DISK_UTIL_PAGE]					= &DiskUtilPage::page,
+//	[Pages::LFO_PAGE]						= &LfoPage::page,
 };
 
 void Pages::init(Settings *settings, Engine *engine, Ui *ui) {

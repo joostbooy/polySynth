@@ -12,13 +12,16 @@
 #include "adc.h"
 #include "leds.h"
 #include "pots.h"
+#include "buttons.h"
 #include <stdint.h>
 
 class Ui {
 
 public:
 
+	Pots &pots() { return pots_; }
 	Leds &leds() { return leds_; }
+	Buttons &buttons() { return buttons_; }
 	Pages &pages() { return pages_; }
 	Canvas &canvas() { return canvas_; }
 
@@ -42,6 +45,8 @@ private:
 	Canvas canvas_;
 	Pages pages_;
 	Leds leds_;
+	Buttons buttons_;
+	Pots pots_;
 
 	Engine *engine_;
 	Matrix *matrix_;

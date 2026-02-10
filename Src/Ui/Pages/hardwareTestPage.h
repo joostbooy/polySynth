@@ -1,7 +1,7 @@
 #ifndef HardwareTestPage_h
 #define HardwareTestPage_h
 
-#include "controller.h"
+#include "buttons.h"
 #include "pots.h"
 #include "textBufferPainter.h"
 
@@ -9,100 +9,102 @@ namespace HardwareTestPage {
 
 using TopPage::canvas_;
 using TopPage::leds_;
+using TopPage::buttons_;
 using TopPage::pages_;
 using TopPage::settings_;
 using TopPage::str_;
+using TopPage::pots_;
 
 bool potsEnabled;
 uint8_t lastPotValue[Pots::NUM_POTS];
 
 const char* buttonIdText(int id) {
   switch (id) {
-    case Controller::TUNE_1_OCT_UP:
+    case Buttons::TUNE_1_OCT_UP:
       return "TUNE_1_OCT_UP";
-    case Controller::TUNE_1_OCT_DOWN:
+    case Buttons::TUNE_1_OCT_DOWN:
       return "TUNE_1_OCT_DOWN";
-    case Controller::TUNE_2_OCT_UP:
+    case Buttons::TUNE_2_OCT_UP:
       return "TUNE_2_OCT_UP";
-    case Controller::TUNE_2_OCT_DOWN:
+    case Buttons::TUNE_2_OCT_DOWN:
       return "TUNE_2_OCT_DOWN";
-    case Controller::LFO_1_TYPE:
+    case Buttons::LFO_1_TYPE:
       return "LFO_1_TYPE";
-    case Controller::LFO_2_TYPE:
+    case Buttons::LFO_2_TYPE:
       return "LFO_2_TYPE";
-    case Controller::TUNE_1_VCO_MOD:
+    case Buttons::TUNE_1_VCO_MOD:
       return "TUNE_1_VCO_MOD";
-    case Controller::TUNE_1_MOD_TYPE:
+    case Buttons::TUNE_1_MOD_TYPE:
       return "TUNE_1_MOD_TYPE";
-    case Controller::VCO_2_SYNC:
+    case Buttons::VCO_2_SYNC:
       return "VCO_2_SYNC";
-    case Controller::TUNE_2_MOD_TYPE:
+    case Buttons::TUNE_2_MOD_TYPE:
       return "TUNE_2_MOD_TYPE";
-    case Controller::SHAPE_1_MOD_TYPE:
+    case Buttons::SHAPE_1_MOD_TYPE:
       return "SHAPE_1_MOD_TYPE";
-    case Controller::VCO_1_OSC_TYPE:
+    case Buttons::VCO_1_OSC_TYPE:
       return "VCO_1_OSC_TYPE";
-    case Controller::SHAPE_2_MOD_TYPE:
+    case Buttons::SHAPE_2_MOD_TYPE:
       return "SHAPE_2_MOD_TYPE";
-    case Controller::VCO_2_OSC_TYPE:
+    case Buttons::VCO_2_OSC_TYPE:
       return "VCO_2_OSC_TYPE";
-    case Controller::VCO_MOD_SOURCE:
+    case Buttons::VCO_MOD_SOURCE:
       return "VCO_MOD_SOURCE";
-    case Controller::SLIDE_VCO_SELECT:
+    case Buttons::SLIDE_VCO_SELECT:
       return "SLIDE_VCO_SELECT";
-    case Controller::CUTOFF_1_MOD_TYPE:
+    case Buttons::CUTOFF_1_MOD_TYPE:
       return "CUTOFF_1_MOD_TYPE";
-    case Controller::VCO_1_MUTE:
+    case Buttons::VCO_1_MUTE:
       return "VCO_1_MUTE";
-    case Controller::CUTOFF_2_MOD_TYPE:
+    case Buttons::CUTOFF_2_MOD_TYPE:
       return "CUTOFF_2_MOD_TYPE";
-    case Controller::VCO_2_MUTE:
+    case Buttons::VCO_2_MUTE:
       return "VCO_2_MUTE";
-    case Controller::VCO_MOD_DEPTH_MOD_TYPE:
+    case Buttons::VCO_MOD_DEPTH_MOD_TYPE:
       return "VCO_MOD_DEPTH_MOD_TYPE";
-    case Controller::VOLUME_MOD_TYPE:
+    case Buttons::VOLUME_MOD_TYPE:
       return "VOLUME_MOD_TYPE";
-    case Controller::VCF_1_TYPE:
+    case Buttons::VCF_1_TYPE:
       return "VCF_1_TYPE";
-    case Controller::CUTOFF_1_VCO_MOD:
+    case Buttons::CUTOFF_1_VCO_MOD:
       return "CUTOFF_1_VCO_MOD";
-    case Controller::VCF_2_ROUTING:
+    case Buttons::VCF_2_ROUTING:
       return "VCF_2_ROUTING";
-    case Controller::CUTOFF_2_VCO_MOD:
+    case Buttons::CUTOFF_2_VCO_MOD:
       return "CUTOFF_2_VCO_MOD";
-    case Controller::VOLUME_VCO_MOD:
+    case Buttons::VOLUME_VCO_MOD:
       return "VOLUME_VCO_MOD";
-    case Controller::DISPLAY_B:
+    case Buttons::DISPLAY_B:
       return "DISPLAY_B";
-    case Controller::DISPLAY_A:
+    case Buttons::DISPLAY_A:
       return "DISPLAY_A";
-    case Controller::PATCH_PAGE:
+    case Buttons::PATCH_PAGE:
       return "PATCH_PAGE";
-    case Controller::ENVELOPE_PAGE:
+    case Buttons::ENVELOPE_PAGE:
       return "ENVELOPE_PAGE";
-    case Controller::VCO_PAGE:
+    case Buttons::VCO_PAGE:
       return "VCO_PAGE";
-    case Controller::PAN_MOD_TYPE:
+    case Buttons::PAN_MOD_TYPE:
       return "PAN_MOD_TYPE";
-    case Controller::DISPLAY_D:
+    case Buttons::DISPLAY_D:
       return "DISPLAY_D";
-    case Controller::DISPLAY_C:
+    case Buttons::DISPLAY_C:
       return "DISPLAY_C";
-    case Controller::LFO_PAGE:
+    case Buttons::LFO_PAGE:
       return "LFO_PAGE";
-    case Controller::MATRIX_PAGE:
+    case Buttons::MATRIX_PAGE:
       return "MATRIX_PAGE";
-    case Controller::SYSTEM_PAGE:
+    case Buttons::SYSTEM_PAGE:
       return "SYSTEM_PAGE";
-    case Controller::SHIFT:
+    case Buttons::SHIFT:
       return "SHIFT";
-    case Controller::ENC_X:
+    case Buttons::ENC_X:
       return "ENC_X";
-    case Controller::AMP_PAGE:
+    case Buttons::AMP_PAGE:
       return "AMP_PAGE";
-    case Controller::VCF_PAGE:
+    case Buttons::VCF_PAGE:
       return "VCF_PAGE";
-    case Controller::ENC_Y:
+    case Buttons::ENC_Y:
       return "ENC_Y";
     default:
       return "";
@@ -191,7 +193,7 @@ bool led_toggle_state_;
 
 void testPots() {
   for (size_t i = 0; i < Pots::NUM_POTS; i++) {
-    uint8_t value = Pots::read(i) * 255;
+    uint8_t value = pots_->read(i) * 255;
     if (value != lastPotValue[i]) {
       lastPotValue[i] = value;
       TextBufferPainter::write(str_.write(potIdText(i), " ", value));
@@ -212,8 +214,8 @@ void exit() {
 void on_button(int id, int state) {
   TextBufferPainter::write(str_.write(buttonIdText(id), " ", state));
 
-  if (Controller::isPressed(Controller::SHIFT)) {
-    switch (Controller::buttonToFunction(id)) {
+  if (buttons_->isPressed(Buttons::SHIFT)) {
+    switch (buttons_->toFunction(id)) {
       case TOGGLE_LEDS:
         if (state) {
           led_toggle_state_ ^= 1;
@@ -233,7 +235,7 @@ void on_button(int id, int state) {
           potsEnabled ^= 1;
           if (potsEnabled) {
             for (size_t i = 0; i < Pots::NUM_POTS; i++) {
-              uint8_t value = Pots::read(i) * 255;
+              uint8_t value = pots_->read(i) * 255;
               lastPotValue[i] = value;
             }
           }

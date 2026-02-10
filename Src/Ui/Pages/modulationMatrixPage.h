@@ -54,9 +54,9 @@ namespace ModulationMatrixPage {
 	}
 
 	void on_encoder(int id, int state) {
-		if (id == Controller::FUNCTION_ENC_A) {
+		if (id == Buttons::FUNCTION_ENC_A) {
 			scroll_to_source(src_ + state);
-		} else if (id == Controller::FUNCTION_ENC_D) {
+		} else if (id == Buttons::FUNCTION_ENC_D) {
 			scroll_to_destination(dest_ + state);
 		}
 	}
@@ -65,29 +65,29 @@ namespace ModulationMatrixPage {
 		if (state) {
 			switch (id)
 			{
-			case Controller::UP_BUTTON:
-				on_encoder(Controller::FUNCTION_ENC_A, -1);
+			case Buttons::UP_BUTTON:
+				on_encoder(Buttons::FUNCTION_ENC_A, -1);
 				break;
-			case Controller::DOWN_BUTTON:
-				on_encoder(Controller::FUNCTION_ENC_A, 1);
+			case Buttons::DOWN_BUTTON:
+				on_encoder(Buttons::FUNCTION_ENC_A, 1);
 				break;
-			case Controller::LEFT_BUTTON:
-				on_encoder(Controller::FUNCTION_ENC_D, -1);
+			case Buttons::LEFT_BUTTON:
+				on_encoder(Buttons::FUNCTION_ENC_D, -1);
 				break;
-			case Controller::RIGHT_BUTTON:
-				on_encoder(Controller::FUNCTION_ENC_D, 1);
+			case Buttons::RIGHT_BUTTON:
+				on_encoder(Buttons::FUNCTION_ENC_D, 1);
 				break;
-			case Controller::FUNCTION_BUTTON_A:
-			case Controller::FUNCTION_BUTTON_D:
-			case Controller::FUNCTION_ENC_PUSH_A:
-			case Controller::FUNCTION_ENC_PUSH_D:
+			case Buttons::FUNCTION_BUTTON_A:
+			case Buttons::FUNCTION_BUTTON_D:
+			case Buttons::FUNCTION_ENC_PUSH_A:
+			case Buttons::FUNCTION_ENC_PUSH_D:
 				settings_->selected_modulation_matrix().toggle(src_, dest_);
 				break;
-			case Controller::COPY_BUTTON:
+			case Buttons::COPY_BUTTON:
 				modulationMatrix_.paste(&settings_->selected_modulation_matrix());
 				pasteable_ = true;
 				break;
-			case Controller::PASTE_BUTTON:
+			case Buttons::PASTE_BUTTON:
 				if (pasteable_) {
 					ConfirmationPage::set("OVERWRITE MATRIX ?", [](int option) {
 						if (option == ConfirmationPage::CONFIRM) {
@@ -97,7 +97,7 @@ namespace ModulationMatrixPage {
 					pages_->open(Pages::CONFIRMATION_PAGE);
 				}
 				break;
-			case Controller::CLEAR_BUTTON:
+			case Buttons::CLEAR_BUTTON:
 				ConfirmationPage::set("CLEAR MATRIX ?", [](int option) {
 					if (option == ConfirmationPage::CONFIRM) {
 						settings_->selected_modulation_matrix().clear();
