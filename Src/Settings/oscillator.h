@@ -26,6 +26,8 @@ class Oscillator {
     setLinkSlideAmmount(true);
     setSlideEnable1(false);
     setSlideEnable2(false);
+    setOctaveOffset1(0);
+    setOctaveOffset2(0);
   }
 
   static const char* type1Text(Type1 type) {
@@ -281,6 +283,32 @@ class Oscillator {
     return SettingsText::floatToText(slideAmmount2());
   }
 
+  // Octave offset 1
+  int octaveOffset1() {
+    return octaveOffset1_;
+  }
+
+  void setOctaveOffset1(int value) {
+    octaveOffset1_ = SettingsUtils::clip(-24, 24, value);
+  }
+
+  const char* octaveOffset1Text() {
+    return SettingsText::intToText(octaveOffset1());
+  }
+
+  // Octave offset 2
+  int octaveOffset2() {
+    return octaveOffset2_;
+  }
+
+  void setOctaveOffset2(int value) {
+    octaveOffset2_ = SettingsUtils::clip(-24, 24, value);
+  }
+
+  const char* octaveOffset2Text() {
+    return SettingsText::intToText(octaveOffset2());
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(fmEnable_);
@@ -300,6 +328,8 @@ class Oscillator {
     fileWriter.write(linkSlideAmmount_);
     fileWriter.write(slideEnable1_);
     fileWriter.write(slideEnable2_);
+    fileWriter.write(octaveOffset1_);
+    fileWriter.write(octaveOffset2_);
   }
 
   void load(FileReader& fileReader) {
@@ -320,6 +350,8 @@ class Oscillator {
     fileReader.read(linkSlideAmmount_);
     fileReader.read(slideEnable1_);
     fileReader.read(slideEnable2_);
+    fileReader.read(octaveOffset1_);
+    fileReader.read(octaveOffset2_);
   }
 
   void paste(Oscillator* oscillator) {
@@ -340,6 +372,8 @@ class Oscillator {
     linkSlideAmmount_ = oscillator->linkSlideAmmount();
     slideEnable1_ = oscillator->slideEnable1();
     slideEnable2_ = oscillator->slideEnable2();
+    octaveOffset1_ = oscillator->octaveOffset1();
+    octaveOffset2_ = oscillator->octaveOffset2();
   }
 
  private:
@@ -358,6 +392,8 @@ class Oscillator {
   bool linkSlideAmmount_;
   float slideAmmount1_;
   float slideAmmount2_;
+  int octaveOffset1_;
+  int octaveOffset2_;
   Type1 type1_;
   Type2 type2_;
 };

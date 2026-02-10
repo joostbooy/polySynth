@@ -166,6 +166,43 @@ class Leds {
   }
 
   // Osc 1
+  void setOctaveOffset1(int offset) {
+    switch (offset) {
+      case -24:
+        set(1, 15, RED);
+        set(0, 15, BLACK);
+        set(0, 13, BLACK);
+        set(1, 13, BLACK);
+        break;
+      case -12:
+        set(1, 15, BLACK);
+        set(0, 15, RED);
+        set(0, 13, BLACK);
+        set(1, 13, BLACK);
+        break;
+      case 0:
+        set(1, 15, BLACK);
+        set(0, 15, BLACK);
+        set(0, 13, BLACK);
+        set(1, 13, BLACK);
+        break;
+      case 12:
+        set(1, 15, BLACK);
+        set(0, 15, BLACK);
+        set(0, 13, RED);
+        set(1, 13, BLACK);
+        break;
+      case 24:
+        set(1, 15, BLACK);
+        set(0, 15, BLACK);
+        set(0, 13, BLACK);
+        set(1, 13, RED);
+        break;
+      default:
+        break;
+    }
+  }
+
   void setOsc1Type(Oscillator::Type1 type) {
     switch (type) {
       case Oscillator::SAW1:
@@ -198,6 +235,43 @@ class Leds {
   }
 
   // Osc 2
+  void setOctaveOffset2(int offset) {
+    switch (offset) {
+      case -24:
+        set(3, 15, RED);
+        set(2, 15, BLACK);
+        set(2, 13, BLACK);
+        set(3, 13, BLACK);
+        break;
+      case -12:
+        set(3, 15, BLACK);
+        set(2, 15, RED);
+        set(2, 13, BLACK);
+        set(3, 13, BLACK);
+        break;
+      case 0:
+        set(3, 15, BLACK);
+        set(2, 15, BLACK);
+        set(2, 13, BLACK);
+        set(3, 13, BLACK);
+        break;
+      case 12:
+        set(3, 15, BLACK);
+        set(2, 15, BLACK);
+        set(2, 13, RED);
+        set(3, 13, BLACK);
+        break;
+      case 24:
+        set(3, 15, BLACK);
+        set(2, 15, BLACK);
+        set(2, 13, BLACK);
+        set(3, 13, RED);
+        break;
+      default:
+        break;
+    }
+  }
+
   void setOsc2Sync(bool state) {
     set(1, 14, state ? RED : BLACK);
   }
