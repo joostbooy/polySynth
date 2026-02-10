@@ -9,6 +9,7 @@ class Amp {
   void init() {
     setPan(0.5f);
     setDrive(0.f);
+    setAmEnable(false);
   }
 
   // Pan
@@ -24,7 +25,7 @@ class Amp {
     return SettingsText::floatToText(pan(), -100, 100);
   }
 
-    // Drive
+  // Drive
   float drive() {
     return drive_;
   }
@@ -37,25 +38,42 @@ class Amp {
     return SettingsText::floatToText(pan(), 0, 100);
   }
 
-   // Storage
+  // Enable AM
+  float amEnable() {
+    return amEnable_;
+  }
+
+  void setAmEnable(bool value) {
+    amEnable_ = value;
+  }
+
+  const char* enableAmText() {
+    return SettingsText::boolToOnOff(amEnable());
+  }
+
+  // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(pan_);
     fileWriter.write(drive_);
+    fileWriter.write(amEnable_);
   }
 
   void load(FileReader& fileReader) {
     fileReader.read(pan_);
     fileReader.read(drive_);
+    fileReader.read(amEnable_);
   }
 
   void paste(Amp* amp) {
     pan_ = amp->pan();
     drive_ = amp->drive();
+    amEnable_ = amp->amEnable();
   }
 
  private:
   float pan_;
   float drive_;
+  bool amEnable_;
 };
 
 #endif  // Amp_h

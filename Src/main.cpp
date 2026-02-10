@@ -10,6 +10,8 @@
 #include "switches.h"
 #include "timer.h"
 
+#include "lookupTables.h"
+
 #include "disk.h"
 #include "settings.h"
 #include "engine.h"
@@ -18,15 +20,13 @@
 Adc adc;
 Dac dac;
 Usb usb;
-//Gate gate;
 Uart uart;
 Sys sys;
 Timer timer;
-//Sdram sdram;
 Sdio sdio;
 Matrix matrix;
 Display display;
-Switches switches_;
+Switches switches;
 
 Disk disk;
 Ui ui;
@@ -51,10 +51,9 @@ extern "C" {
 		}
 		TIM3->SR = ~TIM_IT_UPDATE;
 
-		Debug::write(1);
-		dac.send();
-		Debug::write(0);
-		//engine.tick();
+	//	Debug::write(1);
+		engine.tick();
+	//	Debug::write(0);
 	}
 
 	// 1Khz
@@ -63,40 +62,42 @@ extern "C" {
 			return;
 		}
 		TIM2->SR = ~TIM_IT_UPDATE;
-		//ui.poll();
-		// engine.update();
+
+		// Debug::write(1);
+		 ui.poll();
+		 engine.update();
+		// Debug::write(0);
 	}
 } //extern "C"
 
 int main(void)
 {
 	// Init drivers
-	// HAL_Init();
 	sys.init();
 
 	Debug::init();
-	//Micros::init();
+	Micros::init();
 
 	// usb.init();
-	dac.init();
+	 dac.init();
+	 uart.init();
+	 switches.init();
+	 adc.init();
+	 matrix.init();
+	 display.init();
+	 sdio.init();
 
-	// uart.init();
-	// switches_.init();
-	// adc.init();
-	// matrix.init();
-	// display.init();
-	// sdio.init();
-
-	// disk.init(&sdio);
-	// settings.init(&disk);
-	// engine.init(&settings, &uart, &usb, &dac, &switches_);
-	// ui.init(&settings, &engine, &matrix, &display, &switches_);
+	 disk.init(&sdio);
+	 settings.init(&disk);
+	 //settings.load();
+	 engine.init(&settings, &uart, &usb, &dac, &switches);
+	 ui.init(&settings, &engine, &matrix, &display, &switches, &adc);
 
 	// Start timers
-	timer.start3(CLOCK_ISR_FREQ);
-	//timer.start_2(1000);
+	timer.start3(UPDATE_FREQ);
+	timer.start2(SAMPLE_RATE);
 
 	while (1) {
-		// ui.process();
+		ui.process();
 	}
 }

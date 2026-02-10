@@ -11,10 +11,10 @@ tables = []
 ppqn = 24
 min_bpm = 30
 max_bpm = 300
-clock_isr_freq = 8000
+update_freq = 8000
 
 num_mux_channels = 8
-sample_rate = clock_isr_freq / num_mux_channels
+sample_rate = update_freq / num_mux_channels
 
 
 '''____________________
@@ -25,7 +25,7 @@ name = 'bpm_inc'
 
 bpm = numpy.arange(min_bpm, max_bpm + 1)
 hertz = bpm / 60 * ppqn
-values = hertz / clock_isr_freq * (1 << 32);
+values = hertz / update_freq * (1 << 32);
 
 tables.append('uint32_t ' + name)
 tables.append(values.astype(int))
@@ -112,7 +112,7 @@ defines = [
 'SAMPLE_RATE '		+ str(int(sample_rate)),
 'MIN_BPM '			+ str(int(min_bpm)),
 'MAX_BPM '			+ str(int(max_bpm)),
-'CLOCK_ISR_FREQ '	+ str(int(clock_isr_freq)),
+'UPDATE_FREQ '		+ str(int(update_freq)),
 'EXP_TABLE_SIZE '	+ str(int(exp_table_size)),
 'PHASE_TABLE_SIZE '	+ str(int(phase_table_size)),
 ]

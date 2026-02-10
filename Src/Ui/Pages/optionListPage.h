@@ -56,6 +56,7 @@ namespace OptionListPage {
 	}
 
 	void on_button(int id, int state) {
+		/*
 		if (state) {
 			if (Controller::UP_BUTTON == id) {
 				on_encoder(0, -1);
@@ -80,11 +81,11 @@ namespace OptionListPage {
 				return;
 			}
 		}
+			*/
 	}
 
 	void refresh_leds() {
-		leds_->setFooterEncoders(4);
-		leds_->setFooterButtons(4);
+	
 	}
 
 	void draw() {

@@ -68,7 +68,7 @@ namespace DiskRetryPage {
 	}
 
 	void refresh_leds() {
-		leds_->setFooterButtons(NUM_OPTIONS);
+		
 	}
 
 	void msTick(uint16_t ticks) {

@@ -27,7 +27,7 @@ class SettingsText {
     return str.write(static_cast<int>(percentage), "%");
   }
 
-  static const char* floatToText(float value, const char* unit = nullptr) {
+  static const char* floatToText(float value, const char* unit = "") {
     uint32_t intergral = value;
     uint32_t fractional = (value - intergral) * 100.f;
     return str.write(intergral, ".", fractional, " ", unit);

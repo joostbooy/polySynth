@@ -22,18 +22,22 @@ class ModMatrixEngine {
     source_[ModMatrix::CV_1 + channel] = value;
   }
 
-  void setMidiVelocity(float value) {
-    source_[ModMatrix::MIDI_VELOCITY] = value;
+  void setMidiVelocity(uint8_t value) {
+    source_[ModMatrix::MIDI_VELOCITY] = (1.f / 127.f) * value;
   }
 
-  void setMidiBend(float value) {
-    source_[ModMatrix::MIDI_BEND] = value;
+  void setMidiBend(uint16_t value) {
+    source_[ModMatrix::MIDI_BEND] = (1.f / 16383.f) * value;
   }
 
-  void setMidiCc(uint8_t number, float value) {
+  void setMidiNote(uint8_t note) {
+    source_[ModMatrix::MIDI_BEND] = (1.f / 127.f) * note;
+  }
+
+  void setMidiCc(uint8_t number, uint8_t value) {
     for (size_t i = 0; i < Settings::kNumUserCc; ++i) {
       if (number == modMatrix_->midiCcNumber(i)) {
-        source_[i + ModMatrix::MIDI_CC_A] = value;
+        source_[i + ModMatrix::MIDI_CC_A] = (1.f / 127.f) * value;
       }
     }
   }

@@ -176,7 +176,6 @@ public:
 		}
 	}
 
-
 	// Sustain level
 	float sustainLevel() {
 		return sustainLevel_;

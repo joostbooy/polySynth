@@ -6,7 +6,7 @@
 #define SAMPLE_RATE 1000
 #define MIN_BPM 30
 #define MAX_BPM 300
-#define CLOCK_ISR_FREQ 8000
+#define UPDATE_FREQ 8000
 #define EXP_TABLE_SIZE 1024
 #define PHASE_TABLE_SIZE 256
 

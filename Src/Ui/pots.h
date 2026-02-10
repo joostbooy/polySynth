@@ -5,7 +5,7 @@
 
 class Pots {
  public:
-  enum {
+  enum Id {
     RESONANCE_B,
     RESONANCE_A,
     TUNE_A,
@@ -41,6 +41,11 @@ class Pots {
 
     NUM_POTS
   };
+
+  static void init() {
+    std::fill(&raw_[0], &raw_[NUM_POTS], 0.f);
+    std::fill(&filtered_[0], &filtered_[NUM_POTS], 0.f);
+  }
 
   static void write(float value, int id) {
     raw_[id] = value;

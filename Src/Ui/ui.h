@@ -9,7 +9,9 @@
 #include "matrix.h"
 #include "display.h"
 #include "switches.h"
+#include "adc.h"
 #include "leds.h"
+#include "pots.h"
 #include <stdint.h>
 
 class Ui {
@@ -20,7 +22,7 @@ public:
 	Pages &pages() { return pages_; }
 	Canvas &canvas() { return canvas_; }
 
-	void init(Settings*, Engine*, Matrix*, Display*, Switches*);
+	void init(Settings*, Engine*, Matrix*, Display*, Switches*, Adc*);
 	void poll();
 	void process();
 	void sendDisplay();
@@ -41,9 +43,11 @@ private:
 	Pages pages_;
 	Leds leds_;
 
+	Engine *engine_;
 	Matrix *matrix_;
 	Display *display_;
 	Switches *switches_;
+	Adc *adc_;
 
 	uint32_t lastInterval_ = 0;
 	uint32_t displayInterval_ = 0;

@@ -57,13 +57,9 @@ class MidiEngine {
     }
   }
 
-  bool getLastReceived(uint8_t* ptr) {
-    if (lastReceived_ != 0) {
+  void getLastReceived(uint8_t* ptr) {
       *ptr = lastReceived_;
       lastReceived_ = 0;
-      return true;
-    }
-    return false;
   }
 
   bool pull(Event& e) {

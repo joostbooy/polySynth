@@ -103,8 +103,7 @@ class Voice {
     modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
     float *data = modMatrixEngine_->process();
 
-    float gain = fadePhase_ * data[ModMatrix::GAIN];
-    if (gain == 0.0f) {
+    if (fadePhase_ == 0.f || envelopeEngine_[0].stage() == EnvelopeEngine::IDLE) {
       state_ = IDLE;
     }
 
@@ -114,7 +113,7 @@ class Voice {
     dac_->set(index, 2, (p.oscillator().shape1() * data[ModMatrix::SHAPE_1]) * 65535);
     dac_->set(index, 3, (calculatePitchOsc1() * data[ModMatrix::TUNE_1]) * 65535);
     dac_->set(index, 4, (p.amp().drive() * data[ModMatrix::DRIVE]) * 65535);
-    dac_->set(index, 5, (gain) * 65535);
+    dac_->set(index, 5, (fadePhase_ * data[ModMatrix::GAIN]) * 65535);
     dac_->set(index, 6, (p.filter().resonance2() * data[ModMatrix::RESONANCE_2]) * 65535);
     dac_->set(index, 7, (calculatePitchOsc2() * data[ModMatrix::TUNE_2]) * 65535);
     dac_->set(index, 8, (p.filter().cutoff1() * data[ModMatrix::CUTOFF_1]) * 65535);

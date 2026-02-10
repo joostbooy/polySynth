@@ -78,10 +78,6 @@ class Patch {
     return envelope_[index];
   }
 
-  Envelope& modEnvelope() {
-    return envelope_[1];
-  }
-
   ModMatrix& modMatrix() {
     return modMatrix_;
   }

@@ -67,7 +67,7 @@ namespace ConfirmationPage {
 	}
 
 	void refresh_leds() {
-		leds_->setFooterButtons(num_options_);
+
 	}
 
 	void draw() {

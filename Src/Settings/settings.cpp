@@ -2,50 +2,61 @@
 
 #include "diskUtils.h"
 
-bool Settings::save(const char* new_path) {
-/*
-	path.write(new_path, "/", project_name());
-	if (!save()) {
-		path.clear();
-		return false;
-	}
-	*/
-	return true;
+bool Settings::save() {
+  fileWriter.start(&disk_->file(), "0:/PATCHES.SET", current_version());
+
+  fileWriter.write(patchIndex_);
+
+  for (size_t i = 0; i < kNumPatches; i++) {
+    patch(i).save(fileWriter);
+  }
+
+  fileWriter.stop();
+
+  return fileWriter.writeOk();
+};
+
+bool Settings::load() {
+  init();
+
+  fileReader.start(&disk_->file(), "0:/PATCHES.SET");
+
+  fileReader.read(patchIndex_);
+
+  for (size_t i = 0; i < kNumPatches; i++) {
+    patch(i).load(fileReader);
+  }
+
+  fileReader.stop();
+
+  if (!fileReader.readOk()) {
+    init();
+    return false;
+  }
+
+  loadPatch();
+  return true;
+};
+
+bool Settings::saveCalibration() {
+  fileWriter.start(&disk_->file(), "0:/CALIBRATION.SET", current_version());
+  calibration_.save(fileWriter);
+  fileWriter.stop();
+
+  return fileWriter.writeOk();
 }
 
-bool Settings::save() {
-	if (!path.length()) {
-		return false;
-	}
+bool Settings::loadCalibration() {
+  fileReader.start(&disk_->file(), "0:/CALIBRATION.SET");
+  calibration_.load(fileReader);
+  fileReader.stop();
 
-	fileWriter.start(&disk_->file(), path.read(), current_version());
+  if (fileReader.readOk()) {
+    calibrationLoaded_ = true;
+  } else {
+    calibration_.init();
+    calibrationLoaded_ = false;
+  }
 
-	//midi().save(fileWriter);
-
-
-	fileWriter.stop();
-
-	if (!fileWriter.writeOk()) {
-		return false;
-	}
-
-	return true;
-};
-
-bool Settings::load(const char* new_path) {
-	init();	// also clears the path
-
-	fileReader.start(&disk_->file(), new_path);
-
-	//midi().load(fileReader);
-
-	fileReader.stop();
-
-	if (!fileReader.readOk()) {
-		init();
-		return false;
-	}
-
-	path.write(new_path);	// the new valid path
-	return true;
-};
+  return calibrationLoaded_;
+}

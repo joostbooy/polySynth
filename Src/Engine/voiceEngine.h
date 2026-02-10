@@ -38,9 +38,7 @@ class VoiceEngine {
 
   void update() {
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
-      if (voice_[i].state() != Voice::IDLE) {
-        voice_[i].update(i);
-      }
+      voice_[i].update(i);
     }
     updateAvailableVoices();
   }

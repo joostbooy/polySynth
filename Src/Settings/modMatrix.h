@@ -105,11 +105,13 @@ class ModMatrix {
     for (size_t i = 0; i < NUM_SOURCES; ++i) {
       matrix_[i] = 0;
     }
+    matrix_[ENVELOPE_1] |= (1 << GAIN); // envelope 1 is always tied to gain !
   }
 
   void toggle(size_t src, size_t dest) {
     uint32_t data = matrix_[src];
     matrix_[src] = data ^ (1 << dest);
+    matrix_[ENVELOPE_1] |= (1 << GAIN);
   }
 
   // Midi CC

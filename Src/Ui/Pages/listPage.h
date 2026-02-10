@@ -46,6 +46,7 @@ namespace ListPage {
 	}
 
 	void on_button(int id, int state) {
+		/*
 		if (!state) {
 			return;
 		}
@@ -91,25 +92,22 @@ namespace ListPage {
 		default:
 			break;
 		}
+			*/
 	}
 
 	void on_encoder(int id, int state) {
+		/*
 		int index = Controller::encoderToFunction(id);
 		if (index >= 0) {
 			bool pressed = Controller::encoderIsPressed(id);
-			bool shifted = Controller::isPressed(Controller::SHIFT_BUTTON);
+			bool shifted = Controller::isPressed(Controller::SHIFT);
 			list_->onEncoder(index, state, pressed || shifted);
 		}
+			*/
 	}
 
 	void refresh_leds() {
-		for (int i = 0; i < list_->collumns(); ++i) {
-			if ((i + list_->topItem()) < list_->numItems()) {
-				leds_->setFooterEncoder(i, Leds::RED);
-			} else {
-				leds_->setFooterEncoder(i, Leds::BLACK);
-			}
-		}
+		
 	}
 
 	void draw() {

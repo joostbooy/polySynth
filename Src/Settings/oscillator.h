@@ -9,7 +9,6 @@ class Oscillator {
   enum Type2 { SAW2, TRIANGLE2, NOISE2, SQUARE2, NUM_TYPES2 };
 
   void init() {
-    setAmEnable(false);
     setFmEnable(false);
     setSyncEnable_(false);
     setType1(SAW1);
@@ -21,6 +20,7 @@ class Oscillator {
     setTrackNote1(true);
     setTrackNote2(true);
     setModDepth(0.f);
+    setModSource(0);
     setSlideAmmount1(0.f);
     setSlideAmmount2(0.f);
     setLinkSlideAmmount(true);
@@ -110,19 +110,6 @@ class Oscillator {
 
   const char* syncEnableText() {
     return SettingsText::boolToOnOff(syncEnable());
-  }
-
-  // AM enable
-  bool amEnable() {
-    return amEnable_;
-  }
-
-  void setAmEnable(bool value) {
-    amEnable_ = value;
-  }
-
-  const char* amEnableText() {
-    return SettingsText::boolToOnOff(amEnable());
   }
 
   // Mute Osc 1
@@ -216,6 +203,19 @@ class Oscillator {
     return SettingsText::floatToText(modDepth());
   }
 
+  // Mod source
+  int modSource() {
+    return modSource_;
+  }
+
+  void setModSource(int value) {
+    modDepth_ = value % 2;
+  }
+
+  const char* modSourceText() {
+    return SettingsText::str.write(modSource() == 0 ? "VCO 1" : "VCO 2");
+  }
+
   // Slide enablbe 1
   bool slideEnable1() {
     return slideEnable1_;
@@ -242,7 +242,7 @@ class Oscillator {
     return SettingsText::boolToOnOff(slideEnable2());
   }
 
-    // Link slide ammount
+  // Link slide ammount
   bool linkSlideAmmount() {
     return linkSlideAmmount_;
   }
@@ -268,7 +268,7 @@ class Oscillator {
     return SettingsText::floatToText(slideAmmount1());
   }
 
-    // Slide ammount 2
+  // Slide ammount 2
   float slideAmmount2() {
     return linkSlideAmmount() ? slideAmmount1_ : slideAmmount2_;
   }
@@ -284,7 +284,6 @@ class Oscillator {
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(fmEnable_);
-    fileWriter.write(amEnable_);
     fileWriter.write(muteOsc1_);
     fileWriter.write(muteOsc2_);
     fileWriter.write(shape1_);
@@ -295,6 +294,7 @@ class Oscillator {
     fileWriter.write(trackNote1_);
     fileWriter.write(trackNote2_);
     fileWriter.write(modDepth_);
+    fileWriter.write(modSource_);
     fileWriter.write(slideAmmount1_);
     fileWriter.write(slideAmmount2_);
     fileWriter.write(linkSlideAmmount_);
@@ -304,7 +304,6 @@ class Oscillator {
 
   void load(FileReader& fileReader) {
     fileReader.read(fmEnable_);
-    fileReader.read(amEnable_);
     fileReader.read(muteOsc1_);
     fileReader.read(muteOsc2_);
     fileReader.read(shape1_);
@@ -315,6 +314,7 @@ class Oscillator {
     fileReader.read(trackNote1_);
     fileReader.read(trackNote2_);
     fileReader.read(modDepth_);
+    fileReader.read(modSource_);
     fileReader.read(slideAmmount1_);
     fileReader.read(slideAmmount2_);
     fileReader.read(linkSlideAmmount_);
@@ -324,7 +324,6 @@ class Oscillator {
 
   void paste(Oscillator* oscillator) {
     fmEnable_ = oscillator->fmEnable();
-    amEnable_ = oscillator->amEnable();
     muteOsc1_ = oscillator->muteOsc1();
     muteOsc2_ = oscillator->muteOsc2();
     shape1_ = oscillator->shape1();
@@ -335,6 +334,7 @@ class Oscillator {
     trackNote1_ = oscillator->trackNote1();
     trackNote2_ = oscillator->trackNote2();
     modDepth_ = oscillator->modDepth();
+    modSource_ = oscillator->modSource();
     slideAmmount1_ = oscillator->slideAmmount1();
     slideAmmount2_ = oscillator->slideAmmount2();
     linkSlideAmmount_ = oscillator->linkSlideAmmount();
@@ -347,12 +347,12 @@ class Oscillator {
   bool trackNote2_;
   bool syncEnable_;
   bool fmEnable_;
-  bool amEnable_;
   bool muteOsc1_;
   bool muteOsc2_;
   float shape1_;
   float shape2_;
   float modDepth_;
+  bool modSource_;
   bool slideEnable1_;
   bool slideEnable2_;
   bool linkSlideAmmount_;

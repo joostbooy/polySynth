@@ -65,6 +65,7 @@ namespace TopPage {
 	}
 
 	void on_button(int id, int state) {
+		/*
 		Controller::onButton(id, state);
 
 		int chapter_id = Controller::buttonToChapter(id);
@@ -78,6 +79,7 @@ namespace TopPage {
 				pages_->open(Pages::PageId(chapter_.entry()->selected_page()));
 			}
 		}
+		*/
 	}
 
 	void on_encoder(int id, int state) {
@@ -89,7 +91,7 @@ namespace TopPage {
 	}
 
 	void refresh_leds() {
-		leds_->setChapter(chapter_.selected());
+		//leds_->setChapter(chapter_.selected());
 	}
 
 	void draw() {

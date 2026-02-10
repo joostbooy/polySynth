@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "chapter.h"
 
-#define SERIAL_ID(collumn, row) ((collumn * 8) + row)
+#define SERIAL_ID(collumn, row) ((collumn * 6) + row)
 
 class Controller {
 

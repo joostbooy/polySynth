@@ -112,15 +112,7 @@ namespace ModulationMatrixPage {
 	}
 
 	void refresh_leds() {
-		leds_->setFooterEncoder(0, Leds::RED);
-		leds_->setFooterEncoder(1, Leds::BLACK);
-		leds_->setFooterEncoder(2, Leds::BLACK);
-		leds_->setFooterEncoder(3, Leds::RED);
 
-		leds_->set_footer_button(0, Leds::RED);
-		leds_->set_footer_button(1, Leds::BLACK);
-		leds_->set_footer_button(2, Leds::BLACK);
-		leds_->set_footer_button(3, Leds::RED);
 	}
 
 	void draw_sources_text(int x, int y, int w, int h, int coll_w, int row_h) {

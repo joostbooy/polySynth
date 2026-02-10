@@ -13,7 +13,7 @@ class Settings {
  public:
   static const size_t kNumVoices = 8;
   static const size_t kNumUserCc = 4;
-  static const size_t kNumPatches = 128;
+  static const size_t kNumPatches = 150;
   static const size_t kNumLfos = 2;
   static const size_t kNumEnvelopes = 2;
 
@@ -23,8 +23,6 @@ class Settings {
     lfoIndex_ = 0;
     patchIndex_ = 0;
     envelopeIndex_ = 0;
-
-    path.clear();
 
     selectedPatch_.init();
     for (size_t i = 0; i < kNumPatches; i++) {
@@ -45,8 +43,7 @@ class Settings {
 
   // save & load
   bool save();
-  bool save(const char* new_path);
-  bool load(const char* new_path);
+  bool load();
 
   uint32_t current_version() {
     return 0;
@@ -79,7 +76,7 @@ class Settings {
 
   void savePatch() {
     patch_[patchIndex_].paste(&selectedPatch_);
-   //save();
+    save();
   }
 
   Disk* disk() {
@@ -91,16 +88,8 @@ class Settings {
     return calibration_;
   }
 
-  bool saveCalibration() {
-    calibration_.save(fileWriter);
-    return false;
-  }
-
-  bool loadCalibration() {
-    calibration_.init();
-    calibration_.load(fileReader);
-    return false;
-  }
+  bool saveCalibration();
+  bool loadCalibration();
 
   // oscilator
   Oscillator& oscillator() {

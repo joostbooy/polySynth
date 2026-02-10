@@ -59,7 +59,7 @@ private:
 	volatile uint16_t extBpm_;
 	volatile uint32_t tempoInc_, tempoPhase_, ticks, isrTicks_, isrAverage_;
 	volatile uint8_t numReadings_ = 0;
-	static const uint32_t kUpdatePeriod = 45000000UL / CLOCK_ISR_FREQ;
+	static const uint32_t kUpdatePeriod = 45000000UL / UPDATE_FREQ;
 };
 
 #endif
