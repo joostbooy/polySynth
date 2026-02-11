@@ -46,20 +46,20 @@ void Engine::cc(MidiEngine::Event& e) {
 
 // 8Khz, keep short !
 void Engine::tick() {
+    if (midiClockEngine_.tick()) {
+    for (size_t i = 0; i < Midi::NUM_PORTS; i++) {
+      if (settings_->midi().sendClock(i)) {
+          midiEngine_.writeClock(i, MidiEngine::CLOCK_PULSE);
+      }
+    }
+  }
+
   midiEngine_.poll();
 
   uint8_t data = 0;
   midiEngine_.getLastReceived(&data);
   if (data == MidiEngine::CLOCK_PULSE) {
     midiClockEngine_.syncBpm();
-  }
-
-  if (midiClockEngine_.tick()) {
-    for (size_t i = 0; i < Midi::NUM_PORTS; i++) {
-      if (settings_->midi().sendClock(i)) {
-        //   midiEngine_.writeClock(MidiEngine::CLOCK_PULSE);
-      }
-    }
   }
 
   dac_->send();
@@ -117,6 +117,7 @@ void Engine::processRequests() {
     clearRequest(KILL_VOICES);
   }
 }
+
 // 1Khz
 void Engine::update() {
   processRequests();
