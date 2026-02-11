@@ -15,7 +15,7 @@ void Ui::addEvent(ControlType type, uint8_t id, int8_t value) {
   uiQue.write(e);
 }
 
-void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* display, Switches* switches, Adc *adc) {
+void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* display, Switches* switches, Adc* adc) {
   engine_ = engine;
   settings_ = settings;
   matrix_ = matrix;
@@ -41,7 +41,7 @@ void Ui::poll() {
   matrix_->refresh(&reading);
 
   int collOffset = matrix_->currentCollumn() * 6;
-  
+
   for (int i = 0; i < 6; i++) {
     int index = i + collOffset;
     bool state = reading & (1 << i);
@@ -101,24 +101,28 @@ void Ui::process() {
     }
   }
 
-  processSwitches();
-
   uint32_t interval = (Micros::read() / 1000) - lastInterval_;
 
   if (interval >= 1) {
     lastInterval_ += interval;
-    leds_.setAll(Leds::BLACK);
-    pages_.refresh_leds();
-    matrix_->setLeds(leds_.data());
+    processLeds();
+    processPots();
+    processSwitches();
   }
 
   displayInterval_ += interval;
   if (displayInterval_ >= pages_.target_fps()) {
-    sendDisplay();
+    processDisplay();
   }
 }
 
-void Ui::sendDisplay() {
+void Ui::processLeds() {
+  leds_.setAll(Leds::BLACK);
+  pages_.refresh_leds();
+  matrix_->setLeds(leds_.data());
+}
+
+void Ui::processDisplay() {
   while (display_->dmaBusy());
   displayInterval_ = 0;
   canvas_.clear();
@@ -139,4 +143,187 @@ void Ui::processSwitches() {
   switches_->setFmFilter1Enable(p.filter().fmEnable1());
   switches_->setFmFilter2Enable(p.filter().fmEnable2());
   switches_->setSelectedFilter(p.filter().type(), p.filter().routing());
+}
+
+void Ui::processPots() {
+  for (size_t i = 0; i < Pots::NUM_POTS; i++) {
+    if (!potIsLocked(i)) {
+      writePotToSetting(i);
+    } else {
+      if (potUnlockDirection_[i] == CW) {
+        if (pots_.read(i) >= readPotToSetting(i)) {
+          writePotToSetting(i);
+          unlockPot(i);
+        }
+      } else if (potUnlockDirection_[i] == CCW) {
+        if (pots_.read(i) <= readPotToSetting(i)) {
+          writePotToSetting(i);
+          unlockPot(i);
+        }
+      }
+    }
+  }
+}
+
+float Ui::readPotToSetting(int id) {
+  Patch& p = settings_->selectedPatch();
+
+  switch (id) {
+    case Pots::RESONANCE_B:   return p.filter().resonance2();
+    case Pots::RESONANCE_A:   return p.filter().resonance1();
+    case Pots::TUNE_A:        return p.oscillator().tune1();
+    case Pots::TUNE_B:        return p.oscillator().tune2();
+    case Pots::SHAPE_A:       return p.oscillator().shape1();
+    case Pots::SHAPE_B:       return p.oscillator().shape2();
+    case Pots::CUTOFF_A:      return p.filter().cutoff1();
+    case Pots::CUTOFF_B:      return p.filter().cutoff2();
+    case Pots::PAN:           return p.amp().pan();
+    case Pots::MOD_DEPTH:     return p.oscillator().modDepth();
+    case Pots::DRIVE:         return p.amp().drive();
+    case Pots::SLIDE_AMMOUNT: return p.oscillator().slideAmmount1();
+    case Pots::LFO_SKEW_1:    return p.lfo(0).skew();
+    case Pots::LFO_SPEED_2:   return p.lfo(0).speed();
+    case Pots::LFO_SKEW_2:    return p.lfo(1).skew();
+    case Pots::LFO_SPEED_1:   return p.lfo(1).speed();
+    case Pots::A_TIME_1:      return p.envelope(0).attackTime();
+    case Pots::A_SHAPE_1:     return p.envelope(0).attackShape();
+    case Pots::D_TIME_1:      return p.envelope(0).decayTime();
+    case Pots::D_SHAPE_1:     return p.envelope(0).decayShape();
+    case Pots::S_LEVEL_1:     return p.envelope(0).sustainLevel();
+    case Pots::S_HOLD_1:      return p.envelope(0).holdTime();
+    case Pots::R_TIME_1:      return p.envelope(0).releaseTime();
+    case Pots::R_SHAPE_1:     return p.envelope(0).releaseShape();
+    case Pots::A_TIME_2:      return p.envelope(1).attackTime();
+    case Pots::A_SHAPE_2:     return p.envelope(1).attackShape();
+    case Pots::D_TIME_2:      return p.envelope(1).decayTime();
+    case Pots::D_SHAPE_2:     return p.envelope(1).decayShape();
+    case Pots::S_LEVEL_2:     return p.envelope(1).sustainLevel();
+    case Pots::S_HOLD_2:      return p.envelope(1).holdTime();
+    case Pots::R_TIME_2:      return p.envelope(1).releaseTime();
+    case Pots::R_SHAPE_2:     return p.envelope(1).releaseShape();
+    default:
+      break;
+  }
+  return 0.f;
+}
+
+void Ui::writePotToSetting(int id) {
+  Patch& p = settings_->selectedPatch();
+
+  switch (id) {
+    case Pots::RESONANCE_B:
+      p.filter().setResonace2(pots_.read(Pots::RESONANCE_B));
+      break;
+    case Pots::RESONANCE_A:
+      p.filter().setResonace1(pots_.read(Pots::RESONANCE_A));
+      break;
+    case Pots::TUNE_A:
+      p.oscillator().setTune1(pots_.read(Pots::TUNE_A));
+      break;
+    case Pots::TUNE_B:
+      p.oscillator().setTune2(pots_.read(Pots::Pots::TUNE_B));
+      break;
+    case Pots::SHAPE_A:
+      p.oscillator().setShape1(pots_.read(Pots::SHAPE_A));
+      break;
+    case Pots::SHAPE_B:
+      p.oscillator().setShape2(pots_.read(Pots::SHAPE_B));
+      break;
+    case Pots::CUTOFF_A:
+      p.filter().setCutoff1(pots_.read(Pots::CUTOFF_A));
+      break;
+    case Pots::CUTOFF_B:
+      p.filter().setCutoff2(pots_.read(Pots::CUTOFF_B));
+      break;
+    case Pots::PAN:
+      p.amp().setPan(pots_.read(Pots::PAN));
+      break;
+    case Pots::MOD_DEPTH:
+      p.oscillator().setModDepth(pots_.read(Pots::MOD_DEPTH));
+      break;
+    case Pots::DRIVE:
+      p.amp().setDrive(pots_.read(Pots::DRIVE));
+      break;
+    case Pots::SLIDE_AMMOUNT:
+      p.oscillator().setSlideAmmount1(pots_.read(Pots::RESONANCE_B));
+      break;
+    case Pots::LFO_SKEW_1:
+      p.lfo(0).setSkew(pots_.read(Pots::LFO_SKEW_1));
+      break;
+    case Pots::LFO_SPEED_2:
+      p.lfo(1).setSpeed(pots_.read(Pots::LFO_SPEED_2));
+      break;
+    case Pots::LFO_SKEW_2:
+      p.lfo(1).setSkew(pots_.read(Pots::LFO_SKEW_2));
+      break;
+    case Pots::LFO_SPEED_1:
+      p.lfo(0).setSpeed(pots_.read(Pots::LFO_SPEED_1));
+      break;
+    case Pots::A_TIME_1:
+      p.envelope(0).setAttackTime(pots_.read(Pots::A_TIME_1));
+      break;
+    case Pots::A_SHAPE_1:
+      p.envelope(0).setAttackShape(pots_.read(Pots::A_SHAPE_1));
+      break;
+    case Pots::D_TIME_1:
+      p.envelope(0).setDecayTime(pots_.read(Pots::D_TIME_1));
+      break;
+    case Pots::D_SHAPE_1:
+      p.envelope(0).setDecayShape(pots_.read(Pots::D_SHAPE_1));
+      break;
+    case Pots::S_LEVEL_1:
+      p.envelope(0).setSustainLevel(pots_.read(Pots::S_LEVEL_1));
+      break;
+    case Pots::S_HOLD_1:
+      p.envelope(0).setHoldTime(pots_.read(Pots::S_HOLD_1));
+      break;
+    case Pots::R_TIME_1:
+      p.envelope(0).setReleaseTime(pots_.read(Pots::R_TIME_1));
+      break;
+    case Pots::R_SHAPE_1:
+      p.envelope(0).setReleaseShape(pots_.read(Pots::R_SHAPE_1));
+      break;
+    case Pots::A_TIME_2:
+      p.envelope(1).setAttackTime(pots_.read(Pots::A_TIME_2));
+      break;
+    case Pots::A_SHAPE_2:
+      p.envelope(1).setAttackShape(pots_.read(Pots::A_SHAPE_2));
+      break;
+    case Pots::D_TIME_2:
+      p.envelope(1).setDecayTime(pots_.read(Pots::D_TIME_2));
+      break;
+    case Pots::D_SHAPE_2:
+      p.envelope(1).setDecayShape(pots_.read(Pots::D_SHAPE_2));
+      break;
+    case Pots::S_LEVEL_2:
+      p.envelope(1).setSustainLevel(pots_.read(Pots::S_LEVEL_2));
+      break;
+    case Pots::S_HOLD_2:
+      p.envelope(1).setHoldTime(pots_.read(Pots::S_HOLD_2));
+      break;
+    case Pots::R_TIME_2:
+      p.envelope(1).setReleaseTime(pots_.read(Pots::R_TIME_2));
+      break;
+    case Pots::R_SHAPE_2:
+      p.envelope(1).setReleaseShape(pots_.read(Pots::R_SHAPE_2));
+      break;
+    default:
+      break;
+  }
+}
+
+void Ui::lockAllPots() {
+  lockedPots_[0] = 0xFFFFFFFF;
+  lockedPots_[1] = 0xFFFFFFFF;
+  for (size_t i = 0; i < Pots::NUM_POTS; i++) {
+    potUnlockDirection_[i] = (pots_.read(i) <= readPotToSetting(i)) ? CW : CCW;
+  }
+}
+
+void Ui::unlockAllPots() {
+  lockedPots_[0] = 0;
+  lockedPots_[1] = 0;
+  for (size_t i = 0; i < Pots::NUM_POTS; i++) {
+    writePotToSetting(i);
+  }
 }

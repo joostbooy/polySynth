@@ -1,68 +1,92 @@
 #ifndef Ui_h
 #define Ui_h
 
-#include "que.h"
-#include "canvas.h"
-#include "settings.h"
-#include "pages.h"
-#include "engine.h"
-#include "matrix.h"
-#include "display.h"
-#include "switches.h"
-#include "adc.h"
-#include "leds.h"
-#include "pots.h"
-#include "buttons.h"
 #include <stdint.h>
 
+#include "adc.h"
+#include "buttons.h"
+#include "canvas.h"
+#include "display.h"
+#include "engine.h"
+#include "leds.h"
+#include "matrix.h"
+#include "pages.h"
+#include "pots.h"
+#include "que.h"
+#include "settings.h"
+#include "switches.h"
+
 class Ui {
+ public:
+  Pots& pots() {
+    return pots_;
+  }
+  Leds& leds() {
+    return leds_;
+  }
+  Buttons& buttons() {
+    return buttons_;
+  }
+  Pages& pages() {
+    return pages_;
+  }
+  Canvas& canvas() {
+    return canvas_;
+  }
 
-public:
+  void init(Settings*, Engine*, Matrix*, Display*, Switches*, Adc*);
+  void poll();
+  void process();
+  void sendDisplay();
+  void lockAllPots();
+  void unlockAllPots();
 
-	Pots &pots() { return pots_; }
-	Leds &leds() { return leds_; }
-	Buttons &buttons() { return buttons_; }
-	Pages &pages() { return pages_; }
-	Canvas &canvas() { return canvas_; }
+  bool potIsLocked(int id) {
+    return lockedPots_[id / 32] & (1 << (id % 32));
+  }
 
-	void init(Settings*, Engine*, Matrix*, Display*, Switches*, Adc*);
-	void poll();
-	void process();
-	void sendDisplay();
+ private:
+  enum UnlockDirection { CW, CCW };
+  enum ControlType { BUTTON, ENCODER };
 
-private:
-	enum ControlType {
-		BUTTON,
-		ENCODER
-	};
+  struct Event {
+    ControlType type;
+    uint8_t id;
+    int8_t value;
+  };
 
-	struct Event {
-		ControlType type;
-		uint8_t id;
-		int8_t value;
-	};
+  Canvas canvas_;
+  Pages pages_;
+  Leds leds_;
+  Buttons buttons_;
+  Pots pots_;
 
-	Canvas canvas_;
-	Pages pages_;
-	Leds leds_;
-	Buttons buttons_;
-	Pots pots_;
+  Engine* engine_;
+  Settings* settings_;
+  Matrix* matrix_;
+  Display* display_;
+  Switches* switches_;
+  Adc* adc_;
 
-	Engine *engine_;
-	Settings *settings_;
-	Matrix *matrix_;
-	Display *display_;
-	Switches *switches_;
-	Adc *adc_;
+  uint32_t lastInterval_ = 0;
+  uint32_t displayInterval_ = 0;
+  uint32_t lockedPots_[2];
+  uint8_t encoderRaw_[4];
+  uint8_t potUnlockDirection_[Pots::NUM_POTS];
+  bool lastState_[8 * 6];
 
-	uint32_t lastInterval_ = 0;
-	uint32_t displayInterval_ = 0;
-	uint8_t encoderRaw_[4];
-	bool lastState_[8 * 6];
+  Que<Ui::Event, 16> uiQue;
+  void addEvent(ControlType, uint8_t, int8_t);
+  void processSwitches();
+  void processPots();
+  void processLeds();
+  void processDisplay();
+  void writePotToSetting(int);
+  float readPotToSetting(int);
 
-	Que<Ui::Event, 16> uiQue;
-	void addEvent(ControlType, uint8_t, int8_t);
-	void processSwitches();
+  void unlockPot(int id) {
+    lockedPots_[id / 32] &= ~(1 << (id % 32));
+  }
 };
 
 #endif
