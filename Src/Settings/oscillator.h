@@ -28,6 +28,8 @@ class Oscillator {
     setSlideEnable2(false);
     setOctaveOffset1(0);
     setOctaveOffset2(0);
+    setTune1(0.5f);
+    setTune2(0.5f);
   }
 
   static const char* type1Text(Type1 type) {
@@ -309,6 +311,33 @@ class Oscillator {
     return SettingsText::intToText(octaveOffset2());
   }
 
+    // Tune 1
+  float tune1() {
+    return tune1_;
+  }
+
+  void setTune1(float value) {
+    tune1_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* tune1Text() {
+    return SettingsText::floatToText(tune1());
+  }
+
+    // Tune 2
+  float tune2() {
+    return tune2_;
+  }
+
+  void setTune2(float value) {
+    tune2_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* tune2Text() {
+    return SettingsText::floatToText(tune2());
+  }
+
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(fmEnable_);
@@ -330,6 +359,8 @@ class Oscillator {
     fileWriter.write(slideEnable2_);
     fileWriter.write(octaveOffset1_);
     fileWriter.write(octaveOffset2_);
+    fileWriter.write(tune1_);
+    fileWriter.write(tune2_);
   }
 
   void load(FileReader& fileReader) {
@@ -352,6 +383,8 @@ class Oscillator {
     fileReader.read(slideEnable2_);
     fileReader.read(octaveOffset1_);
     fileReader.read(octaveOffset2_);
+    fileReader.read(tune1_);
+    fileReader.read(tune2_);
   }
 
   void paste(Oscillator* oscillator) {
@@ -374,6 +407,8 @@ class Oscillator {
     slideEnable2_ = oscillator->slideEnable2();
     octaveOffset1_ = oscillator->octaveOffset1();
     octaveOffset2_ = oscillator->octaveOffset2();
+        tune1_ = oscillator->tune1();
+        tune2_ = oscillator->tune2();
   }
 
  private:
@@ -394,6 +429,8 @@ class Oscillator {
   float slideAmmount2_;
   int octaveOffset1_;
   int octaveOffset2_;
+  float tune1_;
+  float tune2_;
   Type1 type1_;
   Type2 type2_;
 };
