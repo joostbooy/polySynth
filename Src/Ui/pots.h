@@ -47,7 +47,7 @@ class Pots {
     std::fill(&filtered_[0], &filtered_[NUM_POTS], 0.f);
   }
 
-   void write(float value, int id) {
+   void write(int id, float value) {
     raw_[id] = value;
     for (size_t i = 0; i < NUM_POTS; ++i) {
       filtered_[i] += 0.01f * (raw_[i] - filtered_[i]);
