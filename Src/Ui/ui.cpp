@@ -247,7 +247,7 @@ void Ui::writePotToSetting(int id) {
       p.amp().setDrive(pots_.read(Pots::DRIVE));
       break;
     case Pots::SLIDE_AMMOUNT:
-      p.oscillator().setSlideAmmount1(pots_.read(Pots::RESONANCE_B));
+      p.oscillator().setSlideAmmount1(pots_.read(Pots::SLIDE_AMMOUNT));
       break;
     case Pots::LFO_SKEW_1:
       p.lfo(0).setSkew(pots_.read(Pots::LFO_SKEW_1));
