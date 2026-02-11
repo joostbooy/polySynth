@@ -32,6 +32,8 @@ void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* displ
   buttons_.init();
   pages_.init(settings, engine, this);
 
+  lockAllPots();
+
   uiQue.clear();
 }
 
