@@ -1,8 +1,8 @@
 #ifndef TopPage_h
 #define TopPage_h
 
-#include "canvas.h"
 #include "buttons.h"
+#include "canvas.h"
 #include "engine.h"
 #include "leds.h"
 #include "messagePainter.h"
@@ -91,7 +91,27 @@ void on_encoder(int id, int state) {
 }
 
 void refresh_leds() {
-  // leds_->setChapter(chapter_.selected());
+  Patch& p = settings_->selectedPatch();
+  leds_->setAm(p.amp().amEnable());
+  leds_->setOsc2Sync(p.oscillator().syncEnable());
+  leds_->setOsc1Type(p.oscillator().type1());
+  leds_->setOsc2Type(p.oscillator().type2());
+  leds_->setOsc1Fm(p.oscillator().fmEnable());
+  leds_->setMute1(p.oscillator().muteOsc1());
+  leds_->setMute2(p.oscillator().muteOsc2());
+  leds_->setOscModSource(p.oscillator().modSource());
+  leds_->setFilter1Fm(p.filter().fmEnable1());
+  leds_->setFilter2Fm(p.filter().fmEnable2());
+  leds_->setFilterType(p.filter().type());
+  leds_->setFilterRouting(p.filter().routing());
+
+  for (size_t i = 0; i < Pots::NUM_POTS; i++) {
+    if (ui_->potIsLocked(i)) {
+      leds_->setPot(i, Leds::BLACK);
+    } else {
+      leds_->setPot(i, Leds::RED);
+    }
+  }
 }
 
 void draw() {

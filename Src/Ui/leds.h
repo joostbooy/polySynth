@@ -23,8 +23,29 @@ class Leds {
     }
   }
 
+  // Amp
+  void setAm(bool state) {
+    set(7, 1, state ? RED : BLACK);
+  }
+
+  // Vco mod
+  void setOscModSource(int source) {
+    switch (source) {
+      case 0:
+        set(4, 4, RED);
+        set(5, 3, BLACK);
+        break;
+      case 1:
+        set(4, 4, BLACK);
+        set(5, 3, RED);
+        break;
+      default:
+        break;
+    }
+  }
+
   // Pots
-  void setPot(Pots::Id id, Color color) {
+  void setPot(int id, Color color) {
     switch (id) {
       case Pots::RESONANCE_B:
         set(2, 4, color);
@@ -128,6 +149,14 @@ class Leds {
   }
 
   // Filter
+  void setFilter1Fm(bool state) {
+    set(1, 5, state ? RED : BLACK);
+  }
+
+  void setFilter2Fm(bool state) {
+    set(3, 4, state ? RED : BLACK);
+  }
+
   void setFilterType(Filter::Type type) {
     switch (type) {
       case Filter::HP:
@@ -166,6 +195,14 @@ class Leds {
   }
 
   // Osc 1
+  void setOsc1Fm(bool state) {
+    set(1, 7, state ? RED : BLACK);
+  }
+
+  void setMute1(bool state) {
+    set(1, 8, state ? RED : BLACK);
+  }
+
   void setOctaveOffset1(int offset) {
     switch (offset) {
       case -24:
@@ -235,6 +272,10 @@ class Leds {
   }
 
   // Osc 2
+  void setMute2(bool state) {
+    set(2, 7, state ? RED : BLACK);
+  }
+
   void setOctaveOffset2(int offset) {
     switch (offset) {
       case -24:
