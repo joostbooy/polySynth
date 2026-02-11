@@ -41,7 +41,7 @@ class Matrix {
  private:
   static const uint8_t kNumCollumns_ = 8;
   uint8_t currentCollumn_ = 0;
-  uint8_t ledRow_[kNumCollumns_];
+  uint16_t ledRow_[kNumCollumns_];
 
   void setCollumn(int coll) {
     uint32_t reg = 0;
