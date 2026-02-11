@@ -176,7 +176,7 @@ class Filter {
   }
 
   void paste(Filter* filter) {
-    cutoff2_ = filter->cutoff2();
+    cutoff1_ = filter->cutoff1();
     cutoff2_ = filter->cutoff2();
     resonace1_ = filter->resonance1();
     resonace2_ = filter->resonance2();
