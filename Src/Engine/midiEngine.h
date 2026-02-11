@@ -109,11 +109,9 @@ class MidiEngine {
     return false;
   }
 
-  void writeClock(uint8_t message) {
-    for (size_t i = 0; i < Midi::NUM_PORTS; i++) {
-      if (clockOutputQue[i].writeable() && midi_->sendClock(i)) {
-        clockOutputQue[i].write(message);
-      }
+  void writeClock(int port, uint8_t message) {
+      if (clockOutputQue[port].writeable() && midi_->sendClock(port)) {
+        clockOutputQue[port].write(message);
     }
   }
 

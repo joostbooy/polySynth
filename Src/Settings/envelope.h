@@ -34,8 +34,8 @@ public:
 		setMode(GATE);
 		setAttackTime(0);
 		setAttackShape(0.5f);
-		set_decay_time(0);
-		set_decay_shape(0.5f);
+		setDecayTime(0);
+		setDecayShape(0.5f);
 		setHoldTime(0);
 		setSustainLevel(0.5f);
 		setReleaseTime(0);
@@ -113,7 +113,7 @@ public:
 		return decayTime_;
 	}
 
-	void set_decay_time(float value) {
+	void setDecayTime(float value) {
 		decayTime_ = SettingsUtils::clipFloat(value);
 	}
 
@@ -138,7 +138,7 @@ public:
 		return decayShape_;
 	}
 
-	void set_decay_shape(float value) {
+	void setDecayShape(float value) {
 		decayShape_ = SettingsUtils::clipFloat(value);
 	}
 
