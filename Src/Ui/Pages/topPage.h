@@ -25,6 +25,8 @@ Pots* pots_;
 
 StringBuilderBase<63> str_;
 
+uint8_t modTypeIndex_[ModMatrix::NUM_DESTINATIONS];
+
 void init(Settings* settings, Engine* engine, Ui* ui) {
   settings_ = settings;
   engine_ = engine;
@@ -39,16 +41,54 @@ void init(Settings* settings, Engine* engine, Ui* ui) {
   MessagePainter::init(canvas_);
   TextBufferPainter::init(canvas_);
   WindowPainter::init(canvas_);
+
+  std::fill(&modTypeIndex_[0], &modTypeIndex_[ModMatrix::NUM_DESTINATIONS], 0);
 }
 
 void enter() {
+
 }
 
 void exit() {
+  
+}
+
+void incModType(ModMatrix::Destination dest, ModMatrix::Source src1, ModMatrix::Source src2) {
+  ModMatrix &m = settings_->modMatrix();
+  
+  ++modTypeIndex_[dest] %= 4;
+
+  switch (modTypeIndex_[dest]) {
+    case 0:
+      m.set(src1, dest, false);
+      m.set(src2, dest, false);
+      break;
+    case 1:
+      m.set(src1, dest, true);
+      m.set(src2, dest, false);
+      break;
+    case 2:
+      m.set(src1, dest, false);
+      m.set(src2, dest, true);
+      break;
+    case 3:
+      m.set(src1, dest, true);
+      m.set(src2, dest, true);
+      break;
+    default:
+      break;
+  }
 }
 
 void on_button(int id, int state) {
   if (!state) {
+    return;
+  }
+
+  int page = buttons_->toPage(id);
+  if (page >= 0) {
+    pages_->close_all();
+    pages_->open(page);
     return;
   }
 
@@ -77,22 +117,22 @@ void on_button(int id, int state) {
       p.oscillator().setFmEnable(!p.oscillator().fmEnable());
       break;
     case Buttons::TUNE_1_MOD_TYPE:
-      //
+      incModType(ModMatrix::TUNE_1, ModMatrix::LFO_1, ModMatrix::ENVELOPE_2);
       break;
     case Buttons::VCO_2_SYNC:
       p.oscillator().setSyncEnable(!p.oscillator().syncEnable());
       break;
     case Buttons::TUNE_2_MOD_TYPE:
-      //
+      incModType(ModMatrix::TUNE_2, ModMatrix::LFO_1, ModMatrix::ENVELOPE_2);
       break;
     case Buttons::SHAPE_1_MOD_TYPE:
-      //
+      incModType(ModMatrix::SHAPE_1, ModMatrix::LFO_2, ModMatrix::ENVELOPE_2);
       break;
     case Buttons::VCO_1_OSC_TYPE:
       p.oscillator().setType1(p.oscillator().type1() + 1);
       break;
     case Buttons::SHAPE_2_MOD_TYPE:
-      //
+      incModType(ModMatrix::SHAPE_2, ModMatrix::LFO_2, ModMatrix::ENVELOPE_2);
       break;
     case Buttons::VCO_2_OSC_TYPE:
       p.oscillator().setType2(p.oscillator().type2() + 1);
@@ -104,22 +144,22 @@ void on_button(int id, int state) {
       //
       break;
     case Buttons::CUTOFF_1_MOD_TYPE:
-      //
+      incModType(ModMatrix::CUTOFF_1, ModMatrix::LFO_2, ModMatrix::ENVELOPE_2);
       break;
     case Buttons::VCO_1_MUTE:
       p.oscillator().setMuteOsc1(!p.oscillator().muteOsc1());
       break;
     case Buttons::CUTOFF_2_MOD_TYPE:
-      //
+      incModType(ModMatrix::CUTOFF_2, ModMatrix::LFO_2, ModMatrix::ENVELOPE_2);
       break;
     case Buttons::VCO_2_MUTE:
       p.oscillator().setMuteOsc2(!p.oscillator().muteOsc2());
       break;
     case Buttons::VCO_MOD_DEPTH_MOD_TYPE:
-      //
+       incModType(ModMatrix::VCO_MOD_DEPTH, ModMatrix::LFO_1, ModMatrix::ENVELOPE_2);
       break;
     case Buttons::VOLUME_MOD_TYPE:
-      //
+        incModType(ModMatrix::GAIN, ModMatrix::LFO_1, ModMatrix::ENVELOPE_1);
       break;
     case Buttons::VCF_1_TYPE:
       p.filter().setType(p.filter().type() + 1);
@@ -137,7 +177,7 @@ void on_button(int id, int state) {
       p.amp().setAmEnable(!p.amp().amEnable());
       break;
     case Buttons::PAN_MOD_TYPE:
-      //
+      incModType(ModMatrix::PAN, ModMatrix::LFO_1, ModMatrix::ENVELOPE_2);
       break;
     default:
       break;
@@ -145,7 +185,6 @@ void on_button(int id, int state) {
 }
 
 void on_encoder(int id, int state) {
-
 }
 
 void refresh_leds() {
@@ -159,6 +198,8 @@ void refresh_leds() {
   leds_->setMute1(p.oscillator().muteOsc1());
   leds_->setMute2(p.oscillator().muteOsc2());
   leds_->setOscModSource(p.oscillator().modSource());
+  leds_->setOctaveOffset1(p.oscillator().octaveOffset1());
+  leds_->setOctaveOffset2(p.oscillator().octaveOffset2());
 
   leds_->setFilter1Fm(p.filter().fmEnable1());
   leds_->setFilter2Fm(p.filter().fmEnable2());
