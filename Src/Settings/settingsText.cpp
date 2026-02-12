@@ -1,4 +1,0 @@
-#include "settingsText.h"
-
-//extern
-

@@ -1,7 +1,6 @@
 #ifndef Leds_h
 #define Leds_h
 
-#include "chapter.h"
 #include "pots.h"
 
 class Leds {
