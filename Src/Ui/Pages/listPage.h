@@ -37,7 +37,8 @@ namespace ListPage {
 	}
 
 	void enter() {
-
+		list_->selectItem(0);
+		list_->setMode(SettingsList::SELECT);
 	}
 
 	void exit() {
@@ -47,6 +48,11 @@ namespace ListPage {
 	}
 
 	void on_button(int id, int state) {
+		if (state) {
+			if (id == Buttons::ENC_X || id == Buttons::ENC_Y) {
+				list_->onButton();
+			}
+		}
 		/*
 		if (!state) {
 			return;
@@ -54,12 +60,6 @@ namespace ListPage {
 
 		switch (id)
 		{
-		case Buttons::UP_BUTTON:
-			list_->onUpButton();
-			break;
-		case Buttons::DOWN_BUTTON:
-			list_->onDownButton();
-			break;
 		case Buttons::CLEAR_BUTTON:
 			if (clearCallback_) {
 				ConfirmationPage::set("CLEAR SETTINGS ?", [](int option) {
@@ -96,15 +96,8 @@ namespace ListPage {
 			*/
 	}
 
-	void on_encoder(int id, int state) {
-		/*
-		int index = Buttons::encoderToFunction(id);
-		if (index >= 0) {
-			bool pressed = Buttons::encoderIsPressed(id);
-			bool shifted = buttons_->isPressed(Buttons::SHIFT);
-			list_->onEncoder(index, state, pressed || shifted);
-		}
-			*/
+	void on_encoder(int id, int inc) {
+		list_->onEncoder(inc, false);
 	}
 
 	void refresh_leds() {
@@ -112,9 +105,10 @@ namespace ListPage {
 	}
 
 	void draw() {
-		const int h = 20;
+		/*
+		const int h = 40;
 		const int y = canvas_->height() - h;
-		const int w = canvas_->width() / list_->collumns();
+		const int w = canvas_->width();
 
 		canvas_->setFont(Font::SMALL);
 
@@ -130,6 +124,7 @@ namespace ListPage {
 		const int bar_w = 6;
 		const int bar_x = canvas_->width() - bar_w;
 		WindowPainter::draw_vertical_scollbar(bar_x, y, bar_w, h, list_->topItem(), list_->numItems(), list_->collumns());
+		*/
 	}
 
 	const size_t target_fps() {

@@ -12,34 +12,41 @@ public:
 		settings_ = settings;
 	}
 
-	constexpr const int collumns() {
-		return 4;
+	enum Mode {
+		SELECT,
+		EDIT
+	};
+
+	Mode mode() {
+		return mode_;
 	}
 
-	int topItem() {
-		return topItem_;
+	void setMode(Mode mode) {
+		mode_ = mode;
 	}
 
-	void setTopItem(int item) {
-		topItem_ = SettingsUtils::clip(0, numItems() - 1, item);
+	int selectedItem() {
+		return selectedItem_;
 	}
 
-	void onUpButton() {
-		int item = topItem() - collumns();
-		if (item >= 0)  {
-			setTopItem(item);
+	void selectItem(int item) {
+		selectedItem_ = SettingsUtils::clip(item, 0, numItems() - 1);
+	}
+
+	void onButton() {
+		if (mode() == SELECT) {
+			setMode(EDIT);
+		} else {
+			setMode(SELECT);
 		}
 	}
 
-	void onDownButton() {
-		int item = topItem() + collumns();
-		if (item < numItems())  {
-			setTopItem(item);
+	void onEncoder(int inc, bool shifted) {
+		if (mode_ == SELECT) {
+			selectItem(selectedItem() + inc);
+		} else {
+			edit(selectedItem(), inc, shifted);
 		}
-	}
-
-	void onEncoder(int index, int inc, bool shifted) {
-		edit(topItem() + index, inc, shifted);
 	}
 
 	virtual const int numItems();
@@ -52,7 +59,8 @@ protected:
 	Settings *settings_;
 
 private:
-	int topItem_ = 0;
+	Mode mode_;
+	int selectedItem_ = 0;
 };
 
 #endif

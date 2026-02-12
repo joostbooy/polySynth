@@ -48,7 +48,7 @@ class Buttons {
     LFO_PAGE                = SERIAL_ID(6, 2),
     MATRIX_PAGE             = SERIAL_ID(6, 3),
     SYSTEM_PAGE             = SERIAL_ID(6, 4),
-    SHIFT                   = SERIAL_ID(6, 5),
+    MENU                    = SERIAL_ID(6, 5),
     ENC_X                   = SERIAL_ID(7, 0),
     AMP_PAGE                = SERIAL_ID(7, 2),
     VCF_PAGE                = SERIAL_ID(7, 3),
@@ -76,7 +76,7 @@ class Buttons {
     return pressed_[index] & mask;
   }
 
-   int8_t toFunction(int id) {
+   int toFunction(int id) {
     switch (id) {
       case DISPLAY_A:
         return 0;
@@ -92,9 +92,9 @@ class Buttons {
     }
   }
 
-   int8_t toPage(int id) {
+   int toPage(int id) {
     switch (id) {
-     // case LFO_PAGE:  return Pages::LFO_PAGE;
+      case LFO_PAGE:  return Pages::LFO_PAGE;
       default:
         return -1;
         break;

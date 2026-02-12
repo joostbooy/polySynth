@@ -96,8 +96,8 @@ const char* buttonIdText(int id) {
       return "MATRIX_PAGE";
     case Buttons::SYSTEM_PAGE:
       return "SYSTEM_PAGE";
-    case Buttons::SHIFT:
-      return "SHIFT";
+    case Buttons::MENU:
+      return "MENU";
     case Buttons::ENC_X:
       return "ENC_X";
     case Buttons::AMP_PAGE:
@@ -214,7 +214,7 @@ void exit() {
 void on_button(int id, int state) {
   TextBufferPainter::write(str_.write(buttonIdText(id), " ", state));
 
-  if (buttons_->isPressed(Buttons::SHIFT)) {
+  if (buttons_->isPressed(Buttons::MENU)) {
     switch (buttons_->toFunction(id)) {
       case TOGGLE_LEDS:
         if (state) {
@@ -235,8 +235,7 @@ void on_button(int id, int state) {
           potsEnabled ^= 1;
           if (potsEnabled) {
             for (size_t i = 0; i < Pots::NUM_POTS; i++) {
-              uint8_t value = pots_->read(i) * 255;
-              lastPotValue[i] = value;
+              lastPotValue[i] = pots_->read(i) * 255;
             }
           }
         }
