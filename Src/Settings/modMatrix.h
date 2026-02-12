@@ -150,10 +150,10 @@ class ModMatrix {
 
   void paste(ModMatrix* modMatrix) {
     clear();
-    for (size_t y = 0; y < NUM_SOURCES; ++y) {
-      for (size_t x = 0; x < NUM_DESTINATIONS; ++x) {
+    for (size_t x = 0; x < NUM_SOURCES; ++x) {
+      for (size_t y = 0; y < NUM_DESTINATIONS; ++y) {
         if (modMatrix->read(x, y)) {
-          matrix_[y] |= (1 << x);
+          matrix_[x] |= (1 << y);
         }
       }
     }
