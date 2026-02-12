@@ -16,17 +16,17 @@ namespace LfoPage {
 	LfoList lfoList_;
 
 	void clear() {
-		settings_->selected_lfo().init();
+		settings_->selectedLfo().init();
 	}
 
 	void copy() {
-		lfo_.paste(&settings_->selected_lfo());
+		lfo_.paste(&settings_->selectedLfo());
 		pasteable_ = true;
 	}
 
 	bool paste() {
 		if (pasteable_) {
-			settings_->selected_lfo().paste(&lfo_);
+			settings_->selectedLfo().paste(&lfo_);
 			return true;
 		}
 		return false;
@@ -39,10 +39,10 @@ namespace LfoPage {
 	}
 
 	void enter() {
-		ListPage::set_list(&lfoList_);
-		ListPage::set_clear_callback(&clear);
-		ListPage::set_copy_callback(&copy);
-		ListPage::set_paste_callback(&paste);
+		ListPage::setList(&lfoList_);
+		ListPage::setClearCallback(&clear);
+		ListPage::setCopyCallback(&copy);
+		ListPage::setPasteCallback(&paste);
 		ListPage::enter();
 	}
 
@@ -64,7 +64,7 @@ namespace LfoPage {
 
 	void draw() {
 		ListPage::draw();
-
+/*
 		Lfo lfo;
 		LfoEngine lfoEngine;
 
@@ -83,7 +83,7 @@ namespace LfoPage {
 			int y2 = h * (1.f - lfoEngine.next());
 			canvas_->drawPixel(x + x2, y + y2, Canvas::BLACK);
 		}
-
+*/
 	//	int index = settings_->selectedLfoIndex();
 	//	float phase = engine_->voiceEngine().lfoEngine(index).phase();
 	//	canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);

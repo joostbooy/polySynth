@@ -21,7 +21,7 @@ public:
 		TEXT_INPUT_PAGE,
 		DISK_RETRY_PAGE,
 		DISK_UTIL_PAGE,
-	//	LFO_PAGE,
+		LFO_PAGE,
 
 		NUM_PAGES
 	};

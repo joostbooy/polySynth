@@ -8,7 +8,7 @@
 #include "textInputPage.h"
 #include "diskRetryPage.h"
 #include "diskUtilPage.h"
-//#include "lfoPage.h"
+#include "lfoPage.h"
 
 Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::EMPTY_PAGE]						= &EmptyPage::page,
@@ -18,7 +18,7 @@ Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::TEXT_INPUT_PAGE]				= &TextInputPage::page,
 	[Pages::DISK_RETRY_PAGE]				= &DiskRetryPage::page,
 	[Pages::DISK_UTIL_PAGE]					= &DiskUtilPage::page,
-//	[Pages::LFO_PAGE]						= &LfoPage::page,
+	[Pages::LFO_PAGE]						= &LfoPage::page,
 };
 
 void Pages::init(Settings *settings, Engine *engine, Ui *ui) {

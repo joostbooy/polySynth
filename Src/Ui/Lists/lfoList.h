@@ -9,16 +9,17 @@ class LfoList : public SettingsList {
 public:
 
 	enum Item {
-		Lfo,
-		Speed,
-		ClockSync,
-		Shape,
-		Skew,
-		Min,
-		Max,
-		SyncPhase,
-		Randomise,
-		Retrigger,
+		LFO,
+		SPEED,
+		CLOCK_SYNC,
+		TYPE,
+		SKEW,
+		MIN,
+		MAX,
+		SYNC_PHASE,
+		RANDOMISE,
+		RETRIGGER,
+		ONE_SHOT,
 
 		NumItems
 	};
@@ -30,16 +31,17 @@ public:
 	const char* itemText(int item) override {
 		switch (item)
 		{
-		case Lfo:		return "LFO";
-		case Speed:		return "SPEED";
-		case ClockSync:	return "CLOCK SYNC";
-		case Shape:		return "SHAPE";
-		case Skew:		return "SKEW";
-		case Min:		return "MIN";
-		case Max:		return "MAX";
-		case SyncPhase:	return "SYNC PHASE";
-		case Randomise:	return "RANDOMISE";
-		case Retrigger:	return "RETRIGGER";
+		case LFO:			return "LFO";
+		case SPEED:			return "SPEED";
+		case CLOCK_SYNC:	return "CLOCK SYNC";
+		case TYPE:			return "SHAPE";
+		case SKEW:			return "SKEW";
+		case MIN:			return "MIN";
+		case MAX:			return "MAX";
+		case SYNC_PHASE:	return "SYNC PHASE";
+		case RANDOMISE:		return "RANDOMISE";
+		case RETRIGGER:		return "RETRIGGER";
+		case ONE_SHOT:		return "ONE SHOT";
 		default:
 			break;
 		}
@@ -47,20 +49,21 @@ public:
 	}
 
 	const char* valueText(int item) override {
-		Lfo &lfo = settings_->selected_lfo();
+		Lfo &lfo = settings_->selectedLfo();
 
 		switch (item)
 		{
-		case Lfo:		return SettingsText::int_to_text(settings_->selected_lfo_index() + 1);
-		case Speed:		return lfo.speedText();
-		case ClockSync:	return lfo.clockSyncText();
-		case Shape:		return lfo.shapeText();
-		case Skew:		return lfo.skewText();
-		case Min:		return lfo.minText();
-		case Max:		return lfo.maxText();
-		case SyncPhase:	return lfo.syncPhaseText();
-		case Randomise:	return lfo.randomiseText();
-		case Retrigger:	return lfo.retriggerText();
+		case LFO:			return SettingsText::intToText(settings_->lfoIndex() + 1);
+		case SPEED:			return lfo.speedText();
+		case CLOCK_SYNC:	return lfo.clockSyncText();
+		case TYPE:			return lfo.typeText();
+		case SKEW:			return lfo.skewText();
+		case MIN:			return lfo.minText();
+		case MAX:			return lfo.maxText();
+		case SYNC_PHASE:	return lfo.syncPhaseText();
+		case RANDOMISE:		return lfo.randomiseText();
+		case RETRIGGER:		return lfo.retriggerText();
+		case ONE_SHOT:		return lfo.oneShotText();
 		default:
 			break;
 		}
@@ -68,39 +71,42 @@ public:
 	}
 
 	void edit(int item, int inc, bool shifted) override {
-		Lfo &lfo = settings_->selected_lfo();
+		Lfo &lfo = settings_->selectedLfo();
 
 		switch (item)
 		{
-		case Lfo:
-			settings_->selectLfoIndex(settings_->selectedLfoIndex() + inc);
+		case LFO:
+			settings_->selectLfoIndex(settings_->lfoIndex() + inc);
 			break;
-		case Speed:
+		case SPEED:
 			lfo.setSpeed(lfo.speed() + SettingsUtils::fInc(inc, shifted));
 			break;
-		case ClockSync:
+		case CLOCK_SYNC:
 			lfo.setClockSync(inc > 0);
 			break;
-		case Shape:
-			lfo.setShape(lfo.shape() + SettingsUtils::fInc(inc, shifted));
+		case TYPE:
+			lfo.setType(lfo.type() + inc);
 			break;
-		case Skew:
+		case SKEW:
 			lfo.setSkew(lfo.skew() + SettingsUtils::fInc(inc, shifted));
 			break;
-		case Min:
+		case MIN:
 			lfo.setMin(lfo.min() + SettingsUtils::fInc(inc, shifted));
 			break;
-		case Max:
+		case MAX:
 			lfo.setMax(lfo.max() + SettingsUtils::fInc(inc, shifted));
 			break;
-		case SyncPhase:
+		case SYNC_PHASE:
 			lfo.setSyncPhase(lfo.syncPhase() + SettingsUtils::fInc(inc, shifted));
 			break;
-		case Randomise:
+		case RANDOMISE:
 			lfo.setRandomise(inc > 0);
 			break;
 		case RETRIGGER:
 			lfo.setRetrigger(inc > 0);
+			break;
+		case ONE_SHOT:
+			lfo.setOneShot(inc > 0);
 			break;
 		default:
 			break;
