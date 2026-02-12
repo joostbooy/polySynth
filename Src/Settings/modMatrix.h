@@ -109,8 +109,16 @@ class ModMatrix {
   }
 
   void toggle(size_t src, size_t dest) {
+    set(src, dest, !read(src, dest));
+  }
+
+  void set(size_t src, size_t dest, bool state) {
     uint32_t data = matrix_[src];
-    matrix_[src] = data ^ (1 << dest);
+    if (state) {
+      matrix_[src] = data | (1 << dest);
+    } else {
+      matrix_[src] = data & ~(1 << dest);
+    }
     matrix_[ENVELOPE_1] |= (1 << GAIN);
   }
 
