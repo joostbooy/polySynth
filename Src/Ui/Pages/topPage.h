@@ -172,6 +172,7 @@ void on_encoder(int id, int state) {
 
 void refresh_leds() {
   Patch& p = settings_->selectedPatch();
+  
   leds_->setAm(p.amp().amEnable());
   leds_->setOsc2Sync(p.oscillator().syncEnable());
   leds_->setOsc1Type(p.oscillator().type1());
@@ -180,10 +181,16 @@ void refresh_leds() {
   leds_->setMute1(p.oscillator().muteOsc1());
   leds_->setMute2(p.oscillator().muteOsc2());
   leds_->setOscModSource(p.oscillator().modSource());
+
   leds_->setFilter1Fm(p.filter().fmEnable1());
   leds_->setFilter2Fm(p.filter().fmEnable2());
   leds_->setFilterType(p.filter().type());
   leds_->setFilterRouting(p.filter().routing());
+
+  leds_->setLfo1Type(p.lfo(0).type());
+  leds_->setLfo2Type(p.lfo(1).type());
+  leds_->setLfo1Tempo(engine_->voiceEngine().mostRecentVoice().lfoEngine(0).phase() < 0.5f);
+  leds_->setLfo2Tempo(engine_->voiceEngine().mostRecentVoice().lfoEngine(1).phase() < 0.5f);
 
   for (size_t i = 0; i < Pots::NUM_POTS; i++) {
     if (ui_->potIsLocked(i)) {

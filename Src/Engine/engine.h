@@ -38,6 +38,10 @@ class Engine {
     return modMatrixEngine_;
   }
 
+  VoiceEngine &voiceEngine() {
+    return voiceEngine_;
+  }
+
  private:
   State state_;
   volatile uint8_t requests_ = 0x00;
