@@ -54,7 +54,7 @@ class Filter {
   }
 
   void setType(int value) {
-    type_ = Type(SettingsUtils::clip(0, NUM_FILTER_TYPES - 1, value));
+    type_ = Type(value % NUM_FILTER_TYPES);
   }
 
   const char* typeText() {
@@ -67,7 +67,7 @@ class Filter {
   }
 
   void setRouting(int value) {
-    routing_ = Routing(SettingsUtils::clip(0, NUM_FILTER_ROUTINGS - 1, value));
+    routing_ = Routing(value % NUM_FILTER_ROUTINGS);
   }
 
   const char* routingText() {

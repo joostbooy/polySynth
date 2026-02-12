@@ -51,7 +51,7 @@ class Lfo {
   }
 
   void setType(int value) {
-    type_ = Type(SettingsUtils::clip(0, NUM_TYPES - 1, value));
+    type_ = Type(value % NUM_TYPES);
   }
 
   const char* typeText() {

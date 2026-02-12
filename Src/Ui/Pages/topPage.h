@@ -66,20 +66,100 @@ void exit() {
 }
 
 void on_button(int id, int state) {
-  /*
-
-  int chapter_id = Buttons::buttonToChapter(id);
-
-  if (chapter_id >= 0) {
-          if (state) {
-                  chapter_.set(chapter_id);
-                  pages_->close_all();
-                  scroll_to_chapter_page();
-          } else {
-                  pages_->open(Pages::PageId(chapter_.entry()->selected_page()));
-          }
+  if (!state) {
+    return;
   }
-  */
+
+  Patch& p = settings_->selectedPatch();
+
+  switch (id) {
+    case Buttons::TUNE_1_OCT_UP:
+      p.oscillator().setOctaveOffset1(p.oscillator().octaveOffset1() + 12);
+      break;
+    case Buttons::TUNE_1_OCT_DOWN:
+      p.oscillator().setOctaveOffset1(p.oscillator().octaveOffset1() - 12);
+      break;
+    case Buttons::TUNE_2_OCT_UP:
+      p.oscillator().setOctaveOffset2(p.oscillator().octaveOffset2() + 12);
+      break;
+    case Buttons::TUNE_2_OCT_DOWN:
+      p.oscillator().setOctaveOffset2(p.oscillator().octaveOffset2() - 12);
+      break;
+    case Buttons::LFO_1_TYPE:
+      p.lfo(0).setType(p.lfo(0).type() + 1);
+      break;
+    case Buttons::LFO_2_TYPE:
+      p.lfo(1).setType(p.lfo(1).type() + 1);
+      break;
+    case Buttons::TUNE_1_VCO_MOD:
+      p.oscillator().setFmEnable(!p.oscillator().fmEnable());
+      break;
+    case Buttons::TUNE_1_MOD_TYPE:
+      //
+      break;
+    case Buttons::VCO_2_SYNC:
+      p.oscillator().setSyncEnable(!p.oscillator().syncEnable());
+      break;
+    case Buttons::TUNE_2_MOD_TYPE:
+      //
+      break;
+    case Buttons::SHAPE_1_MOD_TYPE:
+      //
+      break;
+    case Buttons::VCO_1_OSC_TYPE:
+      p.oscillator().setType1(p.oscillator().type1() + 1);
+      break;
+    case Buttons::SHAPE_2_MOD_TYPE:
+      //
+      break;
+    case Buttons::VCO_2_OSC_TYPE:
+      p.oscillator().setType2(p.oscillator().type2() + 1);
+      break;
+    case Buttons::VCO_MOD_SOURCE:
+      p.oscillator().setModSource(p.oscillator().modSource() + 1);
+      break;
+    case Buttons::SLIDE_VCO_SELECT:
+      //
+      break;
+    case Buttons::CUTOFF_1_MOD_TYPE:
+      //
+      break;
+    case Buttons::VCO_1_MUTE:
+      p.oscillator().setMuteOsc1(!p.oscillator().muteOsc1());
+      break;
+    case Buttons::CUTOFF_2_MOD_TYPE:
+      //
+      break;
+    case Buttons::VCO_2_MUTE:
+      p.oscillator().setMuteOsc2(!p.oscillator().muteOsc2());
+      break;
+    case Buttons::VCO_MOD_DEPTH_MOD_TYPE:
+      //
+      break;
+    case Buttons::VOLUME_MOD_TYPE:
+      //
+      break;
+    case Buttons::VCF_1_TYPE:
+      p.filter().setType(p.filter().type() + 1);
+      break;
+    case Buttons::CUTOFF_1_VCO_MOD:
+      p.filter().setFmEnable1(!p.filter().fmEnable1());
+      break;
+    case Buttons::VCF_2_ROUTING:
+      p.filter().setRouting(p.filter().routing() + 1);
+      break;
+    case Buttons::CUTOFF_2_VCO_MOD:
+      p.filter().setFmEnable2(!p.filter().fmEnable2());
+      break;
+    case Buttons::VOLUME_VCO_MOD:
+      p.amp().setAmEnable(!p.amp().amEnable());
+      break;
+    case Buttons::PAN_MOD_TYPE:
+      //
+      break;
+    default:
+      break;
+  }
 }
 
 void on_encoder(int id, int state) {

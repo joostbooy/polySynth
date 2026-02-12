@@ -10,7 +10,7 @@ class Oscillator {
 
   void init() {
     setFmEnable(false);
-    setSyncEnable_(false);
+    setSyncEnable(false);
     setType1(SAW1);
     setType2(SAW2);
     setMuteOsc1(false);
@@ -108,7 +108,7 @@ class Oscillator {
     return syncEnable_;
   }
 
-  void setSyncEnable_(bool value) {
+  void setSyncEnable(bool value) {
     syncEnable_ = value;
   }
 
@@ -407,8 +407,8 @@ class Oscillator {
     slideEnable2_ = oscillator->slideEnable2();
     octaveOffset1_ = oscillator->octaveOffset1();
     octaveOffset2_ = oscillator->octaveOffset2();
-        tune1_ = oscillator->tune1();
-        tune2_ = oscillator->tune2();
+    tune1_ = oscillator->tune1();
+    tune2_ = oscillator->tune2();
   }
 
  private:
