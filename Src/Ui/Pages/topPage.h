@@ -15,14 +15,13 @@ namespace TopPage {
 
 Settings* settings_;
 Engine* engine_;
+Ui* ui_;
+Disk* disk_;
 Canvas* canvas_;
 Pages* pages_;
 Leds* leds_;
 Buttons* buttons_;
 Pots* pots_;
-
-Ui* ui_;
-Disk* disk_;
 
 StringBuilderBase<63> str_;
 
@@ -151,7 +150,7 @@ void on_encoder(int id, int state) {
 
 void refresh_leds() {
   Patch& p = settings_->selectedPatch();
-  
+
   leds_->setAm(p.amp().amEnable());
   leds_->setOsc2Sync(p.oscillator().syncEnable());
   leds_->setOsc1Type(p.oscillator().type1());
@@ -170,6 +169,8 @@ void refresh_leds() {
   leds_->setLfo2Type(p.lfo(1).type());
   leds_->setLfo1Tempo(engine_->voiceEngine().mostRecentVoice().lfoEngine(0).phase() < 0.5f);
   leds_->setLfo2Tempo(engine_->voiceEngine().mostRecentVoice().lfoEngine(1).phase() < 0.5f);
+
+  leds_->setModMatrix(&p.modMatrix());
 
   for (size_t i = 0; i < Pots::NUM_POTS; i++) {
     if (ui_->potIsLocked(i)) {

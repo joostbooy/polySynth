@@ -2,6 +2,7 @@
 #define Leds_h
 
 #include "pots.h"
+#include "modMatrix.h"
 
 class Leds {
  public:
@@ -24,7 +25,7 @@ class Leds {
 
   // Amp
   void setAm(bool state) {
-    set(7, 1, state ? RED : BLACK);
+    set(7, 1, state);
   }
 
   // Vco mod
@@ -149,11 +150,11 @@ class Leds {
 
   // Filter
   void setFilter1Fm(bool state) {
-    set(1, 5, state ? RED : BLACK);
+    set(1, 5, state);
   }
 
   void setFilter2Fm(bool state) {
-    set(3, 4, state ? RED : BLACK);
+    set(3, 4, state);
   }
 
   void setFilterType(Filter::Type type) {
@@ -195,11 +196,11 @@ class Leds {
 
   // Osc 1
   void setOsc1Fm(bool state) {
-    set(1, 7, state ? RED : BLACK);
+    set(1, 7, state);
   }
 
   void setMute1(bool state) {
-    set(1, 8, state ? RED : BLACK);
+    set(1, 8, state);
   }
 
   void setOctaveOffset1(int offset) {
@@ -272,7 +273,7 @@ class Leds {
 
   // Osc 2
   void setMute2(bool state) {
-    set(2, 7, state ? RED : BLACK);
+    set(2, 7, state);
   }
 
   void setOctaveOffset2(int offset) {
@@ -313,7 +314,7 @@ class Leds {
   }
 
   void setOsc2Sync(bool state) {
-    set(1, 14, state ? RED : BLACK);
+    set(1, 14, state);
   }
 
   void setOsc2Type(Oscillator::Type2 type) {
@@ -349,7 +350,7 @@ class Leds {
 
   // Lfo 1
   void setLfo1Tempo(bool state) {
-    set(5, 13, state ? RED : BLACK);
+    set(5, 13, state);
   }
 
   void setLfo1Type(Lfo::Type type) {
@@ -385,7 +386,7 @@ class Leds {
 
   // Lfo 2
   void setLfo2Tempo(bool state) {
-    set(7, 13, state ? RED : BLACK);
+    set(7, 13, state);
   }
 
   void setLfo2Type(Lfo::Type type) {
@@ -419,6 +420,28 @@ class Leds {
     }
   }
 
+  // Mod matrix shortcuts
+  void setModMatrix(ModMatrix* matrix) {
+    set(0, 12, matrix->read(ModMatrix::LFO_1, ModMatrix::TUNE_1));
+    set(1, 12, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::TUNE_1));
+    set(2, 12, matrix->read(ModMatrix::LFO_1, ModMatrix::TUNE_2));
+    set(3, 12, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::TUNE_2));
+    set(0, 8, matrix->read(ModMatrix::LFO_1, ModMatrix::SHAPE_1));
+    set(1, 9, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::SHAPE_1));
+    set(2, 8, matrix->read(ModMatrix::LFO_1, ModMatrix::SHAPE_2));
+    set(3, 8, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::SHAPE_2));
+    set(0, 6, matrix->read(ModMatrix::LFO_1, ModMatrix::CUTOFF_1));
+    set(1, 6, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::CUTOFF_1));
+    set(2, 5, matrix->read(ModMatrix::LFO_1, ModMatrix::CUTOFF_2));
+    set(3, 5, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::CUTOFF_2));
+    set(4, 2, matrix->read(ModMatrix::LFO_1, ModMatrix::VCO_MOD_DEPTH));
+    set(5, 2, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::VCO_MOD_DEPTH));
+    set(6, 2, matrix->read(ModMatrix::LFO_1, ModMatrix::GAIN));
+    set(7, 2, matrix->read(ModMatrix::ENVELOPE_1, ModMatrix::GAIN));
+    set(6, 0, matrix->read(ModMatrix::LFO_1, ModMatrix::PAN));
+    set(7, 0, matrix->read(ModMatrix::ENVELOPE_1, ModMatrix::PAN));
+  }
+
  private:
   static const size_t kNumOfCollumns = 8;
   uint16_t data_[kNumOfCollumns];
@@ -426,6 +449,10 @@ class Leds {
   void set(int x, int y, Color color) {
     uint16_t value = data_[x] & ~(1 << y);
     data_[x] = value | (color << y);
+  }
+
+  void set(int x, int y, bool state) {
+    set(x, y, state ? RED : BLACK);
   }
 };
 
