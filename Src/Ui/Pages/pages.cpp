@@ -9,6 +9,11 @@
 #include "diskRetryPage.h"
 #include "diskUtilPage.h"
 #include "lfoPage.h"
+#include "midiPage.h"
+#include "envelopePage.h"
+#include "ampPage.h"
+#include "filterPage.h"
+#include "oscillatorPage.h"
 
 Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::EMPTY_PAGE]						= &EmptyPage::page,
@@ -19,6 +24,11 @@ Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::DISK_RETRY_PAGE]				= &DiskRetryPage::page,
 	[Pages::DISK_UTIL_PAGE]					= &DiskUtilPage::page,
 	[Pages::LFO_PAGE]						= &LfoPage::page,
+	[Pages::MIDI_PAGE]						= &MidiPage::page,
+	[Pages::ENVELOPE_PAGE]					= &EnvelopePage::page,
+	[Pages::AMP_PAGE]						= &AmpPage::page,
+	[Pages::FILTER_PAGE]					= &FilterPage::page,
+	[Pages::OSCILLATOR_PAGE]				= &OscillatorPage::page,
 };
 
 void Pages::init(Settings *settings, Engine *engine, Ui *ui) {
@@ -29,7 +39,7 @@ void Pages::init(Settings *settings, Engine *engine, Ui *ui) {
 		page_[i]->init();
 	}
 
-	//open(MIDI_PAGE);
+	//open(PATCH_PAGE);
 }
 
 void Pages::open(int id) {

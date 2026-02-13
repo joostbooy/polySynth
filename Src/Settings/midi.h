@@ -54,6 +54,8 @@ class Midi {
     for (int i = 0; i < NUM_PORTS; ++i) {
       setSendClock(i, true);
     }
+    setPortReceive(UART);
+    setChannelReceive(16);
   }
 
   // bpm

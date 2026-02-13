@@ -47,8 +47,8 @@ class Buttons {
     DISPLAY_C               = SERIAL_ID(6, 1),
     LFO_PAGE                = SERIAL_ID(6, 2),
     MATRIX_PAGE             = SERIAL_ID(6, 3),
-    SYSTEM_PAGE             = SERIAL_ID(6, 4),
-    MENU                    = SERIAL_ID(6, 5),
+    MIDI_PAGE               = SERIAL_ID(6, 4),
+    SHIFT                   = SERIAL_ID(6, 5),
     ENC_X                   = SERIAL_ID(7, 0),
     AMP_PAGE                = SERIAL_ID(7, 2),
     VCF_PAGE                = SERIAL_ID(7, 3),
@@ -94,7 +94,12 @@ class Buttons {
 
    int toPage(int id) {
     switch (id) {
-      case LFO_PAGE:  return Pages::LFO_PAGE;
+      case LFO_PAGE:       return Pages::LFO_PAGE;
+      case MIDI_PAGE:      return Pages::MIDI_PAGE;
+      case AMP_PAGE:       return Pages::AMP_PAGE;
+      case VCF_PAGE:       return Pages::FILTER_PAGE;
+      case ENVELOPE_PAGE:  return Pages::ENVELOPE_PAGE;
+      case VCO_PAGE:       return Pages::OSCILLATOR_PAGE;
       default:
         return -1;
         break;

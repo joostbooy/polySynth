@@ -10,23 +10,26 @@ namespace EnvelopePage {
 	using TopPage::engine_;
 	using TopPage::settings_;
 	using TopPage::canvas_;
+	using TopPage::ui_;
 
 	bool pasteable_;
 	Envelope envelope_;
 	EnvelopeList envelopeList_;
 
 	void clear() {
-		settings_->selected_envelope().init();
+		settings_->selectedEnvelope().init();
+		ui_->resetAllPots();
 	}
 
 	void copy() {
-		envelope_.paste(&settings_->selected_envelope());
+		envelope_.paste(&settings_->selectedEnvelope());
 		pasteable_ = true;
 	}
 
 	bool paste() {
 		if (pasteable_) {
-			settings_->selected_envelope().paste(&envelope_);
+			settings_->selectedEnvelope().paste(&envelope_);
+			ui_->resetAllPots();
 			return true;
 		}
 		return false;
@@ -39,10 +42,10 @@ namespace EnvelopePage {
 	}
 
 	void enter() {
-		ListPage::set_list(&envelopeList_);
-		ListPage::set_clear_callback(&clear);
-		ListPage::set_copy_callback(&copy);
-		ListPage::set_paste_callback(&paste);
+		ListPage::setList(&envelopeList_);
+		ListPage::setClearCallback(&clear);
+		ListPage::setCopyCallback(&copy);
+		ListPage::setPasteCallback(&paste);
 		ListPage::enter();
 	}
 
@@ -64,7 +67,7 @@ namespace EnvelopePage {
 
 	void draw() {
 		ListPage::draw();
-
+	/*
 		Envelope envelope;
 		EnvelopeEngine envelopeEngine;
 
@@ -102,6 +105,7 @@ namespace EnvelopePage {
 		int index = settings_->selected_envelope_index();
 		float phase = engine_->voiceEngine().most_recent_voice().envelopeEngine(index).phase();
 		canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);
+		*/
 	}
 
 	const size_t target_fps() {

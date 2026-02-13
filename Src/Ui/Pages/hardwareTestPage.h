@@ -94,10 +94,10 @@ const char* buttonIdText(int id) {
       return "LFO_PAGE";
     case Buttons::MATRIX_PAGE:
       return "MATRIX_PAGE";
-    case Buttons::SYSTEM_PAGE:
-      return "SYSTEM_PAGE";
-    case Buttons::MENU:
-      return "MENU";
+    case Buttons::MIDI_PAGE:
+      return "MIDI_PAGE";
+    case Buttons::SHIFT:
+      return "SHIFT";
     case Buttons::ENC_X:
       return "ENC_X";
     case Buttons::AMP_PAGE:
@@ -214,7 +214,7 @@ void exit() {
 void on_button(int id, int state) {
   TextBufferPainter::write(str_.write(buttonIdText(id), " ", state));
 
-  if (buttons_->isPressed(Buttons::MENU)) {
+  if (buttons_->isPressed(Buttons::SHIFT)) {
     switch (buttons_->toFunction(id)) {
       case TOGGLE_LEDS:
         if (state) {
