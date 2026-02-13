@@ -315,8 +315,7 @@ void Ui::writePotToSetting(int id) {
 }
 
 void Ui::resetAllPots() {
-  lockedPots_[0] = 0xFFFFFFFF;
-  lockedPots_[1] = 0xFFFFFFFF;
+  lockedPots_ = 0xFFFFFFFF;
 
   for (size_t i = 0; i < Pots::NUM_POTS; i++) {
     float pot = pots_.read(i);
@@ -332,8 +331,7 @@ void Ui::resetAllPots() {
 }
 
 void Ui::unlockAllPots() {
-  lockedPots_[0] = 0;
-  lockedPots_[1] = 0;
+  lockedPots_ = 0;
   for (size_t i = 0; i < Pots::NUM_POTS; i++) {
     writePotToSetting(i);
   }

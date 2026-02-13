@@ -42,7 +42,7 @@ class Ui {
   void unlockAllPots();
 
   bool potIsLocked(int id) {
-    return lockedPots_[id / 32] & (1 << (id % 32));
+    return lockedPots_ & (1 << (id % 32));
   }
 
  private:
@@ -70,7 +70,7 @@ class Ui {
 
   uint32_t lastInterval_ = 0;
   uint32_t displayInterval_ = 0;
-  uint32_t lockedPots_[2];
+  uint32_t lockedPots_;
   uint8_t encoderRaw_[4];
   uint8_t potUnlockDirection_[Pots::NUM_POTS];
   bool lastState_[8 * 6];
@@ -85,7 +85,7 @@ class Ui {
   float readPotToSetting(int);
 
   void unlockPot(int id) {
-    lockedPots_[id / 32] &= ~(1 << (id % 32));
+    lockedPots_ &= ~(1 << (id % 32));
   }
 };
 
