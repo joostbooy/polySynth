@@ -411,6 +411,30 @@ class Oscillator {
     tune2_ = oscillator->tune2();
   }
 
+    void writeHash(Hash& hash) {
+    hash.write(fmEnable_);
+    hash.write(muteOsc1_);
+    hash.write(muteOsc2_);
+    hash.write(shape1_);
+    hash.write(shape2_);
+    hash.write(type1_);
+    hash.write(type2_);
+    hash.write(syncEnable_);
+    hash.write(trackNote1_);
+    hash.write(trackNote2_);
+    hash.write(modDepth_);
+    hash.write(modSource_);
+    hash.write(slideAmmount1_);
+    hash.write(slideAmmount2_);
+    hash.write(linkSlideAmmount_);
+    hash.write(slideEnable1_);
+    hash.write(slideEnable2_);
+    hash.write(octaveOffset1_);
+    hash.write(octaveOffset2_);
+    hash.write(tune1_);
+    hash.write(tune2_);
+  }
+
  private:
   bool trackNote1_;
   bool trackNote2_;

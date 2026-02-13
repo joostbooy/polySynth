@@ -22,10 +22,14 @@ class Lfo {
 
   const char* typeText(Type type) {
     switch (type) {
-      case LINEAR:  return "LINEAR";
-      case LOG_EXP: return "LOG EXP";
-      case EXP_LOG: return "EXP LOG";
-      case SQUARE:  return "SQUARE";
+      case LINEAR:
+        return "LINEAR";
+      case LOG_EXP:
+        return "LOG EXP";
+      case EXP_LOG:
+        return "EXP LOG";
+      case SQUARE:
+        return "SQUARE";
       default:
         break;
     }
@@ -226,6 +230,19 @@ class Lfo {
     retrigger_ = lfo->retrigger();
     oneShot_ = lfo->oneShot();
     type_ = lfo->type();
+  }
+
+  void writeHash(Hash& hash) {
+    hash.write(type_);
+    hash.write(skew_);
+    hash.write(speed_);
+    hash.write(min_);
+    hash.write(max_);
+    hash.write(syncPhase_);
+    hash.write(randomise_);
+    hash.write(clockSync_);
+    hash.write(retrigger_);
+    hash.write(oneShot_);
   }
 
  private:

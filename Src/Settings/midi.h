@@ -189,6 +189,19 @@ class Midi {
     }
   }
 
+  void writeHash(Hash& hash) {
+    hash.write(bpm_);
+    hash.write(clockSource_);
+    hash.write(channelReceive_);
+    hash.write(portReceive_);
+    hash.write(keyRangeLow_);
+    hash.write(keyRangeHigh_);
+
+    for (int i = 0; i < NUM_PORTS; ++i) {
+      hash.write(sendClock_[i]);
+    }
+  }
+
  private:
   uint16_t bpm_;
   uint8_t clockSource_;

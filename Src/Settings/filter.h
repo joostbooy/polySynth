@@ -186,6 +186,17 @@ class Filter {
     fmEnable2_ = filter->fmEnable2();
   }
 
+  void writeHash(Hash& hash) {
+    hash.write(cutoff1_);
+    hash.write(cutoff2_);
+    hash.write(resonace1_);
+    hash.write(resonace2_);
+    hash.write(type_);
+    hash.write(routing_);
+    hash.write(fmEnable1_);
+    hash.write(fmEnable2_);
+  }
+
  private:
   float cutoff1_;
   float cutoff2_;

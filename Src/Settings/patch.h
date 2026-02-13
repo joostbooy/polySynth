@@ -136,14 +136,35 @@ class Patch {
     amp_.paste(&patch->amp());
   }
 
+  uint32_t readHash() {
+    hash_.init();
+
+    hash_.write(name_);
+    hash_.write(voiceMode_);
+ 
+    lfo_[0].writeHash(hash_);
+    lfo_[1].writeHash(hash_);
+    midi_.writeHash(hash_);
+    oscillator_.writeHash(hash_);
+    filter_.writeHash(hash_);
+    envelope_[0].writeHash(hash_);
+    envelope_[1].writeHash(hash_);
+    modMatrix_.writeHash(hash_);
+    amp_.writeHash(hash_);
+
+    return hash_.read();
+  }
+
  private:
+  Amp amp_;
+  Lfo lfo_[2];
+  Envelope envelope_[2];
   Midi midi_;
   Oscillator oscillator_;
   Filter filter_;
   ModMatrix modMatrix_;
-  Amp amp_;
-  Lfo lfo_[2];
-  Envelope envelope_[2];
+
+  Hash hash_;
   char name_[kMaxNameLength];
   VoiceMode voiceMode_;
 };

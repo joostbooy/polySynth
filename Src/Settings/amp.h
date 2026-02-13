@@ -70,6 +70,12 @@ class Amp {
     amEnable_ = amp->amEnable();
   }
 
+  void writeHash(Hash& hash) {
+    hash.write(pan_);
+    hash.write(drive_);
+    hash.write(amEnable_);
+  }
+
  private:
   float pan_;
   float drive_;

@@ -171,6 +171,16 @@ class ModMatrix {
     }
   }
 
+  void writeHash(Hash& hash) {
+    for (size_t i = 0; i < NUM_SOURCES; ++i) {
+      hash.write(matrix_[i]);
+    }
+
+    for (size_t i = 0; i < kNumUserCc; ++i) {
+      hash.write(midiCcNumber_[i]);
+    }
+  }
+
  private:
   uint32_t matrix_[NUM_SOURCES];
   uint8_t midiCcNumber_[4];
