@@ -101,6 +101,7 @@ class Buttons {
       case ENVELOPE_PAGE:  return Pages::ENVELOPE_PAGE;
       case VCO_PAGE:       return Pages::OSCILLATOR_PAGE;
       case MATRIX_PAGE:    return Pages::MOD_MATRIX_PAGE;
+      case PATCH_PAGE:     return Pages::PATCH_PAGE;
       default:
         return -1;
         break;
