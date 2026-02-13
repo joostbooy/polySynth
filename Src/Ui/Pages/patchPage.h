@@ -26,24 +26,6 @@ namespace PatchPage {
 
   int newIndex;
 
-  void clear() {
-    settings_->selectedPatch().init();
-    ui_->unlockAllPots();
-  }
-
-  void copy() {
-    patch_.paste(&settings_->selectedPatch());
-    pasteable_ = true;
-  }
-
-  bool paste() {
-    if (pasteable_) {
-      settings_->selectedPatch().paste(&patch_);
-      return true;
-    }
-    return false;
-  }
-
   void init() {
     pasteable_ = false;
     patch_.init();
@@ -59,28 +41,41 @@ namespace PatchPage {
     if (state) {
       switch (buttons_->toFunction(id)) {
         case SAVE:
-          // open confirmation page
-          if (settings_->savePatch()) {
-            MessagePainter::show("PATCH SAVED");
-          } else {
-            MessagePainter::show("FAILED");
-          }
-          break;
-        case COPY:
-          copy();
-          MessagePainter::show("PATCH COPIED");
-          break;
-        case PASTE:
           ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
             if (option == ConfirmationPage::CONFIRM) {
-              if (paste()) {
-                MessagePainter::show("PATCH PASTED");
+              if (settings_->savePatch()) {
+                MessagePainter::show("PATCH SAVED");
               } else {
-                MessagePainter::show("FAILED! CLIPBOARD EMPTY");
+                MessagePainter::show("FAILED");
               }
             }
           });
           pages_->open(Pages::CONFIRMATION_PAGE);
+          break;
+        case COPY:
+          patch_.paste(&settings_->selectedPatch());
+          pasteable_ = true;
+          MessagePainter::show("PATCH COPIED");
+          break;
+        case PASTE:
+          if (pasteable_) {
+            ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
+              if (option == ConfirmationPage::CONFIRM) {
+                settings_->selectedPatch().paste(&patch_);
+                ui_->resetAllPots();
+                MessagePainter::show("PATCH PASTED");
+              }
+            });
+            pages_->open(Pages::CONFIRMATION_PAGE);
+          }
+          break;
+        case CLEAR:
+          ConfirmationPage::set("CLEAR PATCH ?", [](int option) {
+            if (option == ConfirmationPage::CONFIRM) {
+              settings_->selectedPatch().init();
+              ui_->unlockAllPots();
+            }
+          });
           break;
         default:
           break;
@@ -91,6 +86,7 @@ namespace PatchPage {
   void loadNewPatch() {
     settings_->selectPatchIndex(newIndex);
     settings_->loadPatch();
+    ui_->resetAllPots();
   }
 
   void on_encoder(int id, int inc) {
