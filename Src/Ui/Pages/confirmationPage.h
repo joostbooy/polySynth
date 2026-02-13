@@ -11,14 +11,12 @@ namespace ConfirmationPage {
 	enum Option {
 		CONFIRM,
 		CANCEL,
-		APPLY_TO_ALL,
 		NUM_OPTIONS
 	};
 
 	const char* const option_text[NUM_OPTIONS] = {
 		"CONFIRM",
 		"CANCEL",
-		"APPLY TO ALL"
 	};
 
 
@@ -31,14 +29,11 @@ namespace ConfirmationPage {
 	int w = 0;
 	int h = 32;
 
-	int num_options_;
-
-	void set(const char* message, Callback callback, bool request_apply_to_all = false) {
+	void set(const char* message, Callback callback) {
 		str.write(message);
 		callback_ = callback;
 		w = canvas_->font().string_width(str.read()) + 20;
 		x = (canvas_->width() - w) / 2;
-		num_options_ = request_apply_to_all ? 3 : 2;
 	}
 
 	void init() {
@@ -57,7 +52,7 @@ namespace ConfirmationPage {
 
 	void on_button(int id, int state) {
 		int selected_option = buttons_->toFunction(id);
-		if (state >= 1 && selected_option >= 0 && selected_option < num_options_) {
+		if (state >= 1 && selected_option >= 0 && selected_option < NUM_OPTIONS) {
 			callback_(selected_option);
 			pages_->close(Pages::CONFIRMATION_PAGE);
 		}
@@ -79,7 +74,7 @@ namespace ConfirmationPage {
 		canvas_->frame(x + 4, y + 4, w - 8, h - 8, Canvas::WHITE);
 		canvas_->drawText(x, y, w, h, str.read(), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
 
-		WindowPainter::draw_footer(option_text, num_options_);
+		WindowPainter::draw_footer(option_text, NUM_OPTIONS);
 	}
 
 	const size_t target_fps() {
