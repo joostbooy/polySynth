@@ -38,7 +38,7 @@ class Ui {
   void poll();
   void process();
   void sendDisplay();
-  void lockAllPots();
+  void resetAllPots();
   void unlockAllPots();
 
   bool potIsLocked(int id) {

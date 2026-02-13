@@ -32,7 +32,7 @@ void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* displ
   buttons_.init();
   pages_.init(settings, engine, this);
 
-  lockAllPots();
+  resetAllPots();
 
   uiQue.clear();
 }
@@ -314,11 +314,20 @@ void Ui::writePotToSetting(int id) {
   }
 }
 
-void Ui::lockAllPots() {
+void Ui::resetAllPots() {
   lockedPots_[0] = 0xFFFFFFFF;
   lockedPots_[1] = 0xFFFFFFFF;
+
   for (size_t i = 0; i < Pots::NUM_POTS; i++) {
-    potUnlockDirection_[i] = (pots_.read(i) <= readPotToSetting(i)) ? CW : CCW;
+    float pot = pots_.read(i);
+    float setting = readPotToSetting(i);
+    if (pot == setting) {
+      unlockPot(i);
+    } else if (pot < setting) {
+      potUnlockDirection_[i] = CW;
+    } else {
+      potUnlockDirection_[i] = CCW;
+    }
   }
 }
 
