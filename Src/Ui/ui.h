@@ -42,7 +42,7 @@ class Ui {
   void unlockAllPots();
 
   bool potIsLocked(int id) {
-    return lockedPots_ & (1 << (id % 32));
+    return lockedPots_ & (1 << id);
   }
 
  private:
@@ -85,7 +85,7 @@ class Ui {
   float readPotToSetting(int);
 
   void unlockPot(int id) {
-    lockedPots_ &= ~(1 << (id % 32));
+    lockedPots_ &= ~(1 << id);
   }
 };
 
