@@ -7,6 +7,7 @@ namespace PatchPage {
 
   using TopPage::buttons_;
   using TopPage::engine_;
+  using TopPage::pages_;
   using TopPage::settings_;
   using TopPage::ui_;
 
@@ -15,13 +16,15 @@ namespace PatchPage {
 
   enum FooterOption {
     SAVE,
-    LOAD,
     CLEAR,
-    MENU,
+    COPY,
+    PASTE,
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"SAVE", "LOAD", "CLEAR", "MENU"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"SAVE", "CLEAR", "COPY", "PASTE"};
+
+  int newIndex;
 
   void clear() {
     settings_->selectedPatch().init();
@@ -56,15 +59,28 @@ namespace PatchPage {
     if (state) {
       switch (buttons_->toFunction(id)) {
         case SAVE:
+          // open confirmation page
           if (settings_->savePatch()) {
             MessagePainter::show("PATCH SAVED");
           } else {
             MessagePainter::show("FAILED");
           }
           break;
-        case LOAD:
-          settings_->loadPatch();
-          MessagePainter::show("PATCH LOADED");
+        case COPY:
+          copy();
+          MessagePainter::show("PATCH COPIED");
+          break;
+        case PASTE:
+          ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
+            if (option == ConfirmationPage::CONFIRM) {
+              if (paste()) {
+                MessagePainter::show("PATCH PASTED");
+              } else {
+                MessagePainter::show("FAILED! CLIPBOARD EMPTY");
+              }
+            }
+          });
+          pages_->open(Pages::CONFIRMATION_PAGE);
           break;
         default:
           break;
@@ -72,8 +88,27 @@ namespace PatchPage {
     }
   }
 
+  void loadNewPatch() {
+    settings_->selectPatchIndex(newIndex);
+    settings_->loadPatch();
+  }
+
   void on_encoder(int id, int inc) {
-    settings_->selectPatchIndex(settings_->patchIndex() + inc);
+    int lastIndex = settings_->patchIndex();
+    newIndex = SettingsUtils::clip(0, Settings::kNumPatches - 1, lastIndex + inc);
+
+    if (lastIndex != newIndex) {
+      if (settings_->selectedPatch().readHash() != settings_->selectedPatchOrignalState().readHash()) {
+        ConfirmationPage::set("UNSAVED CHANGES WILL BE LOST, CONTINUE?", [](int option) {
+          if (option == ConfirmationPage::CONFIRM) {
+            loadNewPatch();
+          }
+        });
+        pages_->open(Pages::CONFIRMATION_PAGE);
+      } else {
+        loadNewPatch();
+      }
+    }
   }
 
   void refresh_leds() {
