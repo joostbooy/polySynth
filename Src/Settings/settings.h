@@ -74,9 +74,9 @@ class Settings {
       selectedPatch_.paste(&patch_[patchIndex_]);
   }
 
-  void savePatch() {
+  bool savePatch() {
     patch_[patchIndex_].paste(&selectedPatch_);
-    save();
+    return save();
   }
 
   Disk* disk() {
