@@ -14,6 +14,7 @@
 #include "ampPage.h"
 #include "filterPage.h"
 #include "oscillatorPage.h"
+#include "modMatrixPage.h"
 
 Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::EMPTY_PAGE]						= &EmptyPage::page,
@@ -29,6 +30,7 @@ Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::AMP_PAGE]						= &AmpPage::page,
 	[Pages::FILTER_PAGE]					= &FilterPage::page,
 	[Pages::OSCILLATOR_PAGE]				= &OscillatorPage::page,
+	[Pages::MOD_MATRIX_PAGE]				= &ModMatrixPage::page,
 };
 
 void Pages::init(Settings *settings, Engine *engine, Ui *ui) {
