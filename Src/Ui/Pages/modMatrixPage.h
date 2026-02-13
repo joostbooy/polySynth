@@ -72,6 +72,7 @@ namespace ModMatrixPage {
     if (state) {
       if (id == Buttons::ENC_X || id == Buttons::ENC_Y) {
         settings_->modMatrix().toggle(src_, dest_);
+		return;
       }
 
       switch (buttons_->toFunction(id)) {

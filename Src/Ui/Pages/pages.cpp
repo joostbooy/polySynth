@@ -6,8 +6,6 @@
 #include "optionListPage.h"
 #include "hardwareTestPage.h"
 #include "textInputPage.h"
-#include "diskRetryPage.h"
-#include "diskUtilPage.h"
 #include "lfoPage.h"
 #include "midiPage.h"
 #include "envelopePage.h"
@@ -22,8 +20,6 @@ Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::OPTION_LIST_PAGE]				= &OptionListPage::page,
 	[Pages::HARDWARE_TEST_PAGE]				= &HardwareTestPage::page,
 	[Pages::TEXT_INPUT_PAGE]				= &TextInputPage::page,
-	[Pages::DISK_RETRY_PAGE]				= &DiskRetryPage::page,
-	[Pages::DISK_UTIL_PAGE]					= &DiskUtilPage::page,
 	[Pages::LFO_PAGE]						= &LfoPage::page,
 	[Pages::MIDI_PAGE]						= &MidiPage::page,
 	[Pages::ENVELOPE_PAGE]					= &EnvelopePage::page,
