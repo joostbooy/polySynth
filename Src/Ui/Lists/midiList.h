@@ -25,22 +25,14 @@ class MidiList : public SettingsList {
 
   const char* itemText(int item) override {
     switch (item) {
-      case BPM:
-        return "BPM";
-      case CLOCK_SOURCE:
-        return "CLOCK SOURCE";
-      case SEND_CLOCK_UART:
-        return "SEND CLOCK UART";
-      case SEND_CLOCK_USB:
-        return "SEND CLOCK USB";
-      case KEY_RANGE_LOW:
-        return "KEY RANGE LOW";
-      case KEY_RANGE_HIGH:
-        return "KEY RANGE HIGH";
-      case PORT_RECEIVE:
-        return "PORT RECEIVE";
-      case CHANNEL_RECEIVE:
-        return "CHANNEL RECEIVE";
+      case BPM:             return "BPM";
+      case CLOCK_SOURCE:    return "CLOCK SOURCE";
+      case SEND_CLOCK_UART: return "SEND CLOCK UART";
+      case SEND_CLOCK_USB:  return "SEND CLOCK USB";
+      case KEY_RANGE_LOW:   return "KEY RANGE LOW";
+      case KEY_RANGE_HIGH:  return "KEY RANGE HIGH";
+      case PORT_RECEIVE:    return "PORT RECEIVE";
+      case CHANNEL_RECEIVE: return "CHANNEL RECEIVE";
       default:
         break;
     }
@@ -51,22 +43,14 @@ class MidiList : public SettingsList {
     Midi& midi = settings_->midi();
 
     switch (item) {
-      case BPM:
-        return midi.bpmText();
-      case CLOCK_SOURCE:
-        return midi.clockSourceText();
-      case SEND_CLOCK_UART:
-        return midi.sendClock_text(Midi::UART);
-      case SEND_CLOCK_USB:
-        return midi.sendClock_text(Midi::USB);
-      case KEY_RANGE_LOW:
-        return midi.keyRangeLowText();
-      case KEY_RANGE_HIGH:
-        return midi.keyRangeHighText();
-      case PORT_RECEIVE:
-        return midi.portReceiveText();
-      case CHANNEL_RECEIVE:
-        return midi.channelReceiveText();
+      case BPM:             return midi.bpmText();
+      case CLOCK_SOURCE:    return midi.clockSourceText();
+      case SEND_CLOCK_UART: return midi.sendClock_text(Midi::UART);
+      case SEND_CLOCK_USB:  return midi.sendClock_text(Midi::USB);
+      case KEY_RANGE_LOW:   return midi.keyRangeLowText();
+      case KEY_RANGE_HIGH:  return midi.keyRangeHighText();
+      case PORT_RECEIVE:    return midi.portReceiveText();
+      case CHANNEL_RECEIVE: return midi.channelReceiveText();
       default:
         break;
     }

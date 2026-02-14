@@ -19,10 +19,8 @@ class CalibrationList : public SettingsList {
 
   const char* itemText(int item) override {
     switch (item) {
-      case MIN:
-        return "MIN";
-      case MAX:
-        return "MAX";
+      case MIN: return "MIN";
+      case MAX: return "MAX";
       default:
         break;
     }
@@ -31,10 +29,8 @@ class CalibrationList : public SettingsList {
 
   const char* valueText(int item) override {
     switch (item) {
-      case MIN:
-        return settings_->calibration().minText();
-      case MAX:
-        return settings_->calibration().maxText();
+      case MIN: return settings_->calibration().minText();
+      case MAX: return settings_->calibration().maxText();
       default:
         break;
     }

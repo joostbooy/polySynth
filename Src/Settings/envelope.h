@@ -18,10 +18,8 @@ class Envelope {
 
   static const char* modeText(uint8_t value) {
     switch (value) {
-      case GATE:
-        return "GATE";
-      case TRIGGER:
-        return "TRIGGER";
+      case GATE:    return "GATE";
+      case TRIGGER: return "TRIGGER";
       default:
         break;
     }

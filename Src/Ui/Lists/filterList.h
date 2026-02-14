@@ -25,22 +25,14 @@ class FilterList : public SettingsList {
 
   const char* itemText(int item) override {
     switch (item) {
-      case TYPE:
-        return "TYPE";
-      case CUTOFF_1:
-        return "CUTOFF 1";
-      case RESONANCE_1:
-        return "RESONANCE 1";
-      case FM_ENABLE_1:
-        return "FM 1";
-      case CUTOFF_2:
-        return "CUTOFF 2";
-      case RESONANCE_2:
-        return "RESONANCE 2";
-      case FM_ENABLE_2:
-        return "FM 2";
-      case ROUTING:
-        return "ROUTING";
+      case TYPE:        return "TYPE";
+      case CUTOFF_1:    return "CUTOFF 1";
+      case RESONANCE_1: return "RESONANCE 1";
+      case FM_ENABLE_1: return "FM 1";
+      case CUTOFF_2:    return "CUTOFF 2";
+      case RESONANCE_2: return "RESONANCE 2";
+      case FM_ENABLE_2: return "FM 2";
+      case ROUTING:     return "ROUTING";
       default:
         break;
     }
@@ -51,22 +43,14 @@ class FilterList : public SettingsList {
     Filter& filter = settings_->filter();
 
     switch (item) {
-      case TYPE:
-        return filter.typeText();
-      case CUTOFF_1:
-        return filter.cutoff1Text();
-      case RESONANCE_1:
-        return filter.resonance1Text();
-      case FM_ENABLE_1:
-        return filter.fmEnable1Text();
-      case CUTOFF_2:
-        return filter.cutoff2Text();
-      case RESONANCE_2:
-        return filter.resonance2Text();
-      case FM_ENABLE_2:
-        return filter.fmEnable2Text();
-      case ROUTING:
-        return filter.routingText();
+      case TYPE:        return filter.typeText();
+      case CUTOFF_1:    return filter.cutoff1Text();
+      case RESONANCE_1: return filter.resonance1Text();
+      case FM_ENABLE_1: return filter.fmEnable1Text();
+      case CUTOFF_2:    return filter.cutoff2Text();
+      case RESONANCE_2: return filter.resonance2Text();
+      case FM_ENABLE_2: return filter.fmEnable2Text();
+      case ROUTING:     return filter.routingText();
       default:
         break;
     }

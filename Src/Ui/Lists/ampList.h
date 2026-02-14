@@ -20,12 +20,9 @@ class AmpList : public SettingsList {
 
   const char* itemText(int item) override {
     switch (item) {
-      case PAN:
-        return "PAN";
-      case DRIVE:
-        return "DRIVE";
-      case AM:
-        return "AM";
+      case PAN:   return "PAN";
+      case DRIVE: return "DRIVE";
+      case AM:    return "AM";
       default:
         break;
     }
@@ -36,12 +33,9 @@ class AmpList : public SettingsList {
     Amp& amp = settings_->amp();
 
     switch (item) {
-      case PAN:
-        return amp.panText();
-      case DRIVE:
-        return amp.driveText();
-      case AM:
-        return amp.enableAmText();
+      case PAN:   return amp.panText();
+      case DRIVE: return amp.driveText();
+      case AM:    return amp.enableAmText();
       default:
         break;
     }

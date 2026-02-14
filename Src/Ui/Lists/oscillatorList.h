@@ -39,50 +39,28 @@ class OscillatorList : public SettingsList {
 
   const char* itemText(int item) override {
     switch (item) {
-      case VOICE_MODE:
-        return "VOICE MODE";
-      case TRACK_NOTE_1:
-        return "TRACK NOTE 1";
-      case TRACK_NOTE_2:
-        return "TRACK NOTE 2";
-      case SYNC:
-        return "SYNC";
-      case FM:
-        return "FM";
-      case MUTE_1:
-        return "MUTE 1";
-      case MUTE_2:
-        return "MUTE 2";
-      case SHAPE_1:
-        return "SHAPE 1";
-      case SHAPE_2:
-        return "SHAPE 2";
-      case MOD_DEPTH:
-        return "MOD DEPTH";
-      case MOD_SOURCE:
-        return "MOD SOUCRE";
-      case SLIDE_1:
-        return "SLIDE 1";
-      case SLIDE_2:
-        return "SLIDE 2";
-      case LINK_SLIDE_AMMOUNT:
-        return "LINK SLIDE AMMOUNT";
-      case SLIDE_AMMOUNT_1:
-        return "SLIDE AMMOUNT 1";
-      case SLIDE_AMMOUNT_2:
-        return "SLIDE AMMOUNT 2";
-      case OCTAVE_OFFSET_1:
-        return "OCTAVE OFFSET 1";
-      case OCTAVE_OFFSET_2:
-        return "OCTAVE OFFSET 2";
-      case TUNE_1:
-        return "TUNE 1";
-      case TUNE_2:
-        return "TUNE 2";
-      case TYPE_1:
-        return "TYPE 1";
-      case TYPE_2:
-        return "TYPE 2";
+      case VOICE_MODE:          return "VOICE MODE";
+      case TRACK_NOTE_1:        return "TRACK NOTE 1";
+      case TRACK_NOTE_2:        return "TRACK NOTE 2";
+      case SYNC:                return "SYNC";
+      case FM:                  return "FM";
+      case MUTE_1:              return "MUTE 1";
+      case MUTE_2:              return "MUTE 2";
+      case SHAPE_1:             return "SHAPE 1";
+      case SHAPE_2:             return "SHAPE 2";
+      case MOD_DEPTH:           return "MOD DEPTH";
+      case MOD_SOURCE:          return "MOD SOUCRE";
+      case SLIDE_1:             return "SLIDE 1";
+      case SLIDE_2:             return "SLIDE 2";
+      case LINK_SLIDE_AMMOUNT:  return "LINK SLIDE AMMOUNT";
+      case SLIDE_AMMOUNT_1:     return "SLIDE AMMOUNT 1";
+      case SLIDE_AMMOUNT_2:     return "SLIDE AMMOUNT 2";
+      case OCTAVE_OFFSET_1:     return "OCTAVE OFFSET 1";
+      case OCTAVE_OFFSET_2:     return "OCTAVE OFFSET 2";
+      case TUNE_1:              return "TUNE 1";
+      case TUNE_2:              return "TUNE 2";
+      case TYPE_1:              return "TYPE 1";
+      case TYPE_2:              return "TYPE 2";
       default:
         break;
     }
@@ -93,50 +71,28 @@ class OscillatorList : public SettingsList {
     Oscillator& oscillator = settings_->oscillator();
 
     switch (item) {
-      case VOICE_MODE:
-        return oscillator.voiceModeText();
-      case TRACK_NOTE_1:
-        return oscillator.trackNote1Text();
-      case TRACK_NOTE_2:
-        return oscillator.trackNote2Text();
-      case SYNC:
-        return oscillator.syncEnableText();
-      case FM:
-        return oscillator.fmEnableText();
-      case MUTE_1:
-        return oscillator.muteOsc1Text();
-      case MUTE_2:
-        return oscillator.muteOsc2Text();
-      case SHAPE_1:
-        return oscillator.shape1Text();
-      case SHAPE_2:
-        return oscillator.shape2Text();
-      case MOD_DEPTH:
-        return oscillator.modDepthText();
-      case MOD_SOURCE:
-        return oscillator.modSourceText();
-      case SLIDE_1:
-        return oscillator.slideEnable1Text();
-      case SLIDE_2:
-        return oscillator.slideEnable2Text();
-      case LINK_SLIDE_AMMOUNT:
-        return oscillator.linkSlideAmmountText();
-      case SLIDE_AMMOUNT_1:
-        return oscillator.slideAmmount1Text();
-      case SLIDE_AMMOUNT_2:
-        return oscillator.slideAmmount2Text();
-      case OCTAVE_OFFSET_1:
-        return oscillator.octaveOffset1Text();
-      case OCTAVE_OFFSET_2:
-        return oscillator.octaveOffset2Text();
-      case TUNE_1:
-        return oscillator.tune1Text();
-      case TUNE_2:
-        return oscillator.tune2Text();
-      case TYPE_1:
-        return oscillator.type1Text();
-      case TYPE_2:
-        return oscillator.type2Text();
+      case VOICE_MODE:          return oscillator.voiceModeText();
+      case TRACK_NOTE_1:        return oscillator.trackNote1Text();
+      case TRACK_NOTE_2:        return oscillator.trackNote2Text();
+      case SYNC:                return oscillator.syncEnableText();
+      case FM:                  return oscillator.fmEnableText();
+      case MUTE_1:              return oscillator.muteOsc1Text();
+      case MUTE_2:              return oscillator.muteOsc2Text();
+      case SHAPE_1:             return oscillator.shape1Text();
+      case SHAPE_2:             return oscillator.shape2Text();
+      case MOD_DEPTH:           return oscillator.modDepthText();
+      case MOD_SOURCE:          return oscillator.modSourceText();
+      case SLIDE_1:             return oscillator.slideEnable1Text();
+      case SLIDE_2:             return oscillator.slideEnable2Text();
+      case LINK_SLIDE_AMMOUNT:  return oscillator.linkSlideAmmountText();
+      case SLIDE_AMMOUNT_1:     return oscillator.slideAmmount1Text();
+      case SLIDE_AMMOUNT_2:     return oscillator.slideAmmount2Text();
+      case OCTAVE_OFFSET_1:     return oscillator.octaveOffset1Text();
+      case OCTAVE_OFFSET_2:     return oscillator.octaveOffset2Text();
+      case TUNE_1:              return oscillator.tune1Text();
+      case TUNE_2:              return oscillator.tune2Text();
+      case TYPE_1:              return oscillator.type1Text();
+      case TYPE_2:              return oscillator.type2Text();
       default:
         break;
     }

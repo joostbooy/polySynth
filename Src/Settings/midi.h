@@ -18,10 +18,8 @@ class Midi {
 
   static const char* portText(int port) {
     switch (port) {
-      case UART:
-        return "UART";
-      case USB:
-        return "USB";
+      case UART:  return "UART";
+      case USB:   return "USB";
       default:
         break;
     }

@@ -24,12 +24,9 @@ class Filter {
 
   const char* typeText(Type type) {
     switch (type) {
-      case HP:
-        return "HP";
-      case BP:
-        return "BP";
-      case LP2P:
-        return "2PLP";
+      case HP:    return "HP";
+      case BP:    return "BP";
+      case LP2P:  return "2PLP";
       default:
         break;
     }
@@ -38,10 +35,8 @@ class Filter {
 
   const char* routingText(Routing type) {
     switch (type) {
-      case SERIES:
-        return "SERIES";
-      case PARALEL:
-        return "PARALEL";
+      case SERIES:  return "SERIES";
+      case PARALEL: return "PARALEL";
       default:
         break;
     }

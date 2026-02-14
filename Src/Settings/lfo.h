@@ -22,14 +22,10 @@ class Lfo {
 
   const char* typeText(Type type) {
     switch (type) {
-      case LINEAR:
-        return "LINEAR";
-      case LOG_EXP:
-        return "LOG EXP";
-      case EXP_LOG:
-        return "EXP LOG";
-      case SQUARE:
-        return "SQUARE";
+      case LINEAR:  return "LINEAR";
+      case LOG_EXP: return "LOG EXP";
+      case EXP_LOG: return "EXP LOG";
+      case SQUARE:  return "SQUARE";
       default:
         break;
     }

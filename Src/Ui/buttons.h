@@ -78,14 +78,10 @@ class Buttons {
 
    int toFunction(int id) {
     switch (id) {
-      case DISPLAY_A:
-        return 0;
-      case DISPLAY_B:
-        return 1;
-      case DISPLAY_C:
-        return 2;
-      case DISPLAY_D:
-        return 3;
+      case DISPLAY_A: return 0;
+      case DISPLAY_B: return 1;
+      case DISPLAY_C: return 2;
+      case DISPLAY_D: return 3;
       default:
         return -1;
         break;

@@ -49,14 +49,10 @@ class Oscillator {
 
   static const char* type1Text(Type1 type) {
     switch (type) {
-      case SAW1:
-        return "SAW";
-      case TRIANGLE1:
-        return "TRIANGLE";
-      case SINE1:
-        return "SINE";
-      case SQUARE1:
-        return "SQUARE";
+      case SAW1:      return "SAW";
+      case TRIANGLE1: return "TRIANGLE";
+      case SINE1:     return "SINE";
+      case SQUARE1:   return "SQUARE";
       default:
         break;
     }
@@ -65,14 +61,10 @@ class Oscillator {
 
   static const char* type2Text(Type2 type) {
     switch (type) {
-      case SAW2:
-        return "SAW";
-      case TRIANGLE2:
-        return "TRIANGLE";
-      case NOISE2:
-        return "NOISE";
-      case SQUARE2:
-        return "SQUARE";
+      case SAW2:      return "SAW";
+      case TRIANGLE2: return "TRIANGLE";
+      case NOISE2:    return "NOISE";
+      case SQUARE2:   return "SQUARE";
       default:
         break;
     }
@@ -81,12 +73,9 @@ class Oscillator {
 
   const char* voiceModeText(VoiceMode value) {
     switch (value) {
-      case MONO:
-        return "MONO";
-      case POLY:
-        return "POLY";
-      case UNISON:
-        return "UNISON";
+      case MONO:    return "MONO";
+      case POLY:    return "POLY";
+      case UNISON:  return "UNISON";
       default:
         break;
     }
