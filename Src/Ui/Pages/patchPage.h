@@ -10,6 +10,8 @@ namespace PatchPage {
   using TopPage::pages_;
   using TopPage::settings_;
   using TopPage::ui_;
+  using TopPage::canvas_;
+  using TopPage::str_;
 
   bool pasteable_;
   Patch patch_;
@@ -133,11 +135,18 @@ namespace PatchPage {
   }
 
   void draw() {
-    // settings_->patch(i).name();
+    canvas_->setFont(Font::LARGE);
+    str_.write(settings_->patchIndex() + 1, " ", settings_->selectedPatch().name());
+    if (settings_->selectedPatch().readHash() != settings_->selectedPatchOrignalState().readHash()) {
+      str_.prepend("*");
+    }
+    canvas_->drawText(50, 10, str_.read());
 
+
+    canvas_->setFont(Font::SMALL);
     int numOptions = NUM_FOOTER_OPTIONS - footerOptionsOffset;
     if (numOptions >= 4) {
-        numOptions = 4;
+      numOptions = 4;
     }
     WindowPainter::draw_footer(&footerOptionText[footerOptionsOffset], numOptions);
   }
