@@ -228,6 +228,10 @@ namespace TopPage {
   }
 
   void refresh_leds() {
+    if (pages_->isOpen(Pages::HARDWARE_TEST_PAGE)) {
+      return;
+    }
+
     Patch& p = settings_->selectedPatch();
 
     leds_->setAm(p.amp().amEnable());

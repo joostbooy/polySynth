@@ -52,6 +52,15 @@ void Pages::open(int id) {
 	}
 }
 
+bool Pages::isOpen(int id) {
+	for (size_t i = 0; i < page_stack_.size(); i++){
+		if (page_stack_.read(i) == id) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void Pages::close(int id) {
 	if (page_stack_.remove_by_value(id)) {
 		if (page_stack_.readable()) {

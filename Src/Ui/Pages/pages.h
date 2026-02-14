@@ -40,6 +40,7 @@ public:
 	void on_encoder(int id, int state);
 	void draw();
 	void refresh_leds();
+	bool isOpen(int id);
 	const size_t target_fps();
 
 	struct Page {
