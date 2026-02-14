@@ -108,7 +108,7 @@ namespace ListPage {
   }
 
   void on_encoder(int id, int inc) {
-    list_->onEncoder(inc, false);
+    list_->onEncoder(inc, buttons_->isPressed(Buttons::SHIFT));
   }
 
   void refresh_leds() {
