@@ -240,6 +240,8 @@ namespace TopPage {
     leds_->setOscModSource(p.oscillator().modSource());
     leds_->setOctaveOffset1(p.oscillator().octaveOffset1());
     leds_->setOctaveOffset2(p.oscillator().octaveOffset2());
+    leds_->setSlideVco1(p.oscillator().slideEnable1());
+    leds_->setSlideVco2(p.oscillator().slideEnable2());
 
     leds_->setFilter1Fm(p.filter().fmEnable1());
     leds_->setFilter2Fm(p.filter().fmEnable2());
