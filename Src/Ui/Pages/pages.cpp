@@ -14,6 +14,7 @@
 #include "oscillatorPage.h"
 #include "modMatrixPage.h"
 #include "patchPage.h"
+#include "calibrationPage.h"
 
 Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::EMPTY_PAGE]						= &EmptyPage::page,
@@ -21,6 +22,7 @@ Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::OPTION_LIST_PAGE]				= &OptionListPage::page,
 	[Pages::HARDWARE_TEST_PAGE]				= &HardwareTestPage::page,
 	[Pages::TEXT_INPUT_PAGE]				= &TextInputPage::page,
+	[Pages::CALIBRATION_PAGE]				= &CalibrationPage::page,
 	[Pages::LFO_PAGE]						= &LfoPage::page,
 	[Pages::MIDI_PAGE]						= &MidiPage::page,
 	[Pages::ENVELOPE_PAGE]					= &EnvelopePage::page,
@@ -39,7 +41,7 @@ void Pages::init(Settings *settings, Engine *engine, Ui *ui) {
 		page_[i]->init();
 	}
 
-	//open(PATCH_PAGE);
+	open(PATCH_PAGE);
 }
 
 void Pages::open(int id) {

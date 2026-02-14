@@ -1,25 +1,29 @@
 #ifndef CalibrationPage_h
 #define CalibrationPage_h
 
-#include "calibrationUiList.h"
+#include "calibrationList.h"
 #include "topPage.h"
 
 namespace CalibrationPage {
+
+	using TopPage::settings_;
+	using TopPage::engine_;
+	using TopPage::ui_;
+	using TopPage::canvas_;
+	using TopPage::buttons_;
+	using TopPage::pages_;
 
 CalibrationList calibrationList;
 
 enum FooterOptions { 
 	SAVE, 
 	LOAD, 
+  CLEAR,
 	CLOSE, 
 	NUM_FOOTER_OPTIONS 
 };
 
-const char* const footer_text[NUM_FOOTER_OPTIONS] = { "SAVE", "LOAD", "CLOSE" };
-
-void clear_settings() {
-  settings->calibration().init();
-}
+const char* const footer_text[NUM_FOOTER_OPTIONS] = { "SAVE", "LOAD", "CLEAR", "CLOSE" };
 
 void init() {
 
@@ -27,7 +31,6 @@ void init() {
 
 void enter() {
   ListPage::setList(&calibrationList);
-  ListPage::setClearCallback(&clear);
   ListPage::enter();
   settings_->calibration().start();
 }
@@ -48,9 +51,9 @@ void on_button(int id, int state) {
     return;
   }
 
-  switch (controller.buttonToFunction(id)) {
+  switch (buttons_->toFunction(id)) {
     case SAVE:
-      ConfirmationPage::set("OVERWRITE SETTINGS ?", [](uint8_t option) {
+      ConfirmationPage::set("OVERWRITE SETTINGS ?", [](int option) {
         if (option == ConfirmationPage::CONFIRM) {
           if (settings_->saveCalibration()) {
             MessagePainter::show("CALIBRATION SAVED");
@@ -62,7 +65,7 @@ void on_button(int id, int state) {
       pages_->open(Pages::CONFIRMATION_PAGE);
       break;
     case LOAD:
-      ConfirmationPage::set("OVERWRITE SETTINGS ?", [](uint8_t option) {
+      ConfirmationPage::set("OVERWRITE SETTINGS ?", [](int option) {
         if (option == ConfirmationPage::CONFIRM) {
           if (settings_->loadCalibration()) {
             MessagePainter::show("CALIBRATION LOADED");
@@ -76,23 +79,26 @@ void on_button(int id, int state) {
     case CLOSE:
       pages_->close(Pages::CALIBRATION_PAGE);
       break;
+    case CLEAR:
+      ConfirmationPage::set("CLEAR SETTINGS ?", [](int option) {
+        if (option == ConfirmationPage::CONFIRM) {
+          settings_->calibration().init();
+          MessagePainter::show("CALIBRATION CLEARED");
+        }
+      });
+      break;
     default:
       break;
   }
 }
 
 void refresh_leds() {
-  ListPage::refresh_leds();
-  LedPainter::footer_buttons(NUM_FOOTER_OPTIONS);
-}
 
-void msTick(uint16_t ticks) {
-  ListPage::msTick(ticks);
 }
 
 // Bottom to top
 void draw() {
-  canvas_->buffer.clear();
+  canvas_->clear();
   ListPage::draw();
   WindowPainter::draw_footer(footer_text, NUM_FOOTER_OPTIONS);
 }

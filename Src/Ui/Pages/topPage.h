@@ -108,6 +108,22 @@ namespace TopPage {
       return;
     }
 
+    // Super secret dev pages
+    if (buttons_->isPressed(Buttons::SHIFT)) {
+      if (id == Buttons::PATCH_PAGE) {
+        pages_->close_all();
+        pages_->open(Pages::HARDWARE_TEST_PAGE);
+        return;
+      }
+
+      if (id == Buttons::LFO_PAGE) {
+        pages_->close_all();
+        pages_->open(Pages::CALIBRATION_PAGE);
+        return;
+      }
+    }
+
+    // Page buttons
     int page = buttons_->toPage(id);
     if (page >= 0) {
       pages_->close_all();
@@ -115,6 +131,7 @@ namespace TopPage {
       return;
     }
 
+    // Synth settings
     Patch& p = settings_->selectedPatch();
 
     switch (id) {

@@ -2,6 +2,7 @@
 #define Calibration_h
 
 #include "SettingsUtils.h"
+#include "SettingsText.h"
 #include "dsp.h"
 #include "fileReader.h"
 #include "fileWriter.h"
@@ -31,9 +32,13 @@ class Calibration {
     return min_;
   }
 
-  // should result in -5V
+  // should result in -3V
   void setMin(int value) {
     min_ = SettingsUtils::clip(0, max_, value);
+  }
+
+  const char* minText() {
+    return SettingsText::intToText(min());
   }
 
   // Max
@@ -41,9 +46,13 @@ class Calibration {
     return max_;
   }
 
-  // should result in +5V
+  // should result in +7V
   void setMax(int value) {
     max_ = SettingsUtils::clip(min_, 65535, value);
+  }
+
+  const char* maxText() {
+    return SettingsText::intToText(max());
   }
 
   uint16_t read(uint16_t value) {
