@@ -18,12 +18,17 @@ namespace PatchPage {
     SAVE,
     CLEAR,
     COPY,
+    NEXT,
+    PREV,
     PASTE,
+    EDIT_NAME,
+
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"SAVE", "CLEAR", "COPY", "PASTE"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"SAVE", "CLEAR", "COPY", ">", "<", "PASTE", "EDIT NAME"};
 
+  int footerOptionsOffset;
   int newIndex;
 
   void init() {
@@ -32,6 +37,7 @@ namespace PatchPage {
   }
 
   void enter() {
+    footerOptionsOffset = 0;
   }
 
   void exit() {
@@ -39,7 +45,13 @@ namespace PatchPage {
 
   void on_button(int id, int state) {
     if (state) {
-      switch (buttons_->toFunction(id)) {
+
+      int option = buttons_->toFunction(id);
+      if (option >= 0) {
+        option += footerOptionsOffset;
+      }
+      
+      switch (option) {
         case SAVE:
           ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
             if (option == ConfirmationPage::CONFIRM) {
@@ -77,6 +89,16 @@ namespace PatchPage {
             }
           });
           break;
+        case EDIT_NAME:
+         	TextInputPage::set(settings_->selectedPatch().name(), Patch::kMaxNameLength, "SET PATCH NAME");
+          pages_->open(Pages::TEXT_INPUT_PAGE);
+          break;
+        case NEXT:
+          footerOptionsOffset = 4;
+          break;
+        case PREV:
+          footerOptionsOffset = 0;
+          break;
         default:
           break;
       }
@@ -112,7 +134,12 @@ namespace PatchPage {
 
   void draw() {
     // settings_->patch(i).name();
-    WindowPainter::draw_footer(footerOptionText, NUM_FOOTER_OPTIONS);
+
+    int numOptions = NUM_FOOTER_OPTIONS - footerOptionsOffset;
+    if (numOptions >= 4) {
+        numOptions = 4;
+    }
+    WindowPainter::draw_footer(&footerOptionText[footerOptionsOffset], numOptions);
   }
 
   const size_t target_fps() {
