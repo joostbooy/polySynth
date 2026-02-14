@@ -44,14 +44,14 @@ class VoiceEngine {
   }
 
   void requestVoice() {
-    switch (settings_->selectedPatch().voiceMode()) {
-      case Patch::MONO:
-      case Patch::UNISON:
+    switch (settings_->selectedPatch().oscillator().voiceMode()) {
+      case Oscillator::MONO:
+      case Oscillator::UNISON:
         for (size_t i = 0; i < Settings::kNumVoices; i++) {
           voice_[i].requestStop();
         }
         break;
-      case Patch::POLY: {
+      case Oscillator::POLY: {
         if (availableVoices_.size() == 0) {
           uint8_t v = activeVoices_.pull();
           voice_[v].requestStop();
@@ -82,12 +82,12 @@ class VoiceEngine {
   void assignVoice(MidiEngine::Event e) {
     size_t count = 0;
 
-    switch (settings_->selectedPatch().voiceMode()) {
-      case Patch::MONO:
-      case Patch::POLY:
+    switch (settings_->selectedPatch().oscillator().voiceMode()) {
+      case Oscillator::MONO:
+      case Oscillator::POLY:
         count = 1;
         break;
-      case Patch::UNISON:
+      case Oscillator::UNISON:
         count = availableVoices_.size();
         break;
       default:

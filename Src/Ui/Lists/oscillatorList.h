@@ -7,6 +7,7 @@
 class OscillatorList : public SettingsList {
  public:
   enum Item {
+    VOICE_MODE,
     TRACK_NOTE_1,
     TRACK_NOTE_2,
     SYNC,
@@ -38,6 +39,8 @@ class OscillatorList : public SettingsList {
 
   const char* itemText(int item) override {
     switch (item) {
+      case VOICE_MODE:
+        return "VOICE MODE";
       case TRACK_NOTE_1:
         return "TRACK NOTE 1";
       case TRACK_NOTE_2:
@@ -90,6 +93,8 @@ class OscillatorList : public SettingsList {
     Oscillator& oscillator = settings_->oscillator();
 
     switch (item) {
+      case VOICE_MODE:
+        return oscillator.voiceModeText();
       case TRACK_NOTE_1:
         return oscillator.trackNote1Text();
       case TRACK_NOTE_2:
@@ -142,48 +147,72 @@ class OscillatorList : public SettingsList {
     Oscillator& oscillator = settings_->oscillator();
 
     switch (item) {
+      case VOICE_MODE:
+        oscillator.setVoiceMode(oscillator.voiceMode() + inc);
+        break;
       case TRACK_NOTE_1:
-        return oscillator.setTrackNote1(inc > 0);
+        oscillator.setTrackNote1(inc > 0);
+        break;
       case TRACK_NOTE_2:
-        return oscillator.setTrackNote2(inc > 0);
+        oscillator.setTrackNote2(inc > 0);
+        break;
       case SYNC:
-        return oscillator.setSyncEnable(inc > 0);
+        oscillator.setSyncEnable(inc > 0);
+        break;
       case FM:
-        return oscillator.setFmEnable(inc > 0);
+        oscillator.setFmEnable(inc > 0);
+        break;
       case MUTE_1:
-        return oscillator.setMuteOsc1(inc > 0);
+        oscillator.setMuteOsc1(inc > 0);
+        break;
       case MUTE_2:
-        return oscillator.setMuteOsc2(inc > 0);
+        oscillator.setMuteOsc2(inc > 0);
+        break;
       case SHAPE_1:
-        return oscillator.setShape1(oscillator.shape1() + SettingsUtils::fInc(inc, shifted));
+        oscillator.setShape1(oscillator.shape1() + SettingsUtils::fInc(inc, shifted));
+        break;
       case SHAPE_2:
-        return oscillator.setShape2(oscillator.shape2() + SettingsUtils::fInc(inc, shifted));
+        oscillator.setShape2(oscillator.shape2() + SettingsUtils::fInc(inc, shifted));
+        break;
       case MOD_DEPTH:
-        return oscillator.setModDepth(oscillator.modDepth() + SettingsUtils::fInc(inc, shifted));
+        oscillator.setModDepth(oscillator.modDepth() + SettingsUtils::fInc(inc, shifted));
+        break;
       case MOD_SOURCE:
-        return oscillator.setModSource(oscillator.modSource() + inc);
+        oscillator.setModSource(oscillator.modSource() + inc);
+        break;
       case SLIDE_1:
-        return oscillator.setSlideEnable1(inc > 0);
+        oscillator.setSlideEnable1(inc > 0);
+        break;
       case SLIDE_2:
-        return oscillator.setSlideEnable2(inc > 0);
+        oscillator.setSlideEnable2(inc > 0);
+        break;
       case LINK_SLIDE_AMMOUNT:
-        return oscillator.setLinkSlideAmmount(inc > 0);
+        oscillator.setLinkSlideAmmount(inc > 0);
+        break;
       case SLIDE_AMMOUNT_1:
-        return oscillator.setSlideAmmount1(oscillator.slideAmmount1() + SettingsUtils::fInc(inc, shifted));
+        oscillator.setSlideAmmount1(oscillator.slideAmmount1() + SettingsUtils::fInc(inc, shifted));
+        break;
       case SLIDE_AMMOUNT_2:
-        return oscillator.setSlideAmmount2(oscillator.slideAmmount2() + SettingsUtils::fInc(inc, shifted));
+        oscillator.setSlideAmmount2(oscillator.slideAmmount2() + SettingsUtils::fInc(inc, shifted));
+        break;
       case OCTAVE_OFFSET_1:
-        return oscillator.setOctaveOffset1(oscillator.octaveOffset1() + (inc * 12));
+        oscillator.setOctaveOffset1(oscillator.octaveOffset1() + (inc * 12));
+        break;
       case OCTAVE_OFFSET_2:
-        return oscillator.setOctaveOffset2(oscillator.octaveOffset2() + (inc * 12));
+        oscillator.setOctaveOffset2(oscillator.octaveOffset2() + (inc * 12));
+        break;
       case TUNE_1:
-        return oscillator.setTune1(oscillator.tune1() + SettingsUtils::fInc(inc, shifted));
+        oscillator.setTune1(oscillator.tune1() + SettingsUtils::fInc(inc, shifted));
+        break;
       case TUNE_2:
-        return oscillator.setTune2(oscillator.tune2() + SettingsUtils::fInc(inc, shifted));
+        oscillator.setTune2(oscillator.tune2() + SettingsUtils::fInc(inc, shifted));
+        break;
       case TYPE_1:
-        return oscillator.setType1(oscillator.type1() + inc);
+        oscillator.setType1(oscillator.type1() + inc);
+        break;
       case TYPE_2:
-        return oscillator.setType2(oscillator.type2() + inc);
+        oscillator.setType2(oscillator.type2() + inc);
+        break;
       default:
         break;
     }

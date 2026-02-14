@@ -7,8 +7,10 @@ class Oscillator {
  public:
   enum Type1 { SAW1, TRIANGLE1, SINE1, SQUARE1, NUM_TYPES1 };
   enum Type2 { SAW2, TRIANGLE2, NOISE2, SQUARE2, NUM_TYPES2 };
+  enum VoiceMode { MONO, POLY, UNISON, NUM_VOICE_MODES };
 
   void init() {
+    setVoiceMode(POLY);
     setFmEnable(false);
     setSyncEnable(false);
     setType1(SAW1);
@@ -30,6 +32,19 @@ class Oscillator {
     setOctaveOffset2(0);
     setTune1(0.5f);
     setTune2(0.5f);
+  }
+
+  // Voice mode
+  VoiceMode voiceMode() {
+    return voiceMode_;
+  }
+
+  void setVoiceMode(int value) {
+    voiceMode_ = VoiceMode(SettingsUtils::clip(0, NUM_VOICE_MODES - 1, value));
+  }
+
+  const char *voiceModeText() {
+    return voiceModeText(voiceMode());
   }
 
   static const char* type1Text(Type1 type) {
@@ -58,6 +73,20 @@ class Oscillator {
         return "NOISE";
       case SQUARE2:
         return "SQUARE";
+      default:
+        break;
+    }
+    return nullptr;
+  }
+
+  const char* voiceModeText(VoiceMode value) {
+    switch (value) {
+      case MONO:
+        return "MONO";
+      case POLY:
+        return "POLY";
+      case UNISON:
+        return "UNISON";
       default:
         break;
     }
@@ -340,6 +369,7 @@ class Oscillator {
 
   // Storage
   void save(FileWriter& fileWriter) {
+    fileWriter.write(voiceMode_);
     fileWriter.write(fmEnable_);
     fileWriter.write(muteOsc1_);
     fileWriter.write(muteOsc2_);
@@ -364,6 +394,7 @@ class Oscillator {
   }
 
   void load(FileReader& fileReader) {
+    fileReader.read(voiceMode_);
     fileReader.read(fmEnable_);
     fileReader.read(muteOsc1_);
     fileReader.read(muteOsc2_);
@@ -388,6 +419,7 @@ class Oscillator {
   }
 
   void paste(Oscillator* oscillator) {
+    voiceMode_ = oscillator->voiceMode();
     fmEnable_ = oscillator->fmEnable();
     muteOsc1_ = oscillator->muteOsc1();
     muteOsc2_ = oscillator->muteOsc2();
@@ -412,6 +444,7 @@ class Oscillator {
   }
 
     void writeHash(Hash& hash) {
+    hash.write(voiceMode_);
     hash.write(fmEnable_);
     hash.write(muteOsc1_);
     hash.write(muteOsc2_);
@@ -457,6 +490,7 @@ class Oscillator {
   float tune2_;
   Type1 type1_;
   Type2 type2_;
+  VoiceMode voiceMode_;
 };
 
 #endif  // Oscilator_h
