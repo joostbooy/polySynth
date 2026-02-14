@@ -21,7 +21,7 @@ class Engine {
     KILL_VOICES = (1 << 2),
   };
 
-  void init(Settings*, Uart*, Usb*, Dac*, Switches*);
+  void init(Settings*, Uart*, Usb*, Dac*);
   void tick();
   void update();
 
@@ -49,7 +49,6 @@ class Engine {
   uint32_t processing_time_uS_;
 
   Dac *dac_;
-  Switches* switches_;
   Settings* settings_;
   MidiEngine midiEngine_;
   VoiceEngine voiceEngine_;

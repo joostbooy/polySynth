@@ -89,8 +89,8 @@ int main(void)
 
 	 disk.init(&sdio);
 	 settings.init(&disk);
-	 //settings.load();
-	 engine.init(&settings, &uart, &usb, &dac, &switches);
+	 settings.load();
+	 engine.init(&settings, &uart, &usb, &dac);
 	 ui.init(&settings, &engine, &matrix, &display, &switches, &adc);
 
 	// Start timers

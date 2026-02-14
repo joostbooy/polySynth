@@ -1,8 +1,7 @@
 #include "engine.h"
 
-void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac, Switches* switches) {
+void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac) {
   dac_ = dac;
-  switches_ = switches;
   settings_ = settings;
   midiEngine_.init(uart, usb, &settings_->midi());
   modMatrixEngine_.init(settings_);
