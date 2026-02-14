@@ -108,8 +108,7 @@ namespace PatchPage {
   }
 
   void loadNewPatch() {
-    settings_->selectPatchIndex(newIndex);
-    settings_->loadPatch();
+    settings_->loadPatch(newIndex);
     ui_->resetAllPots();
   }
 
@@ -118,7 +117,7 @@ namespace PatchPage {
     newIndex = SettingsUtils::clip(0, Settings::kNumPatches - 1, lastIndex + inc);
 
     if (lastIndex != newIndex) {
-      if (settings_->selectedPatch().readHash() != settings_->selectedPatchOrignalState().readHash()) {
+      if (settings_->patchHasUnsavedChanges()) {
         ConfirmationPage::set("UNSAVED CHANGES WILL BE LOST, CONTINUE?", [](int option) {
           if (option == ConfirmationPage::CONFIRM) {
             loadNewPatch();
@@ -137,10 +136,11 @@ namespace PatchPage {
   void draw() {
     canvas_->setFont(Font::LARGE);
     str_.write(settings_->patchIndex() + 1, " ", settings_->selectedPatch().name());
-    if (settings_->selectedPatch().readHash() != settings_->selectedPatchOrignalState().readHash()) {
+    if (settings_->patchHasUnsavedChanges()) {
       str_.prepend("*");
     }
-    canvas_->drawText(50, 10, str_.read());
+
+    canvas_->drawText(0, 0, canvas_->width(), 54, str_.read(), Canvas::CENTER, Canvas::CENTER);
 
 
     canvas_->setFont(Font::SMALL);

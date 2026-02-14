@@ -28,7 +28,7 @@ class Settings {
     for (size_t i = 0; i < kNumPatches; i++) {
       patch(i).init();
     }
-    loadPatch();
+    loadPatch(patchIndex_);
 
     if (!calibrationLoaded_) {
       calibrationLoaded_ = loadCalibration();
@@ -66,17 +66,18 @@ class Settings {
     return patchIndex_;
   }
 
-  void selectPatchIndex(int value) {
-    patchIndex_ = SettingsUtils::clip(0, kNumPatches - 1, value);
-  }
-
-  void loadPatch() {
-      selectedPatch_.paste(&patch_[patchIndex_]);
+  void loadPatch(int index) {
+    patchIndex_ = SettingsUtils::clip(0, kNumPatches - 1, index);
+    selectedPatch_.paste(&patch_[patchIndex_]);
   }
 
   bool savePatch() {
     patch_[patchIndex_].paste(&selectedPatch_);
     return save();
+  }
+
+  bool patchHasUnsavedChanges() {
+    return selectedPatch().readHash() != selectedPatchOrignalState().readHash();
   }
 
   Disk* disk() {

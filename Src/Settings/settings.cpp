@@ -34,7 +34,7 @@ bool Settings::load() {
     return false;
   }
 
-  loadPatch();
+  loadPatch(patchIndex_);
   return true;
 };
 
