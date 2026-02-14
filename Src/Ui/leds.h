@@ -44,15 +44,6 @@ class Leds {
     }
   }
 
-  // Slide
-  void setSlideVco1(bool state) {
-    set(6, 3, state);
-  }
-
-   void setSlideVco2(bool state) {
-    set(7, 4, state);
-  }
-
   // Pots
   void setPot(int id, Color color) {
     switch (id) {
@@ -204,6 +195,10 @@ class Leds {
   }
 
   // Osc 1
+  void setSlideVco1(bool state) {
+    set(6, 3, state);
+  }
+
   void setOsc1Fm(bool state) {
     set(1, 7, state);
   }
@@ -281,6 +276,10 @@ class Leds {
   }
 
   // Osc 2
+  void setSlideVco2(bool state) {
+    set(7, 4, state);
+  }
+
   void setMute2(bool state) {
     set(2, 7, state);
   }
