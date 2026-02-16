@@ -50,6 +50,8 @@ namespace CalibrationPage {
     settings_->oscillator().setShape1(0.f);
     settings_->oscillator().setShape2(0.f);
     settings_->oscillator().setFmEnable(false);
+    settings_->oscillator().setSyncEnable(false);
+    settings_->oscillator().setModDepth(0.f);
     settings_->filter().setType(Filter::LP2P);
     settings_->filter().setCutoff1(1.f);
     settings_->filter().setCutoff2(1.f);
