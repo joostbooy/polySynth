@@ -149,11 +149,7 @@ namespace CalibrationPage {
     canvas_->drawText(x, y * (rowHeight * 3), "SELECTED VOICE");
     canvas_->drawText(x + collWdith, y * (rowHeight * 3), settings_->calibration().selectedVoiceText());
 
-    int numOptions = NUM_FOOTER_OPTIONS - footerOptionsOffset;
-    if (numOptions >= 4) {
-      numOptions = 4;
-    }
-    WindowPainter::draw_footer(&footer_text[footerOptionsOffset], numOptions);
+    WindowPainter::draw_footer(footer_text, NUM_FOOTER_OPTIONS, footerOptionsOffset);
   }
 
   const size_t target_fps() {

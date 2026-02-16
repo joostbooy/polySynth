@@ -144,11 +144,7 @@ namespace PatchPage {
 
 
     canvas_->setFont(Font::SMALL);
-    int numOptions = NUM_FOOTER_OPTIONS - footerOptionsOffset;
-    if (numOptions >= 4) {
-      numOptions = 4;
-    }
-    WindowPainter::draw_footer(&footerOptionText[footerOptionsOffset], numOptions);
+    WindowPainter::draw_footer(footerOptionText, NUM_FOOTER_OPTIONS, footerOptionsOffset);
   }
 
   const size_t target_fps() {
