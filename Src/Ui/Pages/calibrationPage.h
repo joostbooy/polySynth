@@ -20,18 +20,28 @@ namespace CalibrationPage {
     CLEAR,
     NEXT,
     PREV,
+    NEXT_VCO,
     NEXT_VOICE,
     CLOSE,
     NUM_FOOTER_OPTIONS,
   };
 
   int footerOptionsOffset;
-  const char* const footer_text[NUM_FOOTER_OPTIONS] = {"SAVE", "LOAD", "CLEAR", ">", "<", "NEXT VOICE", "CLOSE"};
+  const char* const footer_text[NUM_FOOTER_OPTIONS] = {"SAVE", "LOAD", "CLEAR", ">", "<", "NEXT VCO", "NEXT VOICE", "CLOSE"};
+
+  int selectedVco_;
+
+  void selectNextVco() {
+    ++selectedVco_ %= 2;
+    settings_->oscillator().setMuteOsc1(selectedVco_ == 0);
+    settings_->oscillator().setMuteOsc2(selectedVco_ == 1);
+  }
 
   void init() {
   }
 
   void enter() {
+    selectedVco_ = 0;
     footerOptionsOffset = 0;
 
     patch_.paste(&settings_->selectedPatch());
@@ -51,7 +61,8 @@ namespace CalibrationPage {
     settings_->amp().setDrive(0.f);
     settings_->amp().setPan(0.5f);
     settings_->modMatrix().clear();
-
+    selectNextVco();
+    
     settings_->calibration().start();
   }
 
@@ -118,6 +129,9 @@ namespace CalibrationPage {
       case PREV:
         footerOptionsOffset = 0;
         break;
+      case NEXT_VCO:
+        selectNextVco();
+        break;
       case NEXT_VOICE:
         settings_->calibration().selectNextVoice();
         break;
@@ -141,13 +155,17 @@ namespace CalibrationPage {
     const int y = 10;
     const int rowHeight = 8;
     const int collWdith = canvas_->width() / 4;
+
     canvas_->drawText(x, y, "MIN");
     canvas_->drawText(x + collWdith, y, settings_->calibration().minText());
     canvas_->drawText(x, y + rowHeight, "MAX");
     canvas_->drawText(x + collWdith, y + rowHeight, settings_->calibration().maxText());
 
-    canvas_->drawText(x, y * (rowHeight * 3), "SELECTED VOICE");
-    canvas_->drawText(x + collWdith, y * (rowHeight * 3), settings_->calibration().selectedVoiceText());
+    canvas_->drawText(x, y * (rowHeight * 3), "SELECTED VCO");
+    canvas_->drawText(x + collWdith, y * (rowHeight * 3), SettingsText::intToText(selectedVco_ + 1));
+
+    canvas_->drawText(x, y * (rowHeight * 4), "SELECTED VOICE");
+    canvas_->drawText(x + collWdith, y * (rowHeight * 4), settings_->calibration().selectedVoiceText());
 
     WindowPainter::draw_footer(footer_text, NUM_FOOTER_OPTIONS, footerOptionsOffset);
   }
@@ -156,7 +174,16 @@ namespace CalibrationPage {
     return 1000 / 16;
   }
 
-  Pages::Page page = {&init, &enter, &exit, &draw, &refresh_leds, &on_button, &on_encoder, &target_fps};
+  Pages::Page page = {
+      &init,
+      &enter,
+      &exit,
+      &draw,
+      &refresh_leds,
+      &on_button,
+      &on_encoder,
+      &target_fps,
+  };
 
 };  // namespace CalibrationPage
 
