@@ -104,6 +104,10 @@ namespace TopPage {
   }
 
   void on_button(int id, int state) {
+    if (pages_->isOpen(Pages::HARDWARE_TEST_PAGE)) {
+      return;
+    }
+
     if (!state) {
       return;
     }

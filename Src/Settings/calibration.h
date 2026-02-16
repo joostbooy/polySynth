@@ -12,6 +12,7 @@ class Calibration {
   void init() {
     min_ = 0;
     max_ = 65535;
+    selectedVoice_ = 0;
     enabled_ = false;
   }
 
@@ -25,6 +26,21 @@ class Calibration {
 
   bool enabled() {
     return enabled_;
+  }
+
+  // Selected voice
+  void selectNextVoice() {
+    if (++selectedVoice_ >= 8) {
+      selectedVoice_ = 0;
+    }
+  }
+
+  int selectedVoice() {
+    return selectedVoice_;
+  }
+
+  const char *selectedVoiceText() {
+    return SettingsText::intToText(selectedVoice() + 1);
   }
 
   // Min
@@ -86,6 +102,7 @@ class Calibration {
   static const int kMaxNotes = kMaxVolts * 12;
   uint16_t min_ = 0;
   uint16_t max_ = 65535;
+  int selectedVoice_;
 };
 
 #endif

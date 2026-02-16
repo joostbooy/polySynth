@@ -121,7 +121,9 @@ class Voice {
     dac_->set(index, 10, (p.amp().pan() * data[ModMatrix::PAN]) * 65535);
     dac_->set(index, 11, (p.filter().resonance1() * data[ModMatrix::RESONANCE_1]) * 65535);
 
-    if (settings_->calibration().enabled()) {
+    if (settings_->calibration().enabled()) {            
+        uint16_t gain = (index == settings_->calibration().selectedVoice()) ? 65535 : 0;
+        dac_->set(index, 5, gain);
         dac_->set(index, 3, settings_->calibration().min());
         dac_->set(index, 7, settings_->calibration().max());
     }

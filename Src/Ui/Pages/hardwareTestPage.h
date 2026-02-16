@@ -185,9 +185,9 @@ const char* potIdText(int id) {
   return "";
 }
 
-enum FooterOptions { TOGGLE_LEDS, TEST_SD_CARD, ENABLE_POTS, NUM_OPTIONS };
+enum FooterOptions { TOGGLE_LEDS, TEST_SD_CARD, ENABLE_POTS, CLOSE, NUM_OPTIONS };
 
-const char* const footer_option_text[NUM_OPTIONS] = {"TOGGLE LEDS", "TEST SD CARD", "ENABLE POTS"};
+const char* const footer_option_text[NUM_OPTIONS] = {"TOGGLE LEDS", "TEST SD CARD", "ENABLE POTS", "CLOSE"};
 
 bool led_toggle_state_;
 
@@ -239,6 +239,10 @@ void on_button(int id, int state) {
             }
           }
         }
+        break;
+        case CLOSE:
+        pages_->close(Pages::HARDWARE_TEST_PAGE);
+        pages_->open(Pages::PATCH_PAGE);
         break;
       default:
         break;
