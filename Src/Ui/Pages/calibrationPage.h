@@ -64,7 +64,8 @@ namespace CalibrationPage {
     settings_->amp().setPan(0.5f);
     settings_->modMatrix().clear();
     selectNextVco();
-    
+    ui_->resetAllPots();
+
     settings_->calibration().start();
   }
 
