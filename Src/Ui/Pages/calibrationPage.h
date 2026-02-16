@@ -33,8 +33,8 @@ namespace CalibrationPage {
 
   void selectNextVco() {
     ++selectedVco_ %= 2;
-    settings_->oscillator().setMuteOsc1(selectedVco_ == 0);
-    settings_->oscillator().setMuteOsc2(selectedVco_ == 1);
+    settings_->oscillator().setMuteOsc1(selectedVco_ == 1);
+    settings_->oscillator().setMuteOsc2(selectedVco_ == 0);
   }
 
   void init() {
