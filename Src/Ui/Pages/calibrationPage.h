@@ -72,6 +72,7 @@ namespace CalibrationPage {
   void exit() {
     settings_->calibration().stop();
     settings_->selectedPatch().paste(&patch_);
+    ui_->resetAllPots();
   }
 
   void on_encoder(int id, int inc) {
@@ -164,10 +165,10 @@ namespace CalibrationPage {
     canvas_->drawText(x, y + rowHeight, "MAX");
     canvas_->drawText(x + collWdith, y + rowHeight, settings_->calibration().maxText());
 
-    canvas_->drawText(x, y * (rowHeight * 3), "SELECTED VCO");
+    canvas_->drawText(x, y + (rowHeight * 3), "SELECTED VCO");
     canvas_->drawText(x + collWdith, y * (rowHeight * 3), SettingsText::intToText(selectedVco_ + 1));
 
-    canvas_->drawText(x, y * (rowHeight * 4), "SELECTED VOICE");
+    canvas_->drawText(x, y + (rowHeight * 4), "SELECTED VOICE");
     canvas_->drawText(x + collWdith, y * (rowHeight * 4), settings_->calibration().selectedVoiceText());
 
     WindowPainter::draw_footer(footer_text, NUM_FOOTER_OPTIONS, footerOptionsOffset);
