@@ -76,10 +76,12 @@ class MidiList : public SettingsList {
 
     switch (item) {
       case BPM:
-        if (shifted) {
-          midi.setBpmFractional(midi.bpmFractional() + inc);
-        } else {
-          midi.setBpm(midi.bpm() + inc);
+        if (midi.clockSource() == Midi::INTERNAL) {
+          if (shifted) {
+            midi.setBpmFractional(midi.bpmFractional() + inc);
+          } else {
+            midi.setBpm(midi.bpm() + inc);
+          }
         }
         break;
       case CLOCK_SOURCE:
