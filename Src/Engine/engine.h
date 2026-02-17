@@ -1,22 +1,25 @@
 #ifndef Engine_h
 #define Engine_h
 
-#include "switches.h"
 #include "micros.h"
 #include "midiClockEngine.h"
 #include "midiEngine.h"
 #include "modMatrixEngine.h"
 #include "settings.h"
+#include "switches.h"
 #include "uart.h"
 #include "voice.h"
 #include "voiceEngine.h"
 
 class Engine {
  public:
-  enum State { STOPPED, RUNNING };
+  enum State {
+    STOPPED,
+    RUNNING,
+  };
 
   enum Request {
-    STOP =  (1 << 0),
+    STOP = (1 << 0),
     START = (1 << 1),
   };
 
@@ -33,11 +36,11 @@ class Engine {
     return processing_time_uS_;
   }
 
-  ModMatrixEngine &modMatrixEngine() {
+  ModMatrixEngine& modMatrixEngine() {
     return modMatrixEngine_;
   }
 
-  VoiceEngine &voiceEngine() {
+  VoiceEngine& voiceEngine() {
     return voiceEngine_;
   }
 
@@ -47,7 +50,7 @@ class Engine {
 
   uint32_t processing_time_uS_;
 
-  Dac *dac_;
+  Dac* dac_;
   Settings* settings_;
   MidiEngine midiEngine_;
   VoiceEngine voiceEngine_;
