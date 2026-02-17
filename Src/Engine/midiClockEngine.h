@@ -29,12 +29,14 @@ public:
 	bool tick() {
 		if (midi_->clockSource() == Midi::INTERNAL) {
 			bpm_ = midi_->bpm();
+			bpmFractional_ = midi_->bpmFractional();
 		} else {
 			bpm_ = extBpm_;
+			bpmFractional_ = 0;
 		}
 
 		++isrTicks_;
-		tempoPhase_ += lut_bpm_inc[bpm_ - MIN_BPM];
+		tempoPhase_ += (lut_bpm_inc[bpm_ - MIN_BPM] + lut_bpm_fractional_inc[bpmFractional_]);
 		return tempoPhase_ < tempoInc_;
 	}
 

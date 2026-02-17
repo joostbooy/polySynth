@@ -76,7 +76,11 @@ class MidiList : public SettingsList {
 
     switch (item) {
       case BPM:
-        midi.setBpm(midi.bpm() + (inc * (shifted ? 10 : 1)));
+        if (shifted) {
+          midi.setBpmFractional(midi.bpmFractional() + inc);
+        } else {
+          midi.setBpm(midi.bpm() + inc);
+        }
         break;
       case CLOCK_SOURCE:
         midi.setClockSource(midi.clockSource() + inc);

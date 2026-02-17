@@ -11,6 +11,7 @@ tables = []
 ppqn = 24
 min_bpm = 30
 max_bpm = 300
+max_bpm_fractional = 10
 update_freq = 8000
 
 num_mux_channels = 8
@@ -25,6 +26,20 @@ name = 'bpm_inc'
 
 bpm = numpy.arange(min_bpm, max_bpm + 1)
 hertz = bpm / 60 * ppqn
+values = hertz / update_freq * (1 << 32);
+
+tables.append('uint32_t ' + name)
+tables.append(values.astype(int))
+
+'''__________________________
+	BPM FRACTIONAL INC
+_____________________________'''
+
+name = 'bpm_fractional_inc'
+
+stepsize = 1.0 / max_bpm_fractional
+bpmFraction = numpy.arange(0.00, 1.00, stepsize)
+hertz = bpmFraction / 60 * ppqn
 values = hertz / update_freq * (1 << 32);
 
 tables.append('uint32_t ' + name)
@@ -86,12 +101,13 @@ tables.append(values.astype('float32'))
 ________________________'''
 
 defines = [
-'SAMPLE_RATE '		+ str(int(sample_rate)),
-'MIN_BPM '			+ str(int(min_bpm)),
-'MAX_BPM '			+ str(int(max_bpm)),
-'UPDATE_FREQ '		+ str(int(update_freq)),
-'EXP_TABLE_SIZE '	+ str(int(exp_table_size)),
-'PHASE_TABLE_SIZE '	+ str(int(phase_table_size)),
+'SAMPLE_RATE '			+ str(int(sample_rate)),
+'MIN_BPM '				+ str(int(min_bpm)),
+'MAX_BPM '				+ str(int(max_bpm)),
+'MAX_BPM_FRACTIONAL '	+ str(int(max_bpm_fractional)),
+'UPDATE_FREQ '			+ str(int(update_freq)),
+'EXP_TABLE_SIZE '		+ str(int(exp_table_size)),
+'PHASE_TABLE_SIZE '		+ str(int(phase_table_size)),
 ]
 
 '''____________________

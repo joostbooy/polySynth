@@ -43,6 +43,7 @@ class Midi {
 
   void init() {
     setBpm(120);
+    setBpmFractional(0);
     setClockSource(INTERNAL);
 
     // dont use setters for these 2, becasuse they depend on each other
@@ -65,8 +66,17 @@ class Midi {
     bpm_ = SettingsUtils::clip(MIN_BPM, MAX_BPM, value);
   }
 
+  // bpm fractional
+  uint16_t bpmFractional() {
+    return bpmFractional_;
+  }
+
+  void setBpmFractional(int value) {
+    bpmFractional_ = SettingsUtils::clip(0, MAX_BPM_FRACTIONAL, value);
+  }
+
   const char* bpmText() {
-    return SettingsText::str.write(bpm(), " BPM");
+    return SettingsText::str.write(bpm(), ".", bpmFractional(), " BPM");
   }
 
   // clock source
@@ -150,6 +160,7 @@ class Midi {
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(bpm_);
+    fileWriter.write(bpmFractional_);
     fileWriter.write(clockSource_);
     fileWriter.write(channelReceive_);
     fileWriter.write(portReceive_);
@@ -163,6 +174,7 @@ class Midi {
 
   void load(FileReader& fileReader) {
     fileReader.read(bpm_);
+    fileReader.read(bpmFractional_);
     fileReader.read(clockSource_);
     fileReader.read(channelReceive_);
     fileReader.read(portReceive_);
@@ -176,6 +188,7 @@ class Midi {
 
   void paste(Midi* midi) {
     bpm_ = midi->bpm();
+    bpmFractional_ = midi->bpmFractional();
     clockSource_ = midi->clockSource();
     channelReceive_ = midi->channelReceive();
     portReceive_ = midi->portReceive();
@@ -189,6 +202,7 @@ class Midi {
 
   void writeHash(Hash& hash) {
     hash.write(bpm_);
+    hash.write(bpmFractional_);
     hash.write(clockSource_);
     hash.write(channelReceive_);
     hash.write(portReceive_);
@@ -202,6 +216,7 @@ class Midi {
 
  private:
   uint16_t bpm_;
+  uint16_t bpmFractional_;
   uint8_t clockSource_;
   int channelReceive_;
   int portReceive_;
