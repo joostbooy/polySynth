@@ -76,7 +76,7 @@ class Midi {
   }
 
   const char* bpmText() {
-    return SettingsText::str.write(bpm(), ".", bpmFractional(), " BPM");
+    return SettingsText::str.write(bpm(), ".", bpmFractional());
   }
 
   // clock source

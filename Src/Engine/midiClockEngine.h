@@ -26,6 +26,10 @@ public:
 		return bpm_;
 	}
 
+	static uint16_t bpmFractional() {
+		return bpmFractional_;
+	}
+
 	bool tick() {
 		if (midi_->clockSource() == Midi::INTERNAL) {
 			bpm_ = midi_->bpm();

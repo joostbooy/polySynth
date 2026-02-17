@@ -40,6 +40,10 @@ class Engine {
     return modMatrixEngine_;
   }
 
+  MidiClockEngine midiClockEngine() {
+    return midiClockEngine_;
+  }
+
   VoiceEngine& voiceEngine() {
     return voiceEngine_;
   }

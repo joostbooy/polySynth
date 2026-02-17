@@ -52,7 +52,7 @@ class MidiList : public SettingsList {
     ModMatrix& modMatrix = settings_->modMatrix();
 
     switch (item) {
-      case BPM:             return midi.bpmText();
+      case BPM:             return bpmText();
       case CLOCK_SOURCE:    return midi.clockSourceText();
       case SEND_CLOCK_UART: return midi.sendClock_text(Midi::UART);
       case SEND_CLOCK_USB:  return midi.sendClock_text(Midi::USB);
@@ -129,6 +129,11 @@ class MidiList : public SettingsList {
   }
 
  private:
+  const char* bpmText() {
+    uint16_t bpm = engine_->midiClockEngine().bpm();
+    uint16_t bpmFractional = engine_->midiClockEngine().bpmFractional();
+    return SettingsText::str.write(bpm, ".", bpmFractional);
+  }
 };
 
 #endif
