@@ -18,7 +18,7 @@ namespace PatchPage {
 
   enum FooterOption {
     SAVE,
-    CLEAR,
+    INIT,
     COPY,
     NEXT,
     PREV,
@@ -28,7 +28,7 @@ namespace PatchPage {
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"SAVE", "CLEAR", "COPY", ">", "<", "PASTE", "EDIT NAME"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"SAVE", "INIT", "COPY", ">", "<", "PASTE", "EDIT NAME"};
 
   int footerOptionsOffset;
   int newIndex;
@@ -83,8 +83,8 @@ namespace PatchPage {
             pages_->open(Pages::CONFIRMATION_PAGE);
           }
           break;
-        case CLEAR:
-          ConfirmationPage::set("CLEAR PATCH ?", [](int option) {
+        case INIT:
+          ConfirmationPage::set("INIT PATCH ?", [](int option) {
             if (option == ConfirmationPage::CONFIRM) {
               settings_->selectedPatch().init();
               ui_->unlockAllPots();
