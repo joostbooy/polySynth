@@ -8,15 +8,15 @@
 class LfoEngine {
  public:
   enum Stage {
-    Falling = 0,
-    Rising = 1,
+    FALLING = 0,
+    RISING = 1,
   };
 
   void init(Lfo* lfo) {
     lfo_ = lfo;
     reset();
 
-    if (stage_ == Rising) {
+    if (stage_ == RISING) {
       lastValue_ = lfo_->min();
     } else {
       lastValue_ = lfo_->max();
@@ -25,7 +25,7 @@ class LfoEngine {
 
   void reset() {
     phase_ = lfo_->syncPhase();
-    setStage(phase_ < lfo_->skew() ? Rising : Falling, true);
+    setStage(phase_ < lfo_->skew() ? RISING : FALLING, true);
   }
 
   void retrigger() {
@@ -47,10 +47,10 @@ class LfoEngine {
     float skewAmount = lfo_->skew();
 
     if (phase_ < skewAmount) {
-      setStage(Rising);
+      setStage(RISING);
       skewPhase = phase_ * (1.0f / skewAmount);
     } else {
-      setStage(Falling);
+      setStage(FALLING);
       skewPhase = (phase_ - skewAmount) * (1.0f / (1.0f - skewAmount));
     }
 
@@ -85,7 +85,7 @@ class LfoEngine {
 
  private:
   Lfo* lfo_;
-  Stage stage_ = Rising;
+  Stage stage_ = RISING;
   float phase_ = 0.f;
   float value_ = 0.f;
   float lastValue_ = 0.f;
@@ -100,7 +100,7 @@ class LfoEngine {
       if (lfo_->randomise()) {
         targetValue_ = Rng::reciprocal(lfo_->min(), lfo_->max());
       } else {
-        targetValue_ = (stage_ == Rising) ? lfo_->max() : lfo_->min();
+        targetValue_ = (stage_ == RISING) ? lfo_->max() : lfo_->min();
       }
     }
   }

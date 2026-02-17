@@ -13,11 +13,8 @@
 extern const uint32_t lut_bpm_inc[];
 extern const float lut_phase_length[];
 extern const float lut_phase_inc[];
-extern const float lut_beat_length[];
 extern const float lut_beat_length_inc[];
 extern const float lut_exp[];
 extern const float lut_inv_exp[];
-extern const float lut_semitone_ratio[];
-extern const float lut_cent_ratio[];
 
 #endif

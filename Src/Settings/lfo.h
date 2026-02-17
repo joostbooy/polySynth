@@ -75,7 +75,7 @@ class Lfo {
       return SettingsText::floatToText(lut_phase_length[index], "HZ");
     }
   }
-
+  
   float inc() {
     if (clockSync()) {
       return MidiSync::readInc(speed() * (MidiSync::NUM_TEMPOS - 1));

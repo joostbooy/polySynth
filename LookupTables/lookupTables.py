@@ -55,11 +55,6 @@ tables.append(steps.astype('float32'))
      BEAT LENGTH
 _____________________________'''
 
-name = 'beat_length'
-values = sample_rate * (60 / bpm)
-tables.append('float ' + name)
-tables.append(values.astype('float32'))
-
 name = 'beat_length_inc'
 values = 1.0 / (sample_rate * (60 / bpm))
 tables.append('float ' + name)
@@ -87,24 +82,6 @@ tables.append('float ' + name)
 tables.append(values.astype('float32'))
 
 '''____________________
-	FREQUENCY RATIOS
-________________________'''
-name = 'semitone_ratio'
-
-notes = numpy.arange(-128, 128)
-values = pow(2, notes / 12.0);
-
-tables.append('float ' + name)
-tables.append(values.astype('float32'))
-
-name = 'cent_ratio'
-values = pow(2, numpy.arange(-99, 99) / 198.0 / 12.0);
-#values = pow(2, numpy.arange(0, 256) / 256.0 / 12.0)
-
-tables.append('float ' + name)
-tables.append(values.astype('float32'))
-
-'''____________________
 	DEFINES
 ________________________'''
 
@@ -116,7 +93,6 @@ defines = [
 'EXP_TABLE_SIZE '	+ str(int(exp_table_size)),
 'PHASE_TABLE_SIZE '	+ str(int(phase_table_size)),
 ]
-
 
 '''____________________
 	COMPILING

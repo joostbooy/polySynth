@@ -63,45 +63,11 @@ public:
 		return nullptr;
 	}
 
-	static size_t readBeatLength(int value) {
-		return lut_beat_length[MidiClockEngine::bpm() - MIN_BPM] * lengthMultiplier(value);
-	}
-
 	static float readInc(int value) {
 		return lut_beat_length_inc[MidiClockEngine::bpm() - MIN_BPM] * incMultiplier(value);
 	}
 
 private:
-
-	static float lengthMultiplier(int type) {
-		switch (type)
-		{
-		case _1_1_DOTTED:	return 6.f;
-		case _1_1_WHOLE:	return 4.f;
-		case _1_1_TRIPLET:	return 4.f / 1.5f;
-		case _1_2_DOTTED:	return 3.f;
-		case _1_2_WHOLE:	return 2.f;
-		case _1_2_TRIPLET:	return 2.f / 1.5f;
-		case _1_4_DOTTED:	return 1.5f;
-		case _1_4_WHOLE:	return 1.f;
-		case _1_4_TRIPLET:	return 1.f / 1.5f;
-		case _1_8_DOTTED:	return 0.75f;
-		case _1_8_WHOLE:	return 0.5f;
-		case _1_8_TRIPLET:	return 0.5f / 1.5f;
-		case _1_16_DOTTED:	return 0.375f;
-		case _1_16_WHOLE:	return 0.25f;
-		case _1_16_TRIPLET:	return 0.25f / 1.5f;
-		case _1_32_DOTTED:	return 0.1875f;
-		case _1_32_WHOLE:	return 0.125f;
-		case _1_32_TRIPLET:	return 0.125f / 1.5f;
-		case _1_64_DOTTED:	return 0.09375f;
-		case _1_64_WHOLE:	return 0.0625f;
-		case _1_64_TRIPLET:	return 0.0625f / 1.5f;
-		default:
-			break;
-		}
-		return 0.f;
-	}
 
 	static float incMultiplier(int type) {
 		switch (type)
