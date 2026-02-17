@@ -110,7 +110,7 @@ class MidiEngine {
   }
 
   void writeClock(int port, uint8_t message) {
-      if (clockOutputQue[port].writeable() && midi_->sendClock(port)) {
+      if (clockOutputQue[port].writeable()) {
         clockOutputQue[port].write(message);
     }
   }
