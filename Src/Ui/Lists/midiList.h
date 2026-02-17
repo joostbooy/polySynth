@@ -15,6 +15,10 @@ class MidiList : public SettingsList {
     KEY_RANGE_HIGH,
     PORT_RECEIVE,
     CHANNEL_RECEIVE,
+    MATRIX_CC_A,
+    MATRIX_CC_B,
+    MATRIX_CC_C,
+    MATRIX_CC_D,
 
     NUM_ITEMS,
   };
@@ -33,6 +37,10 @@ class MidiList : public SettingsList {
       case KEY_RANGE_HIGH:  return "KEY RANGE HIGH";
       case PORT_RECEIVE:    return "PORT RECEIVE";
       case CHANNEL_RECEIVE: return "CHANNEL RECEIVE";
+      case MATRIX_CC_A:     return "MATRIX CC A";
+      case MATRIX_CC_B:     return "MATRIX CC B";
+      case MATRIX_CC_C:     return "MATRIX CC C";
+      case MATRIX_CC_D:     return "MATRIX CC D";
       default:
         break;
     }
@@ -41,6 +49,7 @@ class MidiList : public SettingsList {
 
   const char* valueText(int item) override {
     Midi& midi = settings_->midi();
+    ModMatrix& modMatrix = settings_->modMatrix();
 
     switch (item) {
       case BPM:             return midi.bpmText();
@@ -51,6 +60,10 @@ class MidiList : public SettingsList {
       case KEY_RANGE_HIGH:  return midi.keyRangeHighText();
       case PORT_RECEIVE:    return midi.portReceiveText();
       case CHANNEL_RECEIVE: return midi.channelReceiveText();
+      case MATRIX_CC_A:     return modMatrix.midiCcNumberText(0);
+      case MATRIX_CC_B:     return modMatrix.midiCcNumberText(1);
+      case MATRIX_CC_C:     return modMatrix.midiCcNumberText(2);
+      case MATRIX_CC_D:     return modMatrix.midiCcNumberText(3);
       default:
         break;
     }
@@ -59,6 +72,7 @@ class MidiList : public SettingsList {
 
   void edit(int item, int inc, bool shifted) override {
     Midi& midi = settings_->midi();
+    ModMatrix& modMatrix = settings_->modMatrix();
 
     switch (item) {
       case BPM:
@@ -75,12 +89,12 @@ class MidiList : public SettingsList {
         break;
       case KEY_RANGE_LOW:
         engine_->addReqestBlocking(Engine::STOP);
-        midi.setKeyRangeLow(midi.keyRangeLow() + inc);
+        midi.setKeyRangeLow(midi.keyRangeLow() + (shifted ? inc * 12 : inc));
         engine_->addReqestBlocking(Engine::START);
         break;
       case KEY_RANGE_HIGH:
         engine_->addReqestBlocking(Engine::STOP);
-        midi.setKeyRangeHigh(midi.keyRangeHigh() + inc);
+        midi.setKeyRangeHigh(midi.keyRangeHigh() + (shifted ? inc * 12 : inc));
         engine_->addReqestBlocking(Engine::START);
         break;
       case PORT_RECEIVE:
@@ -92,6 +106,18 @@ class MidiList : public SettingsList {
         engine_->addReqestBlocking(Engine::STOP);
         midi.setChannelReceive(midi.channelReceive() + inc);
         engine_->addReqestBlocking(Engine::START);
+        break;
+      case MATRIX_CC_A:
+        modMatrix.setMidiCcNumber(0, modMatrix.midiCcNumber(0) + (shifted ? inc * 10 : inc));
+        break;
+      case MATRIX_CC_B:
+        modMatrix.setMidiCcNumber(1, modMatrix.midiCcNumber(1) + (shifted ? inc * 10 : inc));
+        break;
+      case MATRIX_CC_C:
+        modMatrix.setMidiCcNumber(2, modMatrix.midiCcNumber(2) + (shifted ? inc * 10 : inc));
+        break;
+      case MATRIX_CC_D:
+        modMatrix.setMidiCcNumber(3, modMatrix.midiCcNumber(3) + (shifted ? inc * 10 : inc));
         break;
       default:
         break;
