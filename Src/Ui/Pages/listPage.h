@@ -19,7 +19,13 @@ namespace ListPage {
   int topRow_;
   const int kMaxVisibleRows_ = 6;
 
-  enum Footeroptions { CLEAR, COPY, PASTE, NUM_FOOTER_OPTIONS };
+  enum Footeroptions {
+    CLEAR,
+    COPY,
+    PASTE,
+    NUM_FOOTER_OPTIONS,
+  };
+  
   const char* const footerText[NUM_FOOTER_OPTIONS] = {"CLEAR", "COPY", "PASTE"};
 
   void setList(SettingsList* list) {
@@ -133,6 +139,7 @@ namespace ListPage {
 
         canvas_->drawText(x + 4, row_y, collWidth - 8, row_h, list_->itemText(row), Canvas::LEFT, Canvas::CENTER, color);
         canvas_->drawText(x + 4 + collWidth, row_y, collWidth - 8, row_h, list_->valueText(row), Canvas::LEFT, Canvas::CENTER, color);
+
         if (list_->mode() == SettingsList::EDIT && row == list_->selectedItem()) {
           canvas_->fill(x + 1, row_y + 1, w - 2, row_h - 2, Canvas::INVERTED);
         }
