@@ -5,11 +5,11 @@
 
 namespace ModMatrixPage {
 
+  using TopPage::buttons_;
   using TopPage::canvas_;
   using TopPage::leds_;
   using TopPage::pages_;
   using TopPage::settings_;
-  using TopPage::buttons_;
 
   int src_ = 0;
   int top_src_ = 0;
@@ -29,7 +29,7 @@ namespace ModMatrixPage {
     NUM_FOOTER_OPTIONS,
   };
 
-  const char *const footerOptionText[NUM_FOOTER_OPTIONS] = {"COPY", "PASTE", "CLEAR"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"COPY", "PASTE", "CLEAR"};
 
   void scroll_to_source(int src) {
     src_ = SettingsUtils::clip(0, ModMatrix::NUM_SOURCES - 1, src);
@@ -72,7 +72,7 @@ namespace ModMatrixPage {
     if (state) {
       if (id == Buttons::ENC_X || id == Buttons::ENC_Y) {
         settings_->modMatrix().toggle(src_, dest_);
-		return;
+        return;
       }
 
       switch (buttons_->toFunction(id)) {
@@ -167,8 +167,8 @@ namespace ModMatrixPage {
     draw_sources_text(x, row_h, w, h, coll_w, row_h);
     draw_destination_text(coll_w, y, w, h, coll_w, row_h);
     draw_matrix(x + coll_w, y + row_h, w - coll_w, h - row_h, coll_w, row_h);
-	
-	WindowPainter::draw_footer(footerOptionText, NUM_FOOTER_OPTIONS);
+
+    WindowPainter::draw_footer(footerOptionText, NUM_FOOTER_OPTIONS);
   }
 
   const size_t target_fps() {
@@ -186,6 +186,6 @@ namespace ModMatrixPage {
       &target_fps,
   };
 
-};  // namespace ModMatrixPage_h
+};  // namespace ModMatrixPage
 
 #endif

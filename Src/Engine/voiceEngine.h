@@ -102,17 +102,6 @@ class VoiceEngine {
     }
   }
 
-  void killMidiChannel(uint8_t port, uint8_t channel) {
-    uint8_t count = activeVoices_.size();
-
-    for (uint8_t i = 0; i < count; ++i) {
-      uint8_t v = activeVoices_.read(i);
-      if (voice_[v].port() == port && voice_[v].channel() == channel) {
-        voice_[v].requestStop();
-      }
-    }
-  }
-
  private:
   Settings* settings_;
   Voice voice_[Settings::kNumVoices];

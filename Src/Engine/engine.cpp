@@ -108,13 +108,6 @@ void Engine::processRequests() {
     state_ = STOPPED;
     clearRequest(STOP);
   }
-
-  if (requests_ & KILL_VOICES) {
-    for (size_t i = 0; i < Settings::kNumVoices; i++) {
-      voiceEngine_.voice(i).requestStop();
-    }
-    clearRequest(KILL_VOICES);
-  }
 }
 
 // 1Khz

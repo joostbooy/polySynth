@@ -74,16 +74,24 @@ class MidiList : public SettingsList {
         midi.setSendClock(Midi::USB, inc > 0);
         break;
       case KEY_RANGE_LOW:
+        engine_->addReqestBlocking(Engine::STOP);
         midi.setKeyRangeLow(midi.keyRangeLow() + inc);
+        engine_->addReqestBlocking(Engine::START);
         break;
       case KEY_RANGE_HIGH:
+        engine_->addReqestBlocking(Engine::STOP);
         midi.setKeyRangeHigh(midi.keyRangeHigh() + inc);
+        engine_->addReqestBlocking(Engine::START);
         break;
       case PORT_RECEIVE:
+        engine_->addReqestBlocking(Engine::STOP);
         midi.setPortReceive(midi.portReceive() + inc);
+        engine_->addReqestBlocking(Engine::START);
         break;
       case CHANNEL_RECEIVE:
+        engine_->addReqestBlocking(Engine::STOP);
         midi.setChannelReceive(midi.channelReceive() + inc);
+        engine_->addReqestBlocking(Engine::START);
         break;
       default:
         break;

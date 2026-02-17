@@ -16,9 +16,8 @@ class Engine {
   enum State { STOPPED, RUNNING };
 
   enum Request {
-    STOP = (1 << 0),
+    STOP =  (1 << 0),
     START = (1 << 1),
-    KILL_VOICES = (1 << 2),
   };
 
   void init(Settings*, Uart*, Usb*, Dac*);
