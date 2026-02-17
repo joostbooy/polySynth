@@ -72,6 +72,8 @@ class Voice {
     keyPressed_ = true;
     stopRequested_ = false;
     fadePhase_ = 1.f;
+    slidePhase1_ = 0.f;
+    slidePhase2_ = 0.f;
 
     lfoEngine_[0].retrigger();
     lfoEngine_[1].retrigger();
@@ -108,18 +110,18 @@ class Voice {
     }
 
     Patch& p = settings_->selectedPatch();
-    dac_->set(index, 0, (p.oscillator().shape2() * data[ModMatrix::SHAPE_2]) * 65535);
-    dac_->set(index, 1, (p.oscillator().modDepth() * data[ModMatrix::VCO_MOD_DEPTH]) * 65535);
-    dac_->set(index, 2, (p.oscillator().shape1() * data[ModMatrix::SHAPE_1]) * 65535);
-    dac_->set(index, 3, (calculatePitchOsc1() * data[ModMatrix::TUNE_1]) * 65535);
-    dac_->set(index, 4, (p.amp().drive() * data[ModMatrix::DRIVE]) * 65535);
-    dac_->set(index, 5, (fadePhase_ * data[ModMatrix::GAIN]) * 65535);
-    dac_->set(index, 6, (p.filter().resonance2() * data[ModMatrix::RESONANCE_2]) * 65535);
-    dac_->set(index, 7, (calculatePitchOsc2() * data[ModMatrix::TUNE_2]) * 65535);
-    dac_->set(index, 8, (p.filter().cutoff1() * data[ModMatrix::CUTOFF_1]) * 65535);
-    dac_->set(index, 9, (p.filter().cutoff2() * data[ModMatrix::CUTOFF_2]) * 65535);
-    dac_->set(index, 10, (p.amp().pan() * data[ModMatrix::PAN]) * 65535);
-    dac_->set(index, 11, (p.filter().resonance1() * data[ModMatrix::RESONANCE_1]) * 65535);
+    dac_->set(index, 0, p.oscillator().shape2() * data[ModMatrix::SHAPE_2] * 65535);
+    dac_->set(index, 1, p.oscillator().modDepth() * data[ModMatrix::VCO_MOD_DEPTH] * 65535);
+    dac_->set(index, 2, p.oscillator().shape1() * data[ModMatrix::SHAPE_1] * 65535);
+    dac_->set(index, 3, calculatePitchOsc1(data[ModMatrix::TUNE_1]));
+    dac_->set(index, 4, p.amp().drive() * data[ModMatrix::DRIVE] * 65535);
+    dac_->set(index, 5, fadePhase_ * data[ModMatrix::GAIN] * 65535);
+    dac_->set(index, 6, p.filter().resonance2() * data[ModMatrix::RESONANCE_2] * 65535);
+    dac_->set(index, 7, calculatePitchOsc2(data[ModMatrix::TUNE_2]));
+    dac_->set(index, 8, p.filter().cutoff1() * data[ModMatrix::CUTOFF_1] * 65535);
+    dac_->set(index, 9, p.filter().cutoff2() * data[ModMatrix::CUTOFF_2] * 65535);
+    dac_->set(index, 10, p.amp().pan() * data[ModMatrix::PAN] * 65535);
+    dac_->set(index, 11, p.filter().resonance1() * data[ModMatrix::RESONANCE_1] * 65535);
 
     if (settings_->calibration().enabled()) {            
         uint16_t gain = (index == settings_->calibration().selectedVoice()) ? 65535 : 0;
@@ -139,25 +141,50 @@ class Voice {
   State state_;
   float velocity_;
   float fadePhase_;
+  float slidePhase1_;
+  float slidePhase2_;
   Dac* dac_;
   Settings* settings_;
   ModMatrixEngine* modMatrixEngine_;
   EnvelopeEngine envelopeEngine_[2];
   LfoEngine lfoEngine_[Settings::kNumLfos];
 
-  float calculatePitchOsc1() {
-    //  if (settings_->oscillator().trackNote1()) {
-    // return settings_->calibration().note(note_);
-   // }
-    return 0.f;
+  uint16_t calculatePitchOsc1(float modValue) {
+    Calibration& c = settings_->calibration();
+    uint16_t value = settings_->oscillator().tune1() * c.semiNoteValue();
+
+    if (settings_->oscillator().trackNote1()) {
+      value = c.noteToValue(note_);
+      if (settings_->oscillator().slideEnable1()) {
+        value = Dsp::cross_fade(c.noteToValue(lastNote_), value, slidePhase1_);
+        slidePhase1_ += settings_->oscillator().slideAmmount1();
+        if (slidePhase1_ >= 1.f) {
+          slidePhase1_ = 1.f;
+        }
+      }
+      return value;
+    }
+    return 0;
   }
 
-  float calculatePitchOsc2() {
-    //  if (settings_->oscillator().trackNote2()) {
-    // return settings_->calibration().note(note_);
-   // }
-    return 0.f;
+  uint16_t calculatePitchOsc2(float modValue) {
+    Calibration& c = settings_->calibration();
+    uint16_t value = settings_->oscillator().tune2() * c.semiNoteValue();
+
+    if (settings_->oscillator().trackNote2()) {
+      value = c.noteToValue(note_);
+      if (settings_->oscillator().slideEnable2()) {
+        value = Dsp::cross_fade(c.noteToValue(lastNote_), value, slidePhase1_);
+        slidePhase1_ += settings_->oscillator().slideAmmount2();
+        if (slidePhase1_ >= 1.f) {
+          slidePhase1_ = 1.f;
+        }
+      }
+      return value;
+    }
+    return 0;
   }
+
 };
 
 #endif
