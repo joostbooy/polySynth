@@ -16,6 +16,9 @@ namespace LfoPage {
   Lfo lfo_;
   LfoList lfoList_;
 
+  float speed = 1.f;
+  const int w = 128;
+
   void clear() {
     settings_->selectedLfo().init();
     ui_->resetAllPots();
@@ -39,6 +42,17 @@ namespace LfoPage {
     pasteable_ = false;
     lfo_.init();
     lfoList_.init(engine_, settings_);
+
+    // find best increment value for lfo drawing
+    float value = 1.f;
+    float targetInc = 1.f / w;
+    for (size_t i = 0; i < PHASE_TABLE_SIZE; i++) {
+      float currentValue = SettingsUtils::difference(lut_phase_inc[i], targetInc);
+      if (currentValue < value) {
+        value = currentValue;
+        speed = (1.f / PHASE_TABLE_SIZE) * i;
+      }
+    }
   }
 
   void enter() {
@@ -67,33 +81,32 @@ namespace LfoPage {
 
   void draw() {
     ListPage::draw();
-    /*
-                    Lfo lfo;
-                    LfoEngine lfoEngine;
 
-                    lfo.paste(&settings_->selected_lfo());
-                    lfo.set_clock_sync(false);
-                    lfo.set_randomise(false);
-                    lfo.set_speed(0.152f);	// 0.152f results in 7.8hz (control_rate / w = 7.8 hz)
-                    lfoEngine.init(&lfo);
+    Lfo lfo;
+    LfoEngine lfoEngine;
 
-                    const int x = 64;
-                    const int y = 5;
-                    const int w = 128;
-                    const int h = 32;
+    lfo.paste(&settings_->selectedLfo());
+    lfo.setClockSync(false);
+    lfo.setRandomise(false);
+    lfo.setSpeed(speed);  
+    lfoEngine.init(&lfo);
 
-                    for (int x2 = 0; x2 < w; ++x2) {
-                            int y2 = h * (1.f - lfoEngine.next());
-                            canvas_->drawPixel(x + x2, y + y2, Canvas::BLACK);
-                    }
-    */
-    //	int index = settings_->selectedLfoIndex();
-    //	float phase = engine_->voiceEngine().lfoEngine(index).phase();
-    //	canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);
+    const int x = 64;
+    const int y = 5;
+    const int h = 32;
+
+    for (int x2 = 0; x2 < w; ++x2) {
+      int y2 = h * (1.f - lfoEngine.next());
+      canvas_->drawPixel(x + x2, y + y2, Canvas::BLACK);
+    }
+
+    int index = settings_->lfoIndex();
+    float phase = engine_->voiceEngine().mostRecentVoice().lfoEngine(index).phase();
+    canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);
   }
 
   const size_t target_fps() {
-    return 1000 / 24;
+    return 1000 / 16;
   }
 
   Pages::Page page = {
