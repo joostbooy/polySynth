@@ -153,9 +153,8 @@ class Voice {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = 0;
-    float tune = (2.f * osc.tune1() * modValue) - 1.f;
-    int tuneValue = tune * osc.tuneSemiToneRange1() * cal.semiNoteValue();
+    int noteValue = cal.noteToValue(osc.octaveOffset1());
+    int tuneValue = ((2.f * osc.tune1() * modValue) - 1.f) * osc.tuneSemiToneRange1() * cal.semiNoteValue();
 
     if (settings_->oscillator().trackNote1()) {
       noteValue = cal.noteToValue(note_ + osc.octaveOffset1());
@@ -175,9 +174,8 @@ class Voice {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = 0;
-    float tune = (2.f * osc.tune2() * modValue) - 1.f;
-    int tuneValue = tune * osc.tuneSemiToneRange2() * cal.semiNoteValue();
+    int noteValue = cal.noteToValue(osc.octaveOffset2());
+    int tuneValue = ((2.f * osc.tune2() * modValue) - 1.f) * osc.tuneSemiToneRange2() * cal.semiNoteValue();
 
     if (settings_->oscillator().trackNote2()) {
       noteValue = cal.noteToValue(note_ + osc.octaveOffset2());
