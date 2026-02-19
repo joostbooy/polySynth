@@ -17,6 +17,7 @@ class Voice {
     state_ = IDLE;
     keyPressed_ = false;
     stopRequested_ = false;
+    note_ = 60;
     lastNote_ = 60;
 
     envelopeEngine_[0].init(&settings->envelope(0));
@@ -153,7 +154,7 @@ class Voice {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = cal.noteToValue(osc.octaveOffset1());
+    int noteValue = cal.noteToValue(24 + osc.octaveOffset1());
     int tuneValue = ((2.f * osc.tune1() * modValue) - 1.f) * osc.tuneSemiToneRange1() * cal.semiNoteValue();
 
     if (settings_->oscillator().trackNote1()) {
@@ -174,7 +175,7 @@ class Voice {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = cal.noteToValue(osc.octaveOffset2());
+    int noteValue = cal.noteToValue(24 + osc.octaveOffset2());
     int tuneValue = ((2.f * osc.tune2() * modValue) - 1.f) * osc.tuneSemiToneRange2() * cal.semiNoteValue();
 
     if (settings_->oscillator().trackNote2()) {
