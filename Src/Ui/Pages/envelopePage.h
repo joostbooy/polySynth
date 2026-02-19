@@ -84,8 +84,9 @@ namespace EnvelopePage {
 
     Envelope envelope;
     EnvelopeEngine envelopeEngine;
-
     envelope.paste(&settings_->selectedEnvelope());
+
+    envelope.setClockSync(false);
 
     float holdTime;
     if (envelope.mode() == Envelope::TRIGGER) {
@@ -95,14 +96,13 @@ namespace EnvelopePage {
     }
 
     envelope.setMode(Envelope::TRIGGER);
-	envelope.setClockSync(false);
     envelope.setAttackTime(Dsp::cross_fade(time, 1.0f, envelope.attackTime()));
     envelope.setDecayTime(Dsp::cross_fade(time, 1.0f, envelope.decayTime()));
-	envelope.setHoldTime(holdTime);
-	envelope.setSustainLevel(envelope.sustainLevel());
+    envelope.setHoldTime(holdTime);
+    envelope.setSustainLevel(envelope.sustainLevel());
     envelope.setReleaseTime(Dsp::cross_fade(time, 1.0f, envelope.releaseTime()));
 
-	envelopeEngine.init(&envelope);
+    envelopeEngine.init(&envelope);
     envelopeEngine.attack();
 
     const int x = 64;
