@@ -155,7 +155,7 @@ class Voice {
 
     int noteValue = 0;
     float tune = (2.f * osc.tune1() * modValue) - 1.f;
-    int tuneValue = tune * (osc.tuneSemiToneRange1() * cal.semiNoteValue());
+    int tuneValue = tune * osc.tuneSemiToneRange1() * cal.semiNoteValue();
 
     if (settings_->oscillator().trackNote1()) {
       noteValue = cal.noteToValue(note_ + osc.octaveOffset1());
@@ -177,7 +177,7 @@ class Voice {
 
     int noteValue = 0;
     float tune = (2.f * osc.tune2() * modValue) - 1.f;
-    int tuneValue = tune * (osc.tuneSemiToneRange2() * cal.semiNoteValue());
+    int tuneValue = tune * osc.tuneSemiToneRange2() * cal.semiNoteValue();
 
     if (settings_->oscillator().trackNote2()) {
       noteValue = cal.noteToValue(note_ + osc.octaveOffset2());

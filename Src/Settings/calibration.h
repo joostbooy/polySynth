@@ -98,7 +98,7 @@ class Calibration {
 
  private:
   bool enabled_;
-  static const int kMaxVolts = 10;  // 5V p.p
+  static const int kMaxVolts = 10;  // -3V / +7V
   static const int kMaxNotes = kMaxVolts * 12;
   uint16_t min_ = 0;
   uint16_t max_ = 65535;

@@ -1,128 +1,139 @@
 #ifndef EnvelopePage_h
 #define EnvelopePage_h
 
-#include "listPage.h"
 #include "envelope.h"
 #include "envelopeList.h"
+#include "listPage.h"
 
 namespace EnvelopePage {
 
-	using TopPage::engine_;
-	using TopPage::settings_;
-	using TopPage::canvas_;
-	using TopPage::ui_;
+  using TopPage::canvas_;
+  using TopPage::engine_;
+  using TopPage::settings_;
+  using TopPage::ui_;
 
-	bool pasteable_;
-	Envelope envelope_;
-	EnvelopeList envelopeList_;
+  bool pasteable_;
+  Envelope envelope_;
+  EnvelopeList envelopeList_;
 
-	void clear() {
-		settings_->selectedEnvelope().init();
-		ui_->resetAllPots();
-	}
+  float time = 1.f;
+  const int w = 128;
 
-	void copy() {
-		envelope_.paste(&settings_->selectedEnvelope());
-		pasteable_ = true;
-	}
+  void clear() {
+    settings_->selectedEnvelope().init();
+    ui_->resetAllPots();
+  }
 
-	bool paste() {
-		if (pasteable_) {
-			settings_->selectedEnvelope().paste(&envelope_);
-			ui_->resetAllPots();
-			return true;
-		}
-		return false;
-	}
+  void copy() {
+    envelope_.paste(&settings_->selectedEnvelope());
+    pasteable_ = true;
+  }
 
-	void init() {
-		pasteable_ = false;
-		envelope_.init();
-		envelopeList_.init(engine_, settings_);
-	}
+  bool paste() {
+    if (pasteable_) {
+      settings_->selectedEnvelope().paste(&envelope_);
+      ui_->resetAllPots();
+      return true;
+    }
+    return false;
+  }
 
-	void enter() {
-		ListPage::setList(&envelopeList_);
-		ListPage::setClearCallback(&clear);
-		ListPage::setCopyCallback(&copy);
-		ListPage::setPasteCallback(&paste);
-		ListPage::enter();
-	}
+  void init() {
+    pasteable_ = false;
+    envelope_.init();
+    envelopeList_.init(engine_, settings_);
 
-	void exit()  {
-		ListPage::exit();
-	}
+    // find best increment value for envelope drawing
+    float value = 1.f;
+    float targetInc = 1.f / (w / 4);
+    for (size_t i = 0; i < PHASE_TABLE_SIZE; i++) {
+      float currentValue = SettingsUtils::difference(lut_phase_inc[i], targetInc);
+      if (currentValue < value) {
+        value = currentValue;
+        time = (1.f / PHASE_TABLE_SIZE) * i;
+      }
+    }
+  }
 
-	void on_button(int id, int state) {
-		ListPage::on_button(id, state);
-	}
+  void enter() {
+    ListPage::setList(&envelopeList_);
+    ListPage::setClearCallback(&clear);
+    ListPage::setCopyCallback(&copy);
+    ListPage::setPasteCallback(&paste);
+    ListPage::enter();
+  }
 
-	void on_encoder(int id, int state) {
-		ListPage::on_encoder(id, state);
-	}
+  void exit() {
+    ListPage::exit();
+  }
 
-	void refresh_leds() {
-		ListPage::refresh_leds();
-	}
+  void on_button(int id, int state) {
+    ListPage::on_button(id, state);
+  }
 
-	void draw() {
-		ListPage::draw();
-	/*
-		Envelope envelope;
-		EnvelopeEngine envelopeEngine;
+  void on_encoder(int id, int state) {
+    ListPage::on_encoder(id, state);
+  }
 
-		envelope.paste(&settings_->selected_envelope());
+  void refresh_leds() {
+    ListPage::refresh_leds();
+  }
 
-		// 0.623f results in 32.25 hz (control rate / (w / 4) = 31.25 hz)
-		envelope.set_attack_time(Dsp::cross_fade(0.623f, 1.0f, envelope.attack_time()));
-		envelope.set_decay_time(Dsp::cross_fade(0.623f, 1.0f, envelope.decay_time()));
-		envelope.set_release_time(Dsp::cross_fade(0.623f, 1.0f, envelope.release_time()));
+  void draw() {
+    ListPage::draw();
 
-		int mode = envelope.mode();
-		envelope.set_mode(Envelope::TRIGGER);
+    Envelope envelope;
+    EnvelopeEngine envelopeEngine;
 
-		if (mode == Envelope::TRIGGER) {
-			envelope.set_hold_time(Dsp::cross_fade(0.623f, 1.0f, envelope.hold_time()));
-		} else {
-			envelope.set_hold_time(0.623f);
-		}
+    envelope.paste(&settings_->selectedEnvelope());
 
-		envelope.set_clock_sync(false);
+    float holdTime;
+    if (envelope.mode() == Envelope::TRIGGER) {
+      holdTime = Dsp::cross_fade(time, 1.0f, envelope.holdTime());
+    } else {
+      holdTime = time;
+    }
 
-		envelopeEngine.init(&envelope);
-		envelopeEngine.attack();
+    envelope.setMode(Envelope::TRIGGER);
+	envelope.setClockSync(false);
+    envelope.setAttackTime(Dsp::cross_fade(time, 1.0f, envelope.attackTime()));
+    envelope.setDecayTime(Dsp::cross_fade(time, 1.0f, envelope.decayTime()));
+	envelope.setHoldTime(holdTime);
+	envelope.setSustainLevel(envelope.sustainLevel());
+    envelope.setReleaseTime(Dsp::cross_fade(time, 1.0f, envelope.releaseTime()));
 
-		const int x = 64;
-		const int y = 5;
-		const int w = 128;
-		const int h = 32;
+	envelopeEngine.init(&envelope);
+    envelopeEngine.attack();
 
-		for (int x2 = 0; x2 < w; ++x2) {
-			int y2 = h * (1.f - envelopeEngine.next());
-			canvas_->draw_pixel(x + x2, y + y2, Canvas::BLACK);
-		}
+    const int x = 64;
+    const int y = 5;
+    const int h = 32;
 
-		int index = settings_->selected_envelope_index();
-		float phase = engine_->voiceEngine().most_recent_voice().envelopeEngine(index).phase();
-		canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);
-		*/
-	}
+    for (int x2 = 0; x2 < w; ++x2) {
+      int y2 = h * (1.f - envelopeEngine.next());
+      canvas_->drawPixel(x + x2, y + y2, Canvas::BLACK);
+    }
 
-	const size_t target_fps() {
-		return 1000 / 24;
-	}
+    int index = settings_->envelopeIndex();
+    float phase = engine_->voiceEngine().mostRecentVoice().envelopeEngine(index).phase();
+    canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);
+  }
 
-	Pages::Page page = {
-		&init,
-		&enter,
-		&exit,
-		&draw,
-		&refresh_leds,
-		&on_button,
-		&on_encoder,
-		&target_fps
-	};
+  const size_t target_fps() {
+    return 1000 / 24;
+  }
 
-};
+  Pages::Page page = {
+      &init,
+      &enter,
+      &exit,
+      &draw,
+      &refresh_leds,
+      &on_button,
+      &on_encoder,
+      &target_fps,
+  };
+
+};  // namespace EnvelopePage
 
 #endif
