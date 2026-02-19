@@ -142,6 +142,20 @@ void char_cursor_right() {
   }
 }
 
+void char_cursor_up() {
+  int up = char_cursor_ - kCharsPerRow;
+  if (up >= 0) {
+    char_cursor_ = up;
+  }
+}
+
+void char_cursor_down() {
+  int down = char_cursor_ + kCharsPerRow;
+  if (down < kCharTableSize - 1) {
+    char_cursor_ = down;
+  }
+}
+
 void clear() {
   char c = '\0';
   write_to_buffer(&c, dest_max_);
@@ -163,15 +177,12 @@ void paste() {
 }
 
 void on_encoder(int id, int inc) {
-  switch (id) {
-    case 0:
-      inc > 0 ? text_cursor_right() : text_cursor_left();
-      break;
-    case 1:
-      inc > 0 ? char_cursor_right() : char_cursor_left();
-      break;
-    default:
-      break;
+  if (buttons_->isPressed(Buttons::SHIFT)) {
+    inc > 0 ? text_cursor_right() : text_cursor_left();
+  } else if (id == 0) {
+    inc > 0 ? char_cursor_right() : char_cursor_left();
+  } else if (id == 1) {
+    inc > 0 ? char_cursor_up() : char_cursor_down();
   }
 }
 
@@ -195,7 +206,6 @@ void on_button(int id, int state) {
       break;
     case FINISH:
       write_to_dest();
-
       pages_->close(Pages::TEXT_INPUT_PAGE);
       if (callback_) {
         callback_(true);
