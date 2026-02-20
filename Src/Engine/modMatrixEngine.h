@@ -47,18 +47,20 @@ class ModMatrixEngine {
       destination_[dest] = 1.f;
       for (int src = 0; src < ModMatrix::NUM_SOURCES; ++src) {
         if (modMatrix_->read(src, dest)) {
-          destination_[dest] *= source_[src];
+          float value = source_[src];
+          float depth = modMatrix_->depth(src, dest);
+          bool invert = modMatrix_->invert(src, dest);
+          destination_[dest] *= (invert ? 1.f - value : value) * depth;
         }
       }
     }
-
     return &destination_[0];
   }
 
  private:
   ModMatrix* modMatrix_;
-  float destination_[ModMatrix::NUM_DESTINATIONS];
   float source_[ModMatrix::NUM_SOURCES];
+  float destination_[ModMatrix::NUM_DESTINATIONS];
 };
 
 #endif
