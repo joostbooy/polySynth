@@ -48,7 +48,7 @@ class ModMatrixEngine {
       for (int src = 0; src < ModMatrix::NUM_SOURCES; ++src) {
         if (modMatrix_->read(src, dest)) {
           float value = source_[src];
-          float depth = modMatrix_->depth(src, dest);
+          float depth = modMatrix_->destinationDepth(dest);
           bool invert = modMatrix_->invert(src, dest);
           destination_[dest] *= (invert ? 1.f - value : value) * depth;
         }

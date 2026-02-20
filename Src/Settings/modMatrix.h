@@ -102,7 +102,7 @@ class ModMatrix {
   }
   
   void clear() {
-    std::fill(&depth_[0], &depth_[NUM_SOURCES * NUM_DESTINATIONS], 255);
+    std::fill(&destinationDepth_[0], &destinationDepth_[NUM_DESTINATIONS], 1.f);
 
     for (size_t i = 0; i < NUM_SOURCES; ++i) {
       matrix_[i] = 0;
@@ -138,17 +138,17 @@ class ModMatrix {
     return SettingsText::str.write("CC ", midiCcNumber(index));
   }
 
-  // Depth
-  void setDepth(size_t src, size_t dest, float value) {
-    depth_[(src * NUM_SOURCES) + dest] = value * 255;
+  // Destination depth
+  void setDestinationDepth(size_t dest, float value) {
+    destinationDepth_[dest] = value;
   }
 
-  float depth(size_t src, size_t dest) {
-    return (1.f / 255.f) * depth_[(src * NUM_SOURCES) + dest];
+  float destinationDepth(size_t dest) {
+    return destinationDepth_[dest];
   }
  
-  const char* depthText(size_t src, size_t dest) {
-    return SettingsText::floatToText(depth(src, dest));
+  const char* destinationDepthText(size_t dest) {
+    return SettingsText::floatToText(destinationDepth(dest));
   }
 
   // Invert
@@ -225,7 +225,7 @@ class ModMatrix {
   uint8_t midiCcNumber_[4];
   uint32_t matrix_[NUM_SOURCES];
   uint32_t invert_[NUM_SOURCES];
-  uint8_t depth_[NUM_SOURCES * NUM_DESTINATIONS];
+  float destinationDepth_[NUM_DESTINATIONS];
 };
 
 #endif
