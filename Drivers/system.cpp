@@ -21,6 +21,7 @@ void Sys::init() {
    __HAL_RCC_USART6_CLK_ENABLE();
   __HAL_RCC_TIM2_CLK_ENABLE();
   __HAL_RCC_TIM3_CLK_ENABLE();
+  __HAL_RCC_TIM5_CLK_ENABLE();
   __HAL_RCC_USB_OTG_FS_CLK_ENABLE();
 
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -61,6 +62,6 @@ void Sys::init() {
   HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 
   HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-  HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(TIM3_IRQn, 1, 0);
+  HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(TIM2_IRQn, 1, 0);
 }
