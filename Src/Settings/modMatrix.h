@@ -116,11 +116,12 @@ class ModMatrix {
   }
 
   void set(size_t src, size_t dest, bool state) {
-    uint32_t data = matrix_[src];
-    if (state) {
-      matrix_[src] = data | (1 << dest);
+    if (!state) {
+      setInvert(src, dest, false);
+      setDestinationDepth(dest, 1.f);
+      matrix_[src] = matrix_[src] & ~(1 << dest);
     } else {
-      matrix_[src] = data & ~(1 << dest);
+      matrix_[src] = matrix_[src] | (1 << dest);
     }
     matrix_[ENVELOPE_1] |= (1 << GAIN);
   }
