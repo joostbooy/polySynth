@@ -100,15 +100,12 @@ class ModMatrix {
   bool read(size_t src, size_t dest) {
     return matrix_[src] & (1 << dest);
   }
-  
+
   void clear() {
     std::fill(&destinationDepth_[0], &destinationDepth_[NUM_DESTINATIONS], 1.f);
-
-    for (size_t i = 0; i < NUM_SOURCES; ++i) {
-      matrix_[i] = 0;
-      invert_[i] = 0;
-    }
-    matrix_[ENVELOPE_1] |= (1 << GAIN); // envelope 1 is always tied to gain !
+    std::fill(&matrix_[0], &matrix_[NUM_SOURCES], 0);
+    std::fill(&invert_[0], &invert_[NUM_SOURCES], 0);
+    matrix_[ENVELOPE_1] |= (1 << GAIN);  // envelope 1 is always tied to gain !
   }
 
   void toggle(size_t src, size_t dest) {
@@ -177,6 +174,10 @@ class ModMatrix {
       fileWriter.write(invert_[i]);
     }
 
+    for (size_t i = 0; i < NUM_DESTINATIONS; i++) {
+      fileWriter.write(destinationDepth_[i]);
+    }
+
     for (size_t i = 0; i < kNumUserCc; ++i) {
       fileWriter.write(midiCcNumber_[i]);
     }
@@ -188,6 +189,10 @@ class ModMatrix {
       fileReader.read(invert_[i]);
     }
 
+    for (size_t i = 0; i < NUM_DESTINATIONS; i++) {
+      fileReader.read(destinationDepth_[i]);
+    }
+
     for (size_t i = 0; i < kNumUserCc; ++i) {
       fileReader.read(midiCcNumber_[i]);
     }
@@ -195,6 +200,7 @@ class ModMatrix {
 
   void paste(ModMatrix* modMatrix) {
     clear();
+    
     for (size_t x = 0; x < NUM_SOURCES; ++x) {
       for (size_t y = 0; y < NUM_DESTINATIONS; ++y) {
         if (modMatrix->read(x, y)) {
@@ -206,6 +212,10 @@ class ModMatrix {
       }
     }
 
+    for (size_t i = 0; i < NUM_DESTINATIONS; i++) {
+      destinationDepth_[i] = modMatrix->destinationDepth(i);
+    }
+
     for (size_t i = 0; i < kNumUserCc; ++i) {
       midiCcNumber_[i] = midiCcNumber_[i];
     }
@@ -215,6 +225,10 @@ class ModMatrix {
     for (size_t i = 0; i < NUM_SOURCES; ++i) {
       hash.write(matrix_[i]);
       hash.write(invert_[i]);
+    }
+
+    for (size_t i = 0; i < NUM_DESTINATIONS; i++) {
+      hash.write(destinationDepth_[i]);
     }
 
     for (size_t i = 0; i < kNumUserCc; ++i) {
