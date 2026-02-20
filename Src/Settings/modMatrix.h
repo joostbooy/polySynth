@@ -113,14 +113,14 @@ class ModMatrix {
   }
 
   void set(size_t src, size_t dest, bool state) {
-    if (!state) {
+    if (state) {
+      matrix_[src] = matrix_[src] | (1 << dest);
+    } else {
       setInvert(src, dest, false);
       setDestinationDepth(dest, 1.f);
       matrix_[src] = matrix_[src] & ~(1 << dest);
-    } else {
-      matrix_[src] = matrix_[src] | (1 << dest);
+      matrix_[ENVELOPE_1] |= (1 << GAIN);
     }
-    matrix_[ENVELOPE_1] |= (1 << GAIN);
   }
 
   // Midi CC
