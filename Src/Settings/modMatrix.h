@@ -116,8 +116,6 @@ class ModMatrix {
     if (state) {
       matrix_[src] = matrix_[src] | (1 << dest);
     } else {
-      setInvert(src, dest, false);
-      setDestinationDepth(dest, 1.f);
       matrix_[src] = matrix_[src] & ~(1 << dest);
       matrix_[ENVELOPE_1] |= (1 << GAIN);
     }
