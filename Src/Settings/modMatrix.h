@@ -102,10 +102,10 @@ class ModMatrix {
   }
 
   void clear() {
-    std::fill(&destinationDepth_[0], &destinationDepth_[NUM_DESTINATIONS], 1.f);
     std::fill(&matrix_[0], &matrix_[NUM_SOURCES], 0);
-    std::fill(&invert_[0], &invert_[NUM_SOURCES], 0);
+    std::fill(&destinationDepth_[0], &destinationDepth_[NUM_DESTINATIONS], 0.f);
     matrix_[ENVELOPE_1] |= (1 << GAIN);  // envelope 1 is always tied to gain !
+    setDestinationDepth(GAIN, 1.f);
   }
 
   void toggle(size_t src, size_t dest) {
@@ -115,9 +115,15 @@ class ModMatrix {
   void set(size_t src, size_t dest, bool state) {
     if (state) {
       matrix_[src] = matrix_[src] | (1 << dest);
+      if (destinationDepth(dest) == 0.f) {
+        setDestinationDepth(dest, 1.f);
+      }
     } else {
       matrix_[src] = matrix_[src] & ~(1 << dest);
       matrix_[ENVELOPE_1] |= (1 << GAIN);
+      if (dest != GAIN) {
+        setDestinationDepth(dest, 0.f);
+      }
     }
   }
 
@@ -147,29 +153,10 @@ class ModMatrix {
     return SettingsText::floatToText(destinationDepth(dest));
   }
 
-  // Invert
-  void setInvert(size_t src, size_t dest, bool state) {
-    uint32_t data = invert_[src];
-    if (state) {
-      invert_[src] = data | (1 << dest);
-    } else {
-      invert_[src] = data & ~(1 << dest);
-    }
-  }
-
-  bool invert(size_t src, size_t dest) {
-    return invert_[src] & (1 << dest);
-  }
-
-  const char* invertText(size_t src, size_t dest) {
-    return SettingsText::boolToOnOff(invert(src, dest));
-  }
-
   // Storage
   void save(FileWriter& fileWriter) {
     for (size_t i = 0; i < NUM_SOURCES; ++i) {
       fileWriter.write(matrix_[i]);
-      fileWriter.write(invert_[i]);
     }
 
     for (size_t i = 0; i < NUM_DESTINATIONS; i++) {
@@ -184,7 +171,6 @@ class ModMatrix {
   void load(FileReader& fileReader) {
     for (size_t i = 0; i < NUM_SOURCES; ++i) {
       fileReader.read(matrix_[i]);
-      fileReader.read(invert_[i]);
     }
 
     for (size_t i = 0; i < NUM_DESTINATIONS; i++) {
@@ -204,9 +190,6 @@ class ModMatrix {
         if (modMatrix->read(x, y)) {
           matrix_[x] |= (1 << y);
         }
-        if (modMatrix->invert(x, y)) {
-          invert_[x] |= (1 << y);
-        }
       }
     }
 
@@ -215,14 +198,13 @@ class ModMatrix {
     }
 
     for (size_t i = 0; i < kNumUserCc; ++i) {
-      midiCcNumber_[i] = midiCcNumber_[i];
+      midiCcNumber_[i] = modMatrix->midiCcNumber(i);
     }
   }
 
   void writeHash(Hash& hash) {
     for (size_t i = 0; i < NUM_SOURCES; ++i) {
       hash.write(matrix_[i]);
-      hash.write(invert_[i]);
     }
 
     for (size_t i = 0; i < NUM_DESTINATIONS; i++) {
@@ -237,7 +219,6 @@ class ModMatrix {
  private:
   uint8_t midiCcNumber_[4];
   uint32_t matrix_[NUM_SOURCES];
-  uint32_t invert_[NUM_SOURCES];
   float destinationDepth_[NUM_DESTINATIONS];
 };
 

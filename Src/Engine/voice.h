@@ -104,31 +104,30 @@ class Voice {
     modMatrixEngine_->setEnvelope(1, envelopeEngine_[1].next());
     modMatrixEngine_->setLfo(0, lfoEngine_[0].next());
     modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
-    float *data = modMatrixEngine_->process();
+    float* data = modMatrixEngine_->process();
+
+    dac_->set(index, 0, data[ModMatrix::SHAPE_2] * 65535);
+    dac_->set(index, 1, data[ModMatrix::VCO_MOD_DEPTH] * 65535);
+    dac_->set(index, 2, data[ModMatrix::SHAPE_1] * 65535);
+    dac_->set(index, 3, calculatePitchOsc1(data[ModMatrix::TUNE_1]));
+    dac_->set(index, 4, data[ModMatrix::DRIVE] * 65535);
+    dac_->set(index, 5, data[ModMatrix::GAIN] * fadePhase_ * 65535);
+    dac_->set(index, 6, data[ModMatrix::RESONANCE_2] * 65535);
+    dac_->set(index, 7, calculatePitchOsc2(data[ModMatrix::TUNE_2]));
+    dac_->set(index, 8, data[ModMatrix::CUTOFF_1] * 65535);
+    dac_->set(index, 9, data[ModMatrix::CUTOFF_2] * 65535);
+    dac_->set(index, 10, data[ModMatrix::PAN] * 65535);
+    dac_->set(index, 11, data[ModMatrix::RESONANCE_1] * 65535);
 
     if (fadePhase_ == 0.f || envelopeEngine_[0].stage() == EnvelopeEngine::IDLE) {
       state_ = IDLE;
     }
 
-    Patch& p = settings_->selectedPatch();
-    dac_->set(index, 0, p.oscillator().shape2() * data[ModMatrix::SHAPE_2] * 65535);
-    dac_->set(index, 1, p.oscillator().modDepth() * data[ModMatrix::VCO_MOD_DEPTH] * 65535);
-    dac_->set(index, 2, p.oscillator().shape1() * data[ModMatrix::SHAPE_1] * 65535);
-    dac_->set(index, 3, calculatePitchOsc1(data[ModMatrix::TUNE_1]));
-    dac_->set(index, 4, p.amp().drive() * data[ModMatrix::DRIVE] * 65535);
-    dac_->set(index, 5, fadePhase_ * data[ModMatrix::GAIN] * 65535);
-    dac_->set(index, 6, p.filter().resonance2() * data[ModMatrix::RESONANCE_2] * 65535);
-    dac_->set(index, 7, calculatePitchOsc2(data[ModMatrix::TUNE_2]));
-    dac_->set(index, 8, p.filter().cutoff1() * data[ModMatrix::CUTOFF_1] * 65535);
-    dac_->set(index, 9, p.filter().cutoff2() * data[ModMatrix::CUTOFF_2] * 65535);
-    dac_->set(index, 10, p.amp().pan() * data[ModMatrix::PAN] * 65535);
-    dac_->set(index, 11, p.filter().resonance1() * data[ModMatrix::RESONANCE_1] * 65535);
-
-    if (settings_->calibration().enabled()) {            
-        uint16_t gain = (index == settings_->calibration().selectedVoice()) ? 65535 : 0;
-        dac_->set(index, 5, gain);
-        dac_->set(index, 3, settings_->calibration().min());
-        dac_->set(index, 7, settings_->calibration().max());
+    if (settings_->calibration().enabled()) {
+      uint16_t gain = (index == settings_->calibration().selectedVoice()) ? 65535 : 0;
+      dac_->set(index, 5, gain);
+      dac_->set(index, 3, settings_->calibration().min());
+      dac_->set(index, 7, settings_->calibration().max());
     }
   }
 
@@ -155,7 +154,7 @@ class Voice {
     Calibration& cal = settings_->calibration();
 
     int noteValue = cal.noteToValue(24 + osc.octaveOffset1());
-    int tuneValue = ((2.f * osc.tune1() * modValue) - 1.f) * osc.tuneSemiToneRange1() * cal.semiNoteValue();
+    int tuneValue = ((2.f * modValue) - 1.f) * osc.tuneSemiToneRange1() * cal.semiNoteValue();
 
     if (settings_->oscillator().trackNote1()) {
       noteValue = cal.noteToValue(note_ + osc.octaveOffset1());
@@ -176,7 +175,7 @@ class Voice {
     Calibration& cal = settings_->calibration();
 
     int noteValue = cal.noteToValue(24 + osc.octaveOffset2());
-    int tuneValue = ((2.f * osc.tune2() * modValue) - 1.f) * osc.tuneSemiToneRange2() * cal.semiNoteValue();
+    int tuneValue = ((2.f * modValue) - 1.f) * osc.tuneSemiToneRange2() * cal.semiNoteValue();
 
     if (settings_->oscillator().trackNote2()) {
       noteValue = cal.noteToValue(note_ + osc.octaveOffset2());

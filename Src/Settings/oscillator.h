@@ -5,9 +5,63 @@
 
 class Oscillator {
  public:
-  enum Type1 { SAW1, TRIANGLE1, SINE1, SQUARE1, NUM_TYPES1 };
-  enum Type2 { SAW2, TRIANGLE2, NOISE2, SQUARE2, NUM_TYPES2 };
-  enum VoiceMode { MONO, POLY, UNISON, NUM_VOICE_MODES };
+  enum Type1 {
+    SAW1,
+    TRIANGLE1,
+    SINE1,
+    SQUARE1,
+    NUM_TYPES1,
+  };
+
+  enum Type2 {
+    SAW2,
+    TRIANGLE2,
+    NOISE2,
+    SQUARE2,
+    NUM_TYPES2,
+  };
+
+  enum VoiceMode {
+    MONO,
+    POLY,
+    UNISON,
+    NUM_VOICE_MODES,
+  };
+
+  static const char* type1Text(Type1 type) {
+    switch (type) {
+      case SAW1:      return "SAW";
+      case TRIANGLE1: return "TRIANGLE";
+      case SINE1:     return "SINE";
+      case SQUARE1:   return "SQUARE";
+      default:
+        break;
+    }
+    return nullptr;
+  }
+
+  static const char* type2Text(Type2 type) {
+    switch (type) {
+      case SAW2:      return "SAW";
+      case TRIANGLE2: return "TRIANGLE";
+      case NOISE2:    return "NOISE";
+      case SQUARE2:   return "SQUARE";
+      default:
+        break;
+    }
+    return nullptr;
+  }
+
+  const char* voiceModeText(VoiceMode value) {
+    switch (value) {
+      case MONO:    return "MONO";
+      case POLY:    return "POLY";
+      case UNISON:  return "UNISON";
+      default:
+        break;
+    }
+    return nullptr;
+  }
 
   void init() {
     setVoiceMode(POLY);
@@ -45,43 +99,8 @@ class Oscillator {
     voiceMode_ = VoiceMode(SettingsUtils::clip(0, NUM_VOICE_MODES - 1, value));
   }
 
-  const char *voiceModeText() {
+  const char* voiceModeText() {
     return voiceModeText(voiceMode());
-  }
-
-  static const char* type1Text(Type1 type) {
-    switch (type) {
-      case SAW1:      return "SAW";
-      case TRIANGLE1: return "TRIANGLE";
-      case SINE1:     return "SINE";
-      case SQUARE1:   return "SQUARE";
-      default:
-        break;
-    }
-    return nullptr;
-  }
-
-  static const char* type2Text(Type2 type) {
-    switch (type) {
-      case SAW2:      return "SAW";
-      case TRIANGLE2: return "TRIANGLE";
-      case NOISE2:    return "NOISE";
-      case SQUARE2:   return "SQUARE";
-      default:
-        break;
-    }
-    return nullptr;
-  }
-
-  const char* voiceModeText(VoiceMode value) {
-    switch (value) {
-      case MONO:    return "MONO";
-      case POLY:    return "POLY";
-      case UNISON:  return "UNISON";
-      default:
-        break;
-    }
-    return nullptr;
   }
 
   // Type 1

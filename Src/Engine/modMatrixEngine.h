@@ -7,7 +7,7 @@ class ModMatrixEngine {
  public:
 
   void init(Settings* settings) {
-    modMatrix_ = &settings->modMatrix();
+    settings_ = settings;
   }
 
   void setEnvelope(int index, float value) {
@@ -35,32 +35,55 @@ class ModMatrixEngine {
   }
 
   void setMidiCc(uint8_t number, uint8_t value) {
+    Patch& p = settings_->selectedPatch();
+
     for (size_t i = 0; i < Settings::kNumUserCc; ++i) {
-      if (number == modMatrix_->midiCcNumber(i)) {
+      if (number == p.modMatrix().midiCcNumber(i)) {
         source_[i + ModMatrix::MIDI_CC_A] = (1.f / 127.f) * value;
       }
     }
   }
 
   float* process() {
+    Patch& p = settings_->selectedPatch();
+
     for (int dest = 0; dest < ModMatrix::NUM_DESTINATIONS; ++dest) {
       destination_[dest] = 1.f;
       for (int src = 0; src < ModMatrix::NUM_SOURCES; ++src) {
-        if (modMatrix_->read(src, dest)) {
-          float value = source_[src];
-          //float depth = modMatrix_->destinationDepth(dest);
-          bool invert = modMatrix_->invert(src, dest);
-          destination_[dest] *= (invert ? 1.f - value : value); //* depth;
+        if (p.modMatrix().read(src, dest)) {
+          destination_[dest] *= source_[src];
         }
       }
+      destination_[dest] = Dsp::cross_fade(originalValue(dest), destination_[dest], p.modMatrix().destinationDepth(dest));
     }
     return &destination_[0];
   }
 
  private:
-  ModMatrix* modMatrix_;
+  Settings* settings_;
   float source_[ModMatrix::NUM_SOURCES];
   float destination_[ModMatrix::NUM_DESTINATIONS];
+
+  float originalValue(size_t dest) {
+    Patch& p = settings_->selectedPatch();
+    switch (dest) {
+      case ModMatrix::CUTOFF_1:       return p.filter().cutoff1();
+      case ModMatrix::CUTOFF_2:       return p.filter().cutoff2();
+      case ModMatrix::RESONANCE_1:    return p.filter().resonance1();
+      case ModMatrix::RESONANCE_2:    return p.filter().resonance2();
+      case ModMatrix::SHAPE_1:        return p.oscillator().shape1();
+      case ModMatrix::SHAPE_2:        return p.oscillator().shape2();
+      case ModMatrix::TUNE_1:         return p.oscillator().tune1();
+      case ModMatrix::TUNE_2:         return p.oscillator().tune2();
+      case ModMatrix::VCO_MOD_DEPTH:  return p.oscillator().modDepth();
+      case ModMatrix::GAIN:           return 1.f;
+      case ModMatrix::PAN:            return p.amp().pan();
+      case ModMatrix::DRIVE:          return p.amp().drive();
+      default:
+        break;
+    }
+    return 0.f;
+  }
 };
 
 #endif
