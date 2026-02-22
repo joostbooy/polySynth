@@ -117,9 +117,15 @@ class ModMatrix {
   void set(size_t src, size_t dest, bool state) {
     if (state) {
       matrix_[src] = matrix_[src] | (1 << dest);
+      if (destinationDepth(dest) == 0.f) {
+        setDestinationDepth(dest, 1.f);
+      }
     } else {
       matrix_[src] = matrix_[src] & ~(1 << dest);
       matrix_[ENVELOPE_1] |= (1 << GAIN);
+      if (destinationIsUnconnected(dest)) {
+        setDestinationDepth(dest, 0.f);
+      }
     }
   }
 
@@ -216,6 +222,15 @@ class ModMatrix {
   uint8_t midiCcNumber_[4];
   uint32_t matrix_[NUM_SOURCES];
   float destinationDepth_[NUM_DESTINATIONS];
+
+  bool destinationIsUnconnected(size_t dest) {
+    for (size_t i = 0; i < NUM_SOURCES; i++) {
+      if (read(i, dest)) {
+        return false;
+      }
+    }
+    return true;
+  }
 };
 
 #endif

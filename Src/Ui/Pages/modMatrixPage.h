@@ -160,6 +160,14 @@ namespace ModMatrixPage {
     WindowPainter::draw_horizontal_scollbar(coll_w, 64 - 8, w - coll_w, 6, top_dest_, ModMatrix::NUM_DESTINATIONS, kMaxVisibleDestinations);
   }
 
+  void drawDestinationDepthText(int x, int y, int w, int h, int coll_w, int row_h) {
+    for (size_t i = 0; i < kMaxVisibleDestinations; i++) {
+      int dest = i + top_dest_;
+      int depth_x = (i * coll_w) + x;
+      canvas_->drawText(depth_x, y, coll_w, row_h, settings_->modMatrix().destinationDepthText(dest) ,Canvas::CENTER, Canvas::CENTER);
+    }
+  }
+
   void draw() {
     const int x = 0;
     const int y = 0;
@@ -172,6 +180,7 @@ namespace ModMatrixPage {
 
     draw_sources_text(x, row_h, w, h, coll_w, row_h);
     draw_destination_text(coll_w, y, w, h, coll_w, row_h);
+    //drawDestinationDepthText(coll_w, 256 - 16, w, h, coll_w, row_h);
     draw_matrix(x + coll_w, y + row_h, w - coll_w, h - row_h, coll_w, row_h);
 
     WindowPainter::draw_footer(footerOptionText, NUM_FOOTER_OPTIONS);
