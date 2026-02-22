@@ -33,8 +33,8 @@ class SettingsText {
     return str.write(intergral, ".", fractional, " ", unit);
   }
 
-  static const char* floatToText(float value, int min, int max) {
-    return str.write(Dsp::cross_fade(min, max, value));
+  static const char* floatToText(float value, int min, int max, const char* unit = "") {
+    return str.write(Dsp::cross_fade(min, max, value), unit);
   }
 
   static const char* noteToText(uint8_t note) {

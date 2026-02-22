@@ -146,7 +146,7 @@ class ModMatrix {
   }
  
   const char* destinationDepthText(size_t dest) {
-    return SettingsText::floatToText(destinationDepth(dest));
+    return SettingsText::floatToText(destinationDepth(dest), 0, 100, "%");
   }
 
   // Storage
