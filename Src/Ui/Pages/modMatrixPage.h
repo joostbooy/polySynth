@@ -2,6 +2,7 @@
 #define ModMatrixPage_h
 
 #include "topPage.h"
+#include "modMatrixDepthPage.h"
 
 namespace ModMatrixPage {
 
@@ -26,10 +27,11 @@ namespace ModMatrixPage {
     COPY,
     PASTE,
     CLEAR,
+    SET_DEPTH,
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"COPY", "PASTE", "CLEAR"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"COPY", "PASTE", "CLEAR", "SET DEPTH"};
 
   void scroll_to_source(int src) {
     src_ = SettingsUtils::clip(0, ModMatrix::NUM_SOURCES - 1, src);
@@ -97,6 +99,10 @@ namespace ModMatrixPage {
             }
           });
           pages_->open(Pages::CONFIRMATION_PAGE);
+          break;
+          case SET_DEPTH:
+          ModMatrixDepthPage::setDestination(dest_);
+          pages_->open(Pages::MOD_MATRIX_DEPTH_PAGE);
           break;
         default:
           break;

@@ -104,7 +104,9 @@ class ModMatrix {
   void clear() {
     std::fill(&matrix_[0], &matrix_[NUM_SOURCES], 0);
     std::fill(&destinationDepth_[0], &destinationDepth_[NUM_DESTINATIONS], 0.f);
-    matrix_[ENVELOPE_1] |= (1 << GAIN);  // envelope 1 is always tied to gain !
+   
+    // envelope 1 is always tied to gain !
+    matrix_[ENVELOPE_1] |= (1 << GAIN);  
     setDestinationDepth(GAIN, 1.f);
   }
 
@@ -115,15 +117,9 @@ class ModMatrix {
   void set(size_t src, size_t dest, bool state) {
     if (state) {
       matrix_[src] = matrix_[src] | (1 << dest);
-      if (destinationDepth(dest) == 0.f) {
-        setDestinationDepth(dest, 1.f);
-      }
     } else {
       matrix_[src] = matrix_[src] & ~(1 << dest);
       matrix_[ENVELOPE_1] |= (1 << GAIN);
-      if (dest != GAIN) {
-        setDestinationDepth(dest, 0.f);
-      }
     }
   }
 
