@@ -118,7 +118,7 @@ class ModMatrix {
     if (state) {
       matrix_[src] = matrix_[src] | (1 << dest);
       if (destinationDepth(dest) == 0.f) {
-        setDestinationDepth(dest, 1.f);
+        setDestinationDepth(dest, 0.5f);
       }
     } else {
       matrix_[src] = matrix_[src] & ~(1 << dest);
