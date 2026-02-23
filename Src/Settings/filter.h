@@ -8,8 +8,18 @@
 
 class Filter {
  public:
-  enum Type { HP, BP, LP2P, NUM_FILTER_TYPES };
-  enum Routing { SERIES, PARALEL, NUM_FILTER_ROUTINGS };
+  enum Type {
+    HP,
+    BP,
+    LP2P,
+    NUM_FILTER_TYPES,
+  };
+
+  enum Routing {
+    SERIES,
+    PARALEL,
+    NUM_FILTER_ROUTINGS,
+  };
 
   void init() {
     setType(HP);
