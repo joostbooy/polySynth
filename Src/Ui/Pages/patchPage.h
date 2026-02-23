@@ -132,6 +132,7 @@ namespace PatchPage {
   }
 
   void refresh_leds() {
+    //
   }
 
   void draw() {
