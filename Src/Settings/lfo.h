@@ -72,7 +72,7 @@ class Lfo {
       return MidiSync::tempoText(speed() * (MidiSync::NUM_TEMPOS - 1));
     } else {
       size_t index = speed() * PHASE_TABLE_SIZE;
-      return SettingsText::floatToText(lut_phase_inc[index] * SAMPLE_RATE, " HZ");
+      return SettingsText::phaseIncToHertz(lut_phase_inc[index]);
     }
   }
   

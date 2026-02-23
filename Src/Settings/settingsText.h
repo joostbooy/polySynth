@@ -37,6 +37,14 @@ class SettingsText {
     return str.write(Dsp::cross_fade(min, max, value), unit);
   }
 
+  static const char* phaseIncToMilis(float inc) {
+    return floatToText(1000.f / (inc * SAMPLE_RATE), " MS");
+  }
+
+  static const char* phaseIncToHertz(float inc) {
+    return floatToText(inc * SAMPLE_RATE, " HZ");
+  }
+
   static const char* noteToText(uint8_t note) {
     uint8_t oct = 0;
     while (note >= 12) {
@@ -70,6 +78,7 @@ class SettingsText {
       return str.write(kb, " KB");
     }
   }
+
 
  private:
   static inline const char* note_text_[12] = {"C", "Cb", "D", "Db", "E", "F", "Fb", "G", "Gb", "A", "Ab", "B"};

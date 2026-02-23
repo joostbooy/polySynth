@@ -48,11 +48,12 @@ tables.append(values.astype(int))
 '''____________________
         PHASE INC
 ________________________'''
+name = 'phase_inc'
+
 phase_table_size = 256
 freq_min = 0.1
 freq_max = 50.0
 
-name = 'phase_inc'
 freq_inc_min = freq_min / sample_rate
 freq_inc_max = freq_max / sample_rate
 steps = numpy.linspace(freq_inc_min, freq_inc_max, phase_table_size)
