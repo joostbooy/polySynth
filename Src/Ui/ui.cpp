@@ -2,11 +2,6 @@
 
 #include "que.h"
 
-static const int enc_a_row = 2;
-static const int enc_b_row = 3;
-static const int num_buttons_rows = 6;
-static const int buttons_rows[num_buttons_rows] = {0, 1, 4, 5, 6, 7};
-
 void Ui::addEvent(ControlType type, uint8_t id, int8_t value) {
   Ui::Event e;
   e.type = type;
