@@ -80,7 +80,7 @@ class Envelope {
     if (clockSync()) {
       return MidiSync::tempoText(attackTime() * (MidiSync::NUM_TEMPOS - 1));
     } else {
-      size_t index = attackTime() * PHASE_TABLE_SIZE;
+      size_t index = attackTime() * (PHASE_TABLE_SIZE - 1);
       return SettingsText::phaseIncToMilis(lut_phase_inc[index]);
     }
   }
@@ -119,7 +119,7 @@ class Envelope {
     if (clockSync()) {
       return MidiSync::tempoText(decayTime() * (MidiSync::NUM_TEMPOS - 1));
     } else {
-      size_t index = decayTime() * PHASE_TABLE_SIZE;
+      size_t index = decayTime() * (PHASE_TABLE_SIZE - 1);
       return SettingsText::phaseIncToMilis(lut_phase_inc[index]);
     }
   }
@@ -162,7 +162,7 @@ class Envelope {
     } else if (clockSync()) {
       return MidiSync::tempoText(holdTime() * (MidiSync::NUM_TEMPOS - 1));
     } else {
-      size_t index = holdTime() * PHASE_TABLE_SIZE;
+      size_t index = holdTime() * (PHASE_TABLE_SIZE - 1);
       return SettingsText::phaseIncToMilis(lut_phase_inc[index]);
     }
   }
@@ -201,7 +201,7 @@ class Envelope {
     if (clockSync()) {
       return MidiSync::tempoText(releaseTime() * (MidiSync::NUM_TEMPOS - 1));
     } else {
-      size_t index = releaseTime() * PHASE_TABLE_SIZE;
+      size_t index = releaseTime() * (PHASE_TABLE_SIZE - 1);
       return SettingsText::phaseIncToMilis(lut_phase_inc[index]);
     }
   }

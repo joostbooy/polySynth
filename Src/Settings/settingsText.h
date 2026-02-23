@@ -38,11 +38,11 @@ class SettingsText {
   }
 
   static const char* phaseIncToMilis(float inc) {
-    return floatToText(1000.f / (inc * SAMPLE_RATE), " MS");
+    return floatToText(1000.f / (inc * SAMPLE_RATE), "MS");
   }
 
   static const char* phaseIncToHertz(float inc) {
-    return floatToText(inc * SAMPLE_RATE, " HZ");
+    return floatToText(inc * SAMPLE_RATE, "HZ");
   }
 
   static const char* noteToText(uint8_t note) {
