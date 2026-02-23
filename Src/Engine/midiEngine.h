@@ -60,8 +60,8 @@ class MidiEngine {
   }
 
   void getLastReceived(uint8_t* ptr) {
-      *ptr = lastReceivedReady_ ? lastReceived_ : 0x00;
-      lastReceivedReady_ = false;
+    *ptr = lastReceivedReady_ ? lastReceived_ : 0x00;
+    lastReceivedReady_ = false;
   }
 
   bool pull(Event& e) {

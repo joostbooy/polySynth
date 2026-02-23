@@ -161,7 +161,7 @@ class Envelope {
       return MidiSync::tempoText(holdTime() * (MidiSync::NUM_TEMPOS - 1));
     } else {
       size_t index = holdTime() * PHASE_TABLE_SIZE;
-      return SettingsText::floatToText(lut_phase_length[index], "HZ");
+      return SettingsText::floatToText(lut_phase_inc[index] * SAMPLE_RATE, " HZ");
     }
   }
 
