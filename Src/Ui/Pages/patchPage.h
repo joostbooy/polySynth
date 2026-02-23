@@ -112,7 +112,8 @@ namespace PatchPage {
     ui_->resetAllPots();
   }
 
-  void on_encoder(int id, int inc) {
+  void on_encoder(int id, int state) {
+    int inc = buttons_->isPressed(Buttons::SHIFT) ? state * 10 : state;
     int lastIndex = settings_->patchIndex();
     newIndex = SettingsUtils::clip(0, Settings::kNumPatches - 1, lastIndex + inc);
 
