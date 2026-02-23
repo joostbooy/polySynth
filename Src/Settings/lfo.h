@@ -71,8 +71,7 @@ class Lfo {
     if (clockSync()) {
       return MidiSync::tempoText(speed() * (MidiSync::NUM_TEMPOS - 1));
     } else {
-      size_t index = speed() * (PHASE_TABLE_SIZE - 1);
-      return SettingsText::phaseIncToHertz(lut_phase_inc[index]);
+      return SettingsText::phaseIncToHertz(inc());
     }
   }
   
