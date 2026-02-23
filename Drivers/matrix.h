@@ -45,9 +45,9 @@ class Matrix {
 
   void setCollumn(int coll) {
     uint32_t reg = 0;
-    coll& 0x01 ? reg |= GPIO_PIN_0 : reg |= GPIO_PIN_0 << 16;
-    coll& 0x02 ? reg |= GPIO_PIN_1 : reg |= GPIO_PIN_1 << 16;
-    coll& 0x04 ? reg |= GPIO_PIN_4 : reg |= GPIO_PIN_4 << 16;
+    coll & 0x01 ? reg |= GPIO_PIN_0 : reg |= GPIO_PIN_0 << 16;
+    coll & 0x02 ? reg |= GPIO_PIN_1 : reg |= GPIO_PIN_1 << 16;
+    coll & 0x04 ? reg |= GPIO_PIN_4 : reg |= GPIO_PIN_4 << 16;
     GPIOD->BSRR = reg;
     Micros::delay(1);
   }
