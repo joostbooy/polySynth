@@ -49,13 +49,16 @@ class Pots {
 
    void write(int id, float value) {
     raw_[id] = value;
-    for (size_t i = 0; i < NUM_POTS; ++i) {
-      filtered_[i] += 0.01f * (raw_[i] - filtered_[i]);
-    }
   }
 
   float read(int id) {
     return filtered_[id];
+  }
+
+  void filterAll() {
+    for (size_t i = 0; i < NUM_POTS; ++i) {
+      filtered_[i] += 0.01f * (raw_[i] - filtered_[i]);
+    }
   }
 
  private:

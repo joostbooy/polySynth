@@ -71,6 +71,7 @@ void Ui::poll() {
   if (adc_->potReady()) {
     float value = adc_->readPot() * (1.f / 1023.f);
     pots_.write(adc_->currentPot(), value);
+    pots_.filterAll();
     adc_->convertNextPot();
   }
 
