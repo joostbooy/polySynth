@@ -61,10 +61,10 @@ class LfoEngine {
         x = skewPhase;
         break;
       case Lfo::EXP_LOG:
-        x = Curve::read(skewPhase, 1.f);
+        x = LookupTablesUtils::readInterpolated((stage_ == RISING) ? lut_exp : lut_inv_exp, skewPhase);
         break;
       case Lfo::LOG_EXP:
-        x = Curve::read(skewPhase, 0.f);
+        x = LookupTablesUtils::readInterpolated((stage_ == RISING) ? lut_inv_exp : lut_exp, skewPhase);
         break;
       case Lfo::SQUARE:
         x = phase_ < skewAmount ? 1.f : 0.f;

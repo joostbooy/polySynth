@@ -101,8 +101,6 @@ defines = [
 'MAX_BPM '				+ str(int(max_bpm)),
 'MAX_BPM_FRACTIONAL '	+ str(int(max_bpm_fractional)),
 'UPDATE_FREQ '			+ str(int(update_freq)),
-'EXP_TABLE_SIZE '		+ str(int(exp_table_size)),
-'PHASE_TABLE_SIZE '		+ str(int(phase_table_size)),
 ]
 
 '''____________________

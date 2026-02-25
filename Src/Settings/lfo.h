@@ -8,6 +8,7 @@
 #include "midiSync.h"
 #include "settingsText.h"
 #include "settingsUtils.h"
+#include "lookupTablesUtils.h"
 
 class Lfo {
  public:
@@ -69,7 +70,7 @@ class Lfo {
 
   const char* speedText() {
     if (clockSync()) {
-      return MidiSync::tempoText(speed() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::tempoText(speed());
     } else {
       return SettingsText::phaseIncToHertz(inc());
     }
@@ -77,9 +78,9 @@ class Lfo {
   
   float inc() {
     if (clockSync()) {
-      return MidiSync::readInc(speed() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::readInc(speed());
     } else {
-      return lut_phase_inc[int(speed() * (PHASE_TABLE_SIZE - 1))];
+      return LookupTablesUtils::read(lut_phase_inc, speed());
     }
   }
 

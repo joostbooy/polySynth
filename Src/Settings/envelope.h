@@ -6,6 +6,8 @@
 #include "midiSync.h"
 #include "settingsText.h"
 #include "settingsUtils.h"
+#include "lookupTablesUtils.h"
+
 
 class Envelope {
  public:
@@ -78,7 +80,7 @@ class Envelope {
 
   const char* attackTimeText() {
     if (clockSync()) {
-      return MidiSync::tempoText(attackTime() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::tempoText(attackTime());
     } else {
       return SettingsText::phaseIncToMilis(attackInc());
     }
@@ -88,7 +90,7 @@ class Envelope {
     if (clockSync()) {
       return MidiSync::readInc(attackTime() * (MidiSync::NUM_TEMPOS - 1));
     } else {
-      return lut_phase_inc[int(attackTime() * (PHASE_TABLE_SIZE - 1))];
+      return LookupTablesUtils::read(lut_phase_inc, attackTime());
     }
   }
 
@@ -116,7 +118,7 @@ class Envelope {
 
   const char* decayTimeText() {
     if (clockSync()) {
-      return MidiSync::tempoText(decayTime() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::tempoText(decayTime());
     } else {
       return SettingsText::phaseIncToMilis(decayInc());
     }
@@ -124,9 +126,9 @@ class Envelope {
 
   float decayInc() {
     if (clockSync()) {
-      return MidiSync::readInc(decayTime() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::readInc(decayTime());
     } else {
-      return lut_phase_inc[int(decayTime() * (PHASE_TABLE_SIZE - 1))];
+      return LookupTablesUtils::read(lut_phase_inc, decayTime());
     }
   }
 
@@ -158,7 +160,7 @@ class Envelope {
     if (mode() == GATE) {
       return "-";
     } else if (clockSync()) {
-      return MidiSync::tempoText(holdTime() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::tempoText(holdTime());
     } else {
       return SettingsText::phaseIncToMilis(holdInc());
     }
@@ -166,9 +168,9 @@ class Envelope {
 
   float holdInc() {
     if (clockSync()) {
-      return MidiSync::readInc(holdTime() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::readInc(holdTime());
     } else {
-      return lut_phase_inc[int(holdTime() * (PHASE_TABLE_SIZE - 1))];
+      return LookupTablesUtils::read(lut_phase_inc, holdTime());
     }
   }
 
@@ -196,7 +198,7 @@ class Envelope {
 
   const char* releaseTimeText() {
     if (clockSync()) {
-      return MidiSync::tempoText(releaseTime() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::tempoText(releaseTime());
     } else {
       return SettingsText::phaseIncToMilis(releaseInc());
     }
@@ -204,9 +206,9 @@ class Envelope {
 
   float releaseInc() {
     if (clockSync()) {
-      return MidiSync::readInc(releaseTime() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::readInc(releaseTime());
     } else {
-      return lut_phase_inc[int(releaseTime() * (PHASE_TABLE_SIZE - 1))];
+      return LookupTablesUtils::read(lut_phase_inc, releaseTime());
     }
   }
 

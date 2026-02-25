@@ -46,11 +46,13 @@ namespace LfoPage {
     // find best increment value for lfo drawing
     float value = 1.f;
     float targetInc = 1.f / w;
-    for (size_t i = 0; i < PHASE_TABLE_SIZE; i++) {
+    size_t size = LookupTablesUtils::size(lut_phase_inc);
+
+    for (size_t i = 0; i < size; i++) {
       float currentValue = SettingsUtils::difference(lut_phase_inc[i], targetInc);
       if (currentValue < value) {
         value = currentValue;
-        speed = (1.f / PHASE_TABLE_SIZE) * i;
+        speed = (1.f / size) * i;
       }
     }
   }

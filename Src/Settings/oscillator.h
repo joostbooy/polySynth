@@ -2,6 +2,7 @@
 #define Oscillator_h
 
 #include "settingsText.h"
+#include "lookupTablesUtils.h"
 
 class Oscillator {
  public:
@@ -312,7 +313,7 @@ class Oscillator {
   }
 
   float slideInc1() {
-    return lut_phase_inc[int(slideAmmount1() * (PHASE_TABLE_SIZE - 1))];
+    return LookupTablesUtils::read(lut_phase_inc, slideAmmount1());
   }
 
   // Slide ammount 2
@@ -329,7 +330,7 @@ class Oscillator {
   }
 
   float slideInc2() {
-    return lut_phase_inc[int(slideAmmount2() * (PHASE_TABLE_SIZE - 1))];
+    return LookupTablesUtils::read(lut_phase_inc, slideAmmount2());
   }
 
   // Octave offset 1
