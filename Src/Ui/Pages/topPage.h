@@ -277,14 +277,14 @@ namespace TopPage {
 
   const char* selectedPageText() {
     switch (selectedPage_) {
-      case Pages::LFO_PAGE:         return "LFO_PAGE";
-      case Pages::MIDI_PAGE:        return "MIDI_PAGE";
-      case Pages::AMP_PAGE:         return "AMP_PAGE";
-      case Pages::FILTER_PAGE:      return "FILTER_PAGE";
-      case Pages::ENVELOPE_PAGE:    return "ENVELOPE_PAGE";
+      case Pages::LFO_PAGE:         return "LFO PAGE";
+      case Pages::MIDI_PAGE:        return "MIDI PAGE";
+      case Pages::AMP_PAGE:         return "AMP PAGE";
+      case Pages::FILTER_PAGE:      return "FILTER PAGE";
+      case Pages::ENVELOPE_PAGE:    return "ENVELOPE PAGE";
       case Pages::OSCILLATOR_PAGE:  return "VCO PAGE";
       case Pages::MOD_MATRIX_PAGE:  return "MOD MATRIX PAGE";
-      case Pages::PATCH_PAGE:       return "PATCH_PAGE";
+      case Pages::PATCH_PAGE:       return "PATCH PAGE";
       default:
         break;
     }
