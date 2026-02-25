@@ -43,7 +43,8 @@ void Pages::init(Settings *settings, Engine *engine, Ui *ui) {
 		page_[i]->init();
 	}
 
-	open(PATCH_PAGE);
+	TopPage::selectedPage_ = PATCH_PAGE;
+	open(TopPage::selectedPage_);
 }
 
 void Pages::open(int id) {

@@ -25,6 +25,8 @@ namespace TopPage {
 
   StringBuilderBase<63> str_;
 
+  int selectedPage_;
+
   uint8_t slideVcoSelectIndex_;
   uint8_t modTypeIndex_[ModMatrix::NUM_DESTINATIONS];
 
@@ -130,8 +132,9 @@ namespace TopPage {
     // Page buttons
     int page = buttons_->toPage(id);
     if (page >= 0) {
+      selectedPage_ = page;
       pages_->close_all();
-      pages_->open(page);
+      pages_->open(selectedPage_);
       return;
     }
 
@@ -272,7 +275,48 @@ namespace TopPage {
     }
   }
 
+  const char* selectedPageText() {
+    switch (selectedPage_) {
+      case Pages::LFO_PAGE:         return "LFO_PAGE";
+      case Pages::MIDI_PAGE:        return "MIDI_PAGE";
+      case Pages::AMP_PAGE:         return "AMP_PAGE";
+      case Pages::FILTER_PAGE:      return "FILTER_PAGE";
+      case Pages::ENVELOPE_PAGE:    return "ENVELOPE_PAGE";
+      case Pages::OSCILLATOR_PAGE:  return "VCO PAGE";
+      case Pages::MOD_MATRIX_PAGE:  return "MOD MATRIX PAGE";
+      case Pages::PATCH_PAGE:       return "PATCH_PAGE";
+      default:
+        break;
+    }
+    return nullptr;
+  }
+
+  const char* selectedPatchName() {
+    str_.write(settings_->patchIndex() + 1, " ", settings_->selectedPatch().name());
+    if (settings_->patchHasUnsavedChanges()) {
+      str_.append("*");
+    }
+    return str_.read();
+  }
+
   void draw() {
+    int x = 0;
+    int y = 0;
+    int w = canvas_->width();
+    int h = 10;
+
+    const char * name = selectedPatchName();
+
+    canvas_->setFont(Font::LARGE);
+    canvas_->drawText(x + 1, y, w, h, name, Canvas::LEFT, Canvas::CENTER);
+
+    x = canvas_->font().string_width(name);
+    w = canvas_->width() - x;
+
+    canvas_->setFont(Font::SMALL);
+    canvas_->drawText(x + 1, y, w - 1, h, selectedPageText(), Canvas::LEFT, Canvas::CENTER);
+    canvas_->fill(x, y, w, h, Canvas::INVERTED);
+
     MessagePainter::draw(pages_->target_fps());
   }
 
