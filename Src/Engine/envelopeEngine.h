@@ -52,7 +52,7 @@ class EnvelopeEngine {
       case ATTACK:
         phase_ += envelope_->attackInc();
         if (phase_ < 1.f) {
-          sample_ =readCurve(envelope_->attackShape());
+          sample_ = readCurve(envelope_->attackShape());
         } else {
           phase_ = 0.f;
           stage_ = DECAY;
@@ -61,7 +61,7 @@ class EnvelopeEngine {
       case DECAY:
         phase_ += envelope_->decayInc();
         if (phase_ < 1.f) {
-          sample_ = Dsp::cross_fade(1.f, envelope_->sustainLevel(),readCurve(envelope_->decayShape()));
+          sample_ = Dsp::cross_fade(1.f, envelope_->sustainLevel(), readCurve(envelope_->decayShape()));
         } else {
           if (mode_ == Envelope::GATE) {
             phase_ = 0.f;
@@ -88,7 +88,7 @@ class EnvelopeEngine {
       case RELEASE:
         phase_ += envelope_->releaseInc();
         if (phase_ < 1.f) {
-          sample_ = Dsp::cross_fade(releaseLevel_, 0.f,readCurve(envelope_->releaseShape()));
+          sample_ = Dsp::cross_fade(releaseLevel_, 0.f, readCurve(envelope_->releaseShape()));
         } else {
           phase_ = 0.f;
           stage_ = envelope_->loop() ? ATTACK : IDLE;
