@@ -314,7 +314,7 @@ namespace TopPage {
     w = canvas_->width() - x;
 
     canvas_->setFont(Font::SMALL);
-    canvas_->drawText(x + 1, y, w - 1, h, selectedPageText(), Canvas::LEFT, Canvas::CENTER);
+    canvas_->drawText(x + 2, y, w - 2, h, selectedPageText(), Canvas::LEFT, Canvas::CENTER);
     canvas_->fill(x, y, w, h, Canvas::INVERTED);
 
     MessagePainter::draw(pages_->target_fps());
