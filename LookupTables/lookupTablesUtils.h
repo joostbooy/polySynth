@@ -30,8 +30,8 @@ class LookupTablesUtils {
     size_t intergral = index;
     float fractional = index - intergral;
 
-    T a = table1[intergral] + (table1[intergral + 1]) * fractional;
-    T b = table2[intergral] + (table2[intergral + 1]) * fractional;
+    T a = table1[intergral] + (table1[intergral + 1] - table1[intergral]) * fractional;
+    T b = table2[intergral] + (table2[intergral + 1] - table2[intergral]) * fractional;
     return a + (b - a) * mix;
   }
 };
