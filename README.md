@@ -3,12 +3,14 @@ Work in progress
 <img src="PolySynth_Faceplate.jpg"/></a>
 
 ## Features
-- x
+- 8 voices
+- 2 envelopes per voice
+- 2 lfo's per voice
+- Digital recall of all parameters
+- Modulation matrix
 
 ## Specs
 - Cortex-M4 ARM 168mHz (STM32F4)
-- 8 voices
-- 2 polyphonic envelopes & lfo's
 - 9/12V DC power
 
 ## Code structure
@@ -19,7 +21,6 @@ Work in progress
 - `/Src/Ui`				User interface to manipulate & visualize the data
 - `/Src/Engine`		Responsible for running the data & talk to the hardware drivers
 - `/Src/Disk`			Filesystem
-
 
 ## Credits
 - Pichenettes		https://github.com/pichenettes
