@@ -88,7 +88,7 @@ class Envelope {
 
   float attackInc() {
     if (clockSync()) {
-      return MidiSync::readInc(attackTime() * (MidiSync::NUM_TEMPOS - 1));
+      return MidiSync::readInc(attackTime());
     } else {
       return LookupTablesUtils::read(lut_phase_inc, attackTime());
     }
