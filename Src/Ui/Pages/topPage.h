@@ -26,9 +26,14 @@ namespace TopPage {
   StringBuilderBase<63> str_;
 
   int selectedPage_;
+  int potValueFrames_;
+  int potId_;
 
   uint8_t slideVcoSelectIndex_;
   uint8_t modTypeIndex_[ModMatrix::NUM_DESTINATIONS];
+
+  float lastPotValue_[Pots::NUM_POTS];
+
 
   void init(Settings* settings, Engine* engine, Ui* ui) {
     settings_ = settings;
@@ -47,6 +52,7 @@ namespace TopPage {
 
     slideVcoSelectIndex_ = 0;
     std::fill(&modTypeIndex_[0], &modTypeIndex_[ModMatrix::NUM_DESTINATIONS], 0);
+    std::fill(&lastPotValue_[0], &lastPotValue_[Pots::NUM_POTS], 0.f);
   }
 
   void enter() {
@@ -299,7 +305,38 @@ namespace TopPage {
     return str_.read();
   }
 
+  void drawPots() {
+    int w = 100;
+    int h = 30;
+    int x = (canvas_->width() - w) / 2;
+    int y = (canvas_->height() - h) / 2;
+
+    for (size_t i = 0; i < Pots::NUM_POTS; i++) {
+      float value = pots_->read(i);
+      if (value != lastPotValue_[i]) {
+        lastPotValue_[i] = value;
+        if (ui_->potIsLocked(i) == false) {
+          potValueFrames_ = 16;
+          potId_ = i;
+        }
+      }
+    }
+
+    if (potValueFrames_ > 0) {
+      --potValueFrames_;
+      float newValue = ui_->readPotToSetting(potId_);
+      float orignalValue = ui_->readPotToOrignalSetting(potId_);
+
+      canvas_->fill(x, y, w, h, Canvas::GRAY);
+      canvas_->frame(x, y, w, h, Canvas::BLACK);
+      canvas_->drawText(x + 1, y + 1, pots_->idText(potId_));
+      canvas_->drawText(x + 1, y + 9, str_.write("NEW VALUE ", SettingsText::floatToText(newValue)));
+      canvas_->drawText(x + 1, y + 17, str_.write("ORIGINAL VALUE ", SettingsText::floatToText(orignalValue)));
+    }
+  }
+
   void draw() {
+    // Header
     int x = 0;
     int y = 0;
     int w = canvas_->width();
@@ -317,6 +354,10 @@ namespace TopPage {
     canvas_->drawText(x + 2, y, w - 2, h, selectedPageText(), Canvas::LEFT, Canvas::CENTER);
     canvas_->fill(x, y, w, h, Canvas::INVERTED);
 
+    // Pots
+    drawPots();
+
+    // Messages
     MessagePainter::draw(pages_->target_fps());
   }
 

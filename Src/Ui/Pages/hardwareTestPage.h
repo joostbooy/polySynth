@@ -69,46 +69,6 @@ const char* buttonIdText(int id) {
   return "";
 }
 
-const char* potIdText(int id) {
-  switch (id) {
-    case Pots::RESONANCE_B:   return "RESONANCE_B";
-    case Pots::RESONANCE_A:   return "RESONANCE_A";
-    case Pots::TUNE_A:        return "TUNE_A";
-    case Pots::TUNE_B:        return "TUNE_B";
-    case Pots::SHAPE_A:       return "SHAPE_A";
-    case Pots::SHAPE_B:       return "SHAPE_B";
-    case Pots::CUTOFF_A:      return "CUTOFF_A";
-    case Pots::CUTOFF_B:      return "CUTOFF_B";
-    case Pots::PAN:           return "PAN";
-    case Pots::MOD_DEPTH:     return "MOD_DEPTH";
-    case Pots::DRIVE:         return "DRIVE";
-    case Pots::SLIDE_AMMOUNT: return "SLIDE_AMMOUNT";
-    case Pots::LFO_SKEW_1:    return "LFO_SKEW_1";
-    case Pots::LFO_SPEED_2:   return "LFO_SPEED_2";
-    case Pots::LFO_SKEW_2:    return "LFO_SKEW_2";
-    case Pots::LFO_SPEED_1:   return "LFO_SPEED_1";
-    case Pots::A_TIME_1:      return "A_TIME_1";
-    case Pots::A_SHAPE_1:     return "A_SHAPE_1";
-    case Pots::D_TIME_1:      return "D_TIME_1";
-    case Pots::D_SHAPE_1:     return "D_SHAPE_1";
-    case Pots::S_LEVEL_1:     return "S_LEVEL_1";
-    case Pots::S_HOLD_1:      return "S_HOLD_1";
-    case Pots::R_TIME_1:      return "R_TIME_1";
-    case Pots::R_SHAPE_1:     return "R_SHAPE_1";
-    case Pots::A_TIME_2:      return "A_TIME_2";
-    case Pots::A_SHAPE_2:     return "A_SHAPE_2";
-    case Pots::D_TIME_2:      return "D_TIME_2";
-    case Pots::D_SHAPE_2:     return "D_SHAPE_2";
-    case Pots::S_LEVEL_2:     return "S_LEVEL_2";
-    case Pots::S_HOLD_2:      return "S_HOLD_2";
-    case Pots::R_TIME_2:      return "R_TIME_2";
-    case Pots::R_SHAPE_2:     return "R_SHAPE_2";
-    default:
-      break;
-  }
-  return "";
-}
-
 enum FooterOptions {
   TOGGLE_LEDS,
   TEST_SD_CARD,
@@ -126,7 +86,7 @@ void testPots() {
     uint8_t value = pots_->read(i) * 255;
     if (value != lastPotValue[i]) {
       lastPotValue[i] = value;
-      TextBufferPainter::write(str_.write(potIdText(i), " ", value));
+      TextBufferPainter::write(str_.write(pots_->idText(i), " ", value));
     }
   }
 }

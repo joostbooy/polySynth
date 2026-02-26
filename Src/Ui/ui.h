@@ -41,6 +41,14 @@ class Ui {
   void resetAllPots();
   void unlockAllPots();
 
+  float readPotToSetting(int id) {
+    return readPotToSetting(settings_->selectedPatch(), id);
+  }
+
+  float readPotToOrignalSetting(int id) {
+    return readPotToSetting(settings_->selectedPatchOrignalState(), id);
+  }
+
   bool potIsLocked(int id) {
     return lockedPots_ & (1 << id);
   }
@@ -90,7 +98,7 @@ class Ui {
   void processLeds();
   void processDisplay();
   void writePotToSetting(int);
-  float readPotToSetting(int);
+  float readPotToSetting(Patch&, int);
 
   void unlockPot(int id) {
     lockedPots_ &= ~(1 << id);

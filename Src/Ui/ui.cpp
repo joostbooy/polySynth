@@ -175,9 +175,7 @@ void Ui::processPots() {
   }
 }
 
-float Ui::readPotToSetting(int id) {
-  Patch& p = settings_->selectedPatch();
-
+float Ui::readPotToSetting(Patch &p, int id) {
   switch (id) {
     case Pots::RESONANCE_B:   return p.filter().resonance2();
     case Pots::RESONANCE_A:   return p.filter().resonance1();
