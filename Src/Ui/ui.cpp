@@ -64,9 +64,9 @@ void Ui::poll() {
     int b = (i * 2) + 1;
 
     if ((encoderRaw_[a] & 0x03) == 0x02 && (encoderRaw_[b] & 0x03) == 0x00) {
-      addEvent(Ui::ENCODER, 0, -1);
+      addEvent(Ui::ENCODER, i, -1);
     } else if ((encoderRaw_[b] & 0x03) == 0x02 && (encoderRaw_[a] & 0x03) == 0x00) {
-      addEvent(Ui::ENCODER, 0, 1);
+      addEvent(Ui::ENCODER, i, 1);
     }
   }
 
@@ -75,7 +75,7 @@ void Ui::poll() {
     bool state = switches_->readGate(i);
     if (state != lastGateState_[i]) {
       lastGateState_[i] = state;
-      //
+      //engine_->setGate(i, state);
     }
   }
 
