@@ -45,6 +45,16 @@ values = hertz / update_freq * (1 << 32);
 tables.append('uint32_t ' + name)
 tables.append(values.astype(int))
 
+'''_____________________________
+     BEAT LENGTH
+_____________________________'''
+
+name = 'beat_length_inc'
+values = 1.0 / (sample_rate * (60 / bpm))
+tables.append('float ' + name)
+tables.append(values.astype('float32'))
+
+
 '''____________________
         PHASE INC
 ________________________'''
@@ -60,15 +70,6 @@ steps = numpy.linspace(freq_inc_min, freq_inc_max, phase_table_size)
 
 tables.append('float ' + name)
 tables.append(steps.astype('float32'))
-
-'''_____________________________
-     BEAT LENGTH
-_____________________________'''
-
-name = 'beat_length_inc'
-values = 1.0 / (sample_rate * (60 / bpm))
-tables.append('float ' + name)
-tables.append(values.astype('float32'))
 
 '''____________________
 	EXP TABLE
