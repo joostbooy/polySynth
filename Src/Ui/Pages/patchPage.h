@@ -108,8 +108,12 @@ namespace PatchPage {
   }
 
   void loadNewPatch() {
+    engine_->addReqestBlocking(Engine::STOP);
+
     settings_->loadPatch(newIndex);
     ui_->resetAllPots();
+    
+    engine_->addReqestBlocking(Engine::START);
   }
 
   void on_encoder(int id, int state) {
