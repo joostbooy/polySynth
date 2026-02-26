@@ -41,7 +41,7 @@ namespace EnvelopePage {
   void init() {
     pasteable_ = false;
     envelope_.init();
-    envelopeList_.init(engine_, settings_);
+    envelopeList_.init(engine_, settings_, ui_);
 
     // find best increment value for envelope drawing
     float value = 1.f;

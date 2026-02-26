@@ -40,6 +40,7 @@ class Ui {
   void sendDisplay();
   void resetAllPots();
   void unlockAllPots();
+  void resetPot(int id);
 
   float readPotToSetting(int id) {
     return readPotToSetting(settings_->selectedPatch(), id);

@@ -111,10 +111,25 @@ public:
 		default:
 			break;
 		}
+
+		resetPot(item);
 	}
 
 private:
+ void resetPot(int item) {
+   int index = settings_->lfoIndex();
 
+   switch (item) {
+     case SPEED:
+       ui_->resetPot(index == 0 ? Pots::LFO_SPEED_1 : Pots::LFO_SPEED_2);
+       break;
+     case SKEW:
+       ui_->resetPot(index == 0 ? Pots::LFO_SKEW_1 : Pots::LFO_SKEW_2);
+       break;
+     default:
+       break;
+   }
+ }
 };
 
 #endif

@@ -63,26 +63,54 @@ class FilterList : public SettingsList {
     switch (item) {
       case TYPE:
         filter.setType(filter.type() + inc);
+        break;
       case CUTOFF_1:
         filter.setCutoff1(filter.cutoff1() + SettingsUtils::fInc(inc, shifted));
+        break;
       case RESONANCE_1:
         filter.setResonace1(filter.resonance1() + SettingsUtils::fInc(inc, shifted));
+        break;
       case FM_ENABLE_1:
         filter.setFmEnable1(inc > 0);
+        break;
       case CUTOFF_2:
         filter.setCutoff2(filter.cutoff2() + SettingsUtils::fInc(inc, shifted));
+        break;
       case RESONANCE_2:
         filter.setResonace2(filter.resonance2() + SettingsUtils::fInc(inc, shifted));
+        break;
       case FM_ENABLE_2:
         filter.setFmEnable2(inc > 0);
+        break;
       case ROUTING:
         filter.setRouting(filter.routing() + inc);
+        break;
+      default:
+        break;
+    }
+
+    resetPot(item);
+  }
+
+ private:
+  void resetPot(int item) {
+    switch (item) {
+      case CUTOFF_1:
+        ui_->resetPot(Pots::CUTOFF_A);
+        break;
+      case RESONANCE_1:
+        ui_->resetPot(Pots::RESONANCE_A);
+        break;
+      case CUTOFF_2:
+        ui_->resetPot(Pots::CUTOFF_B);
+        break;
+      case RESONANCE_2:
+        ui_->resetPot(Pots::RESONANCE_B);
+        break;
       default:
         break;
     }
   }
-
- private:
 };
 
 #endif

@@ -9,6 +9,7 @@ namespace OscillatorPage {
 
 	using TopPage::settings_;
 	using TopPage::engine_;
+	using TopPage::ui_;
 
 	bool pasteable_;
 	Oscillator oscillator_;
@@ -34,7 +35,7 @@ namespace OscillatorPage {
 	void init() {
 		pasteable_ = false;
 		oscillator_.init();
-		oscillatorList_.init(engine_, settings_);
+		oscillatorList_.init(engine_, settings_, ui_);
 	}
 
 	void enter() {

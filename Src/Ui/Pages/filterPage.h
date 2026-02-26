@@ -37,7 +37,7 @@ namespace FilterPage {
 	void init() {
 		pasteable_ = false;
 		filter_.init();
-		filterList_.init(engine_, settings_);
+		filterList_.init(engine_, settings_, ui_);
 	}
 
 	void enter() {

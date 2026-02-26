@@ -7,9 +7,10 @@ class SettingsList {
 
 public:
 
-	void init(Engine *engine, Settings *settings) {
+	void init(Engine *engine, Settings *settings, Ui *ui) {
 		engine_ = engine;
 		settings_ = settings;
+		ui_ = ui;
 	}
 
 	enum Mode {
@@ -57,7 +58,7 @@ public:
 protected:
 	Engine *engine_;
 	Settings *settings_;
-
+	Ui *ui_;
 private:
 	Mode mode_;
 	int selectedItem_ = 0;

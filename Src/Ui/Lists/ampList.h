@@ -58,9 +58,21 @@ class AmpList : public SettingsList {
       default:
         break;
     }
+
+    resetPot(item);
   }
 
  private:
+  void resetPot(int item) {
+    switch (item) {
+      case PAN:
+        ui_->resetPot(Pots::PAN);
+      case DRIVE:
+        ui_->resetPot(Pots::DRIVE);
+      default:
+        break;
+    }
+  }
 };
 
 #endif

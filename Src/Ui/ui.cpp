@@ -320,19 +320,24 @@ void Ui::writePotToSetting(int id) {
   }
 }
 
-void Ui::resetAllPots() {
-  lockedPots_ = 0xFFFFFFFF;
+void Ui::resetPot(int id) {
+  uint32_t data = lockedPots_;
+  lockedPots_ = data | (1 << id);
 
+  float pot = pots_.read(id);
+  float setting = readPotToSetting(id);
+  if (pot == setting) {
+    unlockPot(id);
+  } else if (pot < setting) {
+    potUnlockDirection_[id] = CW;
+  } else {
+    potUnlockDirection_[id] = CCW;
+  }
+}
+
+void Ui::resetAllPots() {
   for (size_t i = 0; i < Pots::NUM_POTS; i++) {
-    float pot = pots_.read(i);
-    float setting = readPotToSetting(i);
-    if (pot == setting) {
-      unlockPot(i);
-    } else if (pot < setting) {
-      potUnlockDirection_[i] = CW;
-    } else {
-      potUnlockDirection_[i] = CCW;
-    }
+    resetPot(i);
   }
 }
 

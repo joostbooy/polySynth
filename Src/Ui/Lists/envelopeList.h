@@ -118,9 +118,44 @@ class EnvelopeList : public SettingsList {
       default:
         break;
     }
+
+    resetPot(item);
   }
 
  private:
+
+   void resetPot(int item) {
+    int index = settings_->envelopeIndex();
+    
+    switch (item) {
+      case ATTACK_TIME:
+        ui_->resetPot(index == 0 ? Pots::A_TIME_1 : Pots::A_TIME_2);
+        break;
+      case ATTACK_SHAPE:
+        ui_->resetPot(index == 0 ? Pots::A_SHAPE_1 : Pots::A_SHAPE_2);
+        break;
+      case DECAY_TIME:
+        ui_->resetPot(index == 0 ? Pots::D_TIME_1 : Pots::D_TIME_2);
+        break;
+      case DECAY_SHAPE:
+        ui_->resetPot(index == 0 ? Pots::D_SHAPE_1 : Pots::D_SHAPE_2);
+        break;
+      case SUSTAIN_LEVEL:
+        ui_->resetPot(index == 0 ? Pots::S_LEVEL_1 : Pots::S_LEVEL_2);
+        break;
+      case HOLD_TIME:
+        ui_->resetPot(index == 0 ? Pots::S_HOLD_1 : Pots::S_HOLD_2);
+        break;
+      case RELEASE_TIME:
+        ui_->resetPot(index == 0 ? Pots::R_TIME_1 : Pots::R_TIME_2);
+        break;
+      case RELEASE_SHAPE:
+        ui_->resetPot(index == 0 ? Pots::R_SHAPE_1 : Pots::R_SHAPE_2);
+        break;
+      default:
+        break;
+    }
+  }
 };
 
 #endif

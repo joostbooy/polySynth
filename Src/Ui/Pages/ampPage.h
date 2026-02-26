@@ -37,7 +37,7 @@ namespace AmpPage {
 	void init() {
 		pasteable_ = false;
 		amp_.init();
-		ampList_.init(engine_, settings_);
+		ampList_.init(engine_, settings_, ui_);
 	}
 
 	void enter() {

@@ -9,6 +9,7 @@ namespace MidiPage {
 
 	using TopPage::settings_;
 	using TopPage::engine_;
+	using TopPage::ui_;
 
 	bool pasteable_;
 	Midi midi_;
@@ -34,7 +35,7 @@ namespace MidiPage {
 	void init() {
 		pasteable_ = false;
 		midi_.init();
-		midiList_.init(engine_, settings_);
+		midiList_.init(engine_, settings_, ui_);
 	}
 
 	void enter() {

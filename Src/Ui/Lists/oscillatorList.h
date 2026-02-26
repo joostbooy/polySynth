@@ -184,9 +184,40 @@ class OscillatorList : public SettingsList {
       default:
         break;
     }
+
+    resetPot(item);
   }
 
  private:
+  void resetPot(int item) {
+    switch (item) {
+      case SHAPE_1:
+        ui_->resetPot(Pots::SHAPE_A);
+        break;
+      case SHAPE_2:
+        ui_->resetPot(Pots::SHAPE_B);
+        break;
+      case MOD_DEPTH:
+        ui_->resetPot(Pots::MOD_DEPTH);
+        break;
+      case SLIDE_AMMOUNT_1:
+        ui_->resetPot(Pots::SLIDE_AMMOUNT);
+        break;
+      case SLIDE_AMMOUNT_2:
+        if (settings_->oscillator().linkSlideAmmount()) {
+          ui_->resetPot(Pots::SLIDE_AMMOUNT);
+        }
+        break;
+      case TUNE_1:
+        ui_->resetPot(Pots::TUNE_A);
+        break;
+      case TUNE_2:
+        ui_->resetPot(Pots::TUNE_B);
+        break;
+      default:
+        break;
+    }
+  }
 };
 
 #endif

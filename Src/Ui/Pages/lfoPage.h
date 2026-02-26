@@ -41,7 +41,7 @@ namespace LfoPage {
   void init() {
     pasteable_ = false;
     lfo_.init();
-    lfoList_.init(engine_, settings_);
+    lfoList_.init(engine_, settings_, ui_);
 
     // find best increment value for lfo drawing
     float value = 1.f;
