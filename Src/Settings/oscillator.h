@@ -309,7 +309,7 @@ class Oscillator {
   }
 
   const char* slideAmmount1Text() {
-    return SettingsText::floatToText(slideAmmount1());
+    return SettingsText::phaseIncToMilis(slideInc1());
   }
 
   float slideInc1() {
@@ -326,7 +326,7 @@ class Oscillator {
   }
 
   const char* slideAmmount2Text() {
-    return SettingsText::floatToText(slideAmmount2());
+    return SettingsText::phaseIncToMilis(slideInc1());
   }
 
   float slideInc2() {

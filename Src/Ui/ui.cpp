@@ -21,6 +21,9 @@ void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* displ
   lastInterval_ = 0;
   displayInterval_ = 0;
 
+  std::fill(&lastButtonState_[0], &lastButtonState_[8 * 6], 0);
+  std::fill(&lastGateState_[0], &lastGateState_[2], 0);
+
   canvas_.init();
   pots_.init();
   leds_.init();
@@ -42,8 +45,8 @@ void Ui::poll() {
   for (int i = 0; i < 6; i++) {
     int index = i + collOffset;
     bool state = reading & (1 << i);
-    if (state != lastState_[index]) {
-      lastState_[index] = state;
+    if (state != lastButtonState_[index]) {
+      lastButtonState_[index] = state;
       addEvent(Ui::BUTTON, index, !state);
     }
   }
@@ -64,6 +67,15 @@ void Ui::poll() {
       addEvent(Ui::ENCODER, 0, -1);
     } else if ((encoderRaw_[b] & 0x03) == 0x02 && (encoderRaw_[a] & 0x03) == 0x00) {
       addEvent(Ui::ENCODER, 0, 1);
+    }
+  }
+
+  // Gates
+  for (size_t i = 0; i < 2; i++) {
+    bool state = switches_->readGate(i);
+    if (state != lastGateState_[i]) {
+      lastGateState_[i] = state;
+      //
     }
   }
 

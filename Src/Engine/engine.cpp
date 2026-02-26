@@ -19,6 +19,7 @@ void Engine::start() {
 }
 
 void Engine::stop() {
+  //
 }
 
 void Engine::noteOn(MidiEngine::Event& e) {

@@ -46,8 +46,15 @@ class Ui {
   }
 
  private:
-  enum UnlockDirection { CW, CCW };
-  enum ControlType { BUTTON, ENCODER };
+  enum UnlockDirection {
+    CW,
+    CCW,
+  };
+
+  enum ControlType {
+    BUTTON,
+    ENCODER,
+  };
 
   struct Event {
     ControlType type;
@@ -73,7 +80,8 @@ class Ui {
   uint32_t lockedPots_;
   uint8_t encoderRaw_[4];
   uint8_t potUnlockDirection_[Pots::NUM_POTS];
-  bool lastState_[8 * 6];
+  bool lastGateState_[2];
+  bool lastButtonState_[8 * 6];
 
   Que<Ui::Event, 16> uiQue;
   void addEvent(ControlType, uint8_t, int8_t);

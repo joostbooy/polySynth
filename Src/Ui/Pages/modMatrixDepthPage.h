@@ -6,15 +6,15 @@
 namespace ModMatrixDepthPage {
 
   using TopPage::buttons_;
-  using TopPage::settings_;
-  using TopPage::pages_;
   using TopPage::canvas_;
+  using TopPage::pages_;
+  using TopPage::settings_;
 
   size_t dest_;
 
   enum FooterOptions {
     CLOSE,
-	NUM_FOOTER_OPTIONS,
+    NUM_FOOTER_OPTIONS,
   };
 
   const char* const footerOptionsText[NUM_FOOTER_OPTIONS] = {"CLOSE"};
@@ -56,18 +56,18 @@ namespace ModMatrixDepthPage {
   }
 
   void draw() {
-	const int w = canvas_->width() / 4;
-	const int h = canvas_->height() / 4;
-	const int x = (canvas_->width() - w) / 2;
-	const int y = (canvas_->height() - h) / 2;
+    const int w = canvas_->width() / 4;
+    const int h = canvas_->height() / 4;
+    const int x = (canvas_->width() - w) / 2;
+    const int y = (canvas_->height() - h) / 2;
 
-	canvas_->fill(x + 6, y + 6, w, h, Canvas::SUBTRACTED);
-	canvas_->fill(x, y, w, h, Canvas::WHITE);
-	canvas_->frame(x, y, w, h, Canvas::GRAY, 1);
-	canvas_->drawText(x, y + 2, w, h - 2, ModMatrix::destination_text(dest_), Canvas::CENTER, Canvas::TOP);
-	canvas_->drawText(x, y, w, h, settings_->modMatrix().destinationDepthText(dest_), Canvas::CENTER, Canvas::CENTER);
+    canvas_->fill(x + 6, y + 6, w, h, Canvas::SUBTRACTED);
+    canvas_->fill(x, y, w, h, Canvas::WHITE);
+    canvas_->frame(x, y, w, h, Canvas::GRAY, 1);
+    canvas_->drawText(x, y + 2, w, h - 2, ModMatrix::destination_text(dest_), Canvas::CENTER, Canvas::TOP);
+    canvas_->drawText(x, y, w, h, settings_->modMatrix().destinationDepthText(dest_), Canvas::CENTER, Canvas::CENTER);
 
-	WindowPainter::draw_footer(footerOptionsText, NUM_FOOTER_OPTIONS);
+    WindowPainter::draw_footer(footerOptionsText, NUM_FOOTER_OPTIONS);
   }
 
   const size_t target_fps() {
