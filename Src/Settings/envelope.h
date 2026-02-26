@@ -257,7 +257,7 @@ class Envelope {
     fileWriter.write(mode_);
     fileWriter.write(decayTime_);
     fileWriter.write(attackShape_);
-    fileWriter.write(decay_time_);
+    fileWriter.write(attackTime_);
     fileWriter.write(decayShape_);
     fileWriter.write(holdTime_);
     fileWriter.write(sustainLevel_);
@@ -272,7 +272,7 @@ class Envelope {
     fileReader.read(mode_);
     fileReader.read(decayTime_);
     fileReader.read(attackShape_);
-    fileReader.read(decay_time_);
+    fileReader.read(attackTime_);
     fileReader.read(decayShape_);
     fileReader.read(holdTime_);
     fileReader.read(sustainLevel_);
@@ -287,7 +287,7 @@ class Envelope {
     mode_ = envelope->mode();
     decayTime_ = envelope->attackTime();
     attackShape_ = envelope->attackShape();
-    decay_time_ = envelope->decayTime();
+    attackTime_ = envelope->decayTime();
     decayShape_ = envelope->decayShape();
     holdTime_ = envelope->holdTime();
     sustainLevel_ = envelope->sustainLevel();
@@ -302,7 +302,7 @@ class Envelope {
     hash.write(mode_);
     hash.write(decayTime_);
     hash.write(attackShape_);
-    hash.write(decay_time_);
+    hash.write(attackTime_);
     hash.write(decayShape_);
     hash.write(holdTime_);
     hash.write(sustainLevel_);
@@ -317,9 +317,9 @@ class Envelope {
   bool loop_;
   bool invert_;
   bool clockSync_;
-  float decayTime_;
+  float attackTime_;
   float attackShape_;
-  float decay_time_;
+  float decayTime_;
   float decayShape_;
   float holdTime_;
   float sustainLevel_;
