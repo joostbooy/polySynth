@@ -22,7 +22,7 @@ class Amp {
   }
 
   const char* panText() {
-    return SettingsText::floatToText(pan(), -100, 100);
+    return SettingsText::floatToText(1.f - (pan() * 2.f));
   }
 
   // Drive
@@ -35,7 +35,7 @@ class Amp {
   }
 
   const char* driveText() {
-    return SettingsText::floatToText(pan(), 0, 100);
+    return SettingsText::floatToText(pan());
   }
 
   // Enable AM

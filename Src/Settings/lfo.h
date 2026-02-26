@@ -94,7 +94,7 @@ class Lfo {
   }
 
   const char* skewText() {
-    return SettingsText::floatToText(skew(), -100, 100);
+    return SettingsText::floatToText(1.f - (2.f * skew()));
   }
 
   // Min
@@ -107,7 +107,7 @@ class Lfo {
   }
 
   const char* minText() {
-    return SettingsText::floatToText(min(), 0, 100);
+    return SettingsText::floatToText(min());
   }
 
   // Max
@@ -120,7 +120,7 @@ class Lfo {
   }
 
   const char* maxText() {
-    return SettingsText::floatToText(max(), 0, 100);
+    return SettingsText::floatToText(max());
   }
 
   // Sync phase
@@ -133,7 +133,7 @@ class Lfo {
   }
 
   const char* syncPhaseText() {
-    return SettingsText::percentageToText(syncPhase() * 100, 100);
+    return SettingsText::floatToText(syncPhase());
   }
 
   // clock sync

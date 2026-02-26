@@ -104,7 +104,7 @@ class Envelope {
   }
 
   const char* attackShapeText() {
-    return SettingsText::floatToText(attackShape(), -100, 100);
+    return SettingsText::floatToText(attackShape());
   }
 
   // Decay time
@@ -142,7 +142,7 @@ class Envelope {
   }
 
   const char* decayShapeText() {
-    return SettingsText::floatToText(decayShape(), -100, 100);
+    return SettingsText::floatToText(decayShape());
   }
 
   // Hold time
@@ -184,7 +184,7 @@ class Envelope {
   }
 
   const char* sustainLevelText() {
-    return SettingsText::floatToText(sustainLevel(), 0, 100);
+    return SettingsText::floatToText(sustainLevel());
   }
 
   // Release time
@@ -222,7 +222,7 @@ class Envelope {
   }
 
   const char* releaseShapeText() {
-    return SettingsText::floatToText(releaseShape(), -100, 100);
+    return SettingsText::floatToText(releaseShape());
   }
 
   // Loop

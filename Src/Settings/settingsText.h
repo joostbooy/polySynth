@@ -18,23 +18,10 @@ class SettingsText {
     return state ? "ON" : "OFF";
   }
 
-  static const char* boolToCheckmark(bool state) {
-    return state ? Font::glyph(Font::CHECKMARK) : " ";
-  }
-
-  static const char* percentageToText(uint32_t ammount, uint32_t total) {
-    float percentage = (100.f / total) * ammount;
-    return str.write(static_cast<int>(percentage), "%");
-  }
-
   static const char* floatToText(float value, const char* unit = "") {
-    uint32_t intergral = value;
-    uint32_t fractional = (value - intergral) * 100.f;
+    int intergral = value;
+    int fractional = (value - intergral) * 100.f;
     return str.write(intergral, ".", fractional, " ", unit);
-  }
-
-  static const char* floatToText(float value, int min, int max, const char* unit = "") {
-    return str.write(Dsp::cross_fade(min, max, value), unit);
   }
 
   static const char* phaseIncToHertz(float inc) {
@@ -78,7 +65,6 @@ class SettingsText {
       return str.write(kb, " KB");
     }
   }
-
 
  private:
   static inline const char* note_text_[12] = {"C", "Cb", "D", "Db", "E", "F", "Fb", "G", "Gb", "A", "Ab", "B"};
