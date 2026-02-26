@@ -50,6 +50,7 @@ namespace TopPage {
     TextBufferPainter::init(canvas_);
     WindowPainter::init(canvas_);
 
+    potValueFrames_ = 0;
     slideVcoSelectIndex_ = 0;
     std::fill(&modTypeIndex_[0], &modTypeIndex_[ModMatrix::NUM_DESTINATIONS], 0);
     std::fill(&lastPotValue_[0], &lastPotValue_[Pots::NUM_POTS], 0.f);
