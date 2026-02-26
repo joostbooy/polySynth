@@ -67,6 +67,7 @@ class AmpList : public SettingsList {
     switch (item) {
       case PAN:
         ui_->resetPot(Pots::PAN);
+        break;
       case DRIVE:
         ui_->resetPot(Pots::DRIVE);
       default:
