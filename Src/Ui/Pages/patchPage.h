@@ -144,7 +144,6 @@ namespace PatchPage {
     if (settings_->patchHasUnsavedChanges()) {
       str_.append("*");
     }
-
     canvas_->drawText(0, 0, canvas_->width(), 54, str_.read(), Canvas::CENTER, Canvas::CENTER);
 
 
