@@ -75,8 +75,12 @@ namespace PatchPage {
           if (pasteable_) {
             ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
               if (option == ConfirmationPage::CONFIRM) {
+                engine_->addReqestBlocking(Engine::STOP);
+
                 settings_->selectedPatch().paste(&patch_);
                 ui_->resetAllPots();
+
+                engine_->addReqestBlocking(Engine::START);
                 MessagePainter::show("PATCH PASTED");
               }
             });
@@ -86,8 +90,12 @@ namespace PatchPage {
         case INIT:
           ConfirmationPage::set("INIT PATCH ?", [](int option) {
             if (option == ConfirmationPage::CONFIRM) {
+              engine_->addReqestBlocking(Engine::STOP);
+
               settings_->selectedPatch().init();
               ui_->unlockAllPots();
+
+              engine_->addReqestBlocking(Engine::START);
             }
           });
           break;
