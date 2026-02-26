@@ -1,5 +1,4 @@
 # 8 VOICE ANALOG SYNTHESIZER
-Work in progress
 <img src="PolySynth_Faceplate.jpg"/></a>
 
 ## Features
