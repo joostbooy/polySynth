@@ -52,7 +52,7 @@ namespace EnvelopePage {
       float currentValue = SettingsUtils::difference(lut_phase_inc[i], targetInc);
       if (currentValue < value) {
         value = currentValue;
-        time = (1.f / size) * i;
+        time = 1.f - ((1.f / size) * i);
       }
     }
   }
