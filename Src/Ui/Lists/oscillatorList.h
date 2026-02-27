@@ -1,4 +1,4 @@
-#if !defined(OscillatorList_h)
+#ifndef OscillatorList_h
 #define OscillatorList_h
 
 #include "settings.h"

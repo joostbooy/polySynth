@@ -52,11 +52,9 @@ bool Settings::loadCalibration() {
   fileReader.stop();
 
   if (fileReader.readOk()) {
-    calibrationLoaded_ = true;
+    return true;
   } else {
     calibration_.init();
-    calibrationLoaded_ = false;
+    return false;
   }
-
-  return calibrationLoaded_;
 }
