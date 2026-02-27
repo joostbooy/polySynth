@@ -7,7 +7,14 @@
 
 class EnvelopeEngine {
  public:
-  enum Stage { ATTACK, DECAY, SUSTAIN, HOLD, RELEASE, IDLE };
+  enum Stage {
+    ATTACK,
+    DECAY,
+    SUSTAIN,
+    HOLD,
+    RELEASE,
+    IDLE,
+  };
 
   void init(Envelope* envelope) {
     envelope_ = envelope;

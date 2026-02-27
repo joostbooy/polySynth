@@ -72,10 +72,7 @@ void Ui::poll() {
 
   // Gates
   for (size_t i = 0; i < 2; i++) {
-    bool state = switches_->readGate(i);
-    if (state != lastGateState_[i]) {
-      lastGateState_[i] = state;
-      //engine_->setGate(i, state);
+      //engine_->setGate(i, !switches_->readGate(i));
     }
   }
 

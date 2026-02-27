@@ -89,7 +89,6 @@ class Ui {
   uint32_t lockedPots_;
   uint8_t encoderRaw_[4];
   uint8_t potUnlockDirection_[Pots::NUM_POTS];
-  bool lastGateState_[2];
   bool lastButtonState_[8 * 6];
 
   Que<Ui::Event, 16> uiQue;
