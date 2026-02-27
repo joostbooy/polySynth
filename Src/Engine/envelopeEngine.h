@@ -19,9 +19,8 @@ class EnvelopeEngine {
   void init(Envelope* envelope) {
     envelope_ = envelope;
     stage_ = IDLE;
-    phase_ = 0.0f;
-    sample_ = 0.0f;
-    mode_ = 0;
+    phase_ = 0.f;
+    sample_ = 0.f;
   }
 
   void attack() {
