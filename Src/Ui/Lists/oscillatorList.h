@@ -1,5 +1,5 @@
-#ifndef OscillatorList_h
-#define AmpLOscillatorList_hist_h
+#if !defined(OscillatorList_h)
+#define OscillatorList_h
 
 #include "settings.h"
 #include "settingsText.h"
@@ -29,8 +29,6 @@ class OscillatorList : public SettingsList {
     TUNE_2,
     TYPE_1,
     TYPE_2,
-    TUNE_SEMITONE_RANGE_1,
-    TUNE_SEMITONE_RANGE_2,
 
     NUM_ITEMS,
   };
@@ -63,8 +61,6 @@ class OscillatorList : public SettingsList {
       case TUNE_2:                return "TUNE 2";
       case TYPE_1:                return "TYPE 1";
       case TYPE_2:                return "TYPE 2";
-      case TUNE_SEMITONE_RANGE_1: return "TUNE SEMITONE RANGE 1";
-      case TUNE_SEMITONE_RANGE_2: return "TUNE SEMITONE RANGE 2";
       default:
         break;
     }
@@ -97,8 +93,6 @@ class OscillatorList : public SettingsList {
       case TUNE_2:                return oscillator.tune2Text();
       case TYPE_1:                return oscillator.type1Text();
       case TYPE_2:                return oscillator.type2Text();
-      case TUNE_SEMITONE_RANGE_1: return oscillator.tuneSemiToneRange1Text();
-      case TUNE_SEMITONE_RANGE_2: return oscillator.tuneSemiToneRange2Text();
       default:
         break;
     }
@@ -174,12 +168,6 @@ class OscillatorList : public SettingsList {
         break;
       case TYPE_2:
         oscillator.setType2(oscillator.type2() + inc);
-        break;
-      case TUNE_SEMITONE_RANGE_1:
-        oscillator.setTuneSemiToneRange1(oscillator.tuneSemiToneRange1() + inc);
-        break;
-      case TUNE_SEMITONE_RANGE_2:
-        oscillator.setTuneSemiToneRange2(oscillator.tuneSemiToneRange2() + inc);
         break;
       default:
         break;

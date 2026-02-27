@@ -87,8 +87,6 @@ class Oscillator {
     setOctaveOffset2(0);
     setTune1(0.5f);
     setTune2(0.5f);
-    setTuneSemiToneRange1(2);
-    setTuneSemiToneRange2(2);
   }
 
   // Voice mode
@@ -385,32 +383,6 @@ class Oscillator {
     return SettingsText::floatToText(tune2());
   }
 
-  // Tune range 1
-  int tuneSemiToneRange1() {
-    return tuneSemiToneRange1_;
-  }
-
-  void setTuneSemiToneRange1(int value) {
-    tuneSemiToneRange1_ = SettingsUtils::clip(0, 11, value);
-  }
-
-  const char* tuneSemiToneRange1Text() {
-    return SettingsText::intToText(tuneSemiToneRange1());
-  }
-
-  // Tune range 2
-  int tuneSemiToneRange2() {
-    return tuneSemiToneRange2_;
-  }
-
-  void setTuneSemiToneRange2(int value) {
-    tuneSemiToneRange2_ = SettingsUtils::clip(0, 11, value);
-  }
-
-  const char* tuneSemiToneRange2Text() {
-    return SettingsText::intToText(tuneSemiToneRange2());
-  }
-
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(voiceMode_);
@@ -435,8 +407,6 @@ class Oscillator {
     fileWriter.write(octaveOffset2_);
     fileWriter.write(tune1_);
     fileWriter.write(tune2_);
-    fileWriter.write(tuneSemiToneRange1_);
-    fileWriter.write(tuneSemiToneRange2_);
   }
 
   void load(FileReader& fileReader) {
@@ -462,8 +432,6 @@ class Oscillator {
     fileReader.read(octaveOffset2_);
     fileReader.read(tune1_);
     fileReader.read(tune2_);
-    fileReader.read(tuneSemiToneRange1_);
-    fileReader.read(tuneSemiToneRange2_);
   }
 
   void paste(Oscillator* oscillator) {
@@ -489,8 +457,6 @@ class Oscillator {
     octaveOffset2_ = oscillator->octaveOffset2();
     tune1_ = oscillator->tune1();
     tune2_ = oscillator->tune2();
-    tuneSemiToneRange1_ = oscillator->tuneSemiToneRange1();
-    tuneSemiToneRange2_ = oscillator->tuneSemiToneRange2();
   }
 
     void writeHash(Hash& hash) {
@@ -516,8 +482,6 @@ class Oscillator {
     hash.write(octaveOffset2_);
     hash.write(tune1_);
     hash.write(tune2_);
-    hash.write(tuneSemiToneRange1_);
-    hash.write(tuneSemiToneRange2_);
   }
 
  private:
@@ -540,8 +504,6 @@ class Oscillator {
   int octaveOffset2_;
   float tune1_;
   float tune2_;
-  int tuneSemiToneRange1_;
-  int tuneSemiToneRange2_;
   Type1 type1_;
   Type2 type2_;
   VoiceMode voiceMode_;
