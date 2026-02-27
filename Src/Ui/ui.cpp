@@ -22,7 +22,6 @@ void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* displ
   displayInterval_ = 0;
 
   std::fill(&lastButtonState_[0], &lastButtonState_[8 * 6], 0);
-  std::fill(&lastGateState_[0], &lastGateState_[2], 0);
 
   canvas_.init();
   pots_.init();
@@ -72,8 +71,7 @@ void Ui::poll() {
 
   // Gates
   for (size_t i = 0; i < 2; i++) {
-      //engine_->setGate(i, !switches_->readGate(i));
-    }
+    // engine_->setGate(i, !switches_->readGate(i));
   }
 
   // Pots

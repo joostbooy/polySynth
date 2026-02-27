@@ -32,7 +32,7 @@ class EnvelopeEngine {
 
   void release() {
     if (mode_ == Envelope::GATE) {
-      releaseLevel_ = sample();
+      releaseLevel_ = sample_;
       phase_ = 0.0f;
       stage_ = RELEASE;
     }
@@ -47,7 +47,11 @@ class EnvelopeEngine {
   }
 
   float sample() {
-    return envelope_->invert() ? 1.f - sample_ : sample_;
+    if (stage_ == IDLE) {
+      return 0.f;
+    } else {
+      return envelope_->invert() ? 1.f - sample_ : sample_;
+    }
   }
 
   float next() {

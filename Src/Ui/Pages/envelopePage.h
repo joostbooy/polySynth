@@ -92,17 +92,17 @@ namespace EnvelopePage {
 
     float holdTime;
     if (envelope.mode() == Envelope::TRIGGER) {
-      holdTime = Dsp::cross_fade(time, 1.0f, envelope.holdTime());
+      holdTime = time * (1.f - envelope.holdTime());
     } else {
       holdTime = time;
     }
 
     envelope.setMode(Envelope::TRIGGER);
-    envelope.setAttackTime(Dsp::cross_fade(time, 1.0f, envelope.attackTime()));
-    envelope.setDecayTime(Dsp::cross_fade(time, 1.0f, envelope.decayTime()));
+    envelope.setAttackTime(time * (1.f - envelope.attackTime()));
+    envelope.setDecayTime(time * (1.f - envelope.decayTime()));
     envelope.setHoldTime(holdTime);
     envelope.setSustainLevel(envelope.sustainLevel());
-    envelope.setReleaseTime(Dsp::cross_fade(time, 1.0f, envelope.releaseTime()));
+    envelope.setReleaseTime(time * (1.f - envelope.releaseTime()));
 
     envelopeEngine.init(&envelope);
     envelopeEngine.attack();

@@ -71,11 +71,11 @@ class Envelope {
 
   // Attack time
   float attackTime() {
-    return decayTime_;
+    return 1.f - attackTime_;
   }
 
   void setAttackTime(float value) {
-    decayTime_ = SettingsUtils::clipFloat(value);
+    attackTime_ = SettingsUtils::clipFloat(value);
   }
 
   const char* attackTimeText() {
@@ -109,7 +109,7 @@ class Envelope {
 
   // Decay time
   float decayTime() {
-    return decayTime_;
+    return 1.f - decayTime_;
   }
 
   void setDecayTime(float value) {
@@ -147,7 +147,7 @@ class Envelope {
 
   // Hold time
   float holdTime() {
-    return holdTime_;
+    return 1.f - holdTime_;
   }
 
   void setHoldTime(float value) {
@@ -189,7 +189,7 @@ class Envelope {
 
   // Release time
   float releaseTime() {
-    return releaseTime_;
+    return 1.f - releaseTime_;
   }
 
   void setReleaseTime(float value) {
