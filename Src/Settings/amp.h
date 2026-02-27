@@ -39,7 +39,7 @@ class Amp {
   }
 
   // Enable AM
-  float amEnable() {
+  bool amEnable() {
     return amEnable_;
   }
 
