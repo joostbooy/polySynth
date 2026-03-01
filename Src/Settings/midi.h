@@ -55,8 +55,8 @@ class Midi {
     }
     setPortReceive(UART);
     setChannelReceive(16);
-    setGateToNote1(60);
-    setGateToNote2(60);
+    setGateToNote1(-1);
+    setGateToNote2(-1);
   }
 
   // bpm
@@ -160,29 +160,37 @@ class Midi {
   }
 
   // Gate to note 1
-  uint8_t gateToNote1() {
+  int gateToNote1() {
     return gateToNote1_;
   }
 
   void setGateToNote1(int value) {
-    gateToNote1_ = SettingsUtils::clip(0, 127, value);
+    gateToNote1_ = SettingsUtils::clip(-1, 127, value);
   }
 
   const char* gateToNote1Text() {
-    return SettingsText::noteToText(gateToNote1());
+    if (gateToNote1() >= 0) {
+      return SettingsText::noteToText(gateToNote1());
+    } else {
+      return "NONE";
+    }
   }
 
   // Gate to note 2
-  uint8_t gateToNote2() {
+  int gateToNote2() {
     return gateToNote2_;
   }
 
   void setGateToNote2(int value) {
-    gateToNote2_ = SettingsUtils::clip(0, 127, value);
+    gateToNote2_ = SettingsUtils::clip(-1, 127, value);
   }
 
-  const char* gateToNote2Text() {
-    return SettingsText::noteToText(gateToNote2());
+   const char* gateToNote2Text() {
+    if (gateToNote2() >= 0) {
+      return SettingsText::noteToText(gateToNote2());
+    } else {
+      return "NONE";
+    }
   }
 
   // Storage
@@ -254,8 +262,8 @@ class Midi {
   uint16_t bpm_;
   uint16_t bpmFractional_;
   uint8_t clockSource_;
-  uint8_t gateToNote1_;
-  uint8_t gateToNote2_;
+  int gateToNote1_;
+  int gateToNote2_;
   int channelReceive_;
   int portReceive_;
   int keyRangeLow_;
