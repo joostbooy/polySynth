@@ -7,6 +7,12 @@ void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac) {
   modMatrixEngine_.init(settings_);
   voiceEngine_.init(settings_, &modMatrixEngine_, dac);
   midiClockEngine_.init(&settings->midi());
+
+  for (size_t i = 0; i < 2; i++) {
+    gate_[i] = false;
+    lastGate_[i] = false;
+  }
+
   state_ = RUNNING;
 }
 
