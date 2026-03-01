@@ -65,6 +65,32 @@ void Engine::tick() {
   dac_->send();
 }
 
+void Engine::setGate(int index, bool state) {
+  gate_[index] = state;
+}
+
+void Engine::processGates() {
+  MidiEngine::Event e;
+
+  e.port = settings_->midi().portReceive();
+  e.message = settings_->midi().channelReceive();
+  e.data[1] = 100;
+
+  for (size_t i = 0; i < 2; i++) {
+    bool state = gate_[i];
+    if (state != lastGate_[i]) {
+      lastGate_[i] = state;
+      if (state) {
+        e.message |= MidiEngine::NOTE_ON;
+        noteOn(e);
+      } else {
+        e.message |= MidiEngine::NOTE_OFF;
+        noteOff(e);
+      }
+    }
+  }
+}
+
 void Engine::processMidi() {
   MidiEngine::Event e;
 
@@ -117,6 +143,7 @@ void Engine::update() {
 
   if (state_ == RUNNING) {
     processMidi();
+    processGates();
 
     while (voiceEngine_.available() && noteQue_.readable()) {
       voiceEngine_.assignVoice(noteQue_.read());

@@ -71,7 +71,7 @@ void Ui::poll() {
 
   // Gates
   for (size_t i = 0; i < 2; i++) {
-    // engine_->setGate(i, !switches_->readGate(i));
+    engine_->setGate(i, !switches_->readGate(i));
   }
 
   // Pots

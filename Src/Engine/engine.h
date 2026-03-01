@@ -26,6 +26,7 @@ class Engine {
   void init(Settings*, Uart*, Usb*, Dac*);
   void tick();
   void update();
+  void setGate(int index, bool state);
 
   void addReqestBlocking(Request type) {
     addRequest(type);
@@ -62,11 +63,14 @@ class Engine {
   ModMatrixEngine modMatrixEngine_;
   Voice voice_[Settings::kNumVoices];
   Que<MidiEngine::Event, 16> noteQue_;
+  bool gate_[2];
+  bool lastGate_[2];
 
   void start();
   void stop();
   void processRequests();
   void processMidi();
+  void processGates();
   void noteOn(MidiEngine::Event& e);
   void noteOff(MidiEngine::Event& e);
   void pitchBend(MidiEngine::Event& e);
