@@ -73,7 +73,7 @@ void Engine::processGates() {
   for (size_t i = 0; i < 2; i++) {
     MidiEngine::Event e = gateToNote_[i];
     bool state = gate_[i];
-    
+
     if (state != lastGate_[i]) {
       lastGate_[i] = state;
 
@@ -86,7 +86,8 @@ void Engine::processGates() {
           e.data[1] = 100;
           noteOn(e);
         }
-      } else {
+      } else if (e.data[1] != 0) {
+        e.data[1] = 0;
         e.message &= ~(0xF0);
         e.message |= MidiEngine::NOTE_OFF;
         noteOff(e);
