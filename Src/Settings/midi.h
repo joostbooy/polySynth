@@ -193,6 +193,10 @@ class Midi {
     }
   }
 
+  int gateToNote(int index) {
+    return index == 0 ? gateToNote1() : gateToNote2();
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(bpm_);

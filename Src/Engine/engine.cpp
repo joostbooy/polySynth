@@ -80,12 +80,16 @@ void Engine::processGates() {
     bool state = gate_[i];
     if (state != lastGate_[i]) {
       lastGate_[i] = state;
-      if (state) {
-        e.message |= MidiEngine::NOTE_ON;
-        noteOn(e);
-      } else {
-        e.message |= MidiEngine::NOTE_OFF;
-        noteOff(e);
+      int note = settings_->midi().gateToNote(i);
+      if (note >= 0) {
+        e.data[0] = note;
+        if (state) {
+          e.data[0] = e.message |= MidiEngine::NOTE_ON;
+          noteOn(e);
+        } else {
+          e.message |= MidiEngine::NOTE_OFF;
+          noteOff(e);
+        }
       }
     }
   }
