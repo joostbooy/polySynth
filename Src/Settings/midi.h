@@ -55,6 +55,8 @@ class Midi {
     }
     setPortReceive(UART);
     setChannelReceive(16);
+    setGateToNote1(60);
+    setGateToNote2(60);
   }
 
   // bpm
@@ -157,6 +159,32 @@ class Midi {
     return SettingsText::noteToText(keyRangeHigh());
   }
 
+  // Gate to note 1
+  uint8_t gateToNote1() {
+    return gateToNote1_;
+  }
+
+  void setGateToNote1(int value) {
+    gateToNote1_ = SettingsUtils::clip(0, 127, value);
+  }
+
+  const char* gateToNote1Text() {
+    return SettingsText::noteToText(gateToNote1());
+  }
+
+  // Gate to note 2
+  uint8_t gateToNote2() {
+    return gateToNote2_;
+  }
+
+  void setGateToNote2(int value) {
+    gateToNote2_ = SettingsUtils::clip(0, 127, value);
+  }
+
+  const char* gateToNote2Text() {
+    return SettingsText::noteToText(gateToNote2());
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(bpm_);
@@ -166,6 +194,8 @@ class Midi {
     fileWriter.write(portReceive_);
     fileWriter.write(keyRangeLow_);
     fileWriter.write(keyRangeHigh_);
+    fileWriter.write(gateToNote1_);
+    fileWriter.write(gateToNote2_);
 
     for (int i = 0; i < NUM_PORTS; ++i) {
       fileWriter.write(sendClock_[i]);
@@ -180,6 +210,8 @@ class Midi {
     fileReader.read(portReceive_);
     fileReader.read(keyRangeLow_);
     fileReader.read(keyRangeHigh_);
+    fileReader.read(gateToNote1_);
+    fileReader.read(gateToNote2_);
 
     for (int i = 0; i < NUM_PORTS; ++i) {
       fileReader.read(sendClock_[i]);
@@ -194,6 +226,8 @@ class Midi {
     portReceive_ = midi->portReceive();
     keyRangeLow_ = midi->keyRangeLow();
     keyRangeHigh_ = midi->keyRangeHigh();
+    gateToNote1_ = midi->gateToNote1();
+    gateToNote2_ = midi->gateToNote2();
 
     for (int i = 0; i < NUM_PORTS; ++i) {
       sendClock_[i] = midi->sendClock(i);
@@ -208,6 +242,8 @@ class Midi {
     hash.write(portReceive_);
     hash.write(keyRangeLow_);
     hash.write(keyRangeHigh_);
+    hash.write(gateToNote1_);
+    hash.write(gateToNote2_);
 
     for (int i = 0; i < NUM_PORTS; ++i) {
       hash.write(sendClock_[i]);
@@ -218,6 +254,8 @@ class Midi {
   uint16_t bpm_;
   uint16_t bpmFractional_;
   uint8_t clockSource_;
+  uint8_t gateToNote1_;
+  uint8_t gateToNote2_;
   int channelReceive_;
   int portReceive_;
   int keyRangeLow_;

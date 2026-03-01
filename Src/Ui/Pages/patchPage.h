@@ -147,15 +147,11 @@ namespace PatchPage {
   }
 
   void draw() {
-    canvas_->setFont(Font::LARGE);
+    canvas_->setFont(Font::SMALL);
+
     str_.write(settings_->patchIndex() + 1, " ", settings_->selectedPatch().name());
-    if (settings_->patchHasUnsavedChanges()) {
-      str_.append("*");
-    }
     canvas_->drawText(0, 0, canvas_->width(), 54, str_.read(), Canvas::CENTER, Canvas::CENTER);
 
-
-    canvas_->setFont(Font::SMALL);
     WindowPainter::draw_footer(footerOptionText, NUM_FOOTER_OPTIONS, footerOptionsOffset);
   }
 

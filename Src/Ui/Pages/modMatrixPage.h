@@ -150,8 +150,10 @@ namespace ModMatrixPage {
         int src = j + top_src_;
         int src_y = (j * row_h) + y;
 
-        if (settings_->modMatrix().read(src, dest)) {
-          canvas_->fill(dest_x + 1, src_y + 1, coll_w - 2, row_h - 2, Canvas::BLACK);
+        if (dest < ModMatrix::NUM_DESTINATIONS && src < ModMatrix::NUM_SOURCES) {
+          if (settings_->modMatrix().read(src, dest)) {
+            canvas_->fill(dest_x + 1, src_y + 1, coll_w - 2, row_h - 2, Canvas::BLACK);
+          }
         }
       }
     }
@@ -164,7 +166,10 @@ namespace ModMatrixPage {
     for (size_t i = 0; i < kMaxVisibleDestinations; i++) {
       int dest = i + top_dest_;
       int depth_x = (i * coll_w) + x;
-      canvas_->drawText(depth_x, y, coll_w, row_h, settings_->modMatrix().destinationDepthText(dest) ,Canvas::CENTER, Canvas::CENTER);
+     
+      if (dest < ModMatrix::NUM_DESTINATIONS) {
+        canvas_->drawText(depth_x, y, coll_w, row_h, settings_->modMatrix().destinationDepthText(dest), Canvas::CENTER, Canvas::CENTER);
+      }
     }
   }
 
@@ -176,11 +181,9 @@ namespace ModMatrixPage {
     const int coll_w = w / (kMaxVisibleSources + 1);
     const int row_h = h / (kMaxVisibleDestinations + 1);
 
-    canvas_->clear();
-
     draw_sources_text(x, row_h, w, h, coll_w, row_h);
     draw_destination_text(coll_w, y, w, h, coll_w, row_h);
-    //drawDestinationDepthText(coll_w, 256 - 16, w, h, coll_w, row_h);
+    //drawDestinationDepthText(coll_w, row_h, w, h, coll_w, row_h);
     draw_matrix(x + coll_w, y + row_h, w - coll_w, h - row_h, coll_w, row_h);
 
     WindowPainter::draw_footer(footerOptionText, NUM_FOOTER_OPTIONS);
