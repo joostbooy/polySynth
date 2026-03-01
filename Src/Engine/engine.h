@@ -65,6 +65,8 @@ class Engine {
   Que<MidiEngine::Event, 16> noteQue_;
   bool gate_[2];
   bool lastGate_[2];
+  MidiEngine::Event gateToNote_[2];
+
 
   void start();
   void stop();

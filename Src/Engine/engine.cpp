@@ -70,26 +70,26 @@ void Engine::setGate(int index, bool state) {
 }
 
 void Engine::processGates() {
-  MidiEngine::Event e;
-
-  e.port = settings_->midi().portReceive();
-  e.message = settings_->midi().channelReceive();
-  e.data[1] = 100;
-
   for (size_t i = 0; i < 2; i++) {
+    MidiEngine::Event e = gateToNote_[i];
     bool state = gate_[i];
+    
     if (state != lastGate_[i]) {
       lastGate_[i] = state;
-      int note = settings_->midi().gateToNote(i);
-      if (note >= 0) {
-        e.data[0] = note;
-        if (state) {
-          e.data[0] = e.message |= MidiEngine::NOTE_ON;
+
+      if (state) {
+        int note = settings_->midi().gateToNote(i);
+        if (note >= 0) {
+          e.port = settings_->midi().portReceive();
+          e.message = settings_->midi().channelReceive() | MidiEngine::NOTE_ON;
+          e.data[0] = note;
+          e.data[1] = 100;
           noteOn(e);
-        } else {
-          e.message |= MidiEngine::NOTE_OFF;
-          noteOff(e);
         }
+      } else {
+        e.message &= ~(0xF0);
+        e.message |= MidiEngine::NOTE_OFF;
+        noteOff(e);
       }
     }
   }
