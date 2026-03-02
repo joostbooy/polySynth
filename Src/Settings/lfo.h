@@ -94,7 +94,7 @@ class Lfo {
   }
 
   const char* skewText() {
-    return SettingsText::floatToText(1.f - (2.f * skew()));
+    return SettingsText::floatToText((skew() * 2.f) - 1.f);
   }
 
   // Min

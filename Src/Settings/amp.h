@@ -22,7 +22,7 @@ class Amp {
   }
 
   const char* panText() {
-    return SettingsText::floatToText(1.f - (pan() * 2.f));
+    return SettingsText::floatToText((pan() * 2.f) - 1.f);
   }
 
   // Drive

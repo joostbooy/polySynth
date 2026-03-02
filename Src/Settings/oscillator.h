@@ -367,7 +367,7 @@ class Oscillator {
   }
 
   const char* tune1Text() {
-    return SettingsText::floatToText(tune1());
+    return SettingsText::floatToText((tune1() * 2.f) - 1.f);
   }
 
     // Tune 2
@@ -380,7 +380,7 @@ class Oscillator {
   }
 
   const char* tune2Text() {
-    return SettingsText::floatToText(tune2());
+    return SettingsText::floatToText((tune2() * 2.f) - 1.f);
   }
 
   // Storage
