@@ -8,6 +8,7 @@ class ModMatrixEngine {
 
   void init(Settings* settings) {
     settings_ = settings;
+    modMatrix_ = &settings->modMatrix();
     std::fill(&source_[0], &source_[ModMatrix::NUM_SOURCES], 0.f);
     std::fill(&destination_[0], &destination_[ModMatrix::NUM_DESTINATIONS], 0.f);
   }
@@ -33,36 +34,33 @@ class ModMatrixEngine {
   }
 
   void setMidiNote(uint8_t note) {
-    source_[ModMatrix::MIDI_BEND] = (1.f / 127.f) * note;
+    source_[ModMatrix::MIDI_NOTE] = (1.f / 127.f) * note;
   }
 
   void setMidiCc(uint8_t number, uint8_t value) {
-    Patch& p = settings_->selectedPatch();
-
     for (size_t i = 0; i < Settings::kNumUserCc; ++i) {
-      if (number == p.modMatrix().midiCcNumber(i)) {
+      if (number == modMatrix_->midiCcNumber(i)) {
         source_[i + ModMatrix::MIDI_CC_A] = (1.f / 127.f) * value;
       }
     }
   }
 
   float* process() {
-    Patch& p = settings_->selectedPatch();
-
     for (int dest = 0; dest < ModMatrix::NUM_DESTINATIONS; ++dest) {
       destination_[dest] = 1.f;
       for (int src = 0; src < ModMatrix::NUM_SOURCES; ++src) {
-        if (p.modMatrix().read(src, dest)) {
+        if (modMatrix_->read(src, dest)) {
           destination_[dest] *= source_[src];
         }
       }
-      destination_[dest] = Dsp::cross_fade(originalValue(dest), destination_[dest], p.modMatrix().destinationDepth(dest));
+      destination_[dest] = Dsp::cross_fade(originalValue(dest), destination_[dest], modMatrix_->destinationDepth(dest));
     }
     return &destination_[0];
   }
 
  private:
   Settings* settings_;
+  ModMatrix* modMatrix_;
   float source_[ModMatrix::NUM_SOURCES];
   float destination_[ModMatrix::NUM_DESTINATIONS];
 

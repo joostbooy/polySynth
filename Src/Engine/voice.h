@@ -99,6 +99,7 @@ class Voice {
         }
     }
 
+    modMatrixEngine_->setMidiNote(note_);
     modMatrixEngine_->setMidiVelocity(velocity_);
     modMatrixEngine_->setEnvelope(0, envelopeEngine_[0].next());
     modMatrixEngine_->setEnvelope(1, envelopeEngine_[1].next());
