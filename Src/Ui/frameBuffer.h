@@ -22,7 +22,7 @@ public:
 	}
 
 	inline void write(int x, int y, uint8_t value) {
-		int index = (x / 8) + ((kWidth / 8) * y);
+		int index = (x / 2) + ((kWidth / 2) * y);
 
 		if (x & 1) {
 			data_[index] &= ~0x0F;

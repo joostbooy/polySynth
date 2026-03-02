@@ -175,9 +175,9 @@ namespace ModMatrixPage {
 
   void draw() {
     const int x = 0;
-    const int y = 0;
+    const int y = 10;
     const int w = canvas_->width() - 10;
-    const int h = canvas_->height() - 10;
+    const int h = canvas_->height() - 20;
     const int coll_w = w / (kMaxVisibleSources + 1);
     const int row_h = h / (kMaxVisibleDestinations + 1);
 
