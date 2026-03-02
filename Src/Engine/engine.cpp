@@ -139,15 +139,13 @@ void Engine::processRequests() {
   }
 
   if (requests_ & STOP) {
-    state_ = STOPPED;
     for (size_t i = 0; i < Settings::kNumVoices; i++) {
       voiceEngine_.voice(i).requestStop();
     }
     noteQue_.clear();
-
-    if (voiceEngine_.isIdle()) {
-      clearRequest(STOP);
-    }
+    
+    state_ = STOPPED;
+    clearRequest(STOP);
   }
 }
 
