@@ -311,7 +311,7 @@ class Oscillator {
   }
 
   float slideInc1() {
-    return LookupTablesUtils::read(lut_phase_inc, slideAmmount1());
+    return LookupTablesUtils::read(lut_phase_inc, 1.f - slideAmmount1());
   }
 
   // Slide ammount 2
@@ -328,7 +328,7 @@ class Oscillator {
   }
 
   float slideInc2() {
-    return LookupTablesUtils::read(lut_phase_inc, slideAmmount2());
+    return LookupTablesUtils::read(lut_phase_inc, 1.f - slideAmmount2());
   }
 
   // Octave offset 1
