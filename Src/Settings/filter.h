@@ -181,6 +181,7 @@ class Filter {
     fileWriter.write(routing_);
     fileWriter.write(fmEnable1_);
     fileWriter.write(fmEnable2_);
+    fileWriter.write(link_);
   }
 
   void load(FileReader& fileReader) {
@@ -192,6 +193,7 @@ class Filter {
     fileReader.read(routing_);
     fileReader.read(fmEnable1_);
     fileReader.read(fmEnable2_);
+    fileReader.read(link_);
   }
 
   void paste(Filter* filter) {
@@ -203,6 +205,7 @@ class Filter {
     routing_ = filter->routing();
     fmEnable1_ = filter->fmEnable1();
     fmEnable2_ = filter->fmEnable2();
+    link_ = filter->link();
   }
 
   void writeHash(Hash& hash) {
@@ -214,6 +217,7 @@ class Filter {
     hash.write(routing_);
     hash.write(fmEnable1_);
     hash.write(fmEnable2_);
+    hash.write(link_);
   }
 
  private:
