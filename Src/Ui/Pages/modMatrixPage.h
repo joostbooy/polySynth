@@ -119,7 +119,7 @@ namespace ModMatrixPage {
       int src_y = (i * row_h) + y;
 
       if (src < ModMatrix::NUM_SOURCES) {
-        canvas_->drawText(x + 4, src_y, coll_w, row_h, settings_->modMatrix().source_text(src), Canvas::CENTER, Canvas::CENTER);
+        canvas_->drawText(x, src_y, coll_w, row_h, settings_->modMatrix().source_text(src), Canvas::CENTER, Canvas::CENTER);
         if (src == src_) {
           canvas_->fill(coll_w + 1, src_y + 1, w - 2, row_h - 2, Canvas::LIGHT_GRAY);
         }
