@@ -18,7 +18,7 @@ namespace ModMatrixPage {
 
   int dest_ = 0;
   int top_dest_ = 0;
-  const int kMaxVisibleDestinations = 4;
+  const int kMaxVisibleDestinations = 3;
 
   bool pasteable_ = false;
   ModMatrix modMatrix_;
@@ -179,12 +179,12 @@ namespace ModMatrixPage {
     const int w = canvas_->width() - 10;
     const int h = canvas_->height() - 20;
     const int coll_w = w / (kMaxVisibleSources + 1);
-    const int row_h = h / (kMaxVisibleDestinations + 1);
+    const int row_h = h / (kMaxVisibleDestinations + 2);
 
-    draw_sources_text(x, row_h, w, h, coll_w, row_h);
+    draw_sources_text(x, y + (row_h * 2), w, h, coll_w, row_h);
     draw_destination_text(coll_w, y, w, h, coll_w, row_h);
-    //drawDestinationDepthText(coll_w, row_h, w, h, coll_w, row_h);
-    draw_matrix(x + coll_w, y + row_h, w - coll_w, h - row_h, coll_w, row_h);
+    drawDestinationDepthText(coll_w, y + row_h, w, h, coll_w, row_h);
+    draw_matrix(x + coll_w, y + (row_h * 2), w - coll_w, h - (row_h * 2), coll_w, row_h);
 
     WindowPainter::draw_footer(footerOptionText, NUM_FOOTER_OPTIONS);
   }
