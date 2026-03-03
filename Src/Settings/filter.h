@@ -86,7 +86,7 @@ class Filter {
   }
 
   void setCutoff1(float value) {
-    cutoff1_ = value;
+    cutoff1_ = SettingsUtils::clipFloat(value);
   }
 
   const char* cutoff1Text() {
@@ -99,7 +99,7 @@ class Filter {
   }
 
   void setCutoff2(float value) {
-    cutoff2_ = value;
+    cutoff2_ = SettingsUtils::clipFloat(value);
   }
 
   const char* cutoff2Text() {
@@ -112,7 +112,7 @@ class Filter {
   }
 
   void setResonace1(float value) {
-    resonace1_ = value;
+    resonace1_ = SettingsUtils::clipFloat(value);
   }
 
   const char* resonance1Text() {
@@ -125,7 +125,7 @@ class Filter {
   }
 
   void setResonace2(float value) {
-    resonace2_ = value;
+    resonace2_ = SettingsUtils::clipFloat(value);
   }
 
   const char* resonance2Text() {
