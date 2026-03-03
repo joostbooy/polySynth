@@ -75,7 +75,7 @@ namespace CalibrationPage {
     ui_->resetAllPots();
   }
 
-  void on_encoder(int id, int inc) {
+  void onEncoder(int id, int inc) {
     int value = inc * (buttons_->isPressed(Buttons::SHIFT) ? 50 : 1);
     if (id == 0) {
       settings_->calibration().setMin(settings_->calibration().min() + value);
@@ -84,7 +84,7 @@ namespace CalibrationPage {
     }
   }
 
-  void on_button(int id, int state) {
+  void onButton(int id, int state) {
     if (!state) {
       return;
     }
@@ -148,7 +148,7 @@ namespace CalibrationPage {
     }
   }
 
-  void refresh_leds() {
+  void refreshLeds() {
   }
 
   // Bottom to top
@@ -171,10 +171,10 @@ namespace CalibrationPage {
     canvas_->drawText(x, y + (rowHeight * 4), "SELECTED VOICE");
     canvas_->drawText(x + collWdith, y * (rowHeight * 4), settings_->calibration().selectedVoiceText());
 
-    WindowPainter::draw_footer(footer_text, NUM_FOOTER_OPTIONS, footerOptionsOffset);
+    WindowPainter::drawFooter(footer_text, NUM_FOOTER_OPTIONS, footerOptionsOffset);
   }
 
-  const size_t target_fps() {
+  const size_t targetFps() {
     return 1000 / 16;
   }
 
@@ -183,10 +183,10 @@ namespace CalibrationPage {
       &enter,
       &exit,
       &draw,
-      &refresh_leds,
-      &on_button,
-      &on_encoder,
-      &target_fps,
+      &refreshLeds,
+      &onButton,
+      &onEncoder,
+      &targetFps,
   };
 
 };  // namespace CalibrationPage

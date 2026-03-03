@@ -101,7 +101,7 @@ void enter() {
 void exit() {
 }
 
-void on_button(int id, int state) {
+void onButton(int id, int state) {
   TextBufferPainter::write(str_.write(buttonIdText(id), " ", state));
 
   if (buttons_->isPressed(Buttons::SHIFT)) {
@@ -140,11 +140,11 @@ void on_button(int id, int state) {
   }
 }
 
-void on_encoder(int id, int state) {
+void onEncoder(int id, int state) {
   TextBufferPainter::write(str_.write(id == 0 ? "X ENC " : "Y ENC ", state));
 }
 
-void refresh_leds() {
+void refreshLeds() {
   if (led_toggle_state_) {
     leds_->setAll(Leds::BLACK);
   } else {
@@ -157,10 +157,10 @@ void draw() {
     testPots();
   }
   TextBufferPainter::draw();
-  WindowPainter::draw_footer(footer_option_text, NUM_OPTIONS);
+  WindowPainter::drawFooter(footer_option_text, NUM_OPTIONS);
 }
 
-const size_t target_fps() {
+const size_t targetFps() {
   return 1000 / 16;
 }
 
@@ -169,10 +169,10 @@ Pages::Page page = {
     &enter,
     &exit,
     &draw,
-    &refresh_leds,
-    &on_button,
-    &on_encoder,
-    &target_fps,
+    &refreshLeds,
+    &onButton,
+    &onEncoder,
+    &targetFps,
 };
 
 };  // namespace HardwareTestPage

@@ -112,7 +112,7 @@ namespace TopPage {
     }
   }
 
-  void on_button(int id, int state) {
+  void onButton(int id, int state) {
     if (pages_->isOpen(Pages::HARDWARE_TEST_PAGE)) {
       return;
     }
@@ -124,13 +124,13 @@ namespace TopPage {
     // Super secret dev pages
     if (buttons_->isPressed(Buttons::SHIFT)) {
       if (id == Buttons::PATCH_PAGE) {
-        pages_->close_all();
+        pages_->closeAll();
         pages_->open(Pages::HARDWARE_TEST_PAGE);
         return;
       }
 
       if (id == Buttons::LFO_PAGE) {
-        pages_->close_all();
+        pages_->closeAll();
         pages_->open(Pages::CALIBRATION_PAGE);
         return;
       }
@@ -140,7 +140,7 @@ namespace TopPage {
     int page = buttons_->toPage(id);
     if (page >= 0) {
       selectedPage_ = page;
-      pages_->close_all();
+      pages_->closeAll();
       pages_->open(selectedPage_);
       return;
     }
@@ -238,10 +238,10 @@ namespace TopPage {
     }
   }
 
-  void on_encoder(int id, int state) {
+  void onEncoder(int id, int state) {
   }
 
-  void refresh_leds() {
+  void refreshLeds() {
     if (pages_->isOpen(Pages::HARDWARE_TEST_PAGE)) {
       return;
     }
@@ -359,7 +359,7 @@ namespace TopPage {
     drawPots();
 
     // Messages
-    MessagePainter::draw(pages_->target_fps());
+    MessagePainter::draw(pages_->targetFps());
   }
 
 };  // namespace TopPage

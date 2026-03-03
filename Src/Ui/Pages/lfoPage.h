@@ -69,16 +69,16 @@ namespace LfoPage {
     ListPage::exit();
   }
 
-  void on_button(int id, int state) {
-    ListPage::on_button(id, state);
+  void onButton(int id, int state) {
+    ListPage::onButton(id, state);
   }
 
-  void on_encoder(int id, int state) {
-    ListPage::on_encoder(id, state);
+  void onEncoder(int id, int state) {
+    ListPage::onEncoder(id, state);
   }
 
-  void refresh_leds() {
-    ListPage::refresh_leds();
+  void refreshLeds() {
+    ListPage::refreshLeds();
   }
 
   void draw() {
@@ -107,7 +107,7 @@ namespace LfoPage {
     canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);
   }
 
-  const size_t target_fps() {
+  const size_t targetFps() {
     return 1000 / 16;
   }
 
@@ -116,10 +116,10 @@ namespace LfoPage {
       &enter,
       &exit,
       &draw,
-      &refresh_leds,
-      &on_button,
-      &on_encoder,
-      &target_fps,
+      &refreshLeds,
+      &onButton,
+      &onEncoder,
+      &targetFps,
   };
 
 };  // namespace LfoPage

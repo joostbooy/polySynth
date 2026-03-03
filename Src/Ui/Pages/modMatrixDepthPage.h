@@ -32,7 +32,7 @@ namespace ModMatrixDepthPage {
   void exit() {
   }
 
-  void on_button(int id, int state) {
+  void onButton(int id, int state) {
     if (state) {
       switch (buttons_->toFunction(id)) {
         case CLOSE:
@@ -44,7 +44,7 @@ namespace ModMatrixDepthPage {
     }
   }
 
-  void on_encoder(int id, int state) {
+  void onEncoder(int id, int state) {
     Patch& p = settings_->selectedPatch();
 
     bool shift = buttons_->isPressed(Buttons::SHIFT);
@@ -52,7 +52,7 @@ namespace ModMatrixDepthPage {
     p.modMatrix().setDestinationDepth(dest_, value + SettingsUtils::fInc(state, shift));
   }
 
-  void refresh_leds() {
+  void refreshLeds() {
   }
 
   void draw() {
@@ -67,10 +67,10 @@ namespace ModMatrixDepthPage {
     canvas_->drawText(x, y + 2, w, h - 2, ModMatrix::destination_text(dest_), Canvas::CENTER, Canvas::TOP);
     canvas_->drawText(x, y, w, h, settings_->modMatrix().destinationDepthText(dest_), Canvas::CENTER, Canvas::CENTER);
 
-    WindowPainter::draw_footer(footerOptionsText, NUM_FOOTER_OPTIONS);
+    WindowPainter::drawFooter(footerOptionsText, NUM_FOOTER_OPTIONS);
   }
 
-  const size_t target_fps() {
+  const size_t targetFps() {
     return 1000 / 16;
   }
 
@@ -79,10 +79,10 @@ namespace ModMatrixDepthPage {
       &enter,
       &exit,
       &draw,
-      &refresh_leds,
-      &on_button,
-      &on_encoder,
-      &target_fps,
+      &refreshLeds,
+      &onButton,
+      &onEncoder,
+      &targetFps,
   };
 
 };  // namespace ModMatrixDepthPage

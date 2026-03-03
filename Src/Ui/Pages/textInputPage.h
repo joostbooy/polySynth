@@ -179,7 +179,7 @@ void paste() {
   }
 }
 
-void on_encoder(int id, int inc) {
+void onEncoder(int id, int inc) {
   if (buttons_->isPressed(Buttons::SHIFT)) {
     inc > 0 ? text_cursor_right() : text_cursor_left();
   } else if (id == 0) {
@@ -189,7 +189,7 @@ void on_encoder(int id, int inc) {
   }
 }
 
-void on_button(int id, int state) {
+void onButton(int id, int state) {
   if (!state) {
     return;
   }
@@ -228,11 +228,11 @@ void on_button(int id, int state) {
   }
 }
 
-void refresh_leds() {
+void refreshLeds() {
  
 }
 
-const size_t target_fps() {
+const size_t targetFps() {
   return 1000 / 16;
 }
 
@@ -271,7 +271,7 @@ void draw() {
     canvas_->verticalLine(cursor_x, char_y, h, Canvas::WHITE);
   }
 
-  if ((text_cursor_ticks_ += target_fps()) >= 1000) {
+  if ((text_cursor_ticks_ += targetFps()) >= 1000) {
     text_cursor_ticks_ = 0;
   }
 
@@ -292,10 +292,10 @@ void draw() {
   }
 
   // footer
-  WindowPainter::draw_footer(footer_text, NUM_FOOTER_OPTIONS);
+  WindowPainter::drawFooter(footer_text, NUM_FOOTER_OPTIONS);
 }
 
-Pages::Page page = {&init, &enter, &exit, &draw, &refresh_leds, &on_button, &on_encoder, &target_fps};
+Pages::Page page = {&init, &enter, &exit, &draw, &refreshLeds, &onButton, &onEncoder, &targetFps};
 
 };  // namespace TextInputPage
 

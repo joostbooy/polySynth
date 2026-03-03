@@ -50,21 +50,21 @@ namespace OptionListPage {
 		callback_ = nullptr;
 	}
 
-	void on_encoder(int id, int state) {
+	void onEncoder(int id, int state) {
 		selected_ = SettingsUtils::clip(0, count_ - 1, selected_ + state);
 		scroll_to_row(selected_);
 	}
 
-	void on_button(int id, int state) {
+	void onButton(int id, int state) {
 		/*
 		if (state) {
 			if (Buttons::UP_BUTTON == id) {
-				on_encoder(0, -1);
+				onEncoder(0, -1);
 				return;
 			}
 
 			if (Buttons::DOWN_BUTTON == id) {
-				on_encoder(0, 1);
+				onEncoder(0, 1);
 				return;
 			}
 
@@ -84,7 +84,7 @@ namespace OptionListPage {
 			*/
 	}
 
-	void refresh_leds() {
+	void refreshLeds() {
 	
 	}
 
@@ -115,10 +115,10 @@ namespace OptionListPage {
 
 		const int bar_w = 8;
 		const int bar_x = x + (w - bar_w);
-		WindowPainter::draw_vertical_scollbar(bar_x, y, bar_w, h, top_row_, count_, kMaxRows);
+		WindowPainter::drawVerticalScollbar(bar_x, y, bar_w, h, top_row_, count_, kMaxRows);
 	}
 
-	const size_t target_fps() {
+	const size_t targetFps() {
 		return 1000 / 16;
 	}
 
@@ -127,10 +127,10 @@ namespace OptionListPage {
 		&enter,
 		&exit,
 		&draw,
-		&refresh_leds,
-		&on_button,
-		&on_encoder,
-		&target_fps
+		&refreshLeds,
+		&onButton,
+		&onEncoder,
+		&targetFps
 	};
 
 };

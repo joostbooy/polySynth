@@ -62,7 +62,7 @@ namespace ModMatrixPage {
   void exit() {
   }
 
-  void on_encoder(int id, int inc) {
+  void onEncoder(int id, int inc) {
     if (id == 0) {
       scroll_to_source(src_ + inc);
     } else {
@@ -70,7 +70,7 @@ namespace ModMatrixPage {
     }
   }
 
-  void on_button(int id, int state) {
+  void onButton(int id, int state) {
     if (state) {
       if (id == Buttons::ENC_X || id == Buttons::ENC_Y) {
         settings_->modMatrix().toggle(src_, dest_);
@@ -110,7 +110,7 @@ namespace ModMatrixPage {
     }
   }
 
-  void refresh_leds() {
+  void refreshLeds() {
   }
 
   void draw_sources_text(int x, int y, int w, int h, int coll_w, int row_h) {
@@ -158,8 +158,8 @@ namespace ModMatrixPage {
       }
     }
 
-    WindowPainter::draw_vertical_scollbar(256 - 8, y, 6, h, top_src_, ModMatrix::NUM_SOURCES, kMaxVisibleSources);
-    WindowPainter::draw_horizontal_scollbar(coll_w, 64 - 8, w - coll_w, 6, top_dest_, ModMatrix::NUM_DESTINATIONS, kMaxVisibleDestinations);
+    WindowPainter::drawVerticalScollbar(256 - 8, y, 6, h, top_src_, ModMatrix::NUM_SOURCES, kMaxVisibleSources);
+    WindowPainter::drawHorizontalScollbar(coll_w, 64 - 8, w - coll_w, 6, top_dest_, ModMatrix::NUM_DESTINATIONS, kMaxVisibleDestinations);
   }
 
   void drawDestinationDepthText(int x, int y, int w, int h, int coll_w, int row_h) {
@@ -186,10 +186,10 @@ namespace ModMatrixPage {
     drawDestinationDepthText(coll_w, y + row_h, w, h, coll_w, row_h);
     draw_matrix(x + coll_w, y + (row_h * 2), w - coll_w, h - (row_h * 2), coll_w, row_h);
 
-    WindowPainter::draw_footer(footerOptionText, NUM_FOOTER_OPTIONS);
+    WindowPainter::drawFooter(footerOptionText, NUM_FOOTER_OPTIONS);
   }
 
-  const size_t target_fps() {
+  const size_t targetFps() {
     return 1000 / 16;
   }
 
@@ -198,10 +198,10 @@ namespace ModMatrixPage {
       &enter,
       &exit,
       &draw,
-      &refresh_leds,
-      &on_button,
-      &on_encoder,
-      &target_fps,
+      &refreshLeds,
+      &onButton,
+      &onEncoder,
+      &targetFps,
   };
 
 };  // namespace ModMatrixPage

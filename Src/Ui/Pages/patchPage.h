@@ -45,7 +45,7 @@ namespace PatchPage {
   void exit() {
   }
 
-  void on_button(int id, int state) {
+  void onButton(int id, int state) {
     if (state) {
 
       int option = buttons_->toFunction(id);
@@ -124,7 +124,7 @@ namespace PatchPage {
     engine_->addReqestBlocking(Engine::START);
   }
 
-  void on_encoder(int id, int state) {
+  void onEncoder(int id, int state) {
     int inc = buttons_->isPressed(Buttons::SHIFT) ? state * 10 : state;
     int lastIndex = settings_->patchIndex();
     newIndex = SettingsUtils::clip(0, Settings::kNumPatches - 1, lastIndex + inc);
@@ -143,7 +143,7 @@ namespace PatchPage {
     }
   }
 
-  void refresh_leds() {
+  void refreshLeds() {
   }
 
   void draw() {
@@ -152,10 +152,10 @@ namespace PatchPage {
     str_.write(settings_->patchIndex() + 1, " ", settings_->selectedPatch().name());
     canvas_->drawText(0, 0, canvas_->width(), 54, str_.read(), Canvas::CENTER, Canvas::CENTER);
 
-    WindowPainter::draw_footer(footerOptionText, NUM_FOOTER_OPTIONS, footerOptionsOffset);
+    WindowPainter::drawFooter(footerOptionText, NUM_FOOTER_OPTIONS, footerOptionsOffset);
   }
 
-  const size_t target_fps() {
+  const size_t targetFps() {
     return 1000 / 16;
   }
 
@@ -164,10 +164,10 @@ namespace PatchPage {
       &enter,
       &exit,
       &draw,
-      &refresh_leds,
-      &on_button,
-      &on_encoder,
-      &target_fps,
+      &refreshLeds,
+      &onButton,
+      &onEncoder,
+      &targetFps,
   };
 
 };  // namespace PatchPage

@@ -17,15 +17,15 @@ namespace EmptyPage {
 
 	}
 
-	void on_button(int id, int state) {
+	void onButton(int id, int state) {
 
 	}
 
-	void on_encoder(int id, int state) {
+	void onEncoder(int id, int state) {
 
 	}
 
-	void refresh_leds() {
+	void refreshLeds() {
 
 	}
 
@@ -33,7 +33,7 @@ namespace EmptyPage {
 		
 	}
 
-	const size_t target_fps() {
+	const size_t targetFps() {
 		return 1000 / 16;
 	}
 
@@ -42,10 +42,10 @@ namespace EmptyPage {
 		&enter,
 		&exit,
 		&draw,
-		&refresh_leds,
-		&on_button,
-		&on_encoder,
-		&target_fps
+		&refreshLeds,
+		&onButton,
+		&onEncoder,
+		&targetFps
 	};
 
 };

@@ -67,7 +67,7 @@ namespace ListPage {
     copyCallback_ = nullptr;
   }
 
-  void on_button(int id, int state) {
+  void onButton(int id, int state) {
     if (!state) {
       return;
     }
@@ -113,11 +113,11 @@ namespace ListPage {
     }
   }
 
-  void on_encoder(int id, int inc) {
+  void onEncoder(int id, int inc) {
     list_->onEncoder(inc, buttons_->isPressed(Buttons::SHIFT));
   }
 
-  void refresh_leds() {
+  void refreshLeds() {
   }
 
   void draw() {
@@ -148,11 +148,11 @@ namespace ListPage {
 
     const int bar_w = 8;
     const int bar_x = x + (w - bar_w);
-    WindowPainter::draw_vertical_scollbar(bar_x, y, bar_w, h, topRow_, list_->numItems(), kMaxVisibleRows_);
-    WindowPainter::draw_footer(footerText, NUM_FOOTER_OPTIONS);
+    WindowPainter::drawVerticalScollbar(bar_x, y, bar_w, h, topRow_, list_->numItems(), kMaxVisibleRows_);
+    WindowPainter::drawFooter(footerText, NUM_FOOTER_OPTIONS);
   }
 
-  const size_t target_fps() {
+  const size_t targetFps() {
     return 1000 / 16;
   }
 
@@ -161,10 +161,10 @@ namespace ListPage {
       &enter,
       &exit,
       &draw,
-      &refresh_leds,
-      &on_button,
-      &on_encoder,
-      &target_fps,
+      &refreshLeds,
+      &onButton,
+      &onEncoder,
+      &targetFps,
   };
 };  // namespace ListPage
 

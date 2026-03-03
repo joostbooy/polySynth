@@ -36,23 +36,23 @@ public:
 	void init(Settings *settings, Engine *engine, Ui *ui);
 	void open(int id);
 	void close(int id);
-	void close_all();
-	void on_button(int id, int state);
-	void on_encoder(int id, int state);
+	void closeAll();
+	void onButton(int id, int state);
+	void onEncoder(int id, int state);
 	void draw();
-	void refresh_leds();
+	void refreshLeds();
 	bool isOpen(int id);
-	const size_t target_fps();
+	const size_t targetFps();
 
 	struct Page {
 		void(*init)();
 		void(*enter)();
 		void(*exit)();
 		void(*draw)();
-		void(*refresh_leds)();
-		void(*on_button)(int id, int state);
-		void(*on_encoder)(int id, int state);
-		const size_t (*target_fps)();
+		void(*refreshLeds)();
+		void(*onButton)(int id, int state);
+		void(*onEncoder)(int id, int state);
+		const size_t (*targetFps)();
 	};
 
 	int num_open() {

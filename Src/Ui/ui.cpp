@@ -96,10 +96,10 @@ void Ui::process() {
     switch (e.type) {
       case Ui::BUTTON:
         buttons_.write(e.id, e.value);
-        pages_.on_button(e.id, e.value);
+        pages_.onButton(e.id, e.value);
         break;
       case Ui::ENCODER:
-        pages_.on_encoder(e.id, e.value);
+        pages_.onEncoder(e.id, e.value);
         break;
       default:
         break;
@@ -116,14 +116,14 @@ void Ui::process() {
   }
 
   displayInterval_ += interval;
-  if (displayInterval_ >= pages_.target_fps()) {
+  if (displayInterval_ >= pages_.targetFps()) {
     processDisplay();
   }
 }
 
 void Ui::processLeds() {
   leds_.setAll(Leds::BLACK);
-  pages_.refresh_leds();
+  pages_.refreshLeds();
   matrix_->setLeds(leds_.data());
 }
 

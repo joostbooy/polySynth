@@ -14,7 +14,7 @@ public:
 
 	static void clear() {
 		entries_ = 0;
-		top_row_ = 0;
+		topRow_ = 0;
 		for (int i = 0; i < kNumRows; ++i) {
 			text_[i].clear();
 		}
@@ -25,7 +25,7 @@ public:
 
 		++entries_;
 		if (entries_ >= kNumRows) {
-			top_row_ = (entries_ - kNumRows) % kNumRows;
+			topRow_ = (entries_ - kNumRows) % kNumRows;
 		}
 	}
 
@@ -38,14 +38,14 @@ public:
 		canvas_->setFont(Font::SMALL);
 
 		for (int i = 0; i < kNumRows; ++i) {
-			int text__row = (top_row_ + i) % kNumRows;
+			int text__row = (topRow_ + i) % kNumRows;
 			canvas_->drawText(x, y + (h * i), w, h, text_[text__row].read(), Canvas::LEFT, Canvas::CENTER);
 		}
 	}
 
 private:
 	static inline int entries_;
-	static inline int top_row_;
+	static inline int topRow_;
 	static inline const int kNumRows = 6;
 	static inline StringBuilderBase<32>text_[kNumRows];
 	static inline Canvas *canvas_;

@@ -9,7 +9,7 @@ class WindowPainter {
     canvas_ = canvas;
   }
 
-  static void draw_vertical_scollbar(int x, int y, int w, int h, int top_item, int num_items, int visible_items) {
+  static void drawVerticalScollbar(int x, int y, int w, int h, int top_item, int num_items, int visible_items) {
     if (num_items > visible_items) {
       int bar_y = (top_item * h) / num_items;
       int bar_h = (visible_items * h) / num_items;
@@ -19,7 +19,7 @@ class WindowPainter {
     }
   }
 
-  static void draw_horizontal_scollbar(int x, int y, int w, int h, int top_item, int num_items, int visible_items) {
+  static void drawHorizontalScollbar(int x, int y, int w, int h, int top_item, int num_items, int visible_items) {
     if (num_items > visible_items) {
       int bar_x = (top_item * w) / num_items;
       int bar_w = (visible_items * w) / num_items;
@@ -29,7 +29,7 @@ class WindowPainter {
     }
   }
 
-  static void draw_footer(const char* const* text, int num_options, int optionOffset = 0) {
+  static void drawFooter(const char* const* text, int num_options, int optionOffset = 0) {
     const int h = 10;
     const int y = canvas_->height() - h;
     const int w = canvas_->width() / kMaxFooterOptions;
@@ -44,7 +44,7 @@ class WindowPainter {
 
     for (int i = 0; i < kMaxFooterOptions; ++i) {
       int x = i * w;
-      canvas_->verticalLine(x, y, h, Canvas::BLACK);
+      canvas_->verticalLine(x, y, h, Canvas::INVERTED);
       if (i < num_options) {
         canvas_->drawText(x, y, w, h, text[i + optionOffset], Canvas::CENTER, Canvas::CENTER);
       }

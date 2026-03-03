@@ -50,7 +50,7 @@ namespace ConfirmationPage {
 		callback_ = nullptr;
 	}
 
-	void on_button(int id, int state) {
+	void onButton(int id, int state) {
 		int selected_option = buttons_->toFunction(id);
 		if (state >= 1 && selected_option >= 0 && selected_option < NUM_OPTIONS) {
 			callback_(selected_option);
@@ -58,11 +58,11 @@ namespace ConfirmationPage {
 		}
 	}
 
-	void on_encoder(int id, int state) {
+	void onEncoder(int id, int state) {
 
 	}
 
-	void refresh_leds() {
+	void refreshLeds() {
 
 	}
 
@@ -74,10 +74,10 @@ namespace ConfirmationPage {
 		canvas_->frame(x + 4, y + 4, w - 8, h - 8, Canvas::WHITE);
 		canvas_->drawText(x, y, w, h, str.read(), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
 
-		WindowPainter::draw_footer(option_text, NUM_OPTIONS);
+		WindowPainter::drawFooter(option_text, NUM_OPTIONS);
 	}
 
-	const size_t target_fps() {
+	const size_t targetFps() {
 		return 1000 / 16;
 	}
 
@@ -86,10 +86,10 @@ namespace ConfirmationPage {
 		&enter,
 		&exit,
 		&draw,
-		&refresh_leds,
-		&on_button,
-		&on_encoder,
-		&target_fps
+		&refreshLeds,
+		&onButton,
+		&onEncoder,
+		&targetFps
 	};
 
 };

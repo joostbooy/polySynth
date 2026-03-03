@@ -75,7 +75,7 @@ void Pages::close(int id) {
 	}
 }
 
-void Pages::close_all() {
+void Pages::closeAll() {
 	while (page_stack_.readable()) {
 		int id = page_stack_.pop();
 		page_[id]->exit();
@@ -83,22 +83,22 @@ void Pages::close_all() {
 	curr_page_ = EMPTY_PAGE;
 }
 
-void Pages::on_button(int id, int state) {
-	page_[curr_page_]->on_button(id, state);
-	TopPage::on_button(id, state);
+void Pages::onButton(int id, int state) {
+	page_[curr_page_]->onButton(id, state);
+	TopPage::onButton(id, state);
 }
 
-void Pages::on_encoder(int id, int state) {
-	page_[curr_page_]->on_encoder(id, state);
-	TopPage::on_encoder(id, state);
+void Pages::onEncoder(int id, int state) {
+	page_[curr_page_]->onEncoder(id, state);
+	TopPage::onEncoder(id, state);
 }
 
-void Pages::refresh_leds() {
+void Pages::refreshLeds() {
 	for (int i = 0; i < page_stack_.size(); ++i) {
 		int id = page_stack_.read(i);
-		page_[id]->refresh_leds();
+		page_[id]->refreshLeds();
 	}
-	TopPage::refresh_leds();
+	TopPage::refreshLeds();
 }
 
 void Pages::draw() {
@@ -109,6 +109,6 @@ void Pages::draw() {
 	TopPage::draw();
 }
 
-const size_t Pages::target_fps() {
-	return page_[curr_page_]->target_fps();
+const size_t Pages::targetFps() {
+	return page_[curr_page_]->targetFps();
 }
