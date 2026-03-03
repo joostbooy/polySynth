@@ -30,6 +30,7 @@ class Filter {
     setResonace2(0.f);
     setFmEnable1(false);
     setFmEnable2(false);
+    setLink(false);
   }
 
   const char* typeText(Type type) {
@@ -94,7 +95,7 @@ class Filter {
 
   // Cutoff 2
   float cutoff2() {
-    return cutoff2_;
+    return link() ? cutoff1_ : cutoff2_;
   }
 
   void setCutoff2(float value) {
@@ -120,7 +121,7 @@ class Filter {
 
   // Resonance 2
   float resonance2() {
-    return resonace2_;
+    return link() ? resonace1_ : resonace2_;
   }
 
   void setResonace2(float value) {
@@ -155,6 +156,19 @@ class Filter {
 
   const char* fmEnable2Text() {
     return SettingsText::boolToOnOff(fmEnable2());
+  }
+
+  // Link
+  bool link() {
+    return link_;
+  }
+
+  void setLink(bool value) {
+    link_ = value;
+  }
+
+  const char* linkText() {
+    return SettingsText::boolToOnOff(link());
   }
 
   // Storage
@@ -209,6 +223,7 @@ class Filter {
   float resonace2_;
   bool fmEnable1_;
   bool fmEnable2_;
+  bool link_;
   Type type_;
   Routing routing_;
 };

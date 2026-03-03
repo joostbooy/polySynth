@@ -15,6 +15,7 @@ class FilterList : public SettingsList {
     RESONANCE_2,
     FM_ENABLE_2,
     ROUTING,
+    LINK,
 
     NUM_ITEMS,
   };
@@ -33,7 +34,8 @@ class FilterList : public SettingsList {
       case RESONANCE_2: return "RESONANCE 2";
       case FM_ENABLE_2: return "FM 2";
       case ROUTING:     return "ROUTING";
-      default:
+      case LINK:        return "LINK";
+      default:  
         break;
     }
     return nullptr;
@@ -51,6 +53,7 @@ class FilterList : public SettingsList {
       case RESONANCE_2: return filter.resonance2Text();
       case FM_ENABLE_2: return filter.fmEnable2Text();
       case ROUTING:     return filter.routingText();
+      case LINK:        return filter.linkText();
       default:
         break;
     }
@@ -84,6 +87,9 @@ class FilterList : public SettingsList {
         break;
       case ROUTING:
         filter.setRouting(filter.routing() + inc);
+        break;
+      case LINK:
+        filter.setLink(inc > 0);
         break;
       default:
         break;
