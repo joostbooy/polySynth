@@ -33,13 +33,13 @@ public:
 	}
 
 private:
-	static int x;
-	static int y;
-	static int w;
-	static int h;
-	static Canvas *canvas_;
-	static uint16_t millis_;
-	static StringBuilderBase<32>str;
+	static inline int x = 0;
+	static inline int y = 16;
+	static inline int w = 0;
+	static inline int h = 32;
+	static inline Canvas *canvas_;
+	static inline uint16_t millis_ = 0;
+	static inline StringBuilderBase<32>str;
 };
 
 #endif

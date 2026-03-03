@@ -52,8 +52,8 @@ class WindowPainter {
   }
 
  private:
-  static Canvas* canvas_;
-  static const int kMaxFooterOptions = 4;
+  static inline Canvas* canvas_;
+  static inline const int kMaxFooterOptions = 4;
 };
 
 #endif

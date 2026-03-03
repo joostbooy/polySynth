@@ -44,11 +44,11 @@ public:
 	}
 
 private:
-	static int entries_;
-	static int top_row_;
-	static const int kNumRows = 6;
-	static StringBuilderBase<32>text_[kNumRows];
-	static Canvas *canvas_;
+	static inline int entries_;
+	static inline int top_row_;
+	static inline const int kNumRows = 6;
+	static inline StringBuilderBase<32>text_[kNumRows];
+	static inline Canvas *canvas_;
 };
 
 #endif
