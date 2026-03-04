@@ -151,6 +151,8 @@ void Engine::processRequests() {
 
 // 1Khz
 void Engine::update() {
+  uint32_t start = Micros::read();
+
   processRequests();
 
   if (state_ == RUNNING) {
@@ -162,4 +164,6 @@ void Engine::update() {
     }
     voiceEngine_.update();
   }
+
+  processingTimeUs_ = Micros::read() - start;
 }

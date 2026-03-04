@@ -34,7 +34,7 @@ class Engine {
   }
 
   uint32_t processingTimeUs() {
-    return processing_time_uS_;
+    return processingTimeUs_;
   }
 
   ModMatrixEngine& modMatrixEngine() {
@@ -53,7 +53,7 @@ class Engine {
   State state_;
   volatile uint8_t requests_ = 0x00;
 
-  uint32_t processing_time_uS_;
+  uint32_t processingTimeUs_;
 
   Dac* dac_;
   Settings* settings_;
@@ -61,7 +61,6 @@ class Engine {
   VoiceEngine voiceEngine_;
   MidiClockEngine midiClockEngine_;
   ModMatrixEngine modMatrixEngine_;
-  Voice voice_[Settings::kNumVoices];
   Que<MidiEngine::Event, 16> noteQue_;
   bool gate_[2];
   bool lastGate_[2];

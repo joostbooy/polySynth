@@ -9,12 +9,15 @@ namespace HardwareTestPage {
 
   using TopPage::buttons_;
   using TopPage::canvas_;
+  using TopPage::engine_;
   using TopPage::leds_;
   using TopPage::pages_;
   using TopPage::pots_;
   using TopPage::settings_;
   using TopPage::str_;
 
+  int footerOffset_;
+  bool showProcessingTime_;
   bool potsEnabled;
   uint8_t lastPotValue[Pots::NUM_POTS];
 
@@ -22,11 +25,14 @@ namespace HardwareTestPage {
     TOGGLE_LEDS,
     TEST_SD_CARD,
     ENABLE_POTS,
+    NEXT,
+    PREV,
+    PROCESSING_TIME,
     CLOSE,
     NUM_OPTIONS,
   };
 
-  const char* const footerOptionText_[NUM_OPTIONS] = {"TOGGLE LEDS", "TEST SD CARD", "ENABLE POTS", "CLOSE"};
+  const char* const footerOptionText_[NUM_OPTIONS] = {"TOGGLE LEDS", "TEST SD CARD", "ENABLE POTS", "NEXT", "PREV", "PROCESSING TIME", "CLOSE"};
 
   bool ledToggleState_;
 
@@ -44,6 +50,8 @@ namespace HardwareTestPage {
   }
 
   void enter() {
+    footerOffset_ = 0;
+    showProcessingTime_ = false;
     potsEnabled = false;
   }
 
@@ -55,7 +63,7 @@ namespace HardwareTestPage {
 
     if (state) {
       if (buttons_->isPressed(Buttons::SHIFT)) {
-        switch (buttons_->toFunction(id)) {
+        switch (buttons_->toFunction(id, footerOffset_)) {
           case TOGGLE_LEDS:
             ledToggleState_ ^= 1;
             break;
@@ -78,6 +86,15 @@ namespace HardwareTestPage {
             pages_->close(Pages::HARDWARE_TEST_PAGE);
             pages_->open(Pages::PATCH_PAGE);
             break;
+          case NEXT:
+            footerOffset_ = 4;
+            break;
+          case PREV:
+            footerOffset_ = 0;
+            break;
+          case PROCESSING_TIME:
+            showProcessingTime_ ^= 1;
+            break;
           default:
             break;
         }
@@ -97,16 +114,27 @@ namespace HardwareTestPage {
     }
   }
 
+  const size_t targetFps() {
+    return 1000 / 16;
+  }
+
+  void drawProcessingTime() {
+    float percentage = (engine_->processingTimeUs() / SAMPLE_RATE) * 100.f;
+    const char* text = SettingsText::floatToText(percentage, "%");
+    MessagePainter::show(text, targetFps() * 2);
+  }
+
   void draw() {
     if (potsEnabled) {
       testPots();
     }
+
+    if (showProcessingTime_) {
+      drawProcessingTime();
+    }
+
     TextBufferPainter::draw();
     WindowPainter::drawFooter(footerOptionText_, NUM_OPTIONS);
-  }
-
-  const size_t targetFps() {
-    return 1000 / 16;
   }
 
   Pages::Page page = {
