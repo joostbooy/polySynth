@@ -48,7 +48,7 @@ void Pages::init(Settings *settings, Engine *engine, Ui *ui) {
 }
 
 void Pages::open(int id) {
-	if (page_stack_.find(id) < 0 && page_stack_.writeable() == true) {
+	if (isOpen(id) == false && page_stack_.writeable() == true) {
 		curr_page_ = id;
 		page_stack_.push(id);
 		page_[id]->enter();
