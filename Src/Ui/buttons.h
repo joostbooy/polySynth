@@ -55,6 +55,57 @@ class Buttons {
     ENC_Y                   = SERIAL_ID(7, 5),
   };
 
+  const char* idText(int id) {
+    switch (id) {
+      case TUNE_1_OCT_UP:           return "TUNE 1 OCT UP";
+      case TUNE_1_OCT_DOWN:         return "TUNE 1 OCT DOWN";
+      case TUNE_2_OCT_UP:           return "TUNE 2 OCT UP";
+      case TUNE_2_OCT_DOWN:         return "TUNE_2_OCT_DOWN";
+      case LFO_1_TYPE:              return "LFO 1 TYPE";
+      case LFO_2_TYPE:              return "LFO 2 TYPE";
+      case TUNE_1_VCO_MOD:          return "TUNE 1 VCO MOD";
+      case TUNE_1_MOD_TYPE:         return "TUNE 1 MOD TYPE";
+      case VCO_2_SYNC:              return "VCO 2 SYNC";
+      case TUNE_2_MOD_TYPE:         return "TUNE 2 MOD TYPE";
+      case SHAPE_1_MOD_TYPE:        return "SHAPE 1 MOD TYPE";
+      case VCO_1_OSC_TYPE:          return "VCO 1 OSC TYPE";
+      case SHAPE_2_MOD_TYPE:        return "SHAPE 2 MOD TYPE";
+      case VCO_2_OSC_TYPE:          return "VCO 2 OSC TYPE";
+      case VCO_MOD_SOURCE:          return "VCO MOD SOURCE";
+      case SLIDE_VCO_SELECT:        return "SLIDE VCO SELECT";
+      case CUTOFF_1_MOD_TYPE:       return "CUTOFF 1 MOD TYPE";
+      case VCO_1_MUTE:              return "VCO 1 MUTE";
+      case CUTOFF_2_MOD_TYPE:       return "CUTOFF 2 MOD TYPE";
+      case VCO_2_MUTE:              return "VCO 2 MUTE";
+      case VCO_MOD_DEPTH_MOD_TYPE:  return "VCO MOD DEPTH MOD TYPE";
+      case VOLUME_MOD_TYPE:         return "VOLUME MOD TYPE";
+      case VCF_1_TYPE:              return "VCF 1 TYPE";
+      case CUTOFF_1_VCO_MOD:        return "CUTOFF 1 VCO MOD";
+      case VCF_2_ROUTING:           return "VCF 2 ROUTING";
+      case CUTOFF_2_VCO_MOD:        return "CUTOFF 2 VCO MOD";
+      case VOLUME_VCO_MOD:          return "VOLUME VCO MOD";
+      case DISPLAY_B:               return "DISPLAY B";
+      case DISPLAY_A:               return "DISPLAY A";
+      case PATCH_PAGE:              return "PATCH PAGE";
+      case ENVELOPE_PAGE:           return "ENVELOPE PAGE";
+      case VCO_PAGE:                return "VCO PAGE";
+      case PAN_MOD_TYPE:            return "PAN MOD TYPE";
+      case DISPLAY_D:               return "DISPLAY D";
+      case DISPLAY_C:               return "DISPLAY C";
+      case LFO_PAGE:                return "LFO PAGE";
+      case MATRIX_PAGE:             return "MATRIX PAGE";
+      case MIDI_PAGE:               return "MIDI PAGE";
+      case SHIFT:                   return "SHIFT";
+      case ENC_X:                   return "ENC X";
+      case AMP_PAGE:                return "AMP PAGE";
+      case VCF_PAGE:                return "VCF PAGE";
+      case ENC_Y:                   return "ENC Y";
+      default:
+        break;
+    }
+    return "";
+  }
+
    void init() {
     for (int i = 0; i < 2; ++i) {
       pressed_[i] = 0;
@@ -76,12 +127,12 @@ class Buttons {
     return pressed_[index] & mask;
   }
 
-   int toFunction(int id) {
+   int toFunction(int id, int offset = 0) {
     switch (id) {
-      case DISPLAY_A: return 0;
-      case DISPLAY_B: return 1;
-      case DISPLAY_C: return 2;
-      case DISPLAY_D: return 3;
+      case DISPLAY_A: return 0 + offset;
+      case DISPLAY_B: return 1 + offset;
+      case DISPLAY_C: return 2 + offset;
+      case DISPLAY_D: return 3 + offset;
       default:
         return -1;
         break;

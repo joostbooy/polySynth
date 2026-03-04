@@ -47,13 +47,8 @@ namespace PatchPage {
 
   void onButton(int id, int state) {
     if (state) {
-
-      int option = buttons_->toFunction(id);
-      if (option >= 0) {
-        option += footerOptionsOffset;
-      }
       
-      switch (option) {
+      switch (buttons_->toFunction(id, footerOptionsOffset)) {
         case SAVE:
           ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
             if (option == ConfirmationPage::CONFIRM) {
