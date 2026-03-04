@@ -434,20 +434,20 @@ class Leds {
     set(1, 12, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::TUNE_1));
     set(2, 12, matrix->read(ModMatrix::LFO_1, ModMatrix::TUNE_2));
     set(3, 12, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::TUNE_2));
-    set(0, 8, matrix->read(ModMatrix::LFO_1, ModMatrix::SHAPE_1));
+    set(0, 8, matrix->read(ModMatrix::LFO_2, ModMatrix::SHAPE_1));
     set(1, 9, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::SHAPE_1));
-    set(2, 8, matrix->read(ModMatrix::LFO_1, ModMatrix::SHAPE_2));
+    set(2, 8, matrix->read(ModMatrix::LFO_2, ModMatrix::SHAPE_2));
     set(3, 8, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::SHAPE_2));
-    set(0, 6, matrix->read(ModMatrix::LFO_1, ModMatrix::CUTOFF_1));
+    set(0, 6, matrix->read(ModMatrix::LFO_2, ModMatrix::CUTOFF_1));
     set(1, 6, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::CUTOFF_1));
-    set(2, 5, matrix->read(ModMatrix::LFO_1, ModMatrix::CUTOFF_2));
+    set(2, 5, matrix->read(ModMatrix::LFO_2, ModMatrix::CUTOFF_2));
     set(3, 5, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::CUTOFF_2));
     set(4, 2, matrix->read(ModMatrix::LFO_1, ModMatrix::VCO_MOD_DEPTH));
     set(5, 2, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::VCO_MOD_DEPTH));
     set(6, 2, matrix->read(ModMatrix::LFO_1, ModMatrix::GAIN));
     set(7, 2, matrix->read(ModMatrix::ENVELOPE_1, ModMatrix::GAIN));
     set(6, 0, matrix->read(ModMatrix::LFO_1, ModMatrix::PAN));
-    set(7, 0, matrix->read(ModMatrix::ENVELOPE_1, ModMatrix::PAN));
+    set(7, 0, matrix->read(ModMatrix::ENVELOPE_2, ModMatrix::PAN));
   }
 
  private:
