@@ -36,7 +36,7 @@ Pages::Page* page_[Pages::NUM_PAGES] = {
 };
 
 void Pages::init(Settings *settings, Engine *engine, Ui *ui) {
-	page_stack_.clear();
+	pageStack_.clear();
 	TopPage::init(settings, engine, ui);
 
 	for (int i = 0; i < NUM_PAGES; ++i) {
@@ -48,16 +48,16 @@ void Pages::init(Settings *settings, Engine *engine, Ui *ui) {
 }
 
 void Pages::open(int id) {
-	if (isOpen(id) == false && page_stack_.writeable() == true) {
-		curr_page_ = id;
-		page_stack_.push(id);
+	if (isOpen(id) == false && pageStack_.writeable() == true) {
+		currentPage_ = id;
+		pageStack_.push(id);
 		page_[id]->enter();
 	}
 }
 
 bool Pages::isOpen(int id) {
-	for (size_t i = 0; i < page_stack_.size(); i++){
-		if (page_stack_.read(i) == id) {
+	for (size_t i = 0; i < pageStack_.size(); i++){
+		if (pageStack_.read(i) == id) {
 			return true;
 		}
 	}
@@ -65,50 +65,50 @@ bool Pages::isOpen(int id) {
 }
 
 void Pages::close(int id) {
-	if (page_stack_.remove_by_value(id)) {
-		if (page_stack_.readable()) {
-			curr_page_ = page_stack_.read(page_stack_.size() - 1);
+	if (pageStack_.remove_by_value(id)) {
+		if (pageStack_.readable()) {
+			currentPage_ = pageStack_.read(pageStack_.size() - 1);
 		} else {
-			curr_page_ = EMPTY_PAGE;
+			currentPage_ = EMPTY_PAGE;
 		}
 		page_[id]->exit();
 	}
 }
 
 void Pages::closeAll() {
-	while (page_stack_.readable()) {
-		int id = page_stack_.pop();
+	while (pageStack_.readable()) {
+		int id = pageStack_.pop();
 		page_[id]->exit();
 	}
-	curr_page_ = EMPTY_PAGE;
+	currentPage_ = EMPTY_PAGE;
 }
 
 void Pages::onButton(int id, int state) {
-	page_[curr_page_]->onButton(id, state);
+	page_[currentPage_]->onButton(id, state);
 	TopPage::onButton(id, state);
 }
 
 void Pages::onEncoder(int id, int state) {
-	page_[curr_page_]->onEncoder(id, state);
+	page_[currentPage_]->onEncoder(id, state);
 	TopPage::onEncoder(id, state);
 }
 
 void Pages::refreshLeds() {
-	for (int i = 0; i < page_stack_.size(); ++i) {
-		int id = page_stack_.read(i);
+	for (int i = 0; i < pageStack_.size(); ++i) {
+		int id = pageStack_.read(i);
 		page_[id]->refreshLeds();
 	}
 	TopPage::refreshLeds();
 }
 
 void Pages::draw() {
-	for (int i = 0; i < page_stack_.size(); ++i) {
-		int id = page_stack_.read(i);
+	for (int i = 0; i < pageStack_.size(); ++i) {
+		int id = pageStack_.read(i);
 		page_[id]->draw();
 	}
 	TopPage::draw();
 }
 
 const size_t Pages::targetFps() {
-	return page_[curr_page_]->targetFps();
+	return page_[currentPage_]->targetFps();
 }

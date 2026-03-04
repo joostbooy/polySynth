@@ -55,14 +55,13 @@ public:
 		const size_t (*targetFps)();
 	};
 
-	int num_open() {
-		return page_stack_.size();
+	int numOpen() {
+		return pageStack_.size();
 	}
 
 private:
-	int curr_page_;
-	Stack<int, 8>page_stack_;
-	//Page *page_[NUM_PAGES];
+	int currentPage_;
+	Stack<int, 8>pageStack_;
 };
 
 #endif
