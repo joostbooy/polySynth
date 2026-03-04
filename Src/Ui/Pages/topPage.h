@@ -353,7 +353,7 @@ namespace TopPage {
 
     canvas_->setFont(Font::SMALL);
     canvas_->drawText(x + 2, y, w - 2, h, selectedPageText(), Canvas::LEFT, Canvas::CENTER);
-    canvas_->fill(x, y, w, h, Canvas::INVERTED);
+    canvas_->fill(x + 1, y, w - 1, h, Canvas::INVERTED);
 
     // Pots
     drawPots();
