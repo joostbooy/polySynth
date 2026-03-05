@@ -133,6 +133,8 @@ void Engine::processRequests() {
   }
 
   if (requests_ & START) {
+    start();
+    
     state_ = RUNNING;
     clearRequest(START);
   }

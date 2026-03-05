@@ -38,6 +38,11 @@ namespace LfoPage {
     return false;
   }
 
+  void resyncAll() {
+    engine_->addReqestBlocking(Engine::START);
+    MessagePainter::show("LFO'S RESYNCED");
+  }
+
   void init() {
     pasteable_ = false;
     lfo_.init();
@@ -62,6 +67,8 @@ namespace LfoPage {
     ListPage::setClearCallback(&clear);
     ListPage::setCopyCallback(&copy);
     ListPage::setPasteCallback(&paste);
+    ListPage::setFooterCallback(&resyncAll);
+    ListPage::setFooterText("RESYNC");
     ListPage::enter();
   }
 
