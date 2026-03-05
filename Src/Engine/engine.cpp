@@ -40,13 +40,12 @@ void Engine::noteOff(MidiEngine::Event& e) {
 }
 
 void Engine::pitchBend(MidiEngine::Event& e) {
-  float data = (1.f / 16383.f) * MidiEngine::read14Bit(e);
-  modMatrixEngine_.setMidiBend(data);
+  modMatrixEngine_.setMidiBend(MidiEngine::read14Bit(e));
 }
 
 void Engine::cc(MidiEngine::Event& e) {
   uint8_t number = e.data[0];
-  float data = (1.f / 127.f) * e.data[1];
+  uint8_t data = e.data[1];
   modMatrixEngine_.setMidiCc(number, data);
 }
 
