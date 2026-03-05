@@ -16,7 +16,6 @@ namespace HardwareTestPage {
   using TopPage::settings_;
   using TopPage::str_;
 
-  int footerOffset_;
   bool showProcessingTime_;
   bool potsEnabled;
   uint8_t lastPotValue[Pots::NUM_POTS];
@@ -25,14 +24,11 @@ namespace HardwareTestPage {
     TOGGLE_LEDS,
     TEST_SD_CARD,
     ENABLE_POTS,
-    NEXT,
-    PREV,
-    PROCESSING_TIME,
     CLOSE,
     NUM_OPTIONS,
   };
 
-  const char* const footerOptionText_[NUM_OPTIONS] = {"TOGGLE LEDS", "TEST SD CARD", "ENABLE POTS", "NEXT", "PREV", "PROCESSING TIME", "CLOSE"};
+  const char* const footerOptionText_[NUM_OPTIONS] = {"TOGGLE LEDS", "TEST SD CARD", "ENABLE POTS", "CLOSE"};
 
   bool ledToggleState_;
 
@@ -50,8 +46,6 @@ namespace HardwareTestPage {
   }
 
   void enter() {
-    footerOffset_ = 0;
-    showProcessingTime_ = false;
     potsEnabled = false;
   }
 
@@ -63,7 +57,7 @@ namespace HardwareTestPage {
 
     if (state) {
       if (buttons_->isPressed(Buttons::SHIFT)) {
-        switch (buttons_->toFunction(id, footerOffset_)) {
+        switch (buttons_->toFunction(id)) {
           case TOGGLE_LEDS:
             ledToggleState_ ^= 1;
             break;
@@ -86,15 +80,6 @@ namespace HardwareTestPage {
             pages_->close(Pages::HARDWARE_TEST_PAGE);
             pages_->open(Pages::PATCH_PAGE);
             break;
-          case NEXT:
-            footerOffset_ = 4;
-            break;
-          case PREV:
-            footerOffset_ = 0;
-            break;
-          case PROCESSING_TIME:
-            showProcessingTime_ ^= 1;
-            break;
           default:
             break;
         }
@@ -114,14 +99,15 @@ namespace HardwareTestPage {
     }
   }
 
-  const size_t targetFps() {
-    return 1000 / 16;
-  }
-
   void drawProcessingTime() {
+    const int w = canvas_->width();
+    const int x = w - (w / 4);
+    const int y = (canvas_->height() - 20) / 2;
+
     float percentage = (engine_->processingTimeUs() / SAMPLE_RATE) * 100.f;
     const char* text = SettingsText::floatToText(percentage, "%");
-    MessagePainter::show(text, targetFps() * 2);
+    canvas_->drawText(x, y, "PROCESSING TIME");
+    canvas_->drawText(x, y + 10, text);
   }
 
   void draw() {
@@ -129,12 +115,13 @@ namespace HardwareTestPage {
       testPots();
     }
 
-    if (showProcessingTime_) {
-      drawProcessingTime();
-    }
-
+    drawProcessingTime();
     TextBufferPainter::draw();
     WindowPainter::drawFooter(footerOptionText_, NUM_OPTIONS);
+  }
+
+  const size_t targetFps() {
+    return 1000 / 16;
   }
 
   Pages::Page page = {
