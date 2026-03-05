@@ -95,7 +95,7 @@ class Filter {
 
   // Cutoff 2
   float cutoff2() {
-    return link() ? cutoff1_ : cutoff2_;
+    return link() ? Dsp::cross_fade(cutoff2_, 1.f, cutoff1_) : cutoff2_;
   }
 
   void setCutoff2(float value) {
@@ -121,7 +121,7 @@ class Filter {
 
   // Resonance 2
   float resonance2() {
-    return link() ? resonace1_ : resonace2_;
+    return link() ? Dsp::cross_fade(resonace2_, 1.f, resonace1_) : resonace2_;
   }
 
   void setResonace2(float value) {
