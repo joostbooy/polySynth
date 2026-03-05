@@ -74,14 +74,14 @@ namespace MidiMonitorPage {
 
   const char* messageTypeText(MidiEngine::Event& e) {
     switch (engine_->midiEngine().readMessage(e)) {
-      	case MidiEngine::NOTE_OFF:				return "NOTE OFF ";
-      	case MidiEngine::NOTE_ON:				return "NOTE ON ";
-     	case MidiEngine::CONTROLLER_CHANGE:		return "CC ";
-      	case MidiEngine::PITCH_BEND:			return "BEND ";
-		case MidiEngine::CLOCK_PULSE:			return "CLOCK PULSE ";
-		case MidiEngine::CLOCK_START:			return "CLOCK START ";
-		case MidiEngine::CLOCK_STOP:			return "CLOCK STOP ";
-		case MidiEngine::CLOCK_CONTINUE:		return "CLOCK CONTINUE ";
+      case MidiEngine::NOTE_OFF:          return "NOTE OFF ";
+      case MidiEngine::NOTE_ON:           return "NOTE ON ";
+      case MidiEngine::CONTROLLER_CHANGE: return "CC ";
+      case MidiEngine::PITCH_BEND:        return "BEND ";
+      case MidiEngine::CLOCK_PULSE:       return "CLOCK PULSE ";
+      case MidiEngine::CLOCK_START:       return "CLOCK START ";
+      case MidiEngine::CLOCK_STOP:        return "CLOCK STOP ";
+      case MidiEngine::CLOCK_CONTINUE:    return "CLOCK CONTINUE ";
       default:
         break;
     }
@@ -91,19 +91,19 @@ namespace MidiMonitorPage {
   const char* dataText(MidiEngine::Event& e, int byte) {
     if (byte == 0) {
       switch (e.message & 0xF0) {
-        case MidiEngine::NOTE_OFF:			return SettingsText::noteToText(e.data[0]);
-        case MidiEngine::NOTE_ON:			return SettingsText::noteToText(e.data[0]);
+        case MidiEngine::NOTE_OFF:		    	return SettingsText::noteToText(e.data[0]);
+        case MidiEngine::NOTE_ON:			      return SettingsText::noteToText(e.data[0]);
         case MidiEngine::CONTROLLER_CHANGE:	return SettingsText::intToText(e.data[0]);
-        case MidiEngine::PITCH_BEND:		return SettingsText::intToText(engine_->midiEngine().read14Bit(e));
+        case MidiEngine::PITCH_BEND:		    return SettingsText::intToText(engine_->midiEngine().read14Bit(e));
         default:
           break;
       }
     } else {
       switch (e.message & 0xF0) {
-        case MidiEngine::NOTE_OFF:			return SettingsText::intToText(e.data[1]);
-        case MidiEngine::NOTE_ON:			return SettingsText::intToText(e.data[1]);
+        case MidiEngine::NOTE_OFF:		    	return SettingsText::intToText(e.data[1]);
+        case MidiEngine::NOTE_ON:		        return SettingsText::intToText(e.data[1]);
         case MidiEngine::CONTROLLER_CHANGE:	return SettingsText::intToText(e.data[1]);
-        case MidiEngine::PITCH_BEND:		return "";
+        case MidiEngine::PITCH_BEND:	    	return "";
         default:
           break;
       }
