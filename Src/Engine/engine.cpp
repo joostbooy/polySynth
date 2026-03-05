@@ -105,7 +105,7 @@ void Engine::processMidi() {
   MidiEngine::Event e;
 
   while (midiEngine_.pull(e)) {
-    switch (e.message & 0xF0) {
+    switch (midiEngine_.readMessage(e)) {
       case MidiEngine::NOTE_ON:
         noteOn(e);
         break;

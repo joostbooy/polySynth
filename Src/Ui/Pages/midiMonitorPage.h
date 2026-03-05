@@ -9,18 +9,20 @@ namespace MidiMonitorPage {
   using TopPage::engine_;
   using TopPage::pages_;
   using TopPage::str_;
+  using TopPage::canvas_;
 
   enum FooterOptions {
     START_STOP,
+	SHOW_HIDE_CLOCK,
     CLEAR,
     CLOSE,
     NUM_FOOTER_OPTIONS,
   };
 
   bool running_;
+  bool showClock_;
 
-  const char* footerTextRunning[NUM_FOOTER_OPTIONS] = {"STOP", "CLEAR", "CLOSE"};
-  const char* footerTextStopped[NUM_FOOTER_OPTIONS] = {"START", "CLEAR", "CLOSE"};
+  const char* footerText_[NUM_FOOTER_OPTIONS] = {"START_STOP", "SHOW_HIDE_CLOCK", "CLEAR", "CLOSE"};
 
   void clear() {
     engine_->midiEngine().clearMonitor();
@@ -29,6 +31,7 @@ namespace MidiMonitorPage {
 
   void init() {
     running_ = true;
+	showClock_ = true;
   }
 
   void enter() {
@@ -43,6 +46,9 @@ namespace MidiMonitorPage {
       switch (buttons_->toFunction(id)) {
         case START_STOP:
           running_ ^= 1;
+          break;
+        case SHOW_HIDE_CLOCK:
+          showClock_ ^= 1;
           break;
         case CLEAR:
           clear();
@@ -67,11 +73,15 @@ namespace MidiMonitorPage {
   }
 
   const char* messageTypeText(MidiEngine::Event& e) {
-    switch (e.message & 0xF0) {
-      case MidiEngine::NOTE_OFF:			return "NOTE OFF ";
-      case MidiEngine::NOTE_ON:				return "NOTE ON ";
-      case MidiEngine::CONTROLLER_CHANGE:	return "CC ";
-      case MidiEngine::PITCH_BEND:			return "BEND ";
+    switch (engine_->midiEngine().readMessage(e)) {
+      	case MidiEngine::NOTE_OFF:				return "NOTE OFF ";
+      	case MidiEngine::NOTE_ON:				return "NOTE ON ";
+     	case MidiEngine::CONTROLLER_CHANGE:		return "CC ";
+      	case MidiEngine::PITCH_BEND:			return "BEND ";
+		case MidiEngine::CLOCK_PULSE:			return "CLOCK PULSE ";
+		case MidiEngine::CLOCK_START:			return "CLOCK START ";
+		case MidiEngine::CLOCK_STOP:			return "CLOCK STOP ";
+		case MidiEngine::CLOCK_CONTINUE:		return "CLOCK CONTINUE ";
       default:
         break;
     }
@@ -101,20 +111,34 @@ namespace MidiMonitorPage {
     return "";
   }
 
+  void writeMessage(MidiEngine::Event& e) {
+    if (engine_->midiEngine().isClockMessage(e)) {
+      if (showClock_) {
+        str_.write(messageTypeText(e));
+        TextBufferPainter::write(str_.read());
+      }
+    } else {
+      str_.write(messageTypeText(e), dataText(e, 0), " ", dataText(e, 1), " ", channelText(e));
+      TextBufferPainter::write(str_.read());
+    }
+  }
+
   void draw() {
     MidiEngine::Event e;
 
-    if (!running_) {
-      WindowPainter::drawFooter(footerTextStopped, NUM_FOOTER_OPTIONS);
-    } else {
+    canvas_->clear();
+
+    footerText_[START_STOP] = running_ ? "STOP" : "START";
+    footerText_[SHOW_HIDE_CLOCK] = showClock_ ? "HIDE CLOCK" : "SHOW CLOCK";
+
+    if (running_) {
       while (engine_->midiEngine().pullMonitor(e)) {
-        str_.write(messageTypeText(e), dataText(e, 0), " ", dataText(e, 1), " ", channelText(e));
-        TextBufferPainter::write(str_.read());
+        writeMessage(e);
       }
-      WindowPainter::drawFooter(footerTextRunning, NUM_FOOTER_OPTIONS);
     }
 
     TextBufferPainter::draw();
+    WindowPainter::drawFooter(footerText_, NUM_FOOTER_OPTIONS);
   }
 
   const size_t targetFps() {
