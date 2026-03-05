@@ -10,6 +10,7 @@ namespace MidiPage {
 	using TopPage::settings_;
 	using TopPage::engine_;
 	using TopPage::ui_;
+	using TopPage::pages_;
 
 	bool pasteable_;
 	Midi midi_;
@@ -32,6 +33,10 @@ namespace MidiPage {
 		return false;
 	}
 
+	void monitor() {
+		pages_->open(Pages::MIDI_MONITOR_PAGE);
+	}
+
 	void init() {
 		pasteable_ = false;
 		midi_.init();
@@ -43,6 +48,8 @@ namespace MidiPage {
 		ListPage::setClearCallback(&clear);
 		ListPage::setCopyCallback(&copy);
 		ListPage::setPasteCallback(&paste);
+		ListPage::setFooterCallback(&monitor);
+		ListPage::setFooterText("MONITOR");
 		ListPage::enter();
 	}
 

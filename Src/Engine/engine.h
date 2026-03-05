@@ -41,6 +41,10 @@ class Engine {
     return modMatrixEngine_;
   }
 
+  MidiEngine& midiEngine() {
+    return midiEngine_;
+  }
+
   MidiClockEngine midiClockEngine() {
     return midiClockEngine_;
   }

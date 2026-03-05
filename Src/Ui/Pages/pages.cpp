@@ -8,6 +8,7 @@
 #include "textInputPage.h"
 #include "lfoPage.h"
 #include "midiPage.h"
+#include "midiMonitorPage.h"
 #include "envelopePage.h"
 #include "ampPage.h"
 #include "filterPage.h"
@@ -26,6 +27,7 @@ Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::CALIBRATION_PAGE]				= &CalibrationPage::page,
 	[Pages::LFO_PAGE]						= &LfoPage::page,
 	[Pages::MIDI_PAGE]						= &MidiPage::page,
+	[Pages::MIDI_MONITOR_PAGE]				= &MidiMonitorPage::page,
 	[Pages::ENVELOPE_PAGE]					= &EnvelopePage::page,
 	[Pages::AMP_PAGE]						= &AmpPage::page,
 	[Pages::FILTER_PAGE]					= &FilterPage::page,

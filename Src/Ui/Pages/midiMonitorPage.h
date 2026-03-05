@@ -1,0 +1,137 @@
+#ifndef MidiMonitorPage_h
+#define MidiMonitorPage_h
+
+#include "midiEngine.h"
+
+namespace MidiMonitorPage {
+
+  using TopPage::buttons_;
+  using TopPage::engine_;
+  using TopPage::pages_;
+  using TopPage::str_;
+
+  enum FooterOptions {
+    START_STOP,
+    CLEAR,
+    CLOSE,
+    NUM_FOOTER_OPTIONS,
+  };
+
+  bool running_;
+
+  const char* footerTextRunning[NUM_FOOTER_OPTIONS] = {"STOP", "CLEAR", "CLOSE"};
+  const char* footerTextStopped[NUM_FOOTER_OPTIONS] = {"START", "CLEAR", "CLOSE"};
+
+  void clear() {
+    engine_->midiEngine().clearMonitor();
+    TextBufferPainter::clear();
+  }
+
+  void init() {
+    running_ = true;
+  }
+
+  void enter() {
+    engine_->midiEngine().clearMonitor();
+  }
+
+  void exit() {
+  }
+
+  void onButton(int id, int state) {
+    if (state) {
+      switch (buttons_->toFunction(id)) {
+        case START_STOP:
+          running_ ^= 1;
+          break;
+        case CLEAR:
+          clear();
+          break;
+        case CLOSE:
+          pages_->close(Pages::MIDI_MONITOR_PAGE);
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  void onEncoder(int id, int state) {
+  }
+
+  void refreshLeds() {
+  }
+
+  const char* channelText(MidiEngine::Event& e) {
+    return SettingsText::midiChannelText(e.message & 0x0F);
+  }
+
+  const char* messageTypeText(MidiEngine::Event& e) {
+    switch (e.message & 0xF0) {
+      case MidiEngine::NOTE_OFF:			return "NOTE OFF ";
+      case MidiEngine::NOTE_ON:				return "NOTE ON ";
+      case MidiEngine::CONTROLLER_CHANGE:	return "CC ";
+      case MidiEngine::PITCH_BEND:			return "BEND ";
+      default:
+        break;
+    }
+    return "";
+  }
+
+  const char* dataText(MidiEngine::Event& e, int byte) {
+    if (byte == 0) {
+      switch (e.message & 0xF0) {
+        case MidiEngine::NOTE_OFF:			return SettingsText::noteToText(e.data[0]);
+        case MidiEngine::NOTE_ON:			return SettingsText::noteToText(e.data[0]);
+        case MidiEngine::CONTROLLER_CHANGE:	return SettingsText::intToText(e.data[0]);
+        case MidiEngine::PITCH_BEND:		return SettingsText::intToText(engine_->midiEngine().read14Bit(e));
+        default:
+          break;
+      }
+    } else {
+      switch (e.message & 0xF0) {
+        case MidiEngine::NOTE_OFF:			return SettingsText::intToText(e.data[1]);
+        case MidiEngine::NOTE_ON:			return SettingsText::intToText(e.data[1]);
+        case MidiEngine::CONTROLLER_CHANGE:	return SettingsText::intToText(e.data[1]);
+        case MidiEngine::PITCH_BEND:		return "";
+        default:
+          break;
+      }
+    }
+    return "";
+  }
+
+  void draw() {
+    MidiEngine::Event e;
+
+    if (!running_) {
+      WindowPainter::drawFooter(footerTextStopped, NUM_FOOTER_OPTIONS);
+    } else {
+      while (engine_->midiEngine().pullMonitor(e)) {
+        str_.write(messageTypeText(e), dataText(e, 0), " ", dataText(e, 1), " ", channelText(e));
+        TextBufferPainter::write(str_.read());
+      }
+      WindowPainter::drawFooter(footerTextRunning, NUM_FOOTER_OPTIONS);
+    }
+
+    TextBufferPainter::draw();
+  }
+
+  const size_t targetFps() {
+    return 1000 / 16;
+  }
+
+  Pages::Page page = {
+      &init,
+      &enter,
+      &exit,
+      &draw,
+      &refreshLeds,
+      &onButton,
+      &onEncoder,
+      &targetFps,
+  };
+
+};  // namespace MidiMonitorPage
+
+#endif

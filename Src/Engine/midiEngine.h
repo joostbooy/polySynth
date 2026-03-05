@@ -29,10 +29,6 @@ class MidiEngine {
     uint8_t data[2];
   };
 
-  Que<uint8_t, 32> inputQue;
-  Que<uint8_t, 32> outputQue[Midi::NUM_PORTS];
-  Que<uint8_t, 8> clockOutputQue[Midi::NUM_PORTS];
-
   void init(Uart* uart, Usb* usb, Midi* midi) {
     usb_ = usb;
     uart_ = uart;
@@ -68,10 +64,23 @@ class MidiEngine {
     while (inputQue.readable()) {
       if (parse(inputQue.read())) {
         e = event_;
+        monitorQue.write(e);
         return true;
       }
     }
     return false;
+  }
+
+  bool pullMonitor(Event &e) {
+    if (monitorQue.readable()) {
+      e = monitorQue.read();
+      return true;
+    }
+    return false;
+  }
+
+  void clearMonitor() {
+    monitorQue.clear();
   }
 
   bool messageAccepted(Event& e) {
@@ -128,6 +137,11 @@ class MidiEngine {
   uint8_t numDataBytes_;
 
   bool lastReceivedReady_;
+
+  Que<uint8_t, 32> inputQue;
+  Que<uint8_t, 32> outputQue[Midi::NUM_PORTS];
+  Que<uint8_t, 8> clockOutputQue[Midi::NUM_PORTS];
+  Que<Event, 32> monitorQue;
 
   bool parse(uint8_t reading) {
     if (reading >= 0x80) {
