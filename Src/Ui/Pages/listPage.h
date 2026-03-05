@@ -15,6 +15,7 @@ namespace ListPage {
   void (*clearCallback_)() = nullptr;
   bool (*pasteCallback_)() = nullptr;
   void (*copyCallback_)() = nullptr;
+  void (*footerCallback_)() = nullptr;
 
   int topRow_;
   const int kMaxVisibleRows_ = 6;
@@ -23,10 +24,11 @@ namespace ListPage {
     CLEAR,
     COPY,
     PASTE,
+    CUSTOM,
     NUM_FOOTER_OPTIONS,
   };
   
-  const char* const footerText[NUM_FOOTER_OPTIONS] = {"CLEAR", "COPY", "PASTE"};
+  const char* footerText[NUM_FOOTER_OPTIONS] = {"CLEAR", "COPY", "PASTE", "CUSTOM"};
 
   void setList(SettingsList* list) {
     list_ = list;
@@ -42,6 +44,14 @@ namespace ListPage {
 
   void setCopyCallback(void (*callback)()) {
     copyCallback_ = callback;
+  }
+
+  void setFooterCallback(void (*callback)()) {
+    footerCallback_ = callback;
+  }
+
+  void setFooterText(const char* text) {
+    footerText[CUSTOM] = text;
   }
 
   void scroll_to_row(int row) {
@@ -65,6 +75,7 @@ namespace ListPage {
     clearCallback_ = nullptr;
     pasteCallback_ = nullptr;
     copyCallback_ = nullptr;
+    footerCallback_ = nullptr;
   }
 
   void onButton(int id, int state) {
@@ -108,6 +119,11 @@ namespace ListPage {
           pages_->open(Pages::CONFIRMATION_PAGE);
         }
         break;
+      case CUSTOM:
+        if (footerCallback_) {
+          footerCallback_();
+        }
+        break;
       default:
         break;
     }
@@ -149,7 +165,9 @@ namespace ListPage {
     const int bar_w = 8;
     const int bar_x = x + (w - bar_w);
     WindowPainter::drawVerticalScollbar(bar_x, y, bar_w, h, topRow_, list_->numItems(), kMaxVisibleRows_);
-    WindowPainter::drawFooter(footerText, NUM_FOOTER_OPTIONS);
+
+    int count = footerCallback_ ? NUM_FOOTER_OPTIONS : NUM_FOOTER_OPTIONS - 1;
+    WindowPainter::drawFooter(footerText, count);
   }
 
   const size_t targetFps() {
