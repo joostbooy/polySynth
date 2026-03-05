@@ -53,7 +53,9 @@ class ModMatrixEngine {
           destination_[dest] *= source_[src];
         }
       }
-      destination_[dest] = Dsp::cross_fade(originalValue(dest), destination_[dest], modMatrix_->destinationDepth(dest));
+      float a = originalValue(dest);
+      float b = destination_[dest];
+      destination_[dest] = a + (b - a) * modMatrix_->destinationDepth(dest);
     }
     return &destination_[0];
   }

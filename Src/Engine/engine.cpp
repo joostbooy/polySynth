@@ -40,7 +40,7 @@ void Engine::noteOff(MidiEngine::Event& e) {
 }
 
 void Engine::pitchBend(MidiEngine::Event& e) {
-  modMatrixEngine_.setMidiBend(MidiEngine::read14Bit(e));
+  modMatrixEngine_.setMidiBend(midiEngine_.read14Bit(e));
 }
 
 void Engine::cc(MidiEngine::Event& e) {

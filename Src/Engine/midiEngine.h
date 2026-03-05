@@ -9,18 +9,18 @@
 class MidiEngine {
  public:
   enum MessageType {
-    NOTE_OFF = 0x80,
-    NOTE_ON = 0x90,
-    KEY_PRESSURE = 0xA0,
+    NOTE_OFF          = 0x80,
+    NOTE_ON           = 0x90,
+    KEY_PRESSURE      = 0xA0,
     CONTROLLER_CHANGE = 0xB0,
-    PROGRAM_CHANGE = 0xC0,
-    CHANNEL_PRESSURE = 0xD0,
-    PITCH_BEND = 0xE0,
-    CLOCK_PULSE = 0xF8,
-    CLOCK_START = 0xFA,
-    CLOCK_CONTINUE = 0xFB,
-    CLOCK_STOP = 0xFC,
-    SONG_POSITION = 0xF2,
+    PROGRAM_CHANGE    = 0xC0,
+    CHANNEL_PRESSURE  = 0xD0,
+    PITCH_BEND        = 0xE0,
+    CLOCK_PULSE       = 0xF8,
+    CLOCK_START       = 0xFA,
+    CLOCK_CONTINUE    = 0xFB,
+    CLOCK_STOP        = 0xFC,
+    SONG_POSITION     = 0xF2,
   };
 
   struct Event {
@@ -82,15 +82,15 @@ class MidiEngine {
     return e.data[0] >= midi_->keyRangeLow() && e.data[0] <= midi_->keyRangeHigh();
   }
 
-  static inline uint16_t read14Bit(Event& e) {
+  uint16_t read14Bit(Event& e) {
     return (e.data[0] & 0x7F) | (e.data[1] << 7);
   }
 
-  static inline bool isClockMessage(Event& e) {
+  bool isClockMessage(Event& e) {
     return e.message >= 0xF8;
   }
 
-  static inline uint8_t readMessage(Event& e) {
+  uint8_t readMessage(Event& e) {
     return isClockMessage(e) ? e.message : e.message & 0xF0;
   }
 
