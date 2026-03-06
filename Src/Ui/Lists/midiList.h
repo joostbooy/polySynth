@@ -58,9 +58,9 @@ class MidiList : public SettingsList {
 
     switch (item) {
       case BPM:             return bpmText();
-      case CLOCK_SOURCE:    return midiClock.clockSourceText();
-      case SEND_CLOCK_UART: return midiClock.sendClock_text(Midi::UART);
-      case SEND_CLOCK_USB:  return midiClock.sendClock_text(Midi::USB);
+      case CLOCK_SOURCE:    return midiClock.sourceText();
+      case SEND_CLOCK_UART: return midiClock.sendText(Midi::UART);
+      case SEND_CLOCK_USB:  return midiClock.sendText(Midi::USB);
       case KEY_RANGE_LOW:   return midi.keyRangeLowText();
       case KEY_RANGE_HIGH:  return midi.keyRangeHighText();
       case PORT_RECEIVE:    return midi.portReceiveText();
@@ -84,7 +84,7 @@ class MidiList : public SettingsList {
 
     switch (item) {
       case BPM:
-        if (midiClock.clockSource() == MidiClock::INTERNAL) {
+        if (midiClock.source() == MidiClock::INTERNAL) {
           if (shifted) {
             midiClock.setBpmFractional(midiClock.bpmFractional() + inc);
           } else {
@@ -93,13 +93,13 @@ class MidiList : public SettingsList {
         }
         break;
       case CLOCK_SOURCE:
-        midiClock.setClockSource(midiClock.clockSource() + inc);
+        midiClock.setSource(midiClock.source() + inc);
         break;
       case SEND_CLOCK_UART:
-        midiClock.setSendClock(Midi::UART, inc > 0);
+        midiClock.setSend(Midi::UART, inc > 0);
         break;
       case SEND_CLOCK_USB:
-        midiClock.setSendClock(Midi::USB, inc > 0);
+        midiClock.setSend(Midi::USB, inc > 0);
         break;
       case KEY_RANGE_LOW:
         engine_->addReqestBlocking(Engine::STOP);
@@ -145,10 +145,18 @@ class MidiList : public SettingsList {
   }
 
  private:
+  StringBuilderBase<10> str;
+
   const char* bpmText() {
     uint16_t bpm = engine_->midiClockEngine().bpm();
     uint16_t bpmFractional = engine_->midiClockEngine().bpmFractional();
-    return SettingsText::str.write(bpm, ".", bpmFractional);
+    str.write(bpm, ".", bpmFractional);
+
+    if (settings_->midiClock().source() == MidiClock::EXTERNAL) {
+      str.append(Font::LOCK);
+    }
+
+    return str.read();
   }
 };
 

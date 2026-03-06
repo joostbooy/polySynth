@@ -72,7 +72,7 @@ class MidiClock {
     NUM_CLOCK_SOURCES
   };
 
-  static const char* clockSourceText(int value) {
+  static const char* sourceText(int value) {
     if (value <= EXTERNAL) {
       return Midi::portText(value);
     } else {
@@ -83,10 +83,10 @@ class MidiClock {
   void init() {
     setBpm(120);
     setBpmFractional(0);
-    setClockSource(INTERNAL);
+    setSource(INTERNAL);
 
     for (int i = 0; i < Midi::Midi::NUM_PORTS; ++i) {
-      setSendClock(i, true);
+      setSend(i, true);
     }
   }
 
@@ -113,29 +113,29 @@ class MidiClock {
   }
 
   // clock source
-  uint8_t clockSource() {
+  uint8_t source() {
     return clockSource_;
   }
 
-  void setClockSource(int value) {
+  void setSource(int value) {
     clockSource_ = SettingsUtils::clip(0, NUM_CLOCK_SOURCES - 1, value);
   }
 
-  const char* clockSourceText() {
-    return clockSourceText(clockSource());
+  const char* sourceText() {
+    return sourceText(source());
   }
 
   // clock source
-  bool sendClock(int port) {
-    return sendClock_[port];
+  bool send(int port) {
+    return send_[port];
   }
 
-  void setSendClock(int port, bool value) {
-    sendClock_[port] = value;
+  void setSend(int port, bool value) {
+    send_[port] = value;
   }
 
-  const char* sendClock_text(int port) {
-    return SettingsText::boolToOnOff(sendClock(port));
+  const char* sendText(int port) {
+    return SettingsText::boolToOnOff(send(port));
   }
 
   // Storage
@@ -145,7 +145,7 @@ class MidiClock {
     fileWriter.write(clockSource_);
 
     for (int i = 0; i < Midi::NUM_PORTS; ++i) {
-      fileWriter.write(sendClock_[i]);
+      fileWriter.write(send_[i]);
     }
   }
 
@@ -155,17 +155,17 @@ class MidiClock {
     fileReader.read(clockSource_);
 
     for (int i = 0; i < Midi::NUM_PORTS; ++i) {
-      fileReader.read(sendClock_[i]);
+      fileReader.read(send_[i]);
     }
   }
 
   void paste(MidiClock* midiClock) {
     bpm_ = midiClock->bpm();
     bpmFractional_ = midiClock->bpmFractional();
-    clockSource_ = midiClock->clockSource();
+    clockSource_ = midiClock->source();
 
     for (int i = 0; i < Midi::NUM_PORTS; ++i) {
-      sendClock_[i] = midiClock->sendClock(i);
+      send_[i] = midiClock->send(i);
     }
   }
 
@@ -175,7 +175,7 @@ class MidiClock {
     hash.write(clockSource_);
 
     for (int i = 0; i < Midi::NUM_PORTS; ++i) {
-      hash.write(sendClock_[i]);
+      hash.write(send_[i]);
     }
   }
 
@@ -183,7 +183,7 @@ class MidiClock {
   uint16_t bpm_;
   uint16_t bpmFractional_;
   uint8_t clockSource_;
-  bool sendClock_[Midi::NUM_PORTS];
+  bool send_[Midi::NUM_PORTS];
 };
 
 #endif

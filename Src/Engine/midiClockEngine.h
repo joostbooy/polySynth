@@ -29,7 +29,7 @@ class MidiClockEngine {
   }
 
   bool tick() {
-    if (midiClock_->clockSource() == MidiClock::INTERNAL) {
+    if (midiClock_->source() == MidiClock::INTERNAL) {
       bpm_ = midiClock_->bpm();
       bpmFractional_ = midiClock_->bpmFractional();
     } else {
@@ -55,7 +55,8 @@ class MidiClockEngine {
   }
 
   static float readInc(float value) {
-    return readInc(int(value * (MidiClock::NUM_TEMPOS - 1)));
+    int index = value * (MidiClock::NUM_TEMPOS - 1);
+    return lut_beat_length_inc[bpm_ - MIN_BPM] * incMultiplier(index);
   }
 
  private:
@@ -68,10 +69,6 @@ class MidiClockEngine {
   volatile uint32_t tempoInc_, tempoPhase_, ticks, isrTicks_, isrAverage_;
   volatile uint8_t numReadings_ = 0;
   static const uint32_t kUpdatePeriod = 45000000UL / UPDATE_FREQ;
-
-  static float readInc(int value) {
-    return lut_beat_length_inc[bpm_ - MIN_BPM] * incMultiplier(value);
-  }
 
   static float incMultiplier(int value) {
     switch (value) {

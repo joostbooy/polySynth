@@ -53,7 +53,7 @@ void Engine::cc(MidiEngine::Event& e) {
 void Engine::tick() {
     if (midiClockEngine_.tick()) {
     for (size_t i = 0; i < Midi::NUM_PORTS; i++) {
-      if (settings_->midiClock().sendClock(i)) {
+      if (settings_->midiClock().send(i)) {
           midiEngine_.writeClock(i, MidiEngine::CLOCK_PULSE);
       }
     }
