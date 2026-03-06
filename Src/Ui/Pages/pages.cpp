@@ -14,6 +14,7 @@
 #include "filterPage.h"
 #include "oscillatorPage.h"
 #include "modMatrixPage.h"
+#include "modMatrixCcPage.h"
 #include "modMatrixDepthPage.h"
 #include "patchPage.h"
 #include "calibrationPage.h"
@@ -33,6 +34,7 @@ Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::FILTER_PAGE]					= &FilterPage::page,
 	[Pages::OSCILLATOR_PAGE]				= &OscillatorPage::page,
 	[Pages::MOD_MATRIX_PAGE]				= &ModMatrixPage::page,
+	[Pages::MOD_MATRIX_CC_PAGE]				= &ModMatrixCcPage::page,
 	[Pages::MOD_MATRIX_DEPTH_PAGE]			= &ModMatrixDepthPage::page,
 	[Pages::PATCH_PAGE]						= &PatchPage::page,
 };

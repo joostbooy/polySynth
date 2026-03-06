@@ -23,15 +23,21 @@ namespace ModMatrixPage {
   bool pasteable_ = false;
   ModMatrix modMatrix_;
 
+  int footerOffset_ = 0;
+
   enum FooterOptions {
     COPY,
     PASTE,
     CLEAR,
+    NEXT,
+    PREV,
+    TOGGLE,
+    SET_CC,
     SET_DEPTH,
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"COPY", "PASTE", "CLEAR", "SET DEPTH"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"COPY", "PASTE", "CLEAR", ">", "<", "TOGGLE", "SET DEPTH", "SET CC"};
 
   void scroll_to_source(int src) {
     src_ = SettingsUtils::clip(0, ModMatrix::NUM_SOURCES - 1, src);
@@ -77,7 +83,7 @@ namespace ModMatrixPage {
         return;
       }
 
-      switch (buttons_->toFunction(id)) {
+      switch (buttons_->toFunction(id, footerOffset_)) {
         case COPY:
           modMatrix_.paste(&settings_->modMatrix());
           pasteable_ = true;
@@ -100,9 +106,21 @@ namespace ModMatrixPage {
           });
           pages_->open(Pages::CONFIRMATION_PAGE);
           break;
-          case SET_DEPTH:
+        case SET_DEPTH:
           ModMatrixDepthPage::setDestination(dest_);
           pages_->open(Pages::MOD_MATRIX_DEPTH_PAGE);
+          break;
+        case TOGGLE:
+          settings_->modMatrix().toggle(src_, dest_);
+          break;
+        case SET_CC:
+          pages_->open(Pages::MOD_MATRIX_CC_PAGE);
+          break;
+        case NEXT:
+          footerOffset_ = 4;
+          break;
+        case PREV:
+          footerOffset_ = 0;
           break;
         default:
           break;
@@ -186,7 +204,7 @@ namespace ModMatrixPage {
     drawDestinationDepthText(coll_w, y + row_h, w, h, coll_w, row_h);
     draw_matrix(x + coll_w, y + (row_h * 2), w - coll_w, h - (row_h * 2), coll_w, row_h);
 
-    WindowPainter::drawFooter(footerOptionText, NUM_FOOTER_OPTIONS);
+    WindowPainter::drawFooter(footerOptionText, NUM_FOOTER_OPTIONS, footerOffset_);
   }
 
   const size_t targetFps() {
