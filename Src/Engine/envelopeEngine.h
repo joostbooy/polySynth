@@ -1,7 +1,6 @@
 #ifndef EnvelopeEngine_h
 #define EnvelopeEngine_h
 
-#include "curve.h"
 #include "envelope.h"
 #include "lookupTablesUtils.h"
 

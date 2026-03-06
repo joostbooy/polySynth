@@ -3,8 +3,6 @@
 
 #include "fileReader.h"
 #include "fileWriter.h"
-#include "midi.h"
-#include "midiEngine.h"
 #include "midiClock.h"
 #include "settingsText.h"
 #include "settingsUtils.h"

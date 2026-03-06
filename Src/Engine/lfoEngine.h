@@ -1,7 +1,6 @@
 #ifndef LfoEngine_h
 #define LfoEngine_h
 
-#include "curve.h"
 #include "lfo.h"
 #include "rng.h"
 
