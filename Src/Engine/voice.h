@@ -162,7 +162,7 @@ class Voice {
       if (osc.slideEnable1()) {
         int lastNoteValue = cal.noteToValue(lastNote_ + osc.octaveOffset1());
         noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase1_);
-        slidePhase1_ += osc.slideInc1();
+        slidePhase1_ += inc(osc.slideAmmount1());
         if (slidePhase1_ >= 1.f) {
           slidePhase1_ = 1.f;
         }
@@ -183,13 +183,17 @@ class Voice {
       if (osc.slideEnable2()) {
         int lastNoteValue = cal.noteToValue(lastNote_ + osc.octaveOffset2());
         noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase1_);
-        slidePhase1_ += osc.slideInc2();
+        slidePhase1_ += inc(osc.slideAmmount2());
         if (slidePhase1_ >= 1.f) {
           slidePhase1_ = 1.f;
         }
       }
     }
     return SettingsUtils::clip(cal.min(), cal.max(), tuneValue + noteValue);
+  }
+
+  float inc(float value) {
+    return LookupTablesUtils::read(lut_phase_inc, value);
   }
 };
 

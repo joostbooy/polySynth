@@ -5,6 +5,7 @@
 #include "filter.h"
 #include "lfo.h"
 #include "midi.h"
+#include "midiClock.h"
 #include "modMatrix.h"
 #include "oscillator.h"
 #include "amp.h"
@@ -17,6 +18,7 @@ class Patch {
     lfo(0).init();
     lfo(1).init();
     midi().init();
+    midiClock().init();
     oscillator().init();
     filter().init();
     envelope(0).init();
@@ -37,6 +39,10 @@ class Patch {
 
   Midi& midi() {
     return midi_;
+  }
+
+  MidiClock& midiClock() {
+    return midiClock_;
   }
 
   Oscillator& oscillator() {
@@ -70,6 +76,7 @@ class Patch {
     lfo_[0].save(fileWriter);
     lfo_[1].save(fileWriter);
     midi_.save(fileWriter);
+    midiClock_.save(fileWriter);
     oscillator_.save(fileWriter);
     filter_.save(fileWriter);
     envelope_[0].save(fileWriter);
@@ -84,6 +91,7 @@ class Patch {
     lfo_[0].load(fileReader);
     lfo_[1].load(fileReader);
     midi_.load(fileReader);
+    midiClock_.load(fileReader);
     oscillator_.load(fileReader);
     filter_.load(fileReader);
     envelope_[0].load(fileReader);
@@ -98,6 +106,7 @@ class Patch {
     lfo_[0].paste(&patch->lfo(0));
     lfo_[1].paste(&patch->lfo(1));
     midi_.paste(&patch->midi());
+    midiClock_.paste(&patch->midiClock());
     oscillator_.paste(&patch->oscillator());
     filter_.paste(&patch->filter());
     envelope_[0].paste(&patch->envelope(0));
@@ -114,6 +123,7 @@ class Patch {
     lfo_[0].writeHash(hash_);
     lfo_[1].writeHash(hash_);
     midi_.writeHash(hash_);
+    midiClock_.writeHash(hash_);
     oscillator_.writeHash(hash_);
     filter_.writeHash(hash_);
     envelope_[0].writeHash(hash_);
@@ -129,6 +139,7 @@ class Patch {
   Lfo lfo_[2];
   Envelope envelope_[2];
   Midi midi_;
+  MidiClock midiClock_;
   Oscillator oscillator_;
   Filter filter_;
   ModMatrix modMatrix_;

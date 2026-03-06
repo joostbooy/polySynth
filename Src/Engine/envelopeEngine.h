@@ -60,7 +60,7 @@ class EnvelopeEngine {
         sample_ = 0.f;
         break;
       case ATTACK:
-        phase_ += envelope_->attackInc();
+        phase_ += readInc(envelope_->attackTime());
         if (phase_ < 1.f) {
           sample_ = readCurve(envelope_->attackShape());
         } else {
@@ -69,7 +69,7 @@ class EnvelopeEngine {
         }
         break;
       case DECAY:
-        phase_ += envelope_->decayInc();
+        phase_ += readInc(envelope_->decayTime());
         if (phase_ < 1.f) {
           sample_ = Dsp::cross_fade(1.f, envelope_->sustainLevel(), readCurve(envelope_->decayShape()));
         } else {
@@ -86,9 +86,9 @@ class EnvelopeEngine {
         sample_ = envelope_->sustainLevel();
         break;
       case HOLD:
-        phase_ += envelope_->holdInc();
+        phase_ += readInc(envelope_->holdTime());
         if (phase_ < 1.f) {
-          sample_ = envelope_->sustainLevel();
+          sample_ = readInc(envelope_->sustainLevel());
         } else {
           phase_ = 0.f;
           releaseLevel_ = sample_;
@@ -96,7 +96,7 @@ class EnvelopeEngine {
         }
         break;
       case RELEASE:
-        phase_ += envelope_->releaseInc();
+        phase_ += readInc(envelope_->releaseTime());
         if (phase_ < 1.f) {
           sample_ = Dsp::cross_fade(releaseLevel_, 0.f, readCurve(envelope_->releaseShape()));
         } else {
@@ -123,6 +123,15 @@ class EnvelopeEngine {
   float readCurve(float shape) {
     return LookupTablesUtils::readInterpolated(lut_exp, lut_inv_exp, phase_, shape);
   }
+
+  float readInc(float value) {
+    if (envelope_->clockSync()) {
+      return MidiClockEngine::readInc(value);
+    } else {
+      return LookupTablesUtils::read(lut_phase_inc, value);
+    }
+  }
+
 };
 
 #endif

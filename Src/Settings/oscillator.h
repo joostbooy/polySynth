@@ -299,7 +299,7 @@ class Oscillator {
 
   // Slide ammount 1
   float slideAmmount1() {
-    return slideAmmount1_;
+    return 1.f - slideAmmount1_;
   }
 
   void setSlideAmmount1(float value) {
@@ -307,16 +307,12 @@ class Oscillator {
   }
 
   const char* slideAmmount1Text() {
-    return SettingsText::phaseIncToMilis(slideInc1());
+    return SettingsText::phaseIncToMilis(LookupTablesUtils::read(lut_phase_inc, slideAmmount1()));
   }
-
-  float slideInc1() {
-    return LookupTablesUtils::read(lut_phase_inc, 1.f - slideAmmount1());
-  }
-
+  
   // Slide ammount 2
   float slideAmmount2() {
-    return linkSlideAmmount() ? slideAmmount1_ : slideAmmount2_;
+    return 1.f - (linkSlideAmmount() ? slideAmmount1_ : slideAmmount2_);
   }
 
   void setSlideAmmount2(float value) {
@@ -324,11 +320,7 @@ class Oscillator {
   }
 
   const char* slideAmmount2Text() {
-    return SettingsText::phaseIncToMilis(slideInc1());
-  }
-
-  float slideInc2() {
-    return LookupTablesUtils::read(lut_phase_inc, 1.f - slideAmmount2());
+    return SettingsText::phaseIncToMilis(LookupTablesUtils::read(lut_phase_inc, slideAmmount2()));
   }
 
   // Octave offset 1
@@ -507,6 +499,10 @@ class Oscillator {
   Type1 type1_;
   Type2 type2_;
   VoiceMode voiceMode_;
+
+  float readPhaseInc(float value) {
+    return LookupTablesUtils::read(lut_phase_inc, value);
+  }
 };
 
 #endif  // Oscilator_h

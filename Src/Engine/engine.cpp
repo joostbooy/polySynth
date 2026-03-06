@@ -6,7 +6,7 @@ void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac) {
   midiEngine_.init(uart, usb, &settings_->midi());
   modMatrixEngine_.init(settings_);
   voiceEngine_.init(settings_, &modMatrixEngine_, dac);
-  midiClockEngine_.init(&settings->midi());
+  midiClockEngine_.init(&settings->midiClock());
 
   for (size_t i = 0; i < 2; i++) {
     gate_[i] = false;
@@ -53,7 +53,7 @@ void Engine::cc(MidiEngine::Event& e) {
 void Engine::tick() {
     if (midiClockEngine_.tick()) {
     for (size_t i = 0; i < Midi::NUM_PORTS; i++) {
-      if (settings_->midi().sendClock(i)) {
+      if (settings_->midiClock().sendClock(i)) {
           midiEngine_.writeClock(i, MidiEngine::CLOCK_PULSE);
       }
     }

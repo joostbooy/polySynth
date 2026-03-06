@@ -5,7 +5,7 @@
 #include "fileWriter.h"
 #include "midi.h"
 #include "midiEngine.h"
-#include "midiSync.h"
+#include "midiClock.h"
 #include "settingsText.h"
 #include "settingsUtils.h"
 #include "lookupTablesUtils.h"
@@ -70,17 +70,9 @@ class Lfo {
 
   const char* speedText() {
     if (clockSync()) {
-      return MidiSync::tempoText(speed());
+      return MidiClock::tempoText(speed());
     } else {
-      return SettingsText::phaseIncToHertz(inc());
-    }
-  }
-  
-  float inc() {
-    if (clockSync()) {
-      return MidiSync::readInc(speed());
-    } else {
-      return LookupTablesUtils::read(lut_phase_inc, speed());
+      return SettingsText::phaseIncToHertz(LookupTablesUtils::read(lut_phase_inc, speed()));
     }
   }
 

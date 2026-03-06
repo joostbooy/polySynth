@@ -3,7 +3,7 @@
 
 #include "fileReader.h"
 #include "fileWriter.h"
-#include "midiSync.h"
+#include "midiClock.h"
 #include "settingsText.h"
 #include "settingsUtils.h"
 #include "lookupTablesUtils.h"
@@ -80,17 +80,9 @@ class Envelope {
 
   const char* attackTimeText() {
     if (clockSync()) {
-      return MidiSync::tempoText(attackTime());
+      return MidiClock::tempoText(attackTime());
     } else {
-      return SettingsText::phaseIncToMilis(attackInc());
-    }
-  }
-
-  float attackInc() {
-    if (clockSync()) {
-      return MidiSync::readInc(attackTime());
-    } else {
-      return LookupTablesUtils::read(lut_phase_inc, attackTime());
+      return SettingsText::phaseIncToMilis(LookupTablesUtils::read(lut_phase_inc, attackTime()));
     }
   }
 
@@ -118,17 +110,9 @@ class Envelope {
 
   const char* decayTimeText() {
     if (clockSync()) {
-      return MidiSync::tempoText(decayTime());
+      return MidiClock::tempoText(decayTime());
     } else {
-      return SettingsText::phaseIncToMilis(decayInc());
-    }
-  }
-
-  float decayInc() {
-    if (clockSync()) {
-      return MidiSync::readInc(decayTime());
-    } else {
-      return LookupTablesUtils::read(lut_phase_inc, decayTime());
+      return SettingsText::phaseIncToMilis(LookupTablesUtils::read(lut_phase_inc, decayTime()));
     }
   }
 
@@ -160,17 +144,9 @@ class Envelope {
     if (mode() == GATE) {
       return "-";
     } else if (clockSync()) {
-      return MidiSync::tempoText(holdTime());
+      return MidiClock::tempoText(holdTime());
     } else {
-      return SettingsText::phaseIncToMilis(holdInc());
-    }
-  }
-
-  float holdInc() {
-    if (clockSync()) {
-      return MidiSync::readInc(holdTime());
-    } else {
-      return LookupTablesUtils::read(lut_phase_inc, holdTime());
+      return SettingsText::phaseIncToMilis(LookupTablesUtils::read(lut_phase_inc, holdTime()));
     }
   }
 
@@ -198,17 +174,9 @@ class Envelope {
 
   const char* releaseTimeText() {
     if (clockSync()) {
-      return MidiSync::tempoText(releaseTime());
+      return MidiClock::tempoText(releaseTime());
     } else {
-      return SettingsText::phaseIncToMilis(releaseInc());
-    }
-  }
-
-  float releaseInc() {
-    if (clockSync()) {
-      return MidiSync::readInc(releaseTime());
-    } else {
-      return LookupTablesUtils::read(lut_phase_inc, releaseTime());
+      return SettingsText::phaseIncToMilis(LookupTablesUtils::read(lut_phase_inc, releaseTime()));
     }
   }
 

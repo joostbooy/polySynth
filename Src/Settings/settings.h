@@ -107,6 +107,11 @@ class Settings {
     return selectedPatch().midi();
   }
 
+  // midi clock
+  MidiClock& midiClock() {
+    return selectedPatch().midiClock();
+  }
+
   // Envelope
   Envelope& envelope(int index) {
     return selectedPatch().envelope(index);

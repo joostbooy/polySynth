@@ -53,13 +53,14 @@ class MidiList : public SettingsList {
 
   const char* valueText(int item) override {
     Midi& midi = settings_->midi();
+    MidiClock& midiClock = settings_->midiClock();
     ModMatrix& modMatrix = settings_->modMatrix();
 
     switch (item) {
       case BPM:             return bpmText();
-      case CLOCK_SOURCE:    return midi.clockSourceText();
-      case SEND_CLOCK_UART: return midi.sendClock_text(Midi::UART);
-      case SEND_CLOCK_USB:  return midi.sendClock_text(Midi::USB);
+      case CLOCK_SOURCE:    return midiClock.clockSourceText();
+      case SEND_CLOCK_UART: return midiClock.sendClock_text(Midi::UART);
+      case SEND_CLOCK_USB:  return midiClock.sendClock_text(Midi::USB);
       case KEY_RANGE_LOW:   return midi.keyRangeLowText();
       case KEY_RANGE_HIGH:  return midi.keyRangeHighText();
       case PORT_RECEIVE:    return midi.portReceiveText();
@@ -78,26 +79,27 @@ class MidiList : public SettingsList {
 
   void edit(int item, int inc, bool shifted) override {
     Midi& midi = settings_->midi();
+    MidiClock& midiClock = settings_->midiClock();
     ModMatrix& modMatrix = settings_->modMatrix();
 
     switch (item) {
       case BPM:
-        if (midi.clockSource() == Midi::INTERNAL) {
+        if (midiClock.clockSource() == MidiClock::INTERNAL) {
           if (shifted) {
-            midi.setBpmFractional(midi.bpmFractional() + inc);
+            midiClock.setBpmFractional(midiClock.bpmFractional() + inc);
           } else {
-            midi.setBpm(midi.bpm() + inc);
+            midiClock.setBpm(midiClock.bpm() + inc);
           }
         }
         break;
       case CLOCK_SOURCE:
-        midi.setClockSource(midi.clockSource() + inc);
+        midiClock.setClockSource(midiClock.clockSource() + inc);
         break;
       case SEND_CLOCK_UART:
-        midi.setSendClock(Midi::UART, inc > 0);
+        midiClock.setSendClock(Midi::UART, inc > 0);
         break;
       case SEND_CLOCK_USB:
-        midi.setSendClock(Midi::USB, inc > 0);
+        midiClock.setSendClock(Midi::USB, inc > 0);
         break;
       case KEY_RANGE_LOW:
         engine_->addReqestBlocking(Engine::STOP);

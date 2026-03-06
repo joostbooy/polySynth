@@ -83,7 +83,7 @@ class LfoEngine {
 
     value_ = Dsp::cross_fade(lastValue_, targetValue_, x);
 
-    phase_ += lfo_->inc();
+    phase_ += readInc();
     if (phase_ >= 1.f) {
       phase_ = lfo_->oneShot() ? 1.f : 0.f;
     }
@@ -110,6 +110,14 @@ class LfoEngine {
       } else {
         targetValue_ = (stage_ == RISING) ? lfo_->max() : lfo_->min();
       }
+    }
+  }
+
+  float readInc() {
+    if (lfo_->clockSync()) {
+      return MidiClockEngine::readInc(lfo_->speed());
+    } else {
+      return LookupTablesUtils::read(lut_phase_inc, lfo_->speed());
     }
   }
 };
