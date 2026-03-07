@@ -43,11 +43,16 @@ class Midi {
   }
 
   void setChannelReceive(int value) {
-    channelReceive_ = SettingsUtils::clip(0, 16, value);
+    channelReceive_ = SettingsUtils::clip(-1, 16, value);
   }
 
   const char* channelReceiveText() {
-    return SettingsText::midiChannelText(channelReceive());
+    if (channelReceive() < 0) {
+      return "NONE";
+    } else if (channelReceive() >= 16) {
+      return "ALL";
+    }
+    return SettingsText::intToText(channelReceive() + 1);
   }
 
   // port receive

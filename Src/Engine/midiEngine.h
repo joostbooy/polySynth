@@ -84,7 +84,7 @@ class MidiEngine {
   }
 
   bool messageAccepted(Event& e) {
-    return (e.message & 0x0F) == midi_->channelReceive() && e.port == midi_->portReceive();
+    return channelAccepted(e) == true && e.port == midi_->portReceive();
   }
 
   bool withinKeyRange(Event& e) {
@@ -157,6 +157,15 @@ class MidiEngine {
       }
     }
     return false;
+  }
+
+  bool channelAccepted(Event& e) {
+    if (midi_->channelReceive() < 0) {
+      return false;
+    } else if (midi_->channelReceive() >= 16) {
+      return true;
+    }
+    return (e.message & 0x0F) == midi_->channelReceive();
   }
 };
 

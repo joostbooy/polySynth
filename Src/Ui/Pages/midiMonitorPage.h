@@ -69,7 +69,7 @@ namespace MidiMonitorPage {
   }
 
   const char* channelText(MidiEngine::Event& e) {
-    return SettingsText::midiChannelText(e.message & 0x0F);
+    return SettingsText::str.write("CHN ", (e.message & 0x0F) + 1);
   }
 
   const char* messageTypeText(MidiEngine::Event& e) {

@@ -82,7 +82,7 @@ class Envelope {
     if (clockSync()) {
       return MidiClock::tempoText(attackTime());
     } else {
-      return SettingsText::phaseIncToMilis(LookupTablesUtils::read(lut_phase_inc, attackTime()));
+      return SettingsText::phaseIncToMilis(readPhaseInc(attackTime()));
     }
   }
 
@@ -112,7 +112,7 @@ class Envelope {
     if (clockSync()) {
       return MidiClock::tempoText(decayTime());
     } else {
-      return SettingsText::phaseIncToMilis(LookupTablesUtils::read(lut_phase_inc, decayTime()));
+      return SettingsText::phaseIncToMilis(readPhaseInc(decayTime()));
     }
   }
 
@@ -146,7 +146,7 @@ class Envelope {
     } else if (clockSync()) {
       return MidiClock::tempoText(holdTime());
     } else {
-      return SettingsText::phaseIncToMilis(LookupTablesUtils::read(lut_phase_inc, holdTime()));
+      return SettingsText::phaseIncToMilis(readPhaseInc(holdTime()));
     }
   }
 
@@ -176,7 +176,7 @@ class Envelope {
     if (clockSync()) {
       return MidiClock::tempoText(releaseTime());
     } else {
-      return SettingsText::phaseIncToMilis(LookupTablesUtils::read(lut_phase_inc, releaseTime()));
+      return SettingsText::phaseIncToMilis(readPhaseInc(releaseTime()));
     }
   }
 
@@ -293,6 +293,10 @@ class Envelope {
   float sustainLevel_;
   float releaseTime_;
   float releaseShape_;
+
+  float readPhaseInc(float value) {
+    return LookupTablesUtils::read(lut_phase_inc, value);
+  }
 };
 
 #endif

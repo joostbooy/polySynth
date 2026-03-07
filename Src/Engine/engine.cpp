@@ -29,7 +29,7 @@ void Engine::stop() {
 }
 
 void Engine::noteOn(MidiEngine::Event& e) {
-  if (midiEngine_.messageAccepted(e) && midiEngine_.withinKeyRange(e)) {
+  if (midiEngine_.withinKeyRange(e)) {
     noteQue_.write(e);
     voiceEngine_.requestVoice();
   }
@@ -105,24 +105,26 @@ void Engine::processMidi() {
   MidiEngine::Event e;
 
   while (midiEngine_.pull(e)) {
-    switch (midiEngine_.readMessage(e)) {
-      case MidiEngine::NOTE_ON:
-        noteOn(e);
-        break;
-      case MidiEngine::NOTE_OFF:
-        noteOff(e);
-        break;
-      case MidiEngine::PITCH_BEND:
-        pitchBend(e);
-        break;
-      case MidiEngine::CONTROLLER_CHANGE:
-        cc(e);
-        break;
-      case MidiEngine::CLOCK_START:
-        start();
-        break;
-      default:
-        break;
+    if (midiEngine_.messageAccepted(e)) {
+      switch (midiEngine_.readMessage(e)) {
+        case MidiEngine::NOTE_ON:
+          noteOn(e);
+          break;
+        case MidiEngine::NOTE_OFF:
+          noteOff(e);
+          break;
+        case MidiEngine::PITCH_BEND:
+          pitchBend(e);
+          break;
+        case MidiEngine::CONTROLLER_CHANGE:
+          cc(e);
+          break;
+        case MidiEngine::CLOCK_START:
+          start();
+          break;
+        default:
+          break;
+      }
     }
   }
 }

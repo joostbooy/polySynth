@@ -41,16 +41,6 @@ class SettingsText {
     return str.write(note_text_[note], oct);
   }
 
-  static const char* midiChannelText(int channel) {
-    if (channel < 0) {
-      return "NONE";
-    } else if (channel >= 16) {
-      return "OMNI";
-    }
-
-    return str.write(channel + 1);
-  }
-
   static const char* kbToMemSizeText(uint32_t kb) {
     uint32_t gb = kb / 1000000;
     uint32_t mb = kb / 1000;
