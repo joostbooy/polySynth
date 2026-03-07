@@ -81,7 +81,7 @@ class VoiceEngine {
       case Oscillator::UNISON:
         return availableVoices_.size() == Settings::kNumVoices;
       case Oscillator::POLY:
-         return availableVoices_.size() > 0;
+        return availableVoices_.size() > 0;
       default:
         break;
     }
@@ -92,13 +92,13 @@ class VoiceEngine {
     switch (settings_->selectedPatch().oscillator().voiceMode()) {
       case Oscillator::MONO:
         availableVoices_.remove_by_value(0);
-        noteOn(0, e);
+        assignVoice(0, e);
       case Oscillator::POLY:
-        noteOn(availableVoices_.pop(), e);
+        assignVoice(availableVoices_.pop(), e);
         break;
       case Oscillator::UNISON:
         for (size_t i = 0; i < Settings::kNumVoices; i++) {
-          noteOn(availableVoices_.pop(), e);
+          assignVoice(availableVoices_.pop(), e);
         }
         break;
       default:
@@ -126,7 +126,7 @@ class VoiceEngine {
     }
   }
 
-  void noteOn(int voiceIndex, MidiEngine::Event& e) {
+  void assignVoice(int voiceIndex, MidiEngine::Event& e) {
     voice_[voiceIndex].noteOn(e);
     activeVoices_.push(voiceIndex);
     mostRecentVoice_ = voiceIndex;
