@@ -8,13 +8,16 @@
 
 class Voice {
  public:
-  enum State { IDLE = 0, ACTIVE = 1 };
+  enum State {
+    AVAILABLE = 0,
+    ACTIVE = 1,
+  };
 
   void init(Settings* settings, ModMatrixEngine* modMatrixEngine, Dac *dac) {
     dac_ = dac;
     settings_ = settings;
     modMatrixEngine_ = modMatrixEngine;
-    state_ = IDLE;
+    state_ = AVAILABLE;
     keyPressed_ = false;
     stopRequested_ = false;
     note_ = 60;
@@ -60,7 +63,7 @@ class Voice {
   }
 
   bool isAvailable() {
-    return state_ == IDLE;
+    return state_ == AVAILABLE;
   }
 
   void noteOn(MidiEngine::Event& e) {
@@ -121,7 +124,7 @@ class Voice {
     dac_->set(index, 11, data[ModMatrix::RESONANCE_1] * 65535);
 
     if (fadePhase_ == 0.f || envelopeEngine_[0].stage() == EnvelopeEngine::IDLE) {
-      state_ = IDLE;
+      state_ = AVAILABLE;
     }
 
     if (settings_->calibration().enabled()) {
