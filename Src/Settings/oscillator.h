@@ -499,10 +499,6 @@ class Oscillator {
   Type1 type1_;
   Type2 type2_;
   VoiceMode voiceMode_;
-
-  float readPhaseInc(float value) {
-    return LookupTablesUtils::read(lut_phase_inc, value);
-  }
 };
 
 #endif  // Oscilator_h
