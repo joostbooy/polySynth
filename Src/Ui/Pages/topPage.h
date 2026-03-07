@@ -307,9 +307,9 @@ namespace TopPage {
   }
 
   void drawPots() {
-    int w = 100;
+    int w = 64;
     int h = 30;
-    int x = (canvas_->width() - w) / 2;
+    int x = canvas_->width() - w;
     int y = (canvas_->height() - h) / 2;
 
     for (size_t i = 0; i < Pots::NUM_POTS; i++) {
