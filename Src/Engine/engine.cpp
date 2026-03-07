@@ -77,12 +77,11 @@ void Engine::setGate(int index, bool state) {
 void Engine::processGates() {
   for (size_t i = 0; i < 2; i++) {
     MidiEngine::Event e = gateToNote_[i];
-    bool state = gate_[i];
 
-    if (state != lastGate_[i]) {
-      lastGate_[i] = state;
+    if (gate_[i] != lastGate_[i]) {
+      lastGate_[i] = gate_[i];
 
-      if (state) {
+      if (gate_[i]) {
         int note = settings_->midi().gateToNote(i);
         if (note >= 0) {
           e.port = settings_->midi().portReceive();
