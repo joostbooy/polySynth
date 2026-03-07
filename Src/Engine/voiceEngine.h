@@ -76,29 +76,33 @@ class VoiceEngine {
   }
 
   bool available() {
-    return availableVoices_.size() > 0;
-  }
-
-  void assignVoice(MidiEngine::Event e) {
-    size_t count = 0;
-
     switch (settings_->selectedPatch().oscillator().voiceMode()) {
       case Oscillator::MONO:
-      case Oscillator::POLY:
-        count = 1;
-        break;
       case Oscillator::UNISON:
-        count = availableVoices_.size();
-        break;
+        return availableVoices_.size() == Settings::kNumVoices;
+      case Oscillator::POLY:
+         return availableVoices_.size() > 0;
       default:
         break;
     }
+    return false;
+  }
 
-    for (size_t i = 0; i < count; i++) {
-      uint8_t v = availableVoices_.pop();
-      voice_[v].noteOn(e);
-      activeVoices_.push(v);
-      mostRecentVoice_ = v;
+  void assignVoice(MidiEngine::Event e) {
+    switch (settings_->selectedPatch().oscillator().voiceMode()) {
+      case Oscillator::MONO:
+        availableVoices_.remove_by_value(0);
+        pushVoice(0, e);
+      case Oscillator::POLY:
+        pushVoice(availableVoices_.pop(), e);
+        break;
+      case Oscillator::UNISON:
+        for (size_t i = 0; i < Settings::kNumVoices; i++) {
+          pushVoice(availableVoices_.pop(), e);
+        }
+        break;
+      default:
+        break;
     }
   }
 
@@ -120,6 +124,12 @@ class VoiceEngine {
         ++index;
       }
     }
+  }
+
+  void pushVoice(int voiceIndex, MidiEngine::Event& e) {
+    voice_[voiceIndex].noteOn(e);
+    activeVoices_.push(voiceIndex);
+    mostRecentVoice_ = voiceIndex;
   }
 };
 
