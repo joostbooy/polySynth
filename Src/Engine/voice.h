@@ -46,10 +46,6 @@ class Voice {
     return keyPressed_;
   }
 
-  State state() {
-    return state_;
-  }
-
   EnvelopeEngine& envelopeEngine(int index) {
     return envelopeEngine_[index];
   }
