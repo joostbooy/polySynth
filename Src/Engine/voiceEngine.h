@@ -56,7 +56,7 @@ class VoiceEngine {
     updateAvailableVoices();
   }
 
-  void requestVoice(size_t count) {
+  void requestVoices(size_t count) {
     if (numQued_ < count) {
       switch (settings_->oscillator().voiceMode()) {
         case Oscillator::MONO:
@@ -100,11 +100,9 @@ class VoiceEngine {
 
   bool available() {
     switch (settings_->oscillator().voiceMode()) {
-      case Oscillator::MONO:
-      case Oscillator::UNISON:
-        return availableVoices_.size() == Settings::kNumVoices;
-      case Oscillator::POLY:
-        return availableVoices_.size() > 0;
+      case Oscillator::MONO:    return availableVoices_.size() >= 1;
+      case Oscillator::UNISON:  return availableVoices_.size() == Settings::kNumVoices;
+      case Oscillator::POLY:    return availableVoices_.size() >= 1;
       default:
         break;
     }

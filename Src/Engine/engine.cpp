@@ -168,7 +168,7 @@ void Engine::update() {
       if (voiceEngine_.available()) {
         voiceEngine_.assignVoice(noteQue_.read());
       } else {
-        voiceEngine_.requestVoice(noteQue_.size());
+        voiceEngine_.requestVoices(noteQue_.size());
         break;
       }
     }
