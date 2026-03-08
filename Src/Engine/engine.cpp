@@ -29,7 +29,7 @@ void Engine::stop() {
 }
 
 void Engine::noteOn(MidiEngine::Event& e) {
-  if (midiEngine_.withinKeyRange(e)) {
+  if (midiEngine_.withinKeyRange(e) && noteQue_.writeable()) {
     noteQue_.write(e);
     voiceEngine_.requestVoice();
   }

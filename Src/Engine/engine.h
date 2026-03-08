@@ -65,7 +65,7 @@ class Engine {
   VoiceEngine voiceEngine_;
   MidiClockEngine midiClockEngine_;
   ModMatrixEngine modMatrixEngine_;
-  Que<MidiEngine::Event, 16> noteQue_;
+  Que<MidiEngine::Event, Settings::kNumVoices * 2> noteQue_; // dont increase! we can assign 8 voices and request 8 others
   bool gate_[2];
   bool lastGate_[2];
   MidiEngine::Event gateToNote_[2];
