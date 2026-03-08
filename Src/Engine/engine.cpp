@@ -161,7 +161,7 @@ void Engine::update() {
     processGates();
 
     // only use the latets notes that are needed for the voice mode
-    while (noteQue_.size() > voiceEngine_.numVoicesInMode()) {
+    while (noteQue_.size() > voiceEngine_.maxNotesInMode()) {
       noteQue_.swallow();
     }
 

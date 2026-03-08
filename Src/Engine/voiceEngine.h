@@ -32,13 +32,11 @@ class VoiceEngine {
     return activeVoices_.size();
   }
 
-  size_t numVoicesInMode() {
+  size_t maxNotesInMode() {
     switch (settings_->oscillator().voiceMode()) {
       case Oscillator::MONO:
-      case Oscillator::UNISON:
-        return 1;
-      case Oscillator::POLY:
-        return Settings::kNumVoices;
+      case Oscillator::UNISON:  return 1;
+      case Oscillator::POLY:    return Settings::kNumVoices;
       default:
         break;
     }
