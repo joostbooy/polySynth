@@ -55,21 +55,15 @@ class VoiceEngine {
   }
 
   void requestVoices(size_t count) {
-    if (numQued_ < count) {
-      switch (settings_->oscillator().voiceMode()) {
-        case Oscillator::MONO:
-          for (size_t i = 0; i < Settings::kNumVoices; i++) {
-            voice_[i].requestStop();
-          }
-          numQued_ = 1;
-          break;
-        case Oscillator::UNISON:
-          for (size_t i = 0; i < Settings::kNumVoices; i++) {
-            voice_[i].requestStop();
-          }
-          numQued_ = Settings::kNumVoices;
-          break;
-        case Oscillator::POLY: {
+    switch (settings_->oscillator().voiceMode()) {
+      case Oscillator::MONO:
+      case Oscillator::UNISON:
+        for (size_t i = 0; i < Settings::kNumVoices; i++) {
+          voice_[i].requestStop();
+        }
+        break;
+      case Oscillator::POLY:
+        if (numQued_ < count) {
           int needed = count - numQued_;
           while (needed--) {
             uint8_t v = activeVoices_.pull();
@@ -77,10 +71,10 @@ class VoiceEngine {
             activeVoices_.push(v);
             ++numQued_;
           }
-        } break;
-        default:
-          break;
-      }
+        }
+        break;
+      default:
+        break;
     }
   }
 
