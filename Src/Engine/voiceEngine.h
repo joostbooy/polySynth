@@ -39,7 +39,7 @@ class VoiceEngine {
     return activeVoices_.size();
   }
 
-  size_t maxNotesInMode() {
+  size_t maxNotes() {
     switch (settings_->oscillator().voiceMode()) {
       case Oscillator::MONO:
       case Oscillator::UNISON:  return 1;
@@ -70,14 +70,11 @@ class VoiceEngine {
         }
         break;
       case Oscillator::POLY:
-        if (numQued_ < count) {
-          int needed = count - numQued_;
-          while (needed--) {
-            uint8_t v = activeVoices_.pull();
-            voice_[v].requestStop();
-            activeVoices_.push(v);
-            ++numQued_;
-          }
+        while (numQued_ < count) {
+          uint8_t v = activeVoices_.pull();
+          voice_[v].requestStop();
+          activeVoices_.push(v);
+          ++numQued_;
         }
         break;
       default:
