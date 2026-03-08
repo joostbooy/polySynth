@@ -35,8 +35,10 @@ class VoiceEngine {
   size_t numVoicesInMode() {
     switch (settings_->oscillator().voiceMode()) {
       case Oscillator::MONO:
-      case Oscillator::UNISON:  return 1;
-      case Oscillator::POLY:    return Settings::kNumVoices;
+      case Oscillator::UNISON:
+        return 1;
+      case Oscillator::POLY:
+        return Settings::kNumVoices;
       default:
         break;
     }
@@ -54,23 +56,33 @@ class VoiceEngine {
     updateAvailableVoices();
   }
 
-  void requestVoice() {
-    switch (settings_->oscillator().voiceMode()) {
-      case Oscillator::MONO:
-      case Oscillator::UNISON:
-        for (size_t i = 0; i < Settings::kNumVoices; i++) {
-          voice_[i].requestStop();
-        }
-        break;
-      case Oscillator::POLY: {
-        if (availableVoices_.size() == 0) {
-          uint8_t v = activeVoices_.pull();
-          voice_[v].requestStop();
-          activeVoices_.push(v);
-        }
-      } break;
-      default:
-        break;
+  void requestVoice(size_t count) {
+    if (numQued_ < count) {
+      switch (settings_->oscillator().voiceMode()) {
+        case Oscillator::MONO:
+          for (size_t i = 0; i < Settings::kNumVoices; i++) {
+            voice_[i].requestStop();
+          }
+          numQued_ = 1;
+          break;
+        case Oscillator::UNISON:
+          for (size_t i = 0; i < Settings::kNumVoices; i++) {
+            voice_[i].requestStop();
+          }
+          numQued_ = Settings::kNumVoices;
+          break;
+        case Oscillator::POLY: {
+          int needed = count - numQued_;
+          while (needed--) {
+            uint8_t v = activeVoices_.pull();
+            voice_[v].requestStop();
+            activeVoices_.push(v);
+            ++numQued_;
+          }
+        } break;
+        default:
+          break;
+      }
     }
   }
 
@@ -122,6 +134,7 @@ class VoiceEngine {
   Voice voice_[Settings::kNumVoices];
   Stack<uint8_t, Settings::kNumVoices> activeVoices_;
   Stack<uint8_t, Settings::kNumVoices> availableVoices_;
+  uint8_t numQued_ = 0;
   uint8_t mostRecentVoice_ = 0;
 
   void updateAvailableVoices() {
@@ -141,6 +154,9 @@ class VoiceEngine {
     voice_[voiceIndex].noteOn(e);
     activeVoices_.push(voiceIndex);
     mostRecentVoice_ = voiceIndex;
+    if (numQued_ > 0) {
+      --numQued_;
+    }
   }
 };
 

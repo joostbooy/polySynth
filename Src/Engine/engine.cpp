@@ -31,8 +31,6 @@ void Engine::stop() {
 void Engine::noteOn(MidiEngine::Event& e) {
   if (midiEngine_.withinKeyRange(e)) {
     noteQue_.write(e);
-    voiceEngine_.requestVoice();
-
     // only use the latets notes
     while (noteQue_.size() > voiceEngine_.numVoicesInMode()) {
       noteQue_.swallow();
@@ -166,10 +164,15 @@ void Engine::update() {
     processMidi();
     processGates();
 
-    while (voiceEngine_.available() && noteQue_.readable()) {
-      voiceEngine_.assignVoice(noteQue_.read());
+    while (noteQue_.readable()) {
+      if (voiceEngine_.available()) {
+        voiceEngine_.assignVoice(noteQue_.read());
+      } else {
+        voiceEngine_.requestVoice(noteQue_.size());
+        break;
+      }
     }
-    
+
     voiceEngine_.update();
   }
 
