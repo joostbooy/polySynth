@@ -33,12 +33,10 @@ class VoiceEngine {
   }
 
   size_t numVoicesInMode() {
-    switch (settings_->selectedPatch().oscillator().voiceMode()) {
+    switch (settings_->oscillator().voiceMode()) {
       case Oscillator::MONO:
-      case Oscillator::UNISON:
-        return 1;
-      case Oscillator::POLY:
-        return Settings::kNumVoices;
+      case Oscillator::UNISON:  return 1;
+      case Oscillator::POLY:    return Settings::kNumVoices;
       default:
         break;
     }
@@ -57,7 +55,7 @@ class VoiceEngine {
   }
 
   void requestVoice() {
-    switch (settings_->selectedPatch().oscillator().voiceMode()) {
+    switch (settings_->oscillator().voiceMode()) {
       case Oscillator::MONO:
       case Oscillator::UNISON:
         for (size_t i = 0; i < Settings::kNumVoices; i++) {
@@ -89,7 +87,7 @@ class VoiceEngine {
   }
 
   bool available() {
-    switch (settings_->selectedPatch().oscillator().voiceMode()) {
+    switch (settings_->oscillator().voiceMode()) {
       case Oscillator::MONO:
       case Oscillator::UNISON:
         return availableVoices_.size() == Settings::kNumVoices;
@@ -102,7 +100,7 @@ class VoiceEngine {
   }
 
   void assignVoice(MidiEngine::Event e) {
-    switch (settings_->selectedPatch().oscillator().voiceMode()) {
+    switch (settings_->oscillator().voiceMode()) {
       case Oscillator::MONO:
         availableVoices_.remove_by_value(0);
         noteOn(0, e);
