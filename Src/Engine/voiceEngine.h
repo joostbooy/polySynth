@@ -20,6 +20,13 @@ class VoiceEngine {
     }
   }
 
+  void clear() {
+    numQued_ = 0;
+    for (size_t i = 0; i < Settings::kNumVoices; i++) {
+      voice_[i].requestStop();
+    }
+  }
+
   Voice& voice(uint8_t index) {
     return voice_[index];
   }

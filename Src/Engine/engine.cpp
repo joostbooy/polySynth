@@ -25,7 +25,8 @@ void Engine::start() {
 }
 
 void Engine::stop() {
-  //
+  voiceEngine_.clear();
+  noteQue_.clear();
 }
 
 void Engine::noteOn(MidiEngine::Event& e) {
@@ -134,17 +135,12 @@ void Engine::processRequests() {
 
   if (requests_ & START) {
     start();
-
     state_ = RUNNING;
     clearRequest(START);
   }
 
   if (requests_ & STOP) {
-    for (size_t i = 0; i < Settings::kNumVoices; i++) {
-      voiceEngine_.voice(i).requestStop();
-    }
-    noteQue_.clear();
-
+    stop();
     state_ = STOPPED;
     clearRequest(STOP);
   }
