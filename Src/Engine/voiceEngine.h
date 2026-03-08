@@ -98,7 +98,7 @@ class VoiceEngine {
 
   bool available() {
     switch (settings_->oscillator().voiceMode()) {
-      case Oscillator::MONO:    return availableVoices_.size() >= 1;
+      case Oscillator::MONO:   
       case Oscillator::UNISON:  return availableVoices_.size() == Settings::kNumVoices;
       case Oscillator::POLY:    return availableVoices_.size() >= 1;
       default:
