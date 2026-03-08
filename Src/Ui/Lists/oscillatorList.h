@@ -104,7 +104,9 @@ class OscillatorList : public SettingsList {
 
     switch (item) {
       case VOICE_MODE:
+        engine_->addReqestBlocking(Engine::STOP);
         oscillator.setVoiceMode(oscillator.voiceMode() + inc);
+        engine_->addReqestBlocking(Engine::START);
         break;
       case TRACK_NOTE_1:
         oscillator.setTrackNote1(inc > 0);
