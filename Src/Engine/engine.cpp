@@ -29,9 +29,14 @@ void Engine::stop() {
 }
 
 void Engine::noteOn(MidiEngine::Event& e) {
-  if (midiEngine_.withinKeyRange(e) && noteQue_.writeable()) {
+  if (midiEngine_.withinKeyRange(e)) {
     noteQue_.write(e);
     voiceEngine_.requestVoice();
+
+    // only use the latets notes
+    while (noteQue_.size() > voiceEngine_.numVoicesInMode()) {
+      noteQue_.swallow();
+    }
   }
 }
 
@@ -51,10 +56,10 @@ void Engine::cc(MidiEngine::Event& e) {
 
 // 8Khz, keep short !
 void Engine::tick() {
-    if (midiClockEngine_.tick()) {
+  if (midiClockEngine_.tick()) {
     for (size_t i = 0; i < Midi::NUM_PORTS; i++) {
       if (settings_->midiClock().send(i)) {
-          midiEngine_.writeClock(i, MidiEngine::CLOCK_PULSE);
+        midiEngine_.writeClock(i, MidiEngine::CLOCK_PULSE);
       }
     }
   }
@@ -135,7 +140,7 @@ void Engine::processRequests() {
 
   if (requests_ & START) {
     start();
-    
+
     state_ = RUNNING;
     clearRequest(START);
   }
@@ -145,7 +150,7 @@ void Engine::processRequests() {
       voiceEngine_.voice(i).requestStop();
     }
     noteQue_.clear();
-    
+
     state_ = STOPPED;
     clearRequest(STOP);
   }
@@ -164,6 +169,7 @@ void Engine::update() {
     while (voiceEngine_.available() && noteQue_.readable()) {
       voiceEngine_.assignVoice(noteQue_.read());
     }
+    
     voiceEngine_.update();
   }
 

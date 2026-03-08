@@ -32,6 +32,19 @@ class VoiceEngine {
     return activeVoices_.size();
   }
 
+  size_t numVoicesInMode() {
+    switch (settings_->selectedPatch().oscillator().voiceMode()) {
+      case Oscillator::MONO:
+      case Oscillator::UNISON:
+        return 1;
+      case Oscillator::POLY:
+        return Settings::kNumVoices;
+      default:
+        break;
+    }
+    return 0;
+  }
+
   Voice& mostRecentVoice() {
     return voice(mostRecentVoice_);
   }
