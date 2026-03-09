@@ -6,7 +6,7 @@
 namespace EngineUtils {
 
   static float spread(float value, float spreadAmmount, int playOrder) {
-    float spread_ = spreadAmmount * (0.5f / Settings::kNumVoices) * playOrder;
+    float spread_ = spreadAmmount * (1.f / Settings::kNumVoices) * playOrder;
     if (playOrder % 2) {
       return SettingsUtils::clipFloat(value + spread_);
     } else {
