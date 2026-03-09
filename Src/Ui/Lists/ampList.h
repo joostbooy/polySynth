@@ -8,6 +8,7 @@ class AmpList : public SettingsList {
  public:
   enum Item {
     PAN,
+    PAN_SPREAD,
     DRIVE,
     AM,
 
@@ -20,9 +21,10 @@ class AmpList : public SettingsList {
 
   const char* itemText(int item) override {
     switch (item) {
-      case PAN:   return "PAN";
-      case DRIVE: return "DRIVE";
-      case AM:    return "AM";
+      case PAN:          return "PAN";
+      case PAN_SPREAD:   return "PAN SPREAD";
+      case DRIVE:        return "DRIVE";
+      case AM:           return "AM";
       default:
         break;
     }
@@ -33,9 +35,10 @@ class AmpList : public SettingsList {
     Amp& amp = settings_->amp();
 
     switch (item) {
-      case PAN:   return amp.panText();
-      case DRIVE: return amp.driveText();
-      case AM:    return amp.enableAmText();
+      case PAN:          return amp.panText();
+      case PAN_SPREAD:   return amp.panSpreadText();
+      case DRIVE:        return amp.driveText();
+      case AM:           return amp.enableAmText();
       default:
         break;
     }
@@ -48,6 +51,9 @@ class AmpList : public SettingsList {
     switch (item) {
       case PAN:
         amp.setPan(amp.pan() + SettingsUtils::fInc(inc, shifted));
+        break;
+      case PAN_SPREAD:
+        amp.setPanSpread(amp.panSpread() + SettingsUtils::fInc(inc, shifted));
         break;
       case DRIVE:
         amp.setDrive(amp.drive() + SettingsUtils::fInc(inc, shifted));
