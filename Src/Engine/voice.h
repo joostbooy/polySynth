@@ -13,7 +13,9 @@ class Voice {
     ACTIVE = 1,
   };
 
-  void init(Settings* settings, ModMatrixEngine* modMatrixEngine, Dac *dac) {
+  void init(int index, Settings* settings, ModMatrixEngine* modMatrixEngine, Dac *dac) {
+    index_ = index;
+   
     dac_ = dac;
     settings_ = settings;
     modMatrixEngine_ = modMatrixEngine;
@@ -46,12 +48,12 @@ class Voice {
     return keyPressed_;
   }
 
-  EnvelopeEngine& envelopeEngine(int index) {
-    return envelopeEngine_[index];
+  EnvelopeEngine& envelopeEngine(int index_) {
+    return envelopeEngine_[index_];
   }
 
-  LfoEngine& lfoEngine(int index) {
-    return lfoEngine_[index];
+  LfoEngine& lfoEngine(int index_) {
+    return lfoEngine_[index_];
   }
 
   void requestStop() {
@@ -90,7 +92,7 @@ class Voice {
     envelopeEngine_[1].release();
   }
 
-  void update(int index) {
+  void update(int voiceOrder) {
     if (stopRequested_ == true && fadePhase_ > 0.f) {
         fadePhase_ -= 1000.f / (SAMPLE_RATE * 24.f);
         if (fadePhase_ < 0.f) {
@@ -106,28 +108,28 @@ class Voice {
     modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
     float* data = modMatrixEngine_->process();
 
-    dac_->set(index, 0, data[ModMatrix::SHAPE_2] * 65535);
-    dac_->set(index, 1, data[ModMatrix::VCO_MOD_DEPTH] * 65535);
-    dac_->set(index, 2, data[ModMatrix::SHAPE_1] * 65535);
-    dac_->set(index, 3, calculatePitchOsc1(data[ModMatrix::TUNE_1]));
-    dac_->set(index, 4, data[ModMatrix::DRIVE] * 65535);
-    dac_->set(index, 5, data[ModMatrix::GAIN] * fadePhase_ * 65535);
-    dac_->set(index, 6, data[ModMatrix::RESONANCE_2] * 65535);
-    dac_->set(index, 7, calculatePitchOsc2(data[ModMatrix::TUNE_2]));
-    dac_->set(index, 8, data[ModMatrix::CUTOFF_1] * 65535);
-    dac_->set(index, 9, data[ModMatrix::CUTOFF_2] * 65535);
-    dac_->set(index, 10, data[ModMatrix::PAN] * 65535);
-    dac_->set(index, 11, data[ModMatrix::RESONANCE_1] * 65535);
+    dac_->set(index_, 0, data[ModMatrix::SHAPE_2] * 65535);
+    dac_->set(index_, 1, data[ModMatrix::VCO_MOD_DEPTH] * 65535);
+    dac_->set(index_, 2, data[ModMatrix::SHAPE_1] * 65535);
+    dac_->set(index_, 3, calculatePitchOsc1(data[ModMatrix::TUNE_1]));
+    dac_->set(index_, 4, data[ModMatrix::DRIVE] * 65535);
+    dac_->set(index_, 5, data[ModMatrix::GAIN] * fadePhase_ * 65535);
+    dac_->set(index_, 6, data[ModMatrix::RESONANCE_2] * 65535);
+    dac_->set(index_, 7, calculatePitchOsc2(data[ModMatrix::TUNE_2]));
+    dac_->set(index_, 8, data[ModMatrix::CUTOFF_1] * 65535);
+    dac_->set(index_, 9, data[ModMatrix::CUTOFF_2] * 65535);
+    dac_->set(index_, 10, calculatePan(data[ModMatrix::PAN], voiceOrder));
+    dac_->set(index_, 11, data[ModMatrix::RESONANCE_1] * 65535);
 
     if (fadePhase_ == 0.f || envelopeEngine_[0].stage() == EnvelopeEngine::IDLE) {
       state_ = AVAILABLE;
     }
 
     if (settings_->calibration().enabled()) {
-      uint16_t gain = (index == settings_->calibration().selectedVoice()) ? 65535 : 0;
-      dac_->set(index, 5, gain);
-      dac_->set(index, 3, settings_->calibration().min());
-      dac_->set(index, 7, settings_->calibration().max());
+      uint16_t gain = (index_ == settings_->calibration().selectedVoice()) ? 65535 : 0;
+      dac_->set(index_, 5, gain);
+      dac_->set(index_, 3, settings_->calibration().min());
+      dac_->set(index_, 7, settings_->calibration().max());
     }
   }
 
@@ -139,6 +141,7 @@ class Voice {
   uint8_t port_;
   uint8_t channel_;
   State state_;
+  int index_;
   float velocity_;
   float fadePhase_;
   float slidePhase1_;
@@ -148,6 +151,16 @@ class Voice {
   ModMatrixEngine* modMatrixEngine_;
   EnvelopeEngine envelopeEngine_[2];
   LfoEngine lfoEngine_[Settings::kNumLfos];
+
+  uint16_t calculatePan(float modValue, int voiceOrder) {
+    float spread = settings_->amp().panSpread() * (0.5f / Settings::kNumVoices) * index_;
+
+    if (voiceOrder % 2) {
+      return SettingsUtils::clipFloat(modValue + spread) * 65535;
+    } else {
+      return SettingsUtils::clipFloat(modValue - spread) * 65535;
+    }
+  }
 
   uint16_t calculatePitchOsc1(float modValue) {
     Oscillator& osc = settings_->oscillator();

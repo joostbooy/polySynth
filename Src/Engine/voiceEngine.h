@@ -15,7 +15,7 @@ class VoiceEngine {
     availableVoices_.clear();
 
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
-      voice_[i].init(settings, modMatrixEngine, dac);
+      voice_[i].init(i, settings, modMatrixEngine, dac);
       availableVoices_.push(i);
     }
   }
@@ -56,7 +56,8 @@ class VoiceEngine {
 
   void update() {
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
-      voice_[i].update(i);
+      int voiceOrder = i < activeVoices_.size() ? activeVoices_.read(i) : 0;
+      voice_[i].update(voiceOrder);
     }
     updateAvailableVoices();
   }
