@@ -3,6 +3,7 @@
 
 #include "lfo.h"
 #include "rng.h"
+#include "engineUtils.h"
 
 class LfoEngine {
  public:
@@ -41,9 +42,9 @@ class LfoEngine {
     return value_;
   }
 
-  float next() {
+  float next(int playOrder) {
     float skewPhase;
-    float skewAmount = lfo_->skew();
+    float skewAmount = EngineUtils::spread(lfo_->skew(), lfo_->skewSpread(), playOrder);
 
     if (phase_ < skewAmount) {
       setStage(RISING);

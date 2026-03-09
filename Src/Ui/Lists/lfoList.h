@@ -14,6 +14,7 @@ public:
 		CLOCK_SYNC,
 		TYPE,
 		SKEW,
+		SKEW_SPREAD,
 		MIN,
 		MAX,
 		SYNC_PHASE,
@@ -36,6 +37,7 @@ public:
 		case CLOCK_SYNC:	return "CLOCK SYNC";
 		case TYPE:			return "SHAPE";
 		case SKEW:			return "SKEW";
+		case SKEW_SPREAD:	return "SKEW SPREAD";
 		case MIN:			return "MIN";
 		case MAX:			return "MAX";
 		case SYNC_PHASE:	return "SYNC PHASE";
@@ -58,6 +60,7 @@ public:
 		case CLOCK_SYNC:	return lfo.clockSyncText();
 		case TYPE:			return lfo.typeText();
 		case SKEW:			return lfo.skewText();
+		case SKEW_SPREAD:	return lfo.skewSpreadText();
 		case MIN:			return lfo.minText();
 		case MAX:			return lfo.maxText();
 		case SYNC_PHASE:	return lfo.syncPhaseText();
@@ -89,6 +92,9 @@ public:
 			break;
 		case SKEW:
 			lfo.setSkew(lfo.skew() + SettingsUtils::fInc(inc, shifted));
+			break;
+		case SKEW_SPREAD:
+			lfo.setSkewSpread(lfo.skewSpread() + SettingsUtils::fInc(inc, shifted));
 			break;
 		case MIN:
 			lfo.setMin(lfo.min() + SettingsUtils::fInc(inc, shifted));

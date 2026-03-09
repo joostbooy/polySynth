@@ -35,6 +35,7 @@ class Lfo {
     setType(LINEAR);
     setSpeed(0);
     setSkew(0.5f);
+    setSkewSpread(0.0f);
     setMin(0.0f);
     setMax(1.0f);
     setSyncPhase(0.0f);
@@ -85,6 +86,19 @@ class Lfo {
 
   const char* skewText() {
     return SettingsText::floatToText((skew() * 2.f) - 1.f);
+  }
+
+    // Skew
+  float skewSpread() {
+    return skewSpread_;
+  }
+
+  void setSkewSpread(float value) {
+    skewSpread_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* skewSpreadText() {
+    return SettingsText::floatToText(skewSpread());
   }
 
   // Min
@@ -181,6 +195,7 @@ class Lfo {
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(skew_);
+    fileWriter.write(skewSpread_);
     fileWriter.write(speed_);
     fileWriter.write(min_);
     fileWriter.write(max_);
@@ -194,6 +209,7 @@ class Lfo {
 
   void load(FileReader& fileReader) {
     fileReader.read(skew_);
+    fileReader.read(skewSpread_);
     fileReader.read(speed_);
     fileReader.read(min_);
     fileReader.read(max_);
@@ -207,6 +223,7 @@ class Lfo {
 
   void paste(Lfo* lfo) {
     skew_ = lfo->skew();
+    skewSpread_ = lfo->skewSpread();
     speed_ = lfo->speed();
     min_ = lfo->min();
     max_ = lfo->max();
@@ -221,6 +238,7 @@ class Lfo {
   void writeHash(Hash& hash) {
     hash.write(type_);
     hash.write(skew_);
+    hash.write(skewSpread_);
     hash.write(speed_);
     hash.write(min_);
     hash.write(max_);
@@ -234,6 +252,7 @@ class Lfo {
  private:
   Type type_;
   float skew_;
+  float skewSpread_;
   float speed_;
   float min_;
   float max_;
