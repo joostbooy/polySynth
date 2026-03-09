@@ -31,14 +31,6 @@ class VoiceEngine {
     return voice_[index];
   }
 
-  inline bool isIdle() {
-    return activeVoices_.size() == 0;
-  }
-
-  int numActive() {
-    return activeVoices_.size();
-  }
-
   size_t maxNotes() {
     switch (settings_->oscillator().voiceMode()) {
       case Oscillator::MONO:
@@ -56,9 +48,9 @@ class VoiceEngine {
 
   void update() {
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
-      int voiceOrder = i < activeVoices_.size() ? activeVoices_.read(i) : 0;
-      voice_[i].update(voiceOrder);
+      voice_[i].update(readPlayOrder(i));
     }
+
     updateAvailableVoices();
   }
 
@@ -155,6 +147,15 @@ class VoiceEngine {
     mostRecentVoice_ = voiceIndex;
     if (numRequested_ > 0) {
       --numRequested_;
+    }
+  }
+
+  size_t readPlayOrder(size_t index) {
+    size_t numActive = activeVoices_.size();
+    if (index < numActive) {
+      return activeVoices_.read(index);
+    } else {
+      return availableVoices_.read(index - numActive);
     }
   }
 };

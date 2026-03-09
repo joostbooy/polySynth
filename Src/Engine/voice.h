@@ -92,12 +92,12 @@ class Voice {
     envelopeEngine_[1].release();
   }
 
-  void update(int voiceOrder) {
+  void update(int playOrder) {
     if (stopRequested_ == true && fadePhase_ > 0.f) {
-        fadePhase_ -= 1000.f / (SAMPLE_RATE * 24.f);
-        if (fadePhase_ < 0.f) {
-         fadePhase_ = 0.f; 
-        }
+      fadePhase_ -= 1000.f / (SAMPLE_RATE * 24.f);
+      if (fadePhase_ < 0.f) {
+        fadePhase_ = 0.f;
+      }
     }
 
     modMatrixEngine_->setMidiNote(note_);
@@ -118,7 +118,7 @@ class Voice {
     dac_->set(index_, 7, calculatePitchOsc2(data[ModMatrix::TUNE_2]));
     dac_->set(index_, 8, data[ModMatrix::CUTOFF_1] * 65535);
     dac_->set(index_, 9, data[ModMatrix::CUTOFF_2] * 65535);
-    dac_->set(index_, 10, calculatePan(data[ModMatrix::PAN], voiceOrder));
+    dac_->set(index_, 10, calculatePan(data[ModMatrix::PAN], playOrder));
     dac_->set(index_, 11, data[ModMatrix::RESONANCE_1] * 65535);
 
     if (fadePhase_ == 0.f || envelopeEngine_[0].stage() == EnvelopeEngine::IDLE) {
@@ -152,10 +152,10 @@ class Voice {
   EnvelopeEngine envelopeEngine_[2];
   LfoEngine lfoEngine_[Settings::kNumLfos];
 
-  uint16_t calculatePan(float modValue, int voiceOrder) {
-    float spread = settings_->amp().panSpread() * (0.5f / Settings::kNumVoices) * index_;
+  uint16_t calculatePan(float modValue, int playOrder) {
+    float spread = settings_->amp().panSpread() * (0.5f / Settings::kNumVoices) * playOrder;
 
-    if (voiceOrder % 2) {
+    if (playOrder % 2) {
       return SettingsUtils::clipFloat(modValue + spread) * 65535;
     } else {
       return SettingsUtils::clipFloat(modValue - spread) * 65535;
