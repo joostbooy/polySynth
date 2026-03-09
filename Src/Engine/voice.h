@@ -104,8 +104,8 @@ class Voice {
     modMatrixEngine_->setMidiVelocity(velocity_);
     modMatrixEngine_->setEnvelope(0, envelopeEngine_[0].next());
     modMatrixEngine_->setEnvelope(1, envelopeEngine_[1].next());
-    modMatrixEngine_->setLfo(0, lfoEngine_[0].next());
-    modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
+    modMatrixEngine_->setLfo(0, lfoEngine_[0].next(playOrder));
+    modMatrixEngine_->setLfo(1, lfoEngine_[1].next(playOrder));
     float* data = modMatrixEngine_->process();
 
     dac_->set(index_, 0, data[ModMatrix::SHAPE_2] * 65535);
@@ -152,14 +152,8 @@ class Voice {
   EnvelopeEngine envelopeEngine_[2];
   LfoEngine lfoEngine_[Settings::kNumLfos];
 
-  uint16_t calculatePan(float modValue, int playOrder) {
-    float spread = settings_->amp().panSpread() * (0.5f / Settings::kNumVoices) * playOrder;
-
-    if (playOrder % 2) {
-      return SettingsUtils::clipFloat(modValue + spread) * 65535;
-    } else {
-      return SettingsUtils::clipFloat(modValue - spread) * 65535;
-    }
+  uint16_t calculatePan(float pan, int playOrder) {
+    return EngineUtils::spread(pan, settings_->amp().panSpread(), playOrder) * 65535;
   }
 
   uint16_t calculatePitchOsc1(float modValue) {
