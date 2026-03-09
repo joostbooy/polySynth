@@ -156,7 +156,7 @@ void Engine::update() {
     processMidi();
     processGates();
 
-    // only use the latets notes 
+    // only use the latest notes 
     while (noteQue_.size() > voiceEngine_.maxNotes()) {
       noteQue_.swallow();
     }
