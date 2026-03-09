@@ -21,7 +21,7 @@ class VoiceEngine {
   }
 
   void clear() {
-    numQued_ = 0;
+    numRequested_ = 0;
     for (size_t i = 0; i < Settings::kNumVoices; i++) {
       voice_[i].requestStop();
     }
@@ -61,24 +61,28 @@ class VoiceEngine {
     updateAvailableVoices();
   }
 
-  void requestVoices(size_t count) {
-    switch (settings_->oscillator().voiceMode()) {
-      case Oscillator::MONO:
-      case Oscillator::UNISON:
-        for (size_t i = 0; i < Settings::kNumVoices; i++) {
-          voice_[i].requestStop();
-        }
-        break;
-      case Oscillator::POLY:
-        while (numQued_ < count) {
-          uint8_t v = activeVoices_.pull();
-          voice_[v].requestStop();
-          activeVoices_.push(v);
-          ++numQued_;
-        }
-        break;
-      default:
-        break;
+  void requestVoice() {
+    if (numRequested_ < maxNotes()) {
+      ++numRequested_;
+      switch (settings_->oscillator().voiceMode()) {
+        case Oscillator::MONO:
+        case Oscillator::UNISON:
+          if (availableVoices_.size() < Settings::kNumVoices) {
+            for (size_t i = 0; i < Settings::kNumVoices; i++) {
+              voice_[i].requestStop();
+            }
+          }
+          break;
+        case Oscillator::POLY:
+          if (availableVoices_.size() < numRequested_) {
+            uint8_t v = activeVoices_.pull();
+            voice_[v].requestStop();
+            activeVoices_.push(v);
+          }
+          break;
+        default:
+          break;
+      }
     }
   }
 
@@ -128,7 +132,7 @@ class VoiceEngine {
   Voice voice_[Settings::kNumVoices];
   Stack<uint8_t, Settings::kNumVoices> activeVoices_;
   Stack<uint8_t, Settings::kNumVoices> availableVoices_;
-  uint8_t numQued_ = 0;
+  uint8_t numRequested_ = 0;
   uint8_t mostRecentVoice_ = 0;
 
   void updateAvailableVoices() {
@@ -148,8 +152,8 @@ class VoiceEngine {
     voice_[voiceIndex].noteOn(e);
     activeVoices_.push(voiceIndex);
     mostRecentVoice_ = voiceIndex;
-    if (numQued_ > 0) {
-      --numQued_;
+    if (numRequested_ > 0) {
+      --numRequested_;
     }
   }
 };

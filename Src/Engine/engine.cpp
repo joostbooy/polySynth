@@ -32,6 +32,7 @@ void Engine::stop() {
 void Engine::noteOn(MidiEngine::Event& e) {
   if (midiEngine_.withinKeyRange(e)) {
     noteQue_.write(e);
+    voiceEngine_.requestVoice();
   }
 }
 
@@ -161,13 +162,8 @@ void Engine::update() {
       noteQue_.swallow();
     }
 
-    while (noteQue_.readable()) {
-      if (voiceEngine_.available()) {
-        voiceEngine_.assignVoice(noteQue_.read());
-      } else {
-        voiceEngine_.requestVoices(noteQue_.size());
-        break;
-      }
+    while (noteQue_.readable() && voiceEngine_.available() ) {
+      voiceEngine_.assignVoice(noteQue_.read());
     }
 
     voiceEngine_.update();
