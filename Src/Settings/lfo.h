@@ -38,7 +38,8 @@ class Lfo {
     setSkewSpread(0.0f);
     setMin(0.0f);
     setMax(1.0f);
-    setSyncPhase(0.0f);
+    setPhaseOffset(0.0f);
+    setPhaseOffsetSpread(0.0f);
     setClockSync(false);
     setRandomise(false);
     setRetrigger(true);
@@ -127,17 +128,30 @@ class Lfo {
     return SettingsText::floatToText(max());
   }
 
-  // Sync phase
-  float syncPhase() {
-    return syncPhase_;
+  // Phase offset
+  float phaseOffset() {
+    return phaseOffset_;
   }
 
-  void setSyncPhase(float value) {
-    syncPhase_ = SettingsUtils::clipFloat(value);
+  void setPhaseOffset(float value) {
+    phaseOffset_ = SettingsUtils::clipFloat(value);
   }
 
-  const char* syncPhaseText() {
-    return SettingsText::floatToText(syncPhase());
+  const char* phaseOffsetText() {
+    return SettingsText::floatToText(phaseOffset());
+  }
+
+    // Phase offset spread
+  float phaseOffsetSpread() {
+    return phaseOffsetSpread_;
+  }
+
+  void setPhaseOffsetSpread(float value) {
+    phaseOffsetSpread_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* phaseOffsetSpreadText() {
+    return SettingsText::floatToText(phaseOffsetSpread());
   }
 
   // clock sync
@@ -199,7 +213,8 @@ class Lfo {
     fileWriter.write(speed_);
     fileWriter.write(min_);
     fileWriter.write(max_);
-    fileWriter.write(syncPhase_);
+    fileWriter.write(phaseOffset_);
+    fileWriter.write(phaseOffsetSpread_);
     fileWriter.write(randomise_);
     fileWriter.write(clockSync_);
     fileWriter.write(retrigger_);
@@ -213,7 +228,8 @@ class Lfo {
     fileReader.read(speed_);
     fileReader.read(min_);
     fileReader.read(max_);
-    fileReader.read(syncPhase_);
+    fileReader.read(phaseOffset_);
+    fileReader.read(phaseOffsetSpread_);
     fileReader.read(randomise_);
     fileReader.read(clockSync_);
     fileReader.read(retrigger_);
@@ -227,7 +243,8 @@ class Lfo {
     speed_ = lfo->speed();
     min_ = lfo->min();
     max_ = lfo->max();
-    syncPhase_ = lfo->syncPhase();
+    phaseOffset_ = lfo->phaseOffset();
+    phaseOffsetSpread_ = lfo->phaseOffsetSpread();
     randomise_ = lfo->randomise();
     clockSync_ = lfo->clockSync();
     retrigger_ = lfo->retrigger();
@@ -242,7 +259,8 @@ class Lfo {
     hash.write(speed_);
     hash.write(min_);
     hash.write(max_);
-    hash.write(syncPhase_);
+    hash.write(phaseOffset_);
+    hash.write(phaseOffsetSpread_);
     hash.write(randomise_);
     hash.write(clockSync_);
     hash.write(retrigger_);
@@ -256,7 +274,8 @@ class Lfo {
   float speed_;
   float min_;
   float max_;
-  float syncPhase_;
+  float phaseOffset_;
+  float phaseOffsetSpread_;
   bool randomise_;
   bool clockSync_;
   bool retrigger_;

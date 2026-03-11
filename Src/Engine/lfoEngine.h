@@ -1,9 +1,9 @@
 #ifndef LfoEngine_h
 #define LfoEngine_h
 
+#include "engineUtils.h"
 #include "lfo.h"
 #include "rng.h"
-#include "engineUtils.h"
 
 class LfoEngine {
  public:
@@ -24,8 +24,8 @@ class LfoEngine {
   }
 
   void reset() {
-    phase_ = lfo_->syncPhase();
-    setStage(phase_ < lfo_->skew() ? RISING : FALLING, true);
+    phase_ = 0.f;
+    setStage(nextPhase() < lfo_->skew() ? RISING : FALLING, true);
   }
 
   void retrigger() {
@@ -37,21 +37,24 @@ class LfoEngine {
   float phase() {
     return phase_;
   }
-  
+
   float value() {
     return value_;
   }
 
   float next(int playOrder) {
+    playOrder_ = playOrder;
+
     float skewPhase;
     float skewAmount = EngineUtils::spread(lfo_->skew(), lfo_->skewSpread(), playOrder);
+    float phase = nextPhase();
 
-    if (phase_ < skewAmount) {
+    if (phase < skewAmount) {
       setStage(RISING);
-      skewPhase = phase_ * (1.0f / skewAmount);
+      skewPhase = phase * (1.0f / skewAmount);
     } else {
       setStage(FALLING);
-      skewPhase = (phase_ - skewAmount) * (1.0f / (1.0f - skewAmount));
+      skewPhase = (phase - skewAmount) * (1.0f / (1.0f - skewAmount));
     }
 
     float x = 0.f;
@@ -82,12 +85,6 @@ class LfoEngine {
     }
 
     value_ = Dsp::cross_fade(lastValue_, targetValue_, x);
-
-    phase_ += readInc();
-    if (phase_ >= 1.f) {
-      phase_ = lfo_->oneShot() ? 1.f : 0.f;
-    }
-
     return value_;
   }
 
@@ -98,6 +95,7 @@ class LfoEngine {
   float value_ = 0.f;
   float lastValue_ = 0.f;
   float targetValue_ = 1.f;
+  int playOrder_ = 0;
 
   inline void setStage(Stage stage, bool force = false) {
     if (stage_ != stage || force == true) {
@@ -119,6 +117,24 @@ class LfoEngine {
     } else {
       return LookupTablesUtils::read(lut_phase_inc, lfo_->speed());
     }
+  }
+
+  float nextPhase() {
+    float offsetPhase;
+
+    float offset = EngineUtils::spread(lfo_->phaseOffset(), lfo_->phaseOffsetSpread(), playOrder_);
+    if (phase_ + offset >= 1.f) {
+      offsetPhase = phase_ - (1.f - offset);
+    } else {
+      offsetPhase = phase_ + offset;
+    }
+
+    phase_ += readInc();
+    if (phase_ >= 1.f) {
+      phase_ = lfo_->oneShot() ? 1.f : 0.f;
+    }
+
+    return offsetPhase;
   }
 };
 

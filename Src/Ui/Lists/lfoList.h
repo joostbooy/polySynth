@@ -17,7 +17,8 @@ public:
 		SKEW_SPREAD,
 		MIN,
 		MAX,
-		SYNC_PHASE,
+		PHASE_OFFSET,
+		PHASE_OFFSET_SPREAD,
 		RANDOMISE,
 		RETRIGGER,
 		ONE_SHOT,
@@ -32,18 +33,19 @@ public:
 	const char* itemText(int item) override {
 		switch (item)
 		{
-		case LFO:			return "LFO";
-		case SPEED:			return "SPEED";
-		case CLOCK_SYNC:	return "CLOCK SYNC";
-		case TYPE:			return "SHAPE";
-		case SKEW:			return "SKEW";
-		case SKEW_SPREAD:	return "SKEW SPREAD";
-		case MIN:			return "MIN";
-		case MAX:			return "MAX";
-		case SYNC_PHASE:	return "SYNC PHASE";
-		case RANDOMISE:		return "RANDOMISE";
-		case RETRIGGER:		return "RETRIGGER";
-		case ONE_SHOT:		return "ONE SHOT";
+		case LFO:					return "LFO";
+		case SPEED:					return "SPEED";
+		case CLOCK_SYNC:			return "CLOCK SYNC";
+		case TYPE:					return "SHAPE";
+		case SKEW:					return "SKEW";
+		case SKEW_SPREAD:			return "SKEW SPREAD";
+		case MIN:					return "MIN";
+		case MAX:					return "MAX";
+		case PHASE_OFFSET:			return "PHASE OFFSET";
+		case PHASE_OFFSET_SPREAD:	return "PHASE OFFSET SPREAD";
+		case RANDOMISE:				return "RANDOMISE";
+		case RETRIGGER:				return "RETRIGGER";
+		case ONE_SHOT:				return "ONE SHOT";
 		default:
 			break;
 		}
@@ -55,18 +57,19 @@ public:
 
 		switch (item)
 		{
-		case LFO:			return SettingsText::intToText(settings_->lfoIndex() + 1);
-		case SPEED:			return lfo.speedText();
-		case CLOCK_SYNC:	return lfo.clockSyncText();
-		case TYPE:			return lfo.typeText();
-		case SKEW:			return lfo.skewText();
-		case SKEW_SPREAD:	return lfo.skewSpreadText();
-		case MIN:			return lfo.minText();
-		case MAX:			return lfo.maxText();
-		case SYNC_PHASE:	return lfo.syncPhaseText();
-		case RANDOMISE:		return lfo.randomiseText();
-		case RETRIGGER:		return lfo.retriggerText();
-		case ONE_SHOT:		return lfo.oneShotText();
+		case LFO:					return SettingsText::intToText(settings_->lfoIndex() + 1);
+		case SPEED:					return lfo.speedText();
+		case CLOCK_SYNC:			return lfo.clockSyncText();
+		case TYPE:					return lfo.typeText();
+		case SKEW:					return lfo.skewText();
+		case SKEW_SPREAD:			return lfo.skewSpreadText();
+		case MIN:					return lfo.minText();
+		case MAX:					return lfo.maxText();
+		case PHASE_OFFSET:			return lfo.phaseOffsetText();
+		case PHASE_OFFSET_SPREAD:	return lfo.phaseOffsetSpreadText();
+		case RANDOMISE:				return lfo.randomiseText();
+		case RETRIGGER:				return lfo.retriggerText();
+		case ONE_SHOT:				return lfo.oneShotText();
 		default:
 			break;
 		}
@@ -102,8 +105,11 @@ public:
 		case MAX:
 			lfo.setMax(lfo.max() + SettingsUtils::fInc(inc, shifted));
 			break;
-		case SYNC_PHASE:
-			lfo.setSyncPhase(lfo.syncPhase() + SettingsUtils::fInc(inc, shifted));
+		case PHASE_OFFSET:
+			lfo.setPhaseOffset(lfo.phaseOffset() + SettingsUtils::fInc(inc, shifted));
+			break;
+		case PHASE_OFFSET_SPREAD:
+			lfo.setPhaseOffsetSpread(lfo.phaseOffsetSpread() + SettingsUtils::fInc(inc, shifted));
 			break;
 		case RANDOMISE:
 			lfo.setRandomise(inc > 0);
