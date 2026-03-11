@@ -42,11 +42,13 @@ class LfoEngine {
     return value_;
   }
 
-  float next(int playOrder) {
+  void setPlayOrder(int playOrder) {
     playOrder_ = playOrder;
+  }
 
+  float next() {
     float skewPhase;
-    float skewAmount = EngineUtils::spread(lfo_->skew(), lfo_->skewSpread(), playOrder);
+    float skewAmount = EngineUtils::spread(lfo_->skew(), lfo_->skewSpread(), playOrder_);
     float phase = nextPhase();
 
     if (phase < skewAmount) {

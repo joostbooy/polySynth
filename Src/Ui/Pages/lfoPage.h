@@ -107,7 +107,7 @@ namespace LfoPage {
     const int h = 32;
 
     for (int x2 = 0; x2 < w; ++x2) {
-      int y2 = h * (1.f - lfoEngine.next(0));
+      int y2 = h * (1.f - lfoEngine.next());
       canvas_->drawPixel(x + x2, y + y2, Canvas::BLACK);
     }
 

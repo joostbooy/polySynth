@@ -92,7 +92,13 @@ class Voice {
     envelopeEngine_[1].release();
   }
 
-  void update(int playOrder) {
+  void setPlayOrder(int playOrder) {
+    playOrder_ = playOrder;
+    lfoEngine_[0].setPlayOrder(playOrder);
+    lfoEngine_[1].setPlayOrder(playOrder);
+  }
+
+  void update() {
     if (stopRequested_ == true && fadePhase_ > 0.f) {
       fadePhase_ -= 1000.f / (SAMPLE_RATE * 24.f);
       if (fadePhase_ < 0.f) {
@@ -104,8 +110,8 @@ class Voice {
     modMatrixEngine_->setMidiVelocity(velocity_);
     modMatrixEngine_->setEnvelope(0, envelopeEngine_[0].next());
     modMatrixEngine_->setEnvelope(1, envelopeEngine_[1].next());
-    modMatrixEngine_->setLfo(0, lfoEngine_[0].next(playOrder));
-    modMatrixEngine_->setLfo(1, lfoEngine_[1].next(playOrder));
+    modMatrixEngine_->setLfo(0, lfoEngine_[0].next());
+    modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
     float* data = modMatrixEngine_->process();
 
     dac_->set(index_, 0, data[ModMatrix::SHAPE_2] * 65535);
@@ -118,7 +124,7 @@ class Voice {
     dac_->set(index_, 7, calculatePitchOsc2(data[ModMatrix::TUNE_2]));
     dac_->set(index_, 8, data[ModMatrix::CUTOFF_1] * 65535);
     dac_->set(index_, 9, data[ModMatrix::CUTOFF_2] * 65535);
-    dac_->set(index_, 10, calculatePan(data[ModMatrix::PAN], playOrder));
+    dac_->set(index_, 10, calculatePan(data[ModMatrix::PAN]));
     dac_->set(index_, 11, data[ModMatrix::RESONANCE_1] * 65535);
 
     if (fadePhase_ == 0.f || envelopeEngine_[0].stage() == EnvelopeEngine::IDLE) {
@@ -134,6 +140,7 @@ class Voice {
   }
 
  private:
+  int playOrder_ = 0;
   bool keyPressed_;
   bool stopRequested_;
   uint8_t note_;
@@ -152,8 +159,8 @@ class Voice {
   EnvelopeEngine envelopeEngine_[2];
   LfoEngine lfoEngine_[Settings::kNumLfos];
 
-  uint16_t calculatePan(float pan, int playOrder) {
-    return EngineUtils::spread(pan, settings_->amp().panSpread(), playOrder) * 65535;
+  uint16_t calculatePan(float pan) {
+    return EngineUtils::spread(pan, settings_->amp().panSpread(), playOrder_) * 65535;
   }
 
   uint16_t calculatePitchOsc1(float modValue) {

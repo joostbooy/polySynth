@@ -48,7 +48,8 @@ class VoiceEngine {
 
   void update() {
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
-      voice_[i].update(readPlayOrder(i));
+      voice_[i].setPlayOrder(readPlayOrder(i));
+      voice_[i].update();
     }
 
     updateAvailableVoices();
