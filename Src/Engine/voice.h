@@ -64,21 +64,22 @@ class Voice {
     return state_ == AVAILABLE;
   }
 
-  void noteOn(MidiEngine::Event& e) {
+  void noteOn(MidiEngine::Event& e, int playOrder) {
     lastNote_ = note_;
     port_ = e.port;
     note_ = e.data[0];
     channel_ = e.message & 0x0F;
     velocity_ = e.data[1] * (1.f / 127.f);
-
+    
+    playOrder_ = playOrder;
     keyPressed_ = true;
     stopRequested_ = false;
     fadePhase_ = 1.f;
     slidePhase1_ = 0.f;
     slidePhase2_ = 0.f;
 
-    lfoEngine_[0].retrigger();
-    lfoEngine_[1].retrigger();
+    lfoEngine_[0].retrigger(playOrder);
+    lfoEngine_[1].retrigger(playOrder);
 
     envelopeEngine_[0].attack();
     envelopeEngine_[1].attack();
@@ -90,12 +91,6 @@ class Voice {
     keyPressed_ = false;
     envelopeEngine_[0].release();
     envelopeEngine_[1].release();
-  }
-
-  void setPlayOrder(int playOrder) {
-    playOrder_ = playOrder;
-    lfoEngine_[0].setPlayOrder(playOrder);
-    lfoEngine_[1].setPlayOrder(playOrder);
   }
 
   void update() {

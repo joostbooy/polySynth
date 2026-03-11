@@ -48,7 +48,6 @@ class VoiceEngine {
 
   void update() {
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
-      voice_[i].setPlayOrder(readPlayOrder(i));
       voice_[i].update();
     }
 
@@ -143,20 +142,11 @@ class VoiceEngine {
   }
 
   void noteOn(int voiceIndex, MidiEngine::Event& e) {
-    voice_[voiceIndex].noteOn(e);
+    voice_[voiceIndex].noteOn(e, activeVoices_.size());
     activeVoices_.push(voiceIndex);
     mostRecentVoice_ = voiceIndex;
     if (numRequested_ > 0) {
       --numRequested_;
-    }
-  }
-
-  size_t readPlayOrder(size_t index) {
-    size_t numActive = activeVoices_.size();
-    if (index < numActive) {
-      return activeVoices_.read(index);
-    } else {
-      return availableVoices_.read(index - numActive);
     }
   }
 };

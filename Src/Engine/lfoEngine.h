@@ -28,7 +28,8 @@ class LfoEngine {
     setStage(nextPhase() < lfo_->skew() ? RISING : FALLING, true);
   }
 
-  void retrigger() {
+  void retrigger(int playOrder) {
+    playOrder_ = playOrder;
     if (lfo_->retrigger()) {
       reset();
     }
@@ -40,10 +41,6 @@ class LfoEngine {
 
   float value() {
     return value_;
-  }
-
-  void setPlayOrder(int playOrder) {
-    playOrder_ = playOrder;
   }
 
   float next() {
