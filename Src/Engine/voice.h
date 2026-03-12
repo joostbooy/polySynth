@@ -70,8 +70,8 @@ class Voice {
     note_ = e.data[0];
     channel_ = e.message & 0x0F;
     velocity_ = e.data[1] * (1.f / 127.f);
-    
     playOrder_ = playOrder;
+    
     keyPressed_ = true;
     stopRequested_ = false;
     fadePhase_ = 1.f;
