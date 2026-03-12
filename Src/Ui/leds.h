@@ -1,8 +1,8 @@
 #ifndef Leds_h
 #define Leds_h
 
-#include "pots.h"
 #include "modMatrix.h"
+#include "pots.h"
 
 class Leds {
  public:
@@ -364,42 +364,6 @@ class Leds {
   void setLfo1Type(Lfo::Type type) {
     switch (type) {
       case Lfo::LINEAR:
-        set(4, 15, RED);
-        set(4, 14, BLACK);
-        set(5, 14, BLACK);
-        set(5, 15, BLACK);
-        break;
-      case Lfo::LOG_EXP:
-        set(4, 15, BLACK);
-        set(4, 14, RED);
-        set(5, 14, BLACK);
-        set(5, 15, BLACK);
-        break;
-      case Lfo::EXP_LOG:
-        set(4, 15, BLACK);
-        set(4, 14, BLACK);
-        set(5, 14, RED);
-        set(5, 15, BLACK);
-        break;
-      case Lfo::SQUARE:
-        set(4, 15, BLACK);
-        set(4, 14, BLACK);
-        set(5, 14, BLACK);
-        set(5, 15, RED);
-        break;
-      default:
-        break;
-    }
-  }
-
-  // Lfo 2
-  void setLfo2Tempo(bool state) {
-    set(7, 13, state);
-  }
-
-  void setLfo2Type(Lfo::Type type) {
-    switch (type) {
-      case Lfo::LINEAR:
         set(6, 15, RED);
         set(6, 14, BLACK);
         set(7, 14, BLACK);
@@ -422,6 +386,42 @@ class Leds {
         set(6, 14, BLACK);
         set(7, 14, BLACK);
         set(7, 15, RED);
+        break;
+      default:
+        break;
+    }
+  }
+
+  // Lfo 2
+  void setLfo2Tempo(bool state) {
+    set(7, 13, state);
+  }
+
+  void setLfo2Type(Lfo::Type type) {
+    switch (type) {
+      case Lfo::LINEAR:
+        set(4, 15, RED);
+        set(4, 14, BLACK);
+        set(5, 14, BLACK);
+        set(5, 15, BLACK);
+        break;
+      case Lfo::LOG_EXP:
+        set(4, 15, BLACK);
+        set(4, 14, RED);
+        set(5, 14, BLACK);
+        set(5, 15, BLACK);
+        break;
+      case Lfo::EXP_LOG:
+        set(4, 15, BLACK);
+        set(4, 14, BLACK);
+        set(5, 14, RED);
+        set(5, 15, BLACK);
+        break;
+      case Lfo::SQUARE:
+        set(4, 15, BLACK);
+        set(4, 14, BLACK);
+        set(5, 14, BLACK);
+        set(5, 15, RED);
         break;
       default:
         break;
