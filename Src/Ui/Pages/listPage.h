@@ -18,7 +18,7 @@ namespace ListPage {
   void (*footerCallback_)() = nullptr;
 
   int topRow_;
-  const int kMaxVisibleRows_ = 6;
+  const int kMaxVisibleRows_ = 5;
 
   enum Footeroptions {
     CLEAR,
@@ -54,7 +54,7 @@ namespace ListPage {
     footerText[CUSTOM] = text;
   }
 
-  void scroll_to_row(int row) {
+  void scrollToRow(int row) {
     if (row < topRow_) {
       topRow_ = row;
     } else if (row >= (topRow_ + kMaxVisibleRows_)) {
@@ -131,6 +131,7 @@ namespace ListPage {
 
   void onEncoder(int id, int inc) {
     list_->onEncoder(inc, buttons_->isPressed(Buttons::SHIFT));
+    scrollToRow(list_->selectedItem());
   }
 
   void refreshLeds() {
@@ -151,7 +152,7 @@ namespace ListPage {
       int row_y = (i * row_h) + y;
 
       if (row < list_->numItems()) {
-        Canvas::Color color = (row == list_->selectedItem()) ? Canvas::BLACK : Canvas::GRAY;
+        Canvas::Color color = (row == list_->selectedItem()) ? Canvas::BLACK : Canvas::LIGHT_GRAY;
 
         canvas_->drawText(x + 4, row_y, collWidth - 8, row_h, list_->itemText(row), Canvas::LEFT, Canvas::CENTER, color);
         canvas_->drawText(x + 4 + collWidth, row_y, collWidth - 8, row_h, list_->valueText(row), Canvas::LEFT, Canvas::CENTER, color);
