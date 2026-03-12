@@ -76,7 +76,7 @@ void Ui::poll() {
 
   // Pots
   if (adc_->potReady()) {
-    float value = adc_->readPot() * (1.f / 1023.f);
+    float value = adc_->readPot() * (1.f / 4095.f);
     pots_.write(adc_->currentPot(), value);
     pots_.filterAll();
     adc_->convertNextPot();
@@ -84,7 +84,7 @@ void Ui::poll() {
 
   // CV
   if (adc_->cvReady()) {
-    float value = adc_->readCv() * (1.f / 1023.f);
+    float value = adc_->readCv() * (1.f / 4095.f);
     engine_->modMatrixEngine().setCv(adc_->currentCv(), value);
     adc_->convertNextCv();
   }
