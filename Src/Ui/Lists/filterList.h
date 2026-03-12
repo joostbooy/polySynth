@@ -9,9 +9,11 @@ class FilterList : public SettingsList {
   enum Item {
     TYPE,
     CUTOFF_1,
+    CUTOFF_1_SPREAD,
     RESONANCE_1,
     FM_ENABLE_1,
     CUTOFF_2,
+    CUTOFF_2_SPREAD,
     RESONANCE_2,
     FM_ENABLE_2,
     ROUTING,
@@ -26,15 +28,17 @@ class FilterList : public SettingsList {
 
   const char* itemText(int item) override {
     switch (item) {
-      case TYPE:        return "TYPE";
-      case CUTOFF_1:    return "CUTOFF 1";
-      case RESONANCE_1: return "RESONANCE 1";
-      case FM_ENABLE_1: return "FM 1";
-      case CUTOFF_2:    return "CUTOFF 2";
-      case RESONANCE_2: return "RESONANCE 2";
-      case FM_ENABLE_2: return "FM 2";
-      case ROUTING:     return "ROUTING";
-      case LINK:        return "LINK";
+      case TYPE:               return "TYPE";
+      case CUTOFF_1:           return "CUTOFF 1";
+      case CUTOFF_1_SPREAD:    return "CUTOFF 1 SPREAD";
+      case RESONANCE_1:        return "RESONANCE 1";
+      case FM_ENABLE_1:        return "FM 1";
+      case CUTOFF_2:           return "CUTOFF 2";
+      case CUTOFF_2_SPREAD:    return "CUTOFF 2 SPREAD";
+      case RESONANCE_2:        return "RESONANCE 2";
+      case FM_ENABLE_2:        return "FM 2";
+      case ROUTING:            return "ROUTING";
+      case LINK:               return "LINK";
       default:  
         break;
     }
@@ -45,15 +49,17 @@ class FilterList : public SettingsList {
     Filter& filter = settings_->filter();
 
     switch (item) {
-      case TYPE:        return filter.typeText();
-      case CUTOFF_1:    return filter.cutoff1Text();
-      case RESONANCE_1: return filter.resonance1Text();
-      case FM_ENABLE_1: return filter.fmEnable1Text();
-      case CUTOFF_2:    return filter.cutoff2Text();
-      case RESONANCE_2: return filter.resonance2Text();
-      case FM_ENABLE_2: return filter.fmEnable2Text();
-      case ROUTING:     return filter.routingText();
-      case LINK:        return filter.linkText();
+      case TYPE:              return filter.typeText();
+      case CUTOFF_1:          return filter.cutoff1Text();
+      case CUTOFF_1_SPREAD:   return filter.cutoff1SpreadText();
+      case RESONANCE_1:       return filter.resonance1Text();
+      case FM_ENABLE_1:       return filter.fmEnable1Text();
+      case CUTOFF_2:          return filter.cutoff2Text();
+      case CUTOFF_2_SPREAD:   return filter.cutoff2SpreadText();
+      case RESONANCE_2:       return filter.resonance2Text();
+      case FM_ENABLE_2:       return filter.fmEnable2Text();
+      case ROUTING:           return filter.routingText();
+      case LINK:              return filter.linkText();
       default:
         break;
     }
@@ -70,6 +76,9 @@ class FilterList : public SettingsList {
       case CUTOFF_1:
         filter.setCutoff1(filter.cutoff1() + SettingsUtils::fInc(inc, shifted));
         break;
+      case CUTOFF_1_SPREAD:
+        filter.setCutoff1Spread(filter.cutoff1Spread() + SettingsUtils::fInc(inc, shifted));
+        break;
       case RESONANCE_1:
         filter.setResonace1(filter.resonance1() + SettingsUtils::fInc(inc, shifted));
         break;
@@ -78,6 +87,9 @@ class FilterList : public SettingsList {
         break;
       case CUTOFF_2:
         filter.setCutoff2(filter.cutoff2() + SettingsUtils::fInc(inc, shifted));
+        break;
+      case CUTOFF_2_SPREAD:
+        filter.setCutoff2Spread(filter.cutoff2Spread() + SettingsUtils::fInc(inc, shifted));
         break;
       case RESONANCE_2:
         filter.setResonace2(filter.resonance2() + SettingsUtils::fInc(inc, shifted));

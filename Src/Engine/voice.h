@@ -117,8 +117,8 @@ class Voice {
     dac_->set(index_, 5, data[ModMatrix::GAIN] * fadePhase_ * 65535);
     dac_->set(index_, 6, data[ModMatrix::RESONANCE_2] * 65535);
     dac_->set(index_, 7, calculatePitchOsc2(data[ModMatrix::TUNE_2]));
-    dac_->set(index_, 8, data[ModMatrix::CUTOFF_1] * 65535);
-    dac_->set(index_, 9, data[ModMatrix::CUTOFF_2] * 65535);
+    dac_->set(index_, 8, calculateCutoff1(data[ModMatrix::CUTOFF_1]));
+    dac_->set(index_, 9, calculateCutoff2(data[ModMatrix::CUTOFF_2]));
     dac_->set(index_, 10, calculatePan(data[ModMatrix::PAN]));
     dac_->set(index_, 11, data[ModMatrix::RESONANCE_1] * 65535);
 
@@ -156,6 +156,14 @@ class Voice {
 
   uint16_t calculatePan(float pan) {
     return EngineUtils::spread(pan, settings_->amp().panSpread(), playOrder_) * 65535;
+  }
+
+  uint16_t calculateCutoff1(float cutoff) {
+    return EngineUtils::spread(cutoff, settings_->filter().cutoff1Spread(), playOrder_) * 65535;
+  }
+
+  uint16_t calculateCutoff2(float cutoff) {
+    return EngineUtils::spread(cutoff, settings_->filter().cutoff2Spread(), playOrder_) * 65535;
   }
 
   uint16_t calculatePitchOsc1(float modValue) {

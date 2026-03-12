@@ -26,6 +26,8 @@ class Filter {
     setRouting(SERIES);
     setCutoff1(1.f);
     setCutoff2(1.f);
+    setCutoff1Spread(0.f);
+    setCutoff2Spread(0.f);
     setResonace1(0.f);
     setResonace2(0.f);
     setFmEnable1(false);
@@ -106,6 +108,32 @@ class Filter {
     return SettingsText::floatToText(cutoff2());
   }
 
+  // Cutoff 1 spread
+  float cutoff1Spread() {
+    return cutoff1Spread_;
+  }
+
+  void setCutoff1Spread(float value) {
+    cutoff1Spread_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* cutoff1SpreadText() {
+    return SettingsText::floatToText(cutoff1Spread());
+  }
+
+  // Cutoff 2 spread
+  float cutoff2Spread() {
+    return cutoff2Spread_;
+  }
+
+  void setCutoff2Spread(float value) {
+    cutoff2Spread_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* cutoff2SpreadText() {
+    return SettingsText::floatToText(cutoff2Spread());
+  }
+
   // Resonance 1
   float resonance1() {
     return resonace1_;
@@ -175,6 +203,8 @@ class Filter {
   void save(FileWriter& fileWriter) {
     fileWriter.write(cutoff1_);
     fileWriter.write(cutoff2_);
+    fileWriter.write(cutoff1Spread_);
+    fileWriter.write(cutoff2Spread_);
     fileWriter.write(resonace1_);
     fileWriter.write(resonace2_);
     fileWriter.write(type_);
@@ -187,6 +217,8 @@ class Filter {
   void load(FileReader& fileReader) {
     fileReader.read(cutoff1_);
     fileReader.read(cutoff2_);
+    fileReader.read(cutoff1Spread_);
+    fileReader.read(cutoff2Spread_);
     fileReader.read(resonace1_);
     fileReader.read(resonace2_);
     fileReader.read(type_);
@@ -199,6 +231,8 @@ class Filter {
   void paste(Filter* filter) {
     cutoff1_ = filter->cutoff1();
     cutoff2_ = filter->cutoff2();
+    cutoff1Spread_ = filter->cutoff1Spread();
+    cutoff2Spread_ = filter->cutoff2Spread();
     resonace1_ = filter->resonance1();
     resonace2_ = filter->resonance2();
     type_ = filter->type();
@@ -211,6 +245,8 @@ class Filter {
   void writeHash(Hash& hash) {
     hash.write(cutoff1_);
     hash.write(cutoff2_);
+    hash.write(cutoff1Spread_);
+    hash.write(cutoff2Spread_);
     hash.write(resonace1_);
     hash.write(resonace2_);
     hash.write(type_);
@@ -223,6 +259,8 @@ class Filter {
  private:
   float cutoff1_;
   float cutoff2_;
+  float cutoff1Spread_;
+  float cutoff2Spread_;
   float resonace1_;
   float resonace2_;
   bool fmEnable1_;
