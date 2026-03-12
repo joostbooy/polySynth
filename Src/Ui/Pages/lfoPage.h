@@ -103,7 +103,7 @@ namespace LfoPage {
     lfoEngine.init(&lfo);
 
     const int x = 64;
-    const int y = 5;
+    const int y = 10;
     const int h = 32;
 
     for (int x2 = 0; x2 < w; ++x2) {
