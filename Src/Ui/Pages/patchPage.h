@@ -93,6 +93,7 @@ namespace PatchPage {
               engine_->addReqestBlocking(Engine::START);
             }
           });
+            pages_->open(Pages::CONFIRMATION_PAGE);
           break;
         case EDIT_NAME:
          	TextInputPage::set(settings_->selectedPatch().name(), Patch::kMaxNameLength, "SET PATCH NAME");
