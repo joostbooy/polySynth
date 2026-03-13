@@ -29,14 +29,14 @@ class WindowPainter {
     }
   }
 
-  static void drawFooter(const char* const* text, int num_options, int optionOffset = 0) {
+  static void drawFooter(const char* const* text, int numOptions, int optionOffset = 0) {
     const int h = 10;
     const int y = canvas_->height() - h;
     const int w = canvas_->width() / kMaxFooterOptions;
 
-    int numOptions = num_options - optionOffset;
-    if (numOptions >= kMaxFooterOptions) {
-      numOptions = kMaxFooterOptions;
+    int numOptions_ = numOptions - optionOffset;
+    if (numOptions_ >= kMaxFooterOptions) {
+      numOptions_ = kMaxFooterOptions;
     }
 
     canvas_->fill(0, y, canvas_->width(), h, Canvas::WHITE);
@@ -45,7 +45,7 @@ class WindowPainter {
     for (int i = 0; i < kMaxFooterOptions; ++i) {
       int x = i * w;
       canvas_->verticalLine(x, y, h, Canvas::INVERTED);
-      if (i < num_options) {
+      if (i < numOptions_) {
         canvas_->drawText(x, y, w, h, text[i + optionOffset], Canvas::CENTER, Canvas::CENTER);
       }
     }
