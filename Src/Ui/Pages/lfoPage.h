@@ -17,7 +17,7 @@ namespace LfoPage {
   LfoList lfoList_;
 
   float speed = 1.f;
-  const int w = 128;
+  const int w = 100;
 
   void clear() {
     settings_->selectedLfo().init();
@@ -102,7 +102,7 @@ namespace LfoPage {
     lfo.setSpeed(speed);  
     lfoEngine.init(&lfo);
 
-    const int x = 64;
+    const int x = 128;
     const int y = 10;
     const int h = 32;
 
