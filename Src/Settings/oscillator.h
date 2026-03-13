@@ -107,7 +107,7 @@ class Oscillator {
     return type1_;
   }
 
-  void setType1(int value) {
+  void setType1(size_t value) {
     type1_ = Type1(value % NUM_TYPES1);
   }
 
@@ -120,7 +120,7 @@ class Oscillator {
     return type2_;
   }
 
-  void setType2(int value) {
+  void setType2(size_t value) {
     type2_ = Type2(value % NUM_TYPES2);
   }
 
@@ -250,7 +250,7 @@ class Oscillator {
     return modSource_;
   }
 
-  void setModSource(int value) {
+  void setModSource(size_t value) {
     modDepth_ = value % 2;
   }
 

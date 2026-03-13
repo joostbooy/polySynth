@@ -61,7 +61,7 @@ class Filter {
     return type_;
   }
 
-  void setType(int value) {
+  void setType(size_t value) {
     type_ = Type(value % NUM_FILTER_TYPES);
   }
 
@@ -74,7 +74,7 @@ class Filter {
     return routing_;
   }
 
-  void setRouting(int value) {
+  void setRouting(size_t value) {
     routing_ = Routing(value % NUM_FILTER_ROUTINGS);
   }
 

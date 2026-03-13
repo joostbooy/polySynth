@@ -51,7 +51,7 @@ class Lfo {
     return type_;
   }
 
-  void setType(int value) {
+  void setType(size_t value) {
     type_ = Type(value % NUM_TYPES);
   }
 
