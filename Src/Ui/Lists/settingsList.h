@@ -31,7 +31,7 @@ public:
 	}
 
 	void selectItem(int item) {
-		selectedItem_ = SettingsUtils::clip(item, 0, numItems() - 1);
+		selectedItem_ = SettingsUtils::clip(0, numItems() - 1, item);
 	}
 
 	void onButton() {
