@@ -17,7 +17,7 @@ namespace EnvelopePage {
   EnvelopeList envelopeList_;
 
   float time = 1.f;
-  const int w = 128;
+  const int w = 100;
 
   void clear() {
     settings_->selectedEnvelope().init();
@@ -107,8 +107,8 @@ namespace EnvelopePage {
     envelopeEngine.init(&envelope);
     envelopeEngine.attack();
 
-    const int x = 64;
-    const int y = 5;
+    const int x = 128;
+    const int y = 10;
     const int h = 32;
 
     for (int x2 = 0; x2 < w; ++x2) {
