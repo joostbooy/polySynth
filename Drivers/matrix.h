@@ -39,6 +39,7 @@ class Matrix {
   }
 
  private:
+  volatile uint8_t swData;
   volatile uint8_t dummy;
   static const uint8_t kNumCollumns_ = 8;
   uint8_t currentCollumn_ = 0;
@@ -54,8 +55,6 @@ class Matrix {
   }
 
   uint8_t spiTransfer(uint16_t ledData) {
-    volatile uint8_t swData;
-
     while (!(SPI3->SR & SPI_FLAG_TXE));
     *(volatile uint8_t*)&SPI3->DR = ledData >> 8;
 
