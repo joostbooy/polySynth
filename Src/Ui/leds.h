@@ -277,7 +277,7 @@ class Leds {
 
   // Osc 2
   void setSlideVco2(bool state) {
-    set(7, 4, state);
+    set(7, 3, state);
   }
 
   void setMute2(bool state) {
