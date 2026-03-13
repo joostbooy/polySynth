@@ -47,6 +47,7 @@ namespace HardwareTestPage {
 
   void enter() {
     potsEnabled = false;
+    ledToggleState_ = true;
   }
 
   void exit() {
@@ -88,14 +89,14 @@ namespace HardwareTestPage {
   }
 
   void onEncoder(int id, int state) {
-    TextBufferPainter::write(str_.write(id == 0 ? "X ENC " : "Y ENC ", state));
+    TextBufferPainter::write(str_.write(id == 0 ? "Y ENC " : "X ENC ", state));
   }
 
   void refreshLeds() {
     if (ledToggleState_) {
-      leds_->setAll(Leds::BLACK);
-    } else {
       leds_->setAll(Leds::RED);
+    } else {
+      leds_->setAll(Leds::BLACK);
     }
   }
 
