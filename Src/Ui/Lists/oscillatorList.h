@@ -52,7 +52,7 @@ class OscillatorList : public SettingsList {
       case MOD_SOURCE:            return "MOD SOUCRE";
       case SLIDE_1:               return "SLIDE 1";
       case SLIDE_2:               return "SLIDE 2";
-      case LINK_SLIDE_AMMOUNT:    return "LINK SLIDE AMMOUNT";
+      case LINK_SLIDE_AMMOUNT:    return "LINK SLIDE";
       case SLIDE_AMMOUNT_1:       return "SLIDE AMMOUNT 1";
       case SLIDE_AMMOUNT_2:       return "SLIDE AMMOUNT 2";
       case OCTAVE_OFFSET_1:       return "OCTAVE OFFSET 1";
