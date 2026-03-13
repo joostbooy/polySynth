@@ -42,7 +42,7 @@ public:
 		case MIN:					return "MIN";
 		case MAX:					return "MAX";
 		case PHASE_OFFSET:			return "PHASE OFFSET";
-		case PHASE_OFFSET_SPREAD:	return "PHASE OFFSET SPREAD";
+		case PHASE_OFFSET_SPREAD:	return "PHASE SPREAD";
 		case RANDOMISE:				return "RANDOMISE";
 		case RETRIGGER:				return "RETRIGGER";
 		case ONE_SHOT:				return "ONE SHOT";
