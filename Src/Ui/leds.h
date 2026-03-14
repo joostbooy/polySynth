@@ -138,7 +138,7 @@ class Leds {
         set(7, 5, color);
         break;
       case Pots::R_TIME_2:
-        set(5, 8, color);
+        set(5, 4, color);
         break;
       case Pots::R_SHAPE_2:
         set(7, 4, color);
