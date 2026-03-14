@@ -76,8 +76,8 @@ void Ui::poll() {
 
   // Pots
   if (adc_->potReady()) {
-    float value = adc_->readPot() * (1.f / 4095.f);
-    pots_.write(adc_->currentPot(), value);
+    float value = (adc_->readPot() >> 4) * (1.f / 255.f);
+    pots_.write(adc_->currentPot(), value);    
     pots_.filterAll();
     adc_->convertNextPot();
   }
@@ -185,9 +185,9 @@ float Ui::readPotToSetting(Patch &p, int id) {
     case Pots::DRIVE:         return p.amp().drive();
     case Pots::SLIDE_AMMOUNT: return p.oscillator().slideAmmount1();
     case Pots::LFO_SKEW_1:    return p.lfo(0).skew();
-    case Pots::LFO_SPEED_2:   return p.lfo(0).speed();
+    case Pots::LFO_SPEED_1:   return p.lfo(0).speed();
     case Pots::LFO_SKEW_2:    return p.lfo(1).skew();
-    case Pots::LFO_SPEED_1:   return p.lfo(1).speed();
+    case Pots::LFO_SPEED_2:   return p.lfo(1).speed();
     case Pots::A_TIME_1:      return p.envelope(0).attackTime();
     case Pots::A_SHAPE_1:     return p.envelope(0).attackShape();
     case Pots::D_TIME_1:      return p.envelope(0).decayTime();
