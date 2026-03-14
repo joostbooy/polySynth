@@ -13,7 +13,7 @@ namespace MidiMonitorPage {
 
   enum FooterOptions {
     START_STOP,
-	SHOW_HIDE_CLOCK,
+    SHOW_HIDE_CLOCK,
     CLEAR,
     CLOSE,
     NUM_FOOTER_OPTIONS,
