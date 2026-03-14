@@ -113,7 +113,7 @@ class EnvelopeList : public SettingsList {
         envelope.setLoop(inc > 0);
         break;
       case INVERT:
-        envelope.setLoop(inc > 0);
+        envelope.setInvert(inc > 0);
         break;
       default:
         break;
