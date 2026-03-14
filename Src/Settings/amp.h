@@ -49,7 +49,7 @@ class Amp {
   }
 
   const char* driveText() {
-    return SettingsText::floatToText(pan());
+    return SettingsText::floatToText(drive());
   }
 
   // Enable AM
