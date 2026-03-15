@@ -198,10 +198,10 @@ class Voice {
       noteValue = cal.noteToValue(note_ + osc.octaveOffset2());
       if (osc.slideEnable2()) {
         int lastNoteValue = cal.noteToValue(lastNote_ + osc.octaveOffset2());
-        noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase1_);
-        slidePhase1_ += inc(osc.slideAmmount2());
-        if (slidePhase1_ >= 1.f) {
-          slidePhase1_ = 1.f;
+        noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase2_);
+        slidePhase2_ += inc(osc.slideAmmount2());
+        if (slidePhase2_ >= 1.f) {
+          slidePhase2_ = 1.f;
         }
       }
     }
