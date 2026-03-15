@@ -31,11 +31,12 @@ namespace MidiMonitorPage {
 
   void init() {
     running_ = true;
-	showClock_ = true;
+    showClock_ = true;
   }
 
   void enter() {
     engine_->midiEngine().clearMonitor();
+    TextBufferPainter::clear();
   }
 
   void exit() {
