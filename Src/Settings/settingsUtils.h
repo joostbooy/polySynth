@@ -19,14 +19,14 @@ namespace SettingsUtils {
     return value > 1.0f ? 1.0f : (value < 0.0f ? 0.0f : value);
   }
 
-  template <typename type>
-  static inline type difference(type a, type b) {
+  template <typename T>
+  static inline T difference(T a, T b) {
     return a > b ? a - b : b - a;
   }
 
-  template <typename type>
-  static inline void swap(type& a, type& b) {
-    type temp = a;
+  template <typename T>
+  static inline void swap(T& a, T& b) {
+    T temp = a;
     a = b;
     b = temp;
   }
