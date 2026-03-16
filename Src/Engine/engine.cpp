@@ -149,7 +149,7 @@ void Engine::processRequests() {
   if (requests_ & START_AUDITION) {
     auditionEvent_.port = settings_->midi().portReceive();
     auditionEvent_.message = MidiEngine::NOTE_ON | settings_->midi().channelReceive();
-    auditionEvent_.data[0] = 60;
+    auditionEvent_.data[0] = SettingsUtils::clip(settings_->midi().keyRangeLow(),settings_->midi().keyRangeHigh(), 60);
     auditionEvent_.data[1] = 100;
     noteOn(auditionEvent_);
     clearRequest(START_AUDITION);
