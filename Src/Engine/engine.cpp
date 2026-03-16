@@ -145,6 +145,20 @@ void Engine::processRequests() {
     state_ = STOPPED;
     clearRequest(STOP);
   }
+
+  if (requests_ & START_AUDITION) {
+    auditionEvent_.port = settings_->midi().portReceive();
+    auditionEvent_.message = MidiEngine::NOTE_ON | settings_->midi().channelReceive();
+    auditionEvent_.data[0] = 60;
+    auditionEvent_.data[1] = 100;
+    noteOn(auditionEvent_);
+    clearRequest(START_AUDITION);
+  }
+
+  if (requests_ & STOP_AUDITION) {
+    noteOff(auditionEvent_);
+    clearRequest(STOP_AUDITION);
+  }
 }
 
 // 1Khz

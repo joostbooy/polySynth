@@ -21,6 +21,8 @@ class Engine {
   enum Request {
     STOP = (1 << 0),
     START = (1 << 1),
+    START_AUDITION = (1 << 2),
+    STOP_AUDITION = (1 << 3),
   };
 
   void init(Settings*, Uart*, Usb*, Dac*);
@@ -57,19 +59,18 @@ class Engine {
   State state_;
   volatile uint8_t requests_ = 0x00;
 
-  uint32_t processingTimeUs_;
-
   Dac* dac_;
   Settings* settings_;
   MidiEngine midiEngine_;
   VoiceEngine voiceEngine_;
   MidiClockEngine midiClockEngine_;
   ModMatrixEngine modMatrixEngine_;
-  Que<MidiEngine::Event, Settings::kNumVoices> noteQue_; 
+  Que<MidiEngine::Event, Settings::kNumVoices> noteQue_;
+  MidiEngine::Event auditionEvent_;
   bool gate_[2];
   bool lastGate_[2];
   MidiEngine::Event gateToNote_[2];
-
+  uint32_t processingTimeUs_;
 
   void start();
   void stop();

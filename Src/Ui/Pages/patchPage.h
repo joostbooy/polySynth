@@ -6,12 +6,12 @@
 namespace PatchPage {
 
   using TopPage::buttons_;
+  using TopPage::canvas_;
   using TopPage::engine_;
   using TopPage::pages_;
   using TopPage::settings_;
-  using TopPage::ui_;
-  using TopPage::canvas_;
   using TopPage::str_;
+  using TopPage::ui_;
 
   bool pasteable_;
   Patch patch_;
@@ -24,11 +24,12 @@ namespace PatchPage {
     PREV,
     PASTE,
     EDIT_NAME,
+    AUDITION,
 
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"SAVE", "INIT", "COPY", ">", "<", "PASTE", "EDIT NAME"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"SAVE", "INIT", "COPY", ">", "<", "PASTE", "EDIT NAME", "AUDITION"};
 
   int footerOptionsOffset;
   int newIndex;
@@ -43,46 +44,54 @@ namespace PatchPage {
   }
 
   void exit() {
+    engine_->addReqestBlocking(Engine::STOP_AUDITION);
+  }
+
+  void printError() {
   }
 
   void onButton(int id, int state) {
-    if (state) {
-      
-      switch (buttons_->toFunction(id, footerOptionsOffset)) {
-        case SAVE:
+    switch (buttons_->toFunction(id, footerOptionsOffset)) {
+      case SAVE:
+        if (state) {
           ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
             if (option == ConfirmationPage::CONFIRM) {
               if (settings_->savePatch()) {
                 MessagePainter::show("PATCH SAVED");
               } else {
-                MessagePainter::show("FAILED");
+                MessagePainter::show(settings_->fatResultText());
+                // MessagePainter::show("FAILED");
               }
             }
           });
           pages_->open(Pages::CONFIRMATION_PAGE);
-          break;
-        case COPY:
+        }
+        break;
+      case COPY:
+        if (state) {
           patch_.paste(&settings_->selectedPatch());
           pasteable_ = true;
           MessagePainter::show("PATCH COPIED");
-          break;
-        case PASTE:
-          if (pasteable_) {
-            ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
-              if (option == ConfirmationPage::CONFIRM) {
-                engine_->addReqestBlocking(Engine::STOP);
+        }
+        break;
+      case PASTE:
+        if (state && pasteable_) {
+          ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
+            if (option == ConfirmationPage::CONFIRM) {
+              engine_->addReqestBlocking(Engine::STOP);
 
-                settings_->selectedPatch().paste(&patch_);
-                ui_->resetAllPots();
+              settings_->selectedPatch().paste(&patch_);
+              ui_->resetAllPots();
 
-                engine_->addReqestBlocking(Engine::START);
-                MessagePainter::show("PATCH PASTED");
-              }
-            });
-            pages_->open(Pages::CONFIRMATION_PAGE);
-          }
-          break;
-        case INIT:
+              engine_->addReqestBlocking(Engine::START);
+              MessagePainter::show("PATCH PASTED");
+            }
+          });
+          pages_->open(Pages::CONFIRMATION_PAGE);
+        }
+        break;
+      case INIT:
+        if (state) {
           ConfirmationPage::set("INIT PATCH ?", [](int option) {
             if (option == ConfirmationPage::CONFIRM) {
               engine_->addReqestBlocking(Engine::STOP);
@@ -94,20 +103,33 @@ namespace PatchPage {
             }
           });
           pages_->open(Pages::CONFIRMATION_PAGE);
-          break;
-        case EDIT_NAME:
-         	TextInputPage::set(settings_->selectedPatch().name(), Patch::kMaxNameLength, "SET PATCH NAME");
+        }
+        break;
+      case EDIT_NAME:
+        if (state) {
+          TextInputPage::set(settings_->selectedPatch().name(), Patch::kMaxNameLength, "SET PATCH NAME");
           pages_->open(Pages::TEXT_INPUT_PAGE);
-          break;
-        case NEXT:
+        }
+        break;
+      case AUDITION:
+        if (state) {
+          engine_->addReqestBlocking(Engine::START_AUDITION);
+        } else {
+          engine_->addReqestBlocking(Engine::STOP_AUDITION);
+        }
+        break;
+      case NEXT:
+        if (state) {
           footerOptionsOffset = 4;
-          break;
-        case PREV:
+        }
+        break;
+      case PREV:
+        if (state) {
           footerOptionsOffset = 0;
-          break;
-        default:
-          break;
-      }
+        }
+        break;
+      default:
+        break;
     }
   }
 
@@ -116,7 +138,7 @@ namespace PatchPage {
 
     settings_->loadPatch(newIndex);
     ui_->resetAllPots();
-    
+
     engine_->addReqestBlocking(Engine::START);
   }
 
@@ -165,7 +187,6 @@ namespace PatchPage {
       &onEncoder,
       &targetFps,
   };
-
 };  // namespace PatchPage
 
 #endif
