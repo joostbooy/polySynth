@@ -26,7 +26,7 @@ class Matrix {
 
     // latch switch rows
     GPIOB->BSRR = GPIO_PIN_7 << 16;
-    Micros::delay(10);
+    Micros::delay(1);
     GPIOB->BSRR = GPIO_PIN_7;
 
     *swBuffer = spiTransfer(ledRow_[currentCollumn_]);
@@ -34,7 +34,7 @@ class Matrix {
     // latch led rows & collumn
     GPIOB->BSRR = GPIO_PIN_8 << 16;
     GPIOB->BSRR = GPIO_PIN_6 << 16;
-    Micros::delay(10);
+    Micros::delay(5);
     GPIOB->BSRR = GPIO_PIN_8 | GPIO_PIN_6;
   }
 
@@ -51,7 +51,7 @@ class Matrix {
     coll & 0x02 ? reg |= GPIO_PIN_1 : reg |= GPIO_PIN_1 << 16;
     coll & 0x04 ? reg |= GPIO_PIN_4 : reg |= GPIO_PIN_4 << 16;
     GPIOD->BSRR = reg;
-    Micros::delay(10);
+    Micros::delay(1);
   }
 
   uint8_t spiTransfer(uint16_t ledData) {
