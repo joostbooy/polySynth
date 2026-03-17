@@ -251,7 +251,7 @@ class Oscillator {
   }
 
   void setModSource(size_t value) {
-    modDepth_ = value % 2;
+    modSource_ = value % 2;
   }
 
   const char* modSourceText() {
