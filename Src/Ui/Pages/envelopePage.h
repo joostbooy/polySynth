@@ -111,9 +111,17 @@ namespace EnvelopePage {
     const int y = 10;
     const int h = 32;
 
+    int lastX;
+    int lastY;
+
     for (int x2 = 0; x2 < w; ++x2) {
-      int y2 = h * (1.f - envelopeEngine.next());
-      canvas_->drawPixel(x + x2, y + y2, Canvas::BLACK);
+      int x_ = x + x2;
+      int y_ = y + (h * (1.f - envelopeEngine.next()));
+      if (x2 > 0) {
+        canvas_->drawLine(lastX, lastY, x_, y_, Canvas::BLACK);
+      }
+      lastX = x_;
+      lastY = y_;
     }
 
     int index = settings_->envelopeIndex();
