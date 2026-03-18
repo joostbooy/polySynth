@@ -32,7 +32,7 @@ namespace TopPage {
   uint8_t slideVcoSelectIndex_;
   uint8_t modTypeIndex_[ModMatrix::NUM_DESTINATIONS];
 
-  float lastPotValue_[Pots::NUM_POTS];
+  uint8_t lastPotValue_[Pots::NUM_POTS];
 
 
   void init(Settings* settings, Engine* engine, Ui* ui) {
@@ -313,7 +313,7 @@ namespace TopPage {
     int y = (canvas_->height() - h) / 2;
 
     for (size_t i = 0; i < Pots::NUM_POTS; i++) {
-      float value = pots_->read(i);
+      uint8_t value = pots_->read(i) * 255;
       if (value != lastPotValue_[i]) {
         lastPotValue_[i] = value;
         if (ui_->potIsLocked(i) == false) {
@@ -352,11 +352,11 @@ namespace TopPage {
     w = canvas_->width() - x;
 
     canvas_->setFont(Font::SMALL);
-    canvas_->drawText(x + 2, y, w - 2, h, selectedPageText(), Canvas::LEFT, Canvas::CENTER);
+    canvas_->drawText(x + 2, y, w - 2, h, selectedPageText(), Canvas::CENTER, Canvas::CENTER);
     canvas_->fill(x + 1, y, w - 1, h, Canvas::INVERTED);
 
     // Pots
-    drawPots();
+    // drawPots();
 
     // Messages
     MessagePainter::draw(pages_->targetFps());
