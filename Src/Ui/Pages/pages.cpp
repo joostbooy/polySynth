@@ -70,7 +70,7 @@ bool Pages::isOpen(int id) {
 
 void Pages::close(int id) {
 	if (pageStack_.remove_by_value(id)) {
-		if (pageStack_.readable()) {
+		if (pageStack_.size() > 0) {
 			currentPage_ = pageStack_.read(pageStack_.size() - 1);
 		} else {
 			currentPage_ = EMPTY_PAGE;
