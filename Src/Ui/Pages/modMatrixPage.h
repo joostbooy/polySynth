@@ -37,7 +37,7 @@ namespace ModMatrixPage {
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"COPY", "PASTE", "CLEAR", ">", "<", "TOGGLE", "SET DEPTH", "SET CC"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"COPY", "PASTE", "CLEAR", ">", "<", "TOGGLE", "SET CC", "SET DEPTH"};
 
   void scroll_to_source(int src) {
     src_ = SettingsUtils::clip(0, ModMatrix::NUM_SOURCES - 1, src);
