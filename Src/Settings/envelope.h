@@ -253,9 +253,9 @@ class Envelope {
   void paste(Envelope* envelope) {
     clockSync_ = envelope->clockSync();
     mode_ = envelope->mode();
-    decayTime_ = envelope->attackTime();
+    attackTime_ = envelope->attackTime();
     attackShape_ = envelope->attackShape();
-    attackTime_ = envelope->decayTime();
+    decayTime_ = envelope->decayTime();
     decayShape_ = envelope->decayShape();
     holdTime_ = envelope->holdTime();
     sustainLevel_ = envelope->sustainLevel();
