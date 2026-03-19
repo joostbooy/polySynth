@@ -52,7 +52,7 @@ namespace EnvelopePage {
       float currentValue = SettingsUtils::difference(lut_phase_inc[i], targetInc);
       if (currentValue < value) {
         value = currentValue;
-        time = 1.f - ((1.f / size) * i);
+        time = (1.f / size) * (size - i);
       }
     }
   }
@@ -81,6 +81,10 @@ namespace EnvelopePage {
     ListPage::refreshLeds();
   }
 
+  float readTime(float value) {
+    return 1.f + (time - 1.f) * value;
+  }
+
   void draw() {
     ListPage::draw();
 
@@ -98,11 +102,11 @@ namespace EnvelopePage {
     }
 
     envelope.setMode(Envelope::TRIGGER);
-    envelope.setAttackTime(time * (1.f - envelope.attackTime()));
-    envelope.setDecayTime(time * (1.f - envelope.decayTime()));
+    envelope.setAttackTime(time * envelope.attackTime());
+    envelope.setDecayTime(time * envelope.decayTime());
     envelope.setHoldTime(holdTime);
     envelope.setSustainLevel(envelope.sustainLevel());
-    envelope.setReleaseTime(time * (1.f - envelope.releaseTime()));
+    envelope.setReleaseTime(time * envelope.releaseTime());
 
     envelopeEngine.init(&envelope);
     envelopeEngine.attack();
