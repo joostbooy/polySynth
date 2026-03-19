@@ -81,10 +81,6 @@ namespace EnvelopePage {
     ListPage::refreshLeds();
   }
 
-  float readTime(float value) {
-    return 1.f + (time - 1.f) * value;
-  }
-
   void draw() {
     ListPage::draw();
 
