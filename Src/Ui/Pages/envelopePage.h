@@ -96,7 +96,7 @@ namespace EnvelopePage {
 
     float holdTime;
     if (envelope.mode() == Envelope::TRIGGER) {
-      holdTime = time * (1.f - envelope.holdTime());
+      holdTime = time * envelope.holdTime();
     } else {
       holdTime = time;
     }

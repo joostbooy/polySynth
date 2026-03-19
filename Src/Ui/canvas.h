@@ -90,25 +90,6 @@ class Canvas {
     }
   }
 
-  void fill(int x, int y, int w, int h, Color color) {
-    int y2 = y + h;
-    for (int yi = y; yi < y2; ++yi) {
-      horizontalLine(x, yi, w, color);
-    }
-  }
-
-  void frame(int x, int y, int w, int h, Color color, int border = 1) {
-    int x2 = SettingsUtils::clipMin(0, x + w - 1);
-    int y2 = SettingsUtils::clipMin(0, y + h - 1);
-
-    for (int i = 0; i < border; ++i) {
-      horizontalLine(x, y + i, w, color);
-      horizontalLine(x, y2 - i, w, color);
-      verticalLine(x + i, y, h, color);
-      verticalLine(x2 - i, y, h, color);
-    }
-  }
-
   void drawLine(int x1, int y1, int x2, int y2, Color color) {
     int dx = abs(x2 - x1);
     int dy = abs(y2 - y1);
@@ -135,6 +116,26 @@ class Canvas {
       }
     }
   }
+
+  void fill(int x, int y, int w, int h, Color color) {
+    int y2 = y + h;
+    for (int yi = y; yi < y2; ++yi) {
+      horizontalLine(x, yi, w, color);
+    }
+  }
+
+  void frame(int x, int y, int w, int h, Color color, int border = 1) {
+    int x2 = SettingsUtils::clipMin(0, x + w - 1);
+    int y2 = SettingsUtils::clipMin(0, y + h - 1);
+
+    for (int i = 0; i < border; ++i) {
+      horizontalLine(x, y + i, w, color);
+      horizontalLine(x, y2 - i, w, color);
+      verticalLine(x + i, y, h, color);
+      verticalLine(x2 - i, y, h, color);
+    }
+  }
+
   void getXyAllignment(int* x, int* y, int w, int h, int frameW, int frameH, Allign xAllign, Allign yAllign) {
     int x_ = *x;
     int y_ = *y;
