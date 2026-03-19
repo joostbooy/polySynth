@@ -87,7 +87,7 @@ class EnvelopeEngine {
       case HOLD:
         phase_ += readInc(envelope_->holdTime());
         if (phase_ < 1.f) {
-          sample_ = readInc(envelope_->sustainLevel());
+          sample_ = envelope_->sustainLevel();
         } else {
           phase_ = 0.f;
           releaseLevel_ = sample_;
