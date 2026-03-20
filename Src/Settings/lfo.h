@@ -44,6 +44,7 @@ class Lfo {
     setRandomise(false);
     setRetrigger(true);
     setOneShot(false);
+    setInvert(false);
   }
 
   // Type
@@ -206,6 +207,19 @@ class Lfo {
     return SettingsText::boolToOnOff(oneShot());
   }
 
+  // Retrigger
+  bool invert() {
+    return invert_;
+  }
+
+  void setInvert(bool value) {
+    invert_ = value;
+  }
+
+  const char* invertText() {
+    return SettingsText::boolToOnOff(invert());
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(skew_);
@@ -220,6 +234,7 @@ class Lfo {
     fileWriter.write(retrigger_);
     fileWriter.write(oneShot_);
     fileWriter.write(type_);
+    fileWriter.write(invert_);
   }
 
   void load(FileReader& fileReader) {
@@ -235,6 +250,7 @@ class Lfo {
     fileReader.read(retrigger_);
     fileReader.read(oneShot_);
     fileReader.read(type_);
+    fileReader.read(invert_);
   }
 
   void paste(Lfo* lfo) {
@@ -250,6 +266,7 @@ class Lfo {
     retrigger_ = lfo->retrigger();
     oneShot_ = lfo->oneShot();
     type_ = lfo->type();
+    invert_ = lfo->invert();
   }
 
   void writeHash(Hash& hash) {
@@ -265,6 +282,7 @@ class Lfo {
     hash.write(clockSync_);
     hash.write(retrigger_);
     hash.write(oneShot_);
+    hash.write(invert_);
   }
 
  private:
@@ -280,6 +298,7 @@ class Lfo {
   bool clockSync_;
   bool retrigger_;
   bool oneShot_;
+  bool invert_;
 };
 
 #endif

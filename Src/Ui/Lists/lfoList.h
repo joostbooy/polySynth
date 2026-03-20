@@ -22,6 +22,7 @@ public:
 		RANDOMISE,
 		RETRIGGER,
 		ONE_SHOT,
+		INVERT,
 
 		NumItems
 	};
@@ -46,6 +47,7 @@ public:
 		case RANDOMISE:				return "RANDOMISE";
 		case RETRIGGER:				return "RETRIGGER";
 		case ONE_SHOT:				return "ONE SHOT";
+		case INVERT:				return "INVERT";
 		default:
 			break;
 		}
@@ -70,6 +72,7 @@ public:
 		case RANDOMISE:				return lfo.randomiseText();
 		case RETRIGGER:				return lfo.retriggerText();
 		case ONE_SHOT:				return lfo.oneShotText();
+		case INVERT:				return lfo.invertText();
 		default:
 			break;
 		}
@@ -119,6 +122,9 @@ public:
 			break;
 		case ONE_SHOT:
 			lfo.setOneShot(inc > 0);
+			break;
+		case INVERT:
+			lfo.setInvert(inc > 0);
 			break;
 		default:
 			break;

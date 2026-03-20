@@ -75,7 +75,8 @@ class LfoEngine {
 
     float min = lfo_->min();
     float max = lfo_->randomise() ? randomMax_ : lfo_->max();
-    return min + (max - min) * x;
+    float value =  min + (max - min) * x;
+    return lfo_->invert() ? 1.f - value : value;
   }
 
  private:
