@@ -6,7 +6,10 @@
 
 class Leds {
  public:
-  enum Color { BLACK, RED };
+  enum Color {
+    BLACK,
+    RED,
+  };
 
   void init() {
     setAll(BLACK);
