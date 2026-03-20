@@ -67,7 +67,7 @@ class LfoEngine {
         }
         break;
       case Lfo::SQUARE:
-        x = phase_ < skewAmount ? 1.f : 0.f;
+        x = phase < skewAmount ? 1.f : 0.f;
         break;
       default:
         break;
