@@ -9,6 +9,13 @@ class WindowPainter {
     canvas_ = canvas;
   }
 
+  static void drawBox(int x, int y, int w, int h) {
+    canvas_->fill(x + 4, y + 4, w, h, Canvas::SUBTRACTED);
+    canvas_->frame(x, y, w, h, Canvas::WHITE);
+    canvas_->fill(x + 1, y + 1, w - 2, h - 2, Canvas::BLACK);
+    canvas_->frame(x + 4, y + 4, w - 8, h - 8, Canvas::WHITE);
+  }
+
   static void drawVerticalScollbar(int x, int y, int w, int h, int top_item, int num_items, int visible_items) {
     if (num_items > visible_items) {
       int bar_y = (top_item * h) / num_items;

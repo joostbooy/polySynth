@@ -63,10 +63,7 @@ namespace ModMatrixCcPage {
     const int y = (canvas_->height() - h) / 2;
 
     canvas_->setFont(Font::SMALL);
-    canvas_->fill(x + 4, y + 4, w, h, Canvas::SUBTRACTED);
-    canvas_->frame(x, y, w, h, Canvas::WHITE);
-    canvas_->fill(x + 1, y + 1, w - 2, h - 2, Canvas::BLACK);
-    canvas_->frame(x + 4, y + 4, w - 8, h - 8, Canvas::WHITE);
+    WindowPainter::drawBox(x, y, w, h);
     canvas_->drawText(x, y + 2, w, h - 2, str_.write("INDEX ", index_ + 1), Canvas::CENTER, Canvas::TOP, Canvas::WHITE);
     canvas_->drawText(x, y, w, h, settings_->modMatrix().midiCcNumberText(index_), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
 
