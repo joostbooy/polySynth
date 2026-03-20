@@ -144,7 +144,7 @@ class ModMatrix {
 
   // Destination depth
   void setDestinationDepth(size_t dest, float value) {
-    destinationDepth_[dest] = value;
+    destinationDepth_[dest] = SettingsUtils::clipFloat(value);
   }
 
   float destinationDepth(size_t dest) {
