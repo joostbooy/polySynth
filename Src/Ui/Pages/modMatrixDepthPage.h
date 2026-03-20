@@ -57,14 +57,15 @@ namespace ModMatrixDepthPage {
 
   void draw() {
     const int w = canvas_->width() / 4;
-    const int h = canvas_->height() / 4;
+    const int h = canvas_->height() / 2;
     const int x = (canvas_->width() - w) / 2;
     const int y = (canvas_->height() - h) / 2;
-    
+    const int rowH = h / 4;
+
     WindowPainter::drawBox(x, y, w, h);
     canvas_->setFont(Font::SMALL);
-    canvas_->drawText(x, y + 2, w, h - 2, ModMatrix::destination_text(dest_), Canvas::CENTER, Canvas::TOP, Canvas::WHITE);
-    canvas_->drawText(x, y, w, h, settings_->modMatrix().destinationDepthText(dest_), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
+    canvas_->drawText(x, y + (rowH * 1), w, h - 2, ModMatrix::destination_text(dest_), Canvas::CENTER, Canvas::TOP, Canvas::WHITE);
+    canvas_->drawText(x, y + (rowH * 2), w, h, settings_->modMatrix().destinationDepthText(dest_), Canvas::CENTER, Canvas::TOP, Canvas::WHITE);
  
     WindowPainter::drawFooter(footerOptionsText, NUM_FOOTER_OPTIONS);
   }
