@@ -84,9 +84,11 @@ void Engine::processGates() {
 
       if (gate_[i]) {
         int note = settings_->midi().gateToNote(i);
-        if (note >= 0) {
+        int channel = settings_->midi().channelReceive();
+        
+        if (note >= 0 && channel >= 0) {
           e.port = settings_->midi().portReceive();
-          e.message = settings_->midi().channelReceive() | MidiEngine::NOTE_ON;
+          e.message = (channel & 0x0F) | MidiEngine::NOTE_ON;
           e.data[0] = note;
           e.data[1] = 100;
           noteOn(e);
