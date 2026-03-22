@@ -66,10 +66,10 @@ class Engine {
   MidiClockEngine midiClockEngine_;
   ModMatrixEngine modMatrixEngine_;
   Que<MidiEngine::Event, Settings::kNumVoices> noteQue_;
-  MidiEngine::Event auditionEvent_;
   bool gate_[2];
   bool lastGate_[2];
   MidiEngine::Event gateToNote_[2];
+  MidiEngine::Event auditionEvent_;
   uint32_t processingTimeUs_;
 
   void start();
