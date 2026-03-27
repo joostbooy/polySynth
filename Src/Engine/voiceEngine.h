@@ -86,7 +86,6 @@ class VoiceEngine {
       uint8_t v = activeVoices_.read(i);
       if (voice_[v].keyPressed() == true && voice_[v].port() == port && voice_[v].channel() == chn && voice_[v].note() == note) {
         voice_[v].noteOff();
-        break;
       }
     }
   }
@@ -142,7 +141,8 @@ class VoiceEngine {
   }
 
   void noteOn(int voiceIndex, MidiEngine::Event& e) {
-    voice_[voiceIndex].noteOn(e, activeVoices_.size());
+    int playOrder = activeVoices_.size();
+    voice_[voiceIndex].noteOn(e, playOrder);
     activeVoices_.push(voiceIndex);
     mostRecentVoice_ = voiceIndex;
     if (numRequested_ > 0) {
