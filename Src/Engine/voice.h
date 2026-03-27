@@ -113,14 +113,14 @@ class Voice {
     dac_->set(index_, 1, data[ModMatrix::VCO_MOD_DEPTH] * 65535);
     dac_->set(index_, 2, data[ModMatrix::SHAPE_1] * 65535);
     dac_->set(index_, 3, calculatePitchOsc1(data[ModMatrix::TUNE_1]));
-    dac_->set(index_, 4, data[ModMatrix::DRIVE] * 65535);
+    dac_->set(index_, 4, (1.f - data[ModMatrix::DRIVE]) * 65535);
     dac_->set(index_, 5, data[ModMatrix::GAIN] * fadePhase_ * 65535);
-    dac_->set(index_, 6, data[ModMatrix::RESONANCE_2] * 65535);
+    dac_->set(index_, 6, (1.f - data[ModMatrix::RESONANCE_2]) * 65535);
     dac_->set(index_, 7, calculatePitchOsc2(data[ModMatrix::TUNE_2]));
     dac_->set(index_, 8, calculateCutoff1(data[ModMatrix::CUTOFF_1]));
     dac_->set(index_, 9, calculateCutoff2(data[ModMatrix::CUTOFF_2]));
     dac_->set(index_, 10, calculatePan(data[ModMatrix::PAN]));
-    dac_->set(index_, 11, data[ModMatrix::RESONANCE_1] * 65535);
+    dac_->set(index_, 11, (1.f - data[ModMatrix::RESONANCE_1]) * 65535);
 
     if (fadePhase_ == 0.f || envelopeEngine_[0].stage() == EnvelopeEngine::IDLE) {
       state_ = AVAILABLE;
@@ -155,7 +155,8 @@ class Voice {
   LfoEngine lfoEngine_[Settings::kNumLfos];
 
   uint16_t calculatePan(float pan) {
-    return EngineUtils::spread(pan, settings_->amp().panSpread(), playOrder_) * 65535;
+    float pan_ = LookupTablesUtils::read(lut_exp, pan);
+    return EngineUtils::spread(pan_, settings_->amp().panSpread(), playOrder_) * 65535;
   }
 
   uint16_t calculateCutoff1(float cutoff) {
