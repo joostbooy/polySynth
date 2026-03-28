@@ -66,7 +66,7 @@ freq_max = 250.0
 
 freq_inc_min = freq_min / sample_rate
 freq_inc_max = freq_max / sample_rate
-steps = numpy.linspace(freq_inc_min, freq_inc_max, phase_table_size)
+steps = numpy.geomspace(freq_inc_min, freq_inc_max, phase_table_size)
 
 tables.append('float ' + name)
 tables.append(steps.astype('float32'))
