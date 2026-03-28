@@ -24,8 +24,8 @@ class Filter {
   void init() {
     setType(HP);
     setRouting(SERIES);
-    setCutoff1(1.f);
-    setCutoff2(1.f);
+    setCutoff1(0.9f);
+    setCutoff2(0.9f);
     setCutoff1Spread(0.f);
     setCutoff2Spread(0.f);
     setResonace1(0.f);
