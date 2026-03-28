@@ -25,8 +25,8 @@ class ModMatrixEngine {
     source_[ModMatrix::CV_1 + channel] = value;
   }
 
-  void setMidiVelocity(uint8_t value) {
-    source_[ModMatrix::MIDI_VELOCITY] = (1.f / 127.f) * value;
+  void setMidiVelocity(float value) {
+    source_[ModMatrix::MIDI_VELOCITY] = value;
   }
 
   void setMidiBend(uint16_t value) {
