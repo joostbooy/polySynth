@@ -153,7 +153,7 @@ class MidiList : public SettingsList {
     str.write(bpm, ".", bpmFractional);
 
     if (settings_->midiClock().source() == MidiClock::EXTERNAL) {
-      str.append(Font::LOCK);
+      str.append(char(Font::LOCK));
     }
 
     return str.read();
