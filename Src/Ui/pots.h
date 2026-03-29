@@ -123,7 +123,6 @@ class Pots {
     raw_[id] = value;
   }
 
-
   float read(int id) {
     return filtered_[id];
   }
@@ -131,18 +130,13 @@ class Pots {
   void filterAll() {
     for (size_t i = 0; i < NUM_POTS; ++i) {
       float diff = SettingsUtils::difference(raw_[i], filtered_[i]);
-      filtered_[i] += (raw_[i] - filtered_[i]) * curve(diff * 0.01f);
+      filtered_[i] += (raw_[i] - filtered_[i]) * (diff * 0.05f);
     }
   }
 
  private:
   float raw_[NUM_POTS];
   float filtered_[NUM_POTS];
-  uint16_t timer_[NUM_POTS];
-
-  float curve(float x) {
-    return 1.f - (1.f - x) * (1.f - x);
-  }
 };
 
 #endif  // Pots_h
