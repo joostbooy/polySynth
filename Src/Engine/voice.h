@@ -120,7 +120,7 @@ class Voice {
     dac_->set(index_, 8, calculateCutoff1(data[ModMatrix::CUTOFF_1]));
     dac_->set(index_, 9, calculateCutoff2(data[ModMatrix::CUTOFF_2]));
     dac_->set(index_, 10, calculatePan(1.f - data[ModMatrix::PAN]));
-    dac_->set(index_, 11, (1.f - data[ModMatrix::RESONANCE_1]) * 65535);
+    dac_->set(index_, 11, calculateResonance1(1.f - data[ModMatrix::RESONANCE_1]));
 
     if (fadePhase_ == 0.f || envelopeEngine_[0].stage() == EnvelopeEngine::IDLE) {
       state_ = AVAILABLE;
@@ -153,6 +153,10 @@ class Voice {
   ModMatrixEngine* modMatrixEngine_;
   EnvelopeEngine envelopeEngine_[2];
   LfoEngine lfoEngine_[Settings::kNumLfos];
+
+  uint16_t calculateResonance1(float resonance) {
+    return LookupTablesUtils::read(lut_inv_exp, resonance) * 65535;
+  }
 
   uint16_t calculateDrive(float drive) {
     return LookupTablesUtils::read(lut_inv_exp, drive) * 65535;
