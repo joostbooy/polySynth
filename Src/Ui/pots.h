@@ -117,18 +117,12 @@ class Pots {
   void init() {
     std::fill(&raw_[0], &raw_[NUM_POTS], 0.f);
     std::fill(&filtered_[0], &filtered_[NUM_POTS], 0.f);
-    std::fill(&timer_[0], &timer_[NUM_POTS], 0);
   }
 
   void write(int id, float value) {
-    if (SettingsUtils::difference(value, raw_[id]) >= (1.f / 16.f)) {
-      timer_[id] = 500;
-    }
-
-    if (timer_[id] > 0) {
-      raw_[id] = value;
-    }
+    raw_[id] = value;
   }
+
 
   float read(int id) {
     return filtered_[id];
@@ -136,11 +130,8 @@ class Pots {
 
   void filterAll() {
     for (size_t i = 0; i < NUM_POTS; ++i) {
-      filtered_[i] += 0.01f * (raw_[i] - filtered_[i]);
-
-      if (timer_[i] > 0) {
-        --timer_[i];
-      }
+      float diff = SettingsUtils::difference(raw_[i], filtered_[i]);
+      filtered_[i] += (raw_[i] - filtered_[i]) * curve(diff * 0.01f);
     }
   }
 
@@ -148,6 +139,10 @@ class Pots {
   float raw_[NUM_POTS];
   float filtered_[NUM_POTS];
   uint16_t timer_[NUM_POTS];
+
+  float curve(float x) {
+    return 1.f - (1.f - x) * (1.f - x);
+  }
 };
 
 #endif  // Pots_h
