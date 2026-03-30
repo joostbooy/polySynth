@@ -127,7 +127,7 @@ class Voice {
     }
 
     if (settings_->calibration().enabled()) {
-      uint16_t gain = (index_ == settings_->calibration().selectedVoice()) ? 65535 : 0;
+      uint16_t gain = (index_ == settings_->calibration().selectedVoice()) ? 0 : 65535;
       dac_->set(index_, 5, gain);
       dac_->set(index_, 3, settings_->calibration().min());
       dac_->set(index_, 7, settings_->calibration().max());
