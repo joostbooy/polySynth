@@ -95,7 +95,7 @@ class Voice {
 
   void update() {
     if (stopRequested_ == true && fadePhase_ > 0.f) {
-      fadePhase_ -= 1000.f / (SAMPLE_RATE * 24.f);
+      fadePhase_ -= 1000.f / (SAMPLE_RATE * 100.f);
       if (fadePhase_ < 0.f) {
         fadePhase_ = 0.f;
       }
