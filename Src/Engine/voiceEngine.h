@@ -13,6 +13,7 @@ class VoiceEngine {
     settings_ = settings;
     activeVoices_.clear();
     availableVoices_.clear();
+    lastNote_ = 60;
 
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
       voice_[i].init(i, settings, modMatrixEngine, dac);
@@ -106,6 +107,7 @@ class VoiceEngine {
       case Oscillator::MONO:
         availableVoices_.remove_by_value(0);
         noteOn(0, e);
+        break;
       case Oscillator::POLY:
         noteOn(availableVoices_.pop(), e);
         break;
@@ -117,6 +119,7 @@ class VoiceEngine {
       default:
         break;
     }
+    lastNote_ = e.data[0];
   }
 
  private:
@@ -126,6 +129,7 @@ class VoiceEngine {
   Stack<uint8_t, Settings::kNumVoices> availableVoices_;
   uint8_t numRequested_ = 0;
   uint8_t mostRecentVoice_ = 0;
+  uint8_t lastNote_ = 0;
 
   void updateAvailableVoices() {
     uint8_t index = 0;
@@ -142,7 +146,7 @@ class VoiceEngine {
 
   void noteOn(int voiceIndex, MidiEngine::Event& e) {
     int playOrder = activeVoices_.size();
-    voice_[voiceIndex].noteOn(e, playOrder);
+    voice_[voiceIndex].noteOn(e, playOrder, lastNote_);
     activeVoices_.push(voiceIndex);
     mostRecentVoice_ = voiceIndex;
     if (numRequested_ > 0) {

@@ -64,14 +64,14 @@ class Voice {
     return state_ == AVAILABLE;
   }
 
-  void noteOn(MidiEngine::Event& e, int playOrder) {
-    lastNote_ = note_;
+  void noteOn(MidiEngine::Event& e, int playOrder, int lastNote) {
     port_ = e.port;
     note_ = e.data[0];
     channel_ = e.message & 0x0F;
     velocity_ = e.data[1] * (1.f / 127.f);
     playOrder_ = playOrder;
-    
+    lastNote_ = lastNote;
+
     keyPressed_ = true;
     stopRequested_ = false;
     fadePhase_ = 1.f;
