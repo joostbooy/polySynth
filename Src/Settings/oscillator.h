@@ -299,7 +299,7 @@ class Oscillator {
 
   // Slide ammount 1
   float slideAmmount1() {
-    return 1.f - slideAmmount1_;
+    return slideAmmount1_;
   }
 
   void setSlideAmmount1(float value) {
@@ -312,7 +312,7 @@ class Oscillator {
   
   // Slide ammount 2
   float slideAmmount2() {
-    return 1.f - (linkSlideAmmount() ? slideAmmount1_ : slideAmmount2_);
+    return linkSlideAmmount() ? slideAmmount1_ : slideAmmount2_;
   }
 
   void setSlideAmmount2(float value) {
