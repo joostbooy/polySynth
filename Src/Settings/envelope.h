@@ -8,7 +8,6 @@
 #include "settingsUtils.h"
 #include "lookupTablesUtils.h"
 
-
 class Envelope {
  public:
   enum Mode {
@@ -31,13 +30,13 @@ class Envelope {
   void init() {
     setClockSync(false);
     setMode(GATE);
-    setAttackTime(0);
+    setAttackTime(0.5f);
     setAttackShape(0.5f);
-    setDecayTime(0);
+    setDecayTime(0.5f);
     setDecayShape(0.5f);
-    setHoldTime(0);
+    setHoldTime(0.5f);
     setSustainLevel(0.5f);
-    setReleaseTime(0);
+    setReleaseTime(0.5f);
     setReleaseShape(0.5f);
     setLoop(false);
     setInvert(false);
@@ -71,7 +70,7 @@ class Envelope {
 
   // Attack time
   float attackTime() {
-    return 1.f - attackTime_;
+    return attackTime_;
   }
 
   void setAttackTime(float value) {
@@ -101,7 +100,7 @@ class Envelope {
 
   // Decay time
   float decayTime() {
-    return 1.f - decayTime_;
+    return decayTime_;
   }
 
   void setDecayTime(float value) {
@@ -131,7 +130,7 @@ class Envelope {
 
   // Hold time
   float holdTime() {
-    return 1.f - holdTime_;
+    return holdTime_;
   }
 
   void setHoldTime(float value) {
@@ -165,7 +164,7 @@ class Envelope {
 
   // Release time
   float releaseTime() {
-    return 1.f - releaseTime_;
+    return releaseTime_;
   }
 
   void setReleaseTime(float value) {
@@ -268,16 +267,16 @@ class Envelope {
   void writeHash(Hash& hash) {
     hash.write(clockSync_);
     hash.write(mode_);
-    hash.write(decayTime_);
-    hash.write(attackShape_);
+    hash.write(loop_);
+    hash.write(invert_);
     hash.write(attackTime_);
+    hash.write(attackShape_);
+    hash.write(decayTime_);
     hash.write(decayShape_);
     hash.write(holdTime_);
     hash.write(sustainLevel_);
     hash.write(releaseTime_);
     hash.write(releaseShape_);
-    hash.write(loop_);
-    hash.write(invert_);
   }
 
  private:

@@ -263,13 +263,13 @@ void Ui::writePotToSetting(int id) {
       p.lfo(0).setSpeed(pots_.read(Pots::LFO_SPEED_1));
       break;
     case Pots::A_TIME_1:
-      p.envelope(0).setAttackTime(pots_.read(Pots::A_TIME_1));
+      p.envelope(0).setAttackTime(1.f - pots_.read(Pots::A_TIME_1));
       break;
     case Pots::A_SHAPE_1:
       p.envelope(0).setAttackShape(pots_.read(Pots::A_SHAPE_1));
       break;
     case Pots::D_TIME_1:
-      p.envelope(0).setDecayTime(pots_.read(Pots::D_TIME_1));
+      p.envelope(0).setDecayTime(1.f - pots_.read(Pots::D_TIME_1));
       break;
     case Pots::D_SHAPE_1:
       p.envelope(0).setDecayShape(pots_.read(Pots::D_SHAPE_1));
@@ -278,22 +278,22 @@ void Ui::writePotToSetting(int id) {
       p.envelope(0).setSustainLevel(pots_.read(Pots::S_LEVEL_1));
       break;
     case Pots::S_HOLD_1:
-      p.envelope(0).setHoldTime(pots_.read(Pots::S_HOLD_1));
+      p.envelope(0).setHoldTime(1.f - pots_.read(Pots::S_HOLD_1));
       break;
     case Pots::R_TIME_1:
-      p.envelope(0).setReleaseTime(pots_.read(Pots::R_TIME_1));
+      p.envelope(0).setReleaseTime(1.f - pots_.read(Pots::R_TIME_1));
       break;
     case Pots::R_SHAPE_1:
       p.envelope(0).setReleaseShape(pots_.read(Pots::R_SHAPE_1));
       break;
     case Pots::A_TIME_2:
-      p.envelope(1).setAttackTime(pots_.read(Pots::A_TIME_2));
+      p.envelope(1).setAttackTime(1.f - pots_.read(Pots::A_TIME_2));
       break;
     case Pots::A_SHAPE_2:
       p.envelope(1).setAttackShape(pots_.read(Pots::A_SHAPE_2));
       break;
     case Pots::D_TIME_2:
-      p.envelope(1).setDecayTime(pots_.read(Pots::D_TIME_2));
+      p.envelope(1).setDecayTime(1.f - pots_.read(Pots::D_TIME_2));
       break;
     case Pots::D_SHAPE_2:
       p.envelope(1).setDecayShape(pots_.read(Pots::D_SHAPE_2));
@@ -302,10 +302,10 @@ void Ui::writePotToSetting(int id) {
       p.envelope(1).setSustainLevel(pots_.read(Pots::S_LEVEL_2));
       break;
     case Pots::S_HOLD_2:
-      p.envelope(1).setHoldTime(pots_.read(Pots::S_HOLD_2));
+      p.envelope(1).setHoldTime(1.f - pots_.read(Pots::S_HOLD_2));
       break;
     case Pots::R_TIME_2:
-      p.envelope(1).setReleaseTime(pots_.read(Pots::R_TIME_2));
+      p.envelope(1).setReleaseTime(1.f - pots_.read(Pots::R_TIME_2));
       break;
     case Pots::R_SHAPE_2:
       p.envelope(1).setReleaseShape(pots_.read(Pots::R_SHAPE_2));
