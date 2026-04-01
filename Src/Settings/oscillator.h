@@ -440,9 +440,15 @@ class Oscillator {
     trackNote2_ = oscillator->trackNote2();
     modDepth_ = oscillator->modDepth();
     modSource_ = oscillator->modSource();
+
+    // temporarily unlink slide amount so we can write slide ammount 2
+    bool link = oscillator->linkSlideAmmount();
+    oscillator->setLinkSlideAmmount(false);
     slideAmmount1_ = oscillator->slideAmmount1();
     slideAmmount2_ = oscillator->slideAmmount2();
+    oscillator->setLinkSlideAmmount(link);
     linkSlideAmmount_ = oscillator->linkSlideAmmount();
+
     slideEnable1_ = oscillator->slideEnable1();
     slideEnable2_ = oscillator->slideEnable2();
     octaveOffset1_ = oscillator->octaveOffset1();
