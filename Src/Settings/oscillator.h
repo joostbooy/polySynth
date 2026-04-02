@@ -448,12 +448,11 @@ class Oscillator {
     tune2_ = oscillator->tune2();
 
     // temporarily unlink slide amount so we can paste slide ammount 2
-    bool link = oscillator->linkSlideAmmount();
+    linkSlideAmmount_ = oscillator->linkSlideAmmount();
     oscillator->setLinkSlideAmmount(false);
     slideAmmount1_ = oscillator->slideAmmount1();
     slideAmmount2_ = oscillator->slideAmmount2();
-    oscillator->setLinkSlideAmmount(link);
-    linkSlideAmmount_ = oscillator->linkSlideAmmount();
+    oscillator->setLinkSlideAmmount(linkSlideAmmount_);
   }
 
     void writeHash(Hash& hash) {
