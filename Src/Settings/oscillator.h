@@ -447,7 +447,7 @@ class Oscillator {
     tune1_ = oscillator->tune1();
     tune2_ = oscillator->tune2();
 
-    // temporarily unlink slide amount so we can paste slide ammount 2
+    // Temporarily unlink slide amount so we can paste slide ammount 2
     linkSlideAmmount_ = oscillator->linkSlideAmmount();
     oscillator->setLinkSlideAmmount(false);
     slideAmmount1_ = oscillator->slideAmmount1();
