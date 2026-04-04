@@ -99,7 +99,7 @@ void Ui::process() {
   while (uiQue.readable()) {
     Ui::Event e = uiQue.read();
 
-    if (buttons_.isDisplayButton(e.id)) {
+    if ((e.type == ENCODER) || buttons_.isDisplayButton(e.id)) {
       displayTimer_ = 5000;
     }
 
