@@ -69,6 +69,20 @@ class Display {
     return dma_busy_;
   }
 
+  void turnOff() {
+    if (isOn_) {
+      isOn_ = false;
+      sendCommand(0xae);
+    }
+  }
+
+  void turnOn() {
+    if (!isOn_) {
+      isOn_ = true;
+      sendCommand(0xaf);
+    }
+  }
+
   void sendBuffer(uint8_t* data, uint32_t size) {
     while (dma_busy_) {
     };
@@ -91,6 +105,7 @@ class Display {
   }
 
  private:
+  bool isOn_ = false;
   volatile uint8_t dummy;
   volatile bool dma_busy_;
 

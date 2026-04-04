@@ -155,6 +155,16 @@ class Buttons {
     }
   }
 
+  bool isDisplayButton(int id) {
+    if (toFunction(id) >= 0) {
+      return true;
+    }
+    if (toPage(id) >= 0) {
+      return true;
+    }
+    return id == SHIFT;
+  }
+
  private:
     uint32_t pressed_[2];
 };

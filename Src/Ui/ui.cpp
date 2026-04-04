@@ -20,6 +20,7 @@ void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* displ
 
   lastInterval_ = 0;
   displayInterval_ = 0;
+  displayTimer_ = 5000;
 
   std::fill(&lastButtonState_[0], &lastButtonState_[8 * 6], 0);
 
@@ -88,11 +89,20 @@ void Ui::poll() {
     engine_->modMatrixEngine().setCv(adc_->currentCv(), value);
     adc_->convertNextCv();
   }
+
+  if (displayTimer_ > 0) {
+    --displayTimer_;
+  }
 }
 
 void Ui::process() {
   while (uiQue.readable()) {
     Ui::Event e = uiQue.read();
+
+    if (buttons_.isDisplayButton(e.id)) {
+      displayTimer_ = 5000;
+    }
+
     switch (e.type) {
       case Ui::BUTTON:
         buttons_.write(e.id, e.value);
@@ -114,7 +124,7 @@ void Ui::process() {
     processPots();
     processSwitches();
   }
-
+ 
   displayInterval_ += interval;
   if (displayInterval_ >= pages_.targetFps()) {
     processDisplay();
@@ -128,11 +138,17 @@ void Ui::processLeds() {
 }
 
 void Ui::processDisplay() {
-  while (display_->dmaBusy());
-  displayInterval_ = 0;
-  canvas_.clear();
-  pages_.draw();
-  display_->sendBuffer(canvas_.data(), canvas_.size());
+  if (displayTimer_ == 0) {
+    display_->turnOff();
+  } else {
+    display_->turnOn();
+
+    while (display_->dmaBusy());
+    displayInterval_ = 0;
+    canvas_.clear();
+    pages_.draw();
+    display_->sendBuffer(canvas_.data(), canvas_.size());
+  }
 }
 
 void Ui::processSwitches() {

@@ -102,7 +102,7 @@ void Display::init() {
 	sendCommand(0xa6);				// Set Display Mode = Normal Display
 	sendCommand(0xa9);				// Exit Partial Display
 	Micros::delay(10 * 1000);
-	sendCommand(0xaf);				// Set Sleep mode OFF (Display ON),
+	turnOn();
 	Micros::delay(50 * 1000);
 
 	// Start dma interrupt
