@@ -162,7 +162,7 @@ class Buttons {
     if (toPage(id) >= 0) {
       return true;
     }
-    return id == SHIFT;
+    return id == SHIFT || id == ENC_X || id == ENC_Y;
   }
 
  private:
