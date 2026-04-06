@@ -105,7 +105,6 @@ namespace EnvelopePage {
     envelope.setAttackTime(getTime(envelope.attackTime()));
     envelope.setDecayTime(getTime(envelope.decayTime()));
     envelope.setHoldTime(holdTime);
-    envelope.setSustainLevel(envelope.sustainLevel());
     envelope.setReleaseTime(getTime(envelope.releaseTime()));
 
     envelopeEngine.init(&envelope);
