@@ -229,8 +229,6 @@ class Filter {
   }
 
   void paste(Filter* filter) {
-    cutoff1_ = filter->cutoff1();
-    cutoff2_ = filter->cutoff2();
     cutoff1Spread_ = filter->cutoff1Spread();
     cutoff2Spread_ = filter->cutoff2Spread();
     resonace1_ = filter->resonance1();
@@ -239,7 +237,13 @@ class Filter {
     routing_ = filter->routing();
     fmEnable1_ = filter->fmEnable1();
     fmEnable2_ = filter->fmEnable2();
+
+    // Temporarily unlink cutoff so we can paste cutoff 2
     link_ = filter->link();
+    filter->setLink(false);
+    cutoff1_ = filter->cutoff1();
+    cutoff2_ = filter->cutoff2();
+    filter->setLink(link_);
   }
 
   void writeHash(Hash& hash) {
