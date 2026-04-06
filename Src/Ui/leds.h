@@ -162,17 +162,17 @@ class Leds {
 
   void setFilterType(Filter::Type type) {
     switch (type) {
-      case Filter::HP:
+      case Filter::HIGH_PASS:
         set(0, 0, RED);
         set(1, 0, BLACK);
         set(2, 0, BLACK);
         break;
-      case Filter::BP:
+      case Filter::BAND_PASS:
         set(0, 0, BLACK);
         set(1, 0, RED);
         set(2, 0, BLACK);
         break;
-      case Filter::LP2P:
+      case Filter::LOW_PASS_2_POLE:
         set(0, 0, BLACK);
         set(1, 0, BLACK);
         set(2, 0, RED);

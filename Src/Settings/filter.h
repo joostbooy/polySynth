@@ -9,9 +9,9 @@
 class Filter {
  public:
   enum Type {
-    HP,
-    BP,
-    LP2P,
+    HIGH_PASS,
+    BAND_PASS,
+    LOW_PASS_2_POLE,
     NUM_FILTER_TYPES,
   };
 
@@ -22,7 +22,7 @@ class Filter {
   };
 
   void init() {
-    setType(HP);
+    setType(HIGH_PASS);
     setRouting(SERIES);
     setCutoff1(0.9f);
     setCutoff2(0.9f);
@@ -37,9 +37,9 @@ class Filter {
 
   const char* typeText(Type type) {
     switch (type) {
-      case HP:    return "HP";
-      case BP:    return "BP";
-      case LP2P:  return "2PLP";
+      case HIGH_PASS:        return "HIGH PASS";
+      case BAND_PASS:        return "BAND PASS";
+      case LOW_PASS_2_POLE:  return "2 POLE LOW PASS";
       default:
         break;
     }
@@ -231,18 +231,18 @@ class Filter {
   void paste(Filter* filter) {
     cutoff1Spread_ = filter->cutoff1Spread();
     cutoff2Spread_ = filter->cutoff2Spread();
-    resonace1_ = filter->resonance1();
-    resonace2_ = filter->resonance2();
     type_ = filter->type();
     routing_ = filter->routing();
     fmEnable1_ = filter->fmEnable1();
     fmEnable2_ = filter->fmEnable2();
 
-    // Temporarily unlink cutoff so we can paste cutoff 2
+    // Temporarily unlink cutoff & resonance so we can paste cutoff 2 & resonance  2
     link_ = filter->link();
     filter->setLink(false);
     cutoff1_ = filter->cutoff1();
     cutoff2_ = filter->cutoff2();
+    resonace1_ = filter->resonance1();
+    resonace2_ = filter->resonance2();
     filter->setLink(link_);
   }
 

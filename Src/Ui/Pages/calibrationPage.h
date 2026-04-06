@@ -62,7 +62,7 @@ namespace CalibrationPage {
     settings_->oscillator().setFmEnable(false);
     settings_->oscillator().setSyncEnable(false);
     settings_->oscillator().setModDepth(0.f);
-    settings_->filter().setType(Filter::LP2P);
+    settings_->filter().setType(Filter::LOW_PASS_2_POLE);
     settings_->filter().setCutoff1(1.f);
     settings_->filter().setCutoff2(1.f);
     settings_->filter().setResonace1(0.f);
