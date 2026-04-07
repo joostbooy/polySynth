@@ -13,7 +13,7 @@ extern const uint32_t lut_bpm_inc[271];
 extern const uint32_t lut_bpm_fractional_inc[10];
 extern const float lut_beat_length_inc[271];
 extern const float lut_phase_inc[256];
-extern const float lut_exp[1024];
 extern const float lut_inv_exp[1024];
+extern const float lut_exp[1024];
 
 #endif

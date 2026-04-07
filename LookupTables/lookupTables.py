@@ -79,14 +79,14 @@ exp_table_size = 1024
 stepsize = 1.0 / exp_table_size
 x = numpy.arange(0, 1.0, stepsize)
 
-name = 'exp'
+name = 'inv_exp'
 values = 1.0 - numpy.exp(-6 * x)
 values /= values.max()
 
 tables.append('float ' + name)
 tables.append(values.astype('float32'))
 
-name = 'inv_exp'
+name = 'exp'
 values = 1.0 - values[::-1]
 
 tables.append('float ' + name)

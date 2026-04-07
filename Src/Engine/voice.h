@@ -155,19 +155,19 @@ class Voice {
   LfoEngine lfoEngine_[Settings::kNumLfos];
 
   uint16_t calculateResonance1(float resonance) {
-    return LookupTablesUtils::read(lut_inv_exp, resonance) * 65535;
+    return LookupTablesUtils::read(lut_exp, resonance) * 65535;
   }
 
   uint16_t calculateDrive(float drive) {
-    return LookupTablesUtils::read(lut_inv_exp, drive) * 65535;
+    return LookupTablesUtils::read(lut_exp, drive) * 65535;
   }
 
   uint16_t calculateVcoModDepth(float modDepth) {
-    return LookupTablesUtils::read(lut_inv_exp, modDepth) * 65535;
+    return LookupTablesUtils::read(lut_exp, modDepth) * 65535;
   }
 
   uint16_t calculatePan(float pan) {
-    float pan_ = LookupTablesUtils::read(lut_inv_exp, pan);
+    float pan_ = LookupTablesUtils::read(lut_exp, pan);
     return EngineUtils::spread(pan_, settings_->amp().panSpread(), playOrder_) * 65535;
   }
 
