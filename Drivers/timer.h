@@ -4,13 +4,16 @@
 #include "stm32f4xx.h"
 
 class Timer {
+ public:
+  static Timer* timer_;
+  void (*callbackTimer2_)();
+  void (*callbackTimer3_)();
 
-public:
-	void start2(uint32_t freq);
-	void start3(uint32_t freq);
+  void init();
+  void start2(uint32_t freq, void (*callback)());
+  void start3(uint32_t freq, void (*callback)());
 
-private:
-
+ private:
 };
 
 #endif
