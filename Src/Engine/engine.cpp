@@ -71,10 +71,6 @@ void Engine::update() {
   dac_->send();
 }
 
-void Engine::setGate(int index, bool state) {
-  gate_[index] = state;
-}
-
 void Engine::processGates() {
   for (size_t i = 0; i < 2; i++) {
     MidiEngine::Event e = gateToNote_[i];

@@ -28,11 +28,14 @@ class Engine {
   void init(Settings*, Uart*, Usb*, Dac*);
   void render();
   void update();
-  void setGate(int index, bool state);
 
   void addReqestBlocking(Request type) {
     addRequest(type);
     while (requests_ & type);
+  }
+
+  void setGate(int index, bool state) {
+    gate_[index] = state;
   }
 
   uint32_t processingTimeUs() {
