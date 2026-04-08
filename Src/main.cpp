@@ -79,8 +79,8 @@ int main(void)
 
 	// Start timers
 	timer.init();
-	timer.start3(UPDATE_FREQ, &update);
-	timer.start2(SAMPLE_RATE, &tick);
+	timer.start3(UPDATE_FREQ, &tick);
+	timer.start2(SAMPLE_RATE, &update);
 
 	while (1) {
 		ui.process();
