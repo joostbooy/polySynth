@@ -33,13 +33,13 @@ Ui ui;
 Engine engine;
 Settings settings;
 
-void tick() {
-  engine.tick();
+void update() {
+  engine.update();
 }
 
-void update() {
+void render() {
   ui.poll();
-  engine.update();
+  engine.render();
 }
 
 extern "C" {
@@ -79,8 +79,8 @@ int main(void)
 
 	// Start timers
 	timer.init();
-	timer.start3(UPDATE_FREQ, &tick);
-	timer.start2(SAMPLE_RATE, &update);
+	timer.start2(SAMPLE_RATE, &render);
+	timer.start3(UPDATE_FREQ, &update);
 
 	while (1) {
 		ui.process();

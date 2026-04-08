@@ -51,7 +51,7 @@ void Engine::cc(MidiEngine::Event& e) {
 }
 
 // 8Khz, keep short !
-void Engine::tick() {
+void Engine::update() {
   if (midiClockEngine_.tick()) {
     for (size_t i = 0; i < Midi::NUM_PORTS; i++) {
       if (settings_->midiClock().send(i)) {
@@ -164,7 +164,7 @@ void Engine::processRequests() {
 }
 
 // 1Khz
-void Engine::update() {
+void Engine::render() {
   uint32_t start = Micros::read();
 
   processRequests();
@@ -182,7 +182,7 @@ void Engine::update() {
       voiceEngine_.assignVoice(noteQue_.read());
     }
 
-    voiceEngine_.update();
+    voiceEngine_.render();
   }
 
   processingTimeUs_ = Micros::read() - start;

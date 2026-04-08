@@ -47,9 +47,9 @@ class VoiceEngine {
     return voice(mostRecentVoice_);
   }
 
-  void update() {
+  void render() {
     for (size_t i = 0; i < Settings::kNumVoices; ++i) {
-      voice_[i].update();
+      voice_[i].render();
     }
 
     updateAvailableVoices();

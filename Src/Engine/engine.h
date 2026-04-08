@@ -26,7 +26,7 @@ class Engine {
   };
 
   void init(Settings*, Uart*, Usb*, Dac*);
-  void tick();
+  void render();
   void update();
   void setGate(int index, bool state);
 
