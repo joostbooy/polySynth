@@ -9,9 +9,7 @@
 #include "sdio.h"
 #include "switches.h"
 #include "timer.h"
-
 #include "lookupTables.h"
-
 #include "disk.h"
 #include "settings.h"
 #include "engine.h"
