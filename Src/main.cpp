@@ -33,15 +33,6 @@ Ui ui;
 Engine engine;
 Settings settings;
 
-void update() {
-  engine.update();
-}
-
-void render() {
-  ui.poll();
-  engine.render();
-}
-
 extern "C" {
 	void NMI_Handler() { }
 	void HardFault_Handler() { while (1); }
@@ -53,6 +44,15 @@ extern "C" {
 	void PendSV_Handler() { }
 	void SysTick_Handler(void) { }
 } //extern "C"
+
+void update() {
+  engine.update();
+}
+
+void render() {
+  ui.poll();
+  engine.render();
+}
 
 int main(void)
 {
