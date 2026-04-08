@@ -62,6 +62,8 @@ void Sys::init() {
   HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 
   HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-  HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(TIM2_IRQn, 1, 0);
+  HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);          // Clock update
+  HAL_NVIC_SetPriority(TIM2_IRQn, 1, 0);          // Render sample
+  HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 2, 0);	// SDIO
+  HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 3, 0);	// LCD
 }
