@@ -51,11 +51,11 @@ class Eeprom {
 
  private:
   void select() {
-    GPIOC->BSRR = GPIO_PIN_15 << 16;
+    GPIOC->BSRR = GPIO_PIN_10 << 16;
   }
 
   void deselect() {
-    GPIOC->BSRR = GPIO_PIN_15;
+    GPIOC->BSRR = GPIO_PIN_10;
   }
 
   uint8_t spiTransfer(uint8_t data = 0) {
