@@ -11,8 +11,4 @@ void Eeprom::init() {
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
 	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-    select();
-    spiTransfer(WRITE_ENABLE);
-    deselect();
 }

@@ -50,6 +50,27 @@ void render() {
   engine.render();
 }
 
+bool testEeprom() {
+  static const size_t kDataSize = 256;
+  uint8_t wData[kDataSize];
+  uint8_t rData[kDataSize];
+
+  for (size_t i = 0; i < kDataSize; i++) {
+    wData[i] = Rng::u16() >> 8;
+  }
+
+  eeprom.write(0, wData, kDataSize);
+  eeprom.read(0, rData, kDataSize);
+
+  for (size_t i = 0; i < kDataSize; i++) {
+    if (rData[i] != wData[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 int main(void)
 {
 	// Init drivers

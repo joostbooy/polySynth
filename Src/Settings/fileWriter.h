@@ -22,9 +22,7 @@ class FileWriter {
   void stop() {
     size_t hash = hash_.read();
     writeBuffer(&hash, sizeof(hash));
-    if (buffPos_ > 0) {
-      sendBuffer();
-    }
+    sendBuffer();
   }
 
   template <typename T>
@@ -33,14 +31,10 @@ class FileWriter {
     hash_.write(&data, sizeof(T));
   }
 
-  bool writeOk() {
-	return true;
-  }
-
  private:
   Hash hash_;
   Eeprom* eeprom_;
-  static constexpr size_t kBufferSize = 128;
+  static constexpr size_t kBufferSize = 512;
   size_t address_;
   size_t buffPos_;
   uint8_t buffer_[kBufferSize];
@@ -59,8 +53,9 @@ class FileWriter {
   }
 
   void sendBuffer() {
-    eeprom_->write(address_, buffer_, buffPos_);
-    address_ += buffPos_;
+    size_t size = buffPos_;
+    eeprom_->write(address_, buffer_, size);
+    address_ += size;
     buffPos_ = 0;
   }
 };

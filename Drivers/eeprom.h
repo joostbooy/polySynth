@@ -21,6 +21,8 @@ class Eeprom {
 
   void write(uint16_t address, uint8_t* data, size_t size) {
     while (size) {
+      writeEnable();
+
       select();
       spiTransfer(WRITE);
       spiTransfer(address);
@@ -32,6 +34,7 @@ class Eeprom {
         }
       }
       deselect();
+      while (writeInProgress()) {}
     }
   }
 
@@ -61,6 +64,22 @@ class Eeprom {
 
     while (!(SPI3->SR & SPI_FLAG_RXNE));
     return *(volatile uint8_t*)&SPI3->DR;
+  }
+
+  void writeEnable() {
+    select();
+    spiTransfer(WRITE_ENABLE);
+    deselect();
+    while (writeInProgress()) {}
+  }
+
+  bool writeInProgress() {
+    bool state;
+
+    select();
+    state = spiTransfer(READ_STATUS) & 0x01;
+    deselect();
+    return state;
   }
 };
 

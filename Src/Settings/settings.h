@@ -177,7 +177,9 @@ class Settings {
   Patch patch_[kNumPatches];
   Patch selectedPatch_;
 
-  //static_assert(sizeof(patch_) < 64000, "Too large");
+  static constexpr size_t kPatchStorageBlock = 63500;
+  static_assert((sizeof(patch_) + sizeof(patchIndex_)) < kPatchStorageBlock, "Patch storage block exceeded!"); 
+  static_assert(kPatchStorageBlock + (sizeof(calibration_)) < 64000, "EEPROM exceeded!"); // 65536
 };
 
 #endif

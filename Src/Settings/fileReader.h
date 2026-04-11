@@ -23,17 +23,14 @@ class FileReader {
   void start(size_t address) {
     address_ = address;
     numRead_ = 0;
-    numReadable_ = 0;
     hash_.init();
     read(version_);
   }
 
   void stop() {
-    if (readOk_) {
-      uint32_t hash = 0;
-      readBuffer(&hash, sizeof(hash));
-      readOk_ = (hash == hash_.read());
-    }
+    uint32_t hash = 0;
+    readBuffer(&hash, sizeof(hash));
+    readOk_ = (hash == hash_.read());
   }
 
   template <typename T>
@@ -60,32 +57,30 @@ class FileReader {
   bool readOk_;
   Eeprom* eeprom_;
   uint32_t numRead_ = 0;
-  uint32_t numReadable_ = 0;
   size_t version_ = 0;
   size_t address_;
   Hash hash_;
 
-  static constexpr size_t kBufferSize = 128;
+  static constexpr size_t kBufferSize = 512;
   uint8_t buffer_[kBufferSize];
 
   void readBuffer(void* data, uint32_t size) {
     uint8_t* data_ = reinterpret_cast<uint8_t*>(data);
 
-    while (readOk_ && (size > 0)) {
-      if (numRead_ < numReadable_) {
+    while (size > 0) {
+      if (numRead_ < kBufferSize) {
         *data_++ = buffer_[numRead_++];
         --size;
       } else {
-        readOk_ = fillBuffer(size);
+        fillBuffer();
       }
     }
   }
 
-  bool fillBuffer(uint32_t requestedSize) {
+  void fillBuffer() {
     numRead_ = 0;
     eeprom_->read(address_, buffer_, kBufferSize);
     address_ += kBufferSize;
-    return true;
   }
 };
 
