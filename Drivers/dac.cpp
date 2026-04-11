@@ -58,6 +58,8 @@ void Dac::init() {
   HAL_SPI_Init(&hspi4);
   __HAL_SPI_ENABLE(&hspi4);
 
+  dummy = SPI4->DR;
+
   // cs pins HIGH
   GPIOC->BSRR = GPIO_PIN_13;
   GPIOE->BSRR = GPIO_PIN_4;
