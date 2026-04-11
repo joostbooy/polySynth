@@ -4,7 +4,6 @@
 namespace TextInputPage {
 
 using TopPage::canvas_;
-using TopPage::disk_;
 using TopPage::leds_;
 using TopPage::buttons_;
 using TopPage::pages_;
