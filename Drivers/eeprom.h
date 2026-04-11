@@ -36,8 +36,7 @@ class Eeprom {
         }
       }
       deselect();
-      while (writeInProgress()) {
-      }
+      while (writeInProgress()) {}
     }
   }
 
@@ -75,8 +74,7 @@ class Eeprom {
     select();
     spiTransfer(WRITE_ENABLE);
     deselect();
-    while (writeInProgress()) {
-    }
+    while (writeInProgress()) {}
   }
 
   bool writeInProgress() {
