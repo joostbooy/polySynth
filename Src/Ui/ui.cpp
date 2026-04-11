@@ -37,7 +37,7 @@ void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* displ
 
 void Ui::poll() {
   // Buttons
-  uint8_t reading = 0xff;
+  uint8_t reading;
   if (!settings_->eepromBusy()) {  // The matrix & eeprom share the same spi line
     matrix_->refresh(&reading);
 
@@ -52,7 +52,7 @@ void Ui::poll() {
       }
     }
   }
-  
+
   // Encoder
   for (int i = 0; i < 4; ++i) {
     encoderRaw_[i] <<= 1;

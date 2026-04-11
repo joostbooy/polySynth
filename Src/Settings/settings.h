@@ -20,8 +20,8 @@ class Settings {
   void init(Eeprom* eeprom) {
     eeprom_ = eeprom;
 
-    fileReader.init(eeprom);
-    fileWriter.init(eeprom);
+    fileReader_.init(eeprom);
+    fileWriter_.init(eeprom);
 
     lfoIndex_ = 0;
     patchIndex_ = 0;
@@ -161,8 +161,8 @@ class Settings {
  private:
   StringBuilderBase<63> path;
 
-  FileWriter fileWriter;
-  FileReader fileReader;
+  FileWriter fileWriter_;
+  FileReader fileReader_;
 
   Eeprom* eeprom_ = nullptr;
 

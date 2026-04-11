@@ -3,19 +3,19 @@
 bool Settings::save() {
   eepromBusy_ = true;
 
-  fileWriter.start(0, current_version());
+  fileWriter_.start(0, current_version());
 
-  fileWriter.write(patchIndex_);
+  fileWriter_.write(patchIndex_);
 
   for (size_t i = 0; i < kNumPatches; i++) {
-    patch(i).save(fileWriter);
+    patch(i).save(fileWriter_);
   }
 
-  fileWriter.stop();
+  fileWriter_.stop();
 
   eepromBusy_ = false;
 
-  return fileWriter.writeOk();
+  return fileWriter_.writeOk();
 };
 
 bool Settings::load() {
@@ -23,17 +23,17 @@ bool Settings::load() {
 
   init();
 
-  fileReader.start(0);
+  fileReader_.start(0);
 
-  fileReader.read(patchIndex_);
+  fileReader_.read(patchIndex_);
 
   for (size_t i = 0; i < kNumPatches; i++) {
-    patch(i).load(fileReader);
+    patch(i).load(fileReader_);
   }
 
-  fileReader.stop();
+  fileReader_.stop();
 
-  if (!fileReader.readOk()) {
+  if (!fileReader_.readOk()) {
     init();
     return false;
   }
@@ -48,23 +48,23 @@ bool Settings::load() {
 bool Settings::saveCalibration() {
   eepromBusy_ = true;
 
-  fileWriter.start(64000 - sizeof(calibration_), current_version());
-  calibration_.save(fileWriter);
-  fileWriter.stop();
+  fileWriter_.start(64000 - sizeof(calibration_), current_version());
+  calibration_.save(fileWriter_);
+  fileWriter_.stop();
 
   eepromBusy_ = false;
 
-  return fileWriter.writeOk();
+  return fileWriter_.writeOk();
 }
 
 bool Settings::loadCalibration() {
   eepromBusy_ = true;
 
-  fileReader.start(64000 - sizeof(calibration_));
-  calibration_.load(fileReader);
-  fileReader.stop();
+  fileReader_.start(64000 - sizeof(calibration_));
+  calibration_.load(fileReader_);
+  fileReader_.stop();
 
-  if (fileReader.readOk()) {
+  if (fileReader_.readOk()) {
     return true;
   } else {
     calibration_.init();
