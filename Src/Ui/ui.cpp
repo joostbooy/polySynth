@@ -38,21 +38,21 @@ void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* displ
 void Ui::poll() {
   // Buttons
   uint8_t reading = 0xff;
-  if (!settings_->eepromBusy()) {   // The matrix & eeprom share the same spi line
+  if (!settings_->eepromBusy()) {  // The matrix & eeprom share the same spi line
     matrix_->refresh(&reading);
-  }
 
-  int collOffset = matrix_->currentCollumn() * 6;
+    int collOffset = matrix_->currentCollumn() * 6;
 
-  for (int i = 0; i < 6; i++) {
-    int index = i + collOffset;
-    bool state = reading & (1 << i);
-    if (state != lastButtonState_[index]) {
-      lastButtonState_[index] = state;
-      addEvent(Ui::BUTTON, index, !state);
+    for (int i = 0; i < 6; i++) {
+      int index = i + collOffset;
+      bool state = reading & (1 << i);
+      if (state != lastButtonState_[index]) {
+        lastButtonState_[index] = state;
+        addEvent(Ui::BUTTON, index, !state);
+      }
     }
   }
-
+  
   // Encoder
   for (int i = 0; i < 4; ++i) {
     encoderRaw_[i] <<= 1;
