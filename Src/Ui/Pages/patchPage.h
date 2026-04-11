@@ -24,12 +24,15 @@ namespace PatchPage {
     PREV,
     PASTE,
     EDIT_NAME,
+    NEXT_2,
+    PREV_2,
+    DISPLAY_OFF,
     AUDITION,
 
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"SAVE", "INIT", "COPY", ">", "<", "PASTE", "EDIT NAME", "AUDITION"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"SAVE", "INIT", "COPY", ">", "<", "PASTE", "EDIT NAME", ">", "<", "DISPLAY OFF", "AUDITION"};
 
   int footerOptionsOffset;
   int newIndex;
@@ -47,9 +50,6 @@ namespace PatchPage {
     engine_->addReqestBlocking(Engine::STOP_AUDITION);
   }
 
-  void printError() {
-  }
-
   void onButton(int id, int state) {
     switch (buttons_->toFunction(id, footerOptionsOffset)) {
       case SAVE:
@@ -59,8 +59,7 @@ namespace PatchPage {
               if (settings_->savePatch()) {
                 MessagePainter::show("PATCH SAVED");
               } else {
-                MessagePainter::show(settings_->fatResultText());
-                // MessagePainter::show("FAILED");
+                MessagePainter::show("FAILED");
               }
             }
           });
@@ -118,14 +117,30 @@ namespace PatchPage {
           engine_->addReqestBlocking(Engine::STOP_AUDITION);
         }
         break;
+      case DISPLAY_OFF:
+        if (!state) {
+          ui_->displayOff();
+        }
+        break;
       case NEXT:
         if (state) {
           footerOptionsOffset = 4;
         }
         break;
       case PREV:
-        if (state) {
+        // dont switch footer options if audition is pressed
+        if (state == 1 && buttons_->isPressed(Buttons::DISPLAY_D) == false) {
           footerOptionsOffset = 0;
+        }
+        break;
+      case NEXT_2:
+        if (state) {
+          footerOptionsOffset = 8;
+        }
+        break;
+      case PREV_2:
+        if (state) {
+          footerOptionsOffset = 4;
         }
         break;
       default:
