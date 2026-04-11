@@ -19,9 +19,8 @@ class Eeprom {
 
   void init();
 
-
   void write(uint16_t address, uint8_t* data, size_t size) {
-    size = clipSize(address, size);
+    checkBounds(&address, &size);
 
     while (size) {
       writeEnable();
@@ -37,12 +36,13 @@ class Eeprom {
         }
       }
       deselect();
-      while (writeInProgress()) {}
+      while (writeInProgress()) {
+      }
     }
   }
 
   void read(uint16_t address, uint8_t* data, size_t size) {
-    size = clipSize(address, size);
+    checkBounds(&address, &size);
 
     select();
     spiTransfer(READ);
@@ -75,7 +75,8 @@ class Eeprom {
     select();
     spiTransfer(WRITE_ENABLE);
     deselect();
-    while (writeInProgress()) {}
+    while (writeInProgress()) {
+    }
   }
 
   bool writeInProgress() {
@@ -87,12 +88,15 @@ class Eeprom {
     return state;
   }
 
-  size_t clipSize(size_t address, size_t size) {
-    int endAdress = address + size;
-    if (endAdress > 64000) {
-      size -= (endAdress - 64000);
+  void checkBounds(uint16_t* address, size_t* size) {
+    if (*address >= 64000) {
+      *address = 63999;
     }
-    return size;
+
+    int endAdress = *address + *size;
+    if (endAdress > 64000) {
+      *size -= (endAdress - 64000);
+    }
   }
 };
 
