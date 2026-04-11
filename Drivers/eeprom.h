@@ -1,7 +1,6 @@
 #if !defined(Eeprom_h)
 #define Eeprom_h
 
-#include "matrix.h"
 #include "stm32f4xx.h"
 
 class Eeprom {
