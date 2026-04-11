@@ -3,7 +3,6 @@
 
 #include "calibration.h"
 #include "eeprom.h"
-#include "matrix.h"
 #include "fileReader.h"
 #include "fileWriter.h"
 #include "patch.h"
@@ -18,9 +17,8 @@ class Settings {
   static const size_t kNumLfos = 2;
   static const size_t kNumEnvelopes = 2;
 
-  void init(Eeprom* eeprom, Matrix *matrix) {
+  void init(Eeprom* eeprom) {
     eeprom_ = eeprom;
-    matrix_ = matrix;
 
     fileReader.init(eeprom);
     fileWriter.init(eeprom);
@@ -41,15 +39,14 @@ class Settings {
   }
 
   void init() {
-    if (eeprom_ != nullptr && matrix_ != nullptr) {
-      init(eeprom_, matrix_);
+    if (eeprom_ != nullptr) {
+      init(eeprom_);
     }
   }
 
   // save & load
   bool save();
   bool load();
-
   bool eepromBusy() {
     return eepromBusy_;
   }
@@ -168,7 +165,6 @@ class Settings {
   FileReader fileReader;
 
   Eeprom* eeprom_ = nullptr;
-  Matrix* matrix_ = nullptr;
 
   int lfoIndex_;
   int patchIndex_;

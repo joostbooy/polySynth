@@ -67,7 +67,7 @@ int main(void)
 	display.init();
 	eeprom.init();
 
-	settings.init(&eeprom, &matrix);
+	settings.init(&eeprom);
 	settings.load();
 	engine.init(&settings, &uart, &usb, &dac);
 	ui.init(&settings, &engine, &matrix, &display, &switches, &adc);
