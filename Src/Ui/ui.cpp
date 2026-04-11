@@ -37,8 +37,10 @@ void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* displ
 
 void Ui::poll() {
   // Buttons
-  uint8_t reading;
-  matrix_->refresh(&reading);
+  uint8_t reading = 0xff;
+  if (!settings_->eepromBusy()) {   // The matrix & eeprom share the same spi line
+    matrix_->refresh(&reading);
+  }
 
   int collOffset = matrix_->currentCollumn() * 6;
 

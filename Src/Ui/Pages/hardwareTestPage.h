@@ -18,7 +18,8 @@ namespace HardwareTestPage {
 
   bool showProcessingTime_;
   bool potsEnabled;
-  uint8_t lastPotValue[Pots::NUM_POTS];
+  uint16_t lastPotValue[Pots::NUM_POTS];
+  uint16_t potLargerstDifference;
 
   enum FooterOptions {
     TOGGLE_LEDS,
@@ -32,22 +33,66 @@ namespace HardwareTestPage {
 
   bool ledToggleState_;
 
+  void printChange(int i, uint16_t value) {
+    if (value != lastPotValue[i]) {
+      lastPotValue[i] = value;
+      TextBufferPainter::write(str_.write(pots_->idText(i), " ", value));
+    }
+  }
+
+  void prinLargestDiff(int i, uint16_t value) {
+    int diff = SettingsUtils::difference(value, lastPotValue[i]);
+    if (diff > potLargerstDifference && diff < 255) {
+      potLargerstDifference = diff;
+      TextBufferPainter::write(str_.write(potLargerstDifference));
+    }
+    lastPotValue[i] = value;
+  }
+
+  void prinAverageDiff(int i, uint16_t value) {
+    static uint32_t sum = 0;
+    static uint16_t count = 0;
+    static uint32_t lastAverage = 0;
+
+    if (count < 65535) {
+      sum += SettingsUtils::difference(value, lastPotValue[i]);
+      ++count;
+
+      uint32_t average = sum / count;
+      if (average != lastAverage) {
+        lastAverage = average;
+        TextBufferPainter::write(str_.write(average));
+      }
+    }
+
+    lastPotValue[i] = value;
+  }
+
   void testPots() {
     for (size_t i = 0; i < Pots::NUM_POTS; i++) {
-      uint8_t value = pots_->read(i) * 255;
-      if (value != lastPotValue[i]) {
-        lastPotValue[i] = value;
-        TextBufferPainter::write(str_.write(pots_->idText(i), " ", value));
-      }
+      uint16_t value = pots_->read(i) * 255;
+      prinAverageDiff(i, value);
+      prinLargestDiff(i, value);
+      printChange(i, value);
+    }
+  }
+
+  void printHashResult(const char* setting, Hash& h1, Hash& h2) {
+    if (h1.read() != h2.read()) {
+      TextBufferPainter::write(str_.write(setting, " ERROR !"));
     }
   }
 
   void init() {
+ 
   }
 
   void enter() {
     potsEnabled = false;
     ledToggleState_ = true;
+    TextBufferPainter::clear();
+
+    potLargerstDifference = 0;
   }
 
   void exit() {
@@ -63,11 +108,6 @@ namespace HardwareTestPage {
             ledToggleState_ ^= 1;
             break;
           case TEST_SD_CARD:
-            if (settings_->disk()->mount()) {
-              MessagePainter::show("SD MOUNTED");
-            } else {
-              MessagePainter::show("ERROR");
-            }
             break;
           case ENABLE_POTS:
             potsEnabled ^= 1;
@@ -77,7 +117,7 @@ namespace HardwareTestPage {
               }
             }
             break;
-          case CLOSE:
+            case CLOSE:
             pages_->close(Pages::HARDWARE_TEST_PAGE);
             pages_->open(Pages::PATCH_PAGE);
             break;
@@ -105,7 +145,7 @@ namespace HardwareTestPage {
     const int x = w - (w / 4);
     const int y = (canvas_->height() - 20) / 2;
 
-    float percentage = (engine_->processingTimeUs() / SAMPLE_RATE) * 100.f;
+    float percentage = float(engine_->processingTimeUs()) / float(SAMPLE_RATE) * 100.f;
     const char* text = SettingsText::floatToText(percentage, "%");
     canvas_->drawText(x, y, "PROCESSING TIME");
     canvas_->drawText(x, y + 10, text);

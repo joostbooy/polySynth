@@ -1,9 +1,9 @@
 #include "settings.h"
 
-#include "diskUtils.h"
-
 bool Settings::save() {
-  fileWriter.start(&disk_->file(), "0:/PATCHES.SET", current_version());
+  eepromBusy_ = true;
+
+  fileWriter.start(0, current_version());
 
   fileWriter.write(patchIndex_);
 
@@ -13,13 +13,17 @@ bool Settings::save() {
 
   fileWriter.stop();
 
+  eepromBusy_ = false;
+
   return fileWriter.writeOk();
 };
 
 bool Settings::load() {
+  eepromBusy_ = true;
+
   init();
 
-  fileReader.start(&disk_->file(), "0:/PATCHES.SET");
+  fileReader.start(0);
 
   fileReader.read(patchIndex_);
 
@@ -35,19 +39,28 @@ bool Settings::load() {
   }
 
   loadPatch(patchIndex_);
+
+  eepromBusy_ = false;
+
   return true;
 };
 
 bool Settings::saveCalibration() {
-  fileWriter.start(&disk_->file(), "0:/CALIBRATION.SET", current_version());
+  eepromBusy_ = true;
+
+  fileWriter.start(64000 - sizeof(calibration_), current_version());
   calibration_.save(fileWriter);
   fileWriter.stop();
+
+  eepromBusy_ = false;
 
   return fileWriter.writeOk();
 }
 
 bool Settings::loadCalibration() {
-  fileReader.start(&disk_->file(), "0:/CALIBRATION.SET");
+  eepromBusy_ = true;
+
+  fileReader.start(64000 - sizeof(calibration_));
   calibration_.load(fileReader);
   fileReader.stop();
 
@@ -57,4 +70,6 @@ bool Settings::loadCalibration() {
     calibration_.init();
     return false;
   }
+
+  eepromBusy_ = false;
 }

@@ -18,13 +18,11 @@ BUILD_DIR = Build
 LIB_DIR = /Users/joostbooij/Desktop/Code/lib
 STM_REPO = $(LIB_DIR)/stm32/STM32CubeF4
 UTILS_DIR = $(LIB_DIR)/utils
-FATFS_LIB = $(LIB_DIR)/ff14b/source
 USB_DIR = $(LIB_DIR)/tinyusb
 UI_DIR = Src/Ui
 ENGINE_DIR = Src/Engine
 SETTINGS_DIR = Src/Settings
 TABLE_DIR = LookupTables
-FILESYSTEM_DIR = Src/Disk
 
 #######################################
 # model specifics
@@ -68,7 +66,6 @@ $(wildcard $(USB_DIR)/src/device/*.c) \
 $(wildcard $(USB_DIR)/src/class/midi/*.c) \
 $(wildcard $(USB_DIR)/src/portable/synopsys/dwc2/*.c) \
 $(wildcard $(USB_DIR)/src/portable/st/stm32_fsdev/*.c) \
-$(wildcard $(FATFS_LIB)/*.c) \
 $(filter-out $(wildcard $(HAL_DIR)/Src/*template*), $(wildcard $(HAL_DIR)/Src/*.c)) \
 $(SYSTEM)
 
@@ -84,10 +81,7 @@ $(wildcard $(UTILS_DIR)/*.cpp) \
 $(wildcard $(UI_DIR)/*.cpp) \
 $(wildcard $(UI_DIR)/Pages/*.cpp) \
 $(wildcard $(UI_DIR)/Painters/*.cpp) \
-$(wildcard $(UI_DIR)/Lists/*.cpp) \
-$(wildcard $(FILESYSTEM_DIR)/*.cpp)
-#$(wildcard $(FATFS_LIB)/*.cpp)
-
+$(wildcard $(UI_DIR)/Lists/*.cpp) 
 # ASM sources
 ASM_SOURCES =  \
 $(STARTUP)
@@ -145,10 +139,7 @@ C_INCLUDES = \
 -I$(USB_DIR)/src/device \
 -I$(USB_DIR)/src/class/midi \
 -I$(USB_DIR)/src/portable/synopsys/dwc2 \
--I$(USB_DIR)/src/portable/st/stm32_fsdev \
--I$(FATFS_LIB) \
--I$(FILESYSTEM_DIR)
-
+-I$(USB_DIR)/src/portable/st/stm32_fsdev 
 
 #######################################
 # FLAGS

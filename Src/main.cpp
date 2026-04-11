@@ -5,15 +5,14 @@
 #include "adc.h"
 #include "dac.h"
 #include "display.h"
-#include "disk.h"
-#include "sdio.h"
+#include "eeprom.h"
 #include "switches.h"
 #include "timer.h"
 #include "lookupTables.h"
-#include "disk.h"
 #include "settings.h"
 #include "engine.h"
 #include "ui.h"
+
 
 Adc adc;
 Dac dac;
@@ -21,12 +20,11 @@ Usb usb;
 Uart uart;
 Sys sys;
 Timer timer;
-Sdio sdio;
+Eeprom eeprom;
 Matrix matrix;
 Display display;
 Switches switches;
 
-Disk disk;
 Ui ui;
 Engine engine;
 Settings settings;
@@ -67,18 +65,17 @@ int main(void)
 	adc.init();
 	matrix.init();
 	display.init();
-	sdio.init();
+	eeprom.init();
 
-	disk.init(&sdio);
-	settings.init(&disk);
+	settings.init(&eeprom, &matrix);
 	settings.load();
 	engine.init(&settings, &uart, &usb, &dac);
 	ui.init(&settings, &engine, &matrix, &display, &switches, &adc);
 
 	// Start timers
 	timer.init();
-	timer.start2(SAMPLE_RATE, &render);
 	timer.start3(UPDATE_FREQ, &update);
+	timer.start2(SAMPLE_RATE, &render);
 
 	while (1) {
 		ui.process();

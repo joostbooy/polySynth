@@ -2,7 +2,8 @@
 #define Settings_h
 
 #include "calibration.h"
-#include "disk.h"
+#include "eeprom.h"
+#include "matrix.h"
 #include "fileReader.h"
 #include "fileWriter.h"
 #include "patch.h"
@@ -17,8 +18,12 @@ class Settings {
   static const size_t kNumLfos = 2;
   static const size_t kNumEnvelopes = 2;
 
-  void init(Disk* disk) {
-    disk_ = disk;
+  void init(Eeprom* eeprom, Matrix *matrix) {
+    eeprom_ = eeprom;
+    matrix_ = matrix;
+
+    fileReader.init(eeprom);
+    fileWriter.init(eeprom);
 
     lfoIndex_ = 0;
     patchIndex_ = 0;
@@ -36,14 +41,18 @@ class Settings {
   }
 
   void init() {
-    if (disk_ != nullptr) {
-      init(disk_);
+    if (eeprom_ != nullptr && matrix_ != nullptr) {
+      init(eeprom_, matrix_);
     }
   }
 
   // save & load
   bool save();
   bool load();
+
+  bool eepromBusy() {
+    return eepromBusy_;
+  }
 
   uint32_t current_version() {
     return 0;
@@ -78,10 +87,6 @@ class Settings {
 
   bool patchHasUnsavedChanges() {
     return selectedPatch().readHash() != selectedPatchOrignalState().readHash();
-  }
-
-  Disk* disk() {
-    return disk_;
   }
 
   // Calibration
@@ -162,17 +167,21 @@ class Settings {
   FileWriter fileWriter;
   FileReader fileReader;
 
-  Disk* disk_ = nullptr;
+  Eeprom* eeprom_ = nullptr;
+  Matrix* matrix_ = nullptr;
 
   int lfoIndex_;
   int patchIndex_;
   int envelopeIndex_;
+  volatile bool eepromBusy_ = false;
 
   bool calibrationLoaded_ = false;
   Calibration calibration_;
 
   Patch patch_[kNumPatches];
   Patch selectedPatch_;
+
+  //static_assert(sizeof(patch_) < 64000, "Too large");
 };
 
 #endif

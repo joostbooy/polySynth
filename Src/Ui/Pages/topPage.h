@@ -16,7 +16,6 @@ namespace TopPage {
   Settings* settings_;
   Engine* engine_;
   Ui* ui_;
-  Disk* disk_;
   Canvas* canvas_;
   Pages* pages_;
   Leds* leds_;
@@ -44,7 +43,6 @@ namespace TopPage {
     pots_ = &ui->pots();
     pages_ = &ui->pages();
     buttons_ = &ui->buttons();
-    disk_ = settings_->disk();
 
     MessagePainter::init(canvas_);
     TextBufferPainter::init(canvas_);
