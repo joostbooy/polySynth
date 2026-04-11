@@ -146,8 +146,8 @@ enum {
 char const *string_desc_arr[] =
 {
   (const char[]) { 0x09, 0x04 }, // 0: is supported language is English (0x0409)
-  "Joost Seq",                     // 1: Manufacturer
-  "Midi & CV Sequencer",              // 2: Product
+  "Joost Booij",                   // 1: Manufacturer
+  "PolySynth",                    // 2: Product
   NULL,                          // 3: Serials will use unique ID if possible
 };
 
