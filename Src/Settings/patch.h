@@ -9,6 +9,7 @@
 #include "modMatrix.h"
 #include "oscillator.h"
 #include "amp.h"
+#include "stringUtils.h"
 
 class Patch {
  public:
