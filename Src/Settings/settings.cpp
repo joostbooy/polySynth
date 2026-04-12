@@ -1,49 +1,43 @@
 #include "settings.h"
 
-void Settings::save() {
+void Settings::save(int index) {
   eepromBusy_ = true;
 
-  fileWriter_.start(0, current_version());
-  fileWriter_.write(patchIndex_);
-
-  for (size_t i = 0; i < kNumPatches; i++) {
-    patch(i).save(fileWriter_);
-  }
-
+  fileWriter_.start(index * kPatchStorageSize, current_version());
+  patch_[index].save(fileWriter_);
   fileWriter_.stop();
 
   eepromBusy_ = false;
 };
 
 bool Settings::load() {
+  bool error = false;
   eepromBusy_ = true;
 
   init();
-  fileReader_.start(0);
-  fileReader_.read(patchIndex_);
 
   for (size_t i = 0; i < kNumPatches; i++) {
-    patch(i).load(fileReader_);
+    fileReader_.start(i * kPatchStorageSize);
+    patch_[i].load(fileReader_);
+    fileReader_.stop();
+    
+    if (!fileReader_.readOk()) {
+      patch_[i].init();
+      error = true;
+    }
   }
-
-  fileReader_.stop();
 
   eepromBusy_ = false;
 
-  if (!fileReader_.readOk()) {
-    init();
-    return false;
-  }
+  loadPatch(0);
 
-  loadPatch(patchIndex_);
-
-  return true;
+  return error;
 };
 
 void Settings::saveCalibration() {
   eepromBusy_ = true;
 
-  fileWriter_.start(kPatchStorageBlock, current_version());
+  fileWriter_.start(kPatchStorageBlockSize, current_version());
   calibration_.save(fileWriter_);
   fileWriter_.stop();
 
@@ -53,7 +47,7 @@ void Settings::saveCalibration() {
 bool Settings::loadCalibration() {
   eepromBusy_ = true;
 
-  fileReader_.start(kPatchStorageBlock);
+  fileReader_.start(kPatchStorageBlockSize);
   calibration_.load(fileReader_);
   fileReader_.stop();
 

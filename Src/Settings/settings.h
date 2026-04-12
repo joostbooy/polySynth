@@ -45,7 +45,7 @@ class Settings {
   }
 
   // save & load
-  void save();
+  void save(int index);
   bool load();
   bool eepromBusy() {
     return eepromBusy_;
@@ -79,7 +79,7 @@ class Settings {
 
   void savePatch() {
     patch_[patchIndex_].paste(&selectedPatch_);
-    save();
+    save(patchIndex_);
   }
 
   bool patchHasUnsavedChanges() {
@@ -177,9 +177,10 @@ class Settings {
   Patch patch_[kNumPatches];
   Patch selectedPatch_;
 
-  static constexpr size_t kPatchStorageBlock = 63500;
-  static_assert((sizeof(patch_) + sizeof(patchIndex_)) < kPatchStorageBlock, "Patch storage block exceeded!"); 
-  static_assert(kPatchStorageBlock + (sizeof(calibration_)) < 64000, "EEPROM exceeded!"); // 65536
+  static constexpr size_t kPatchStorageBlockSize = 63500;
+  static constexpr size_t kPatchStorageSize = kPatchStorageBlockSize / kNumPatches;
+  static_assert((sizeof(patch_) + sizeof(patchIndex_)) < kPatchStorageBlockSize, "Patch storage block exceeded!"); 
+  static_assert(kPatchStorageBlockSize + (sizeof(calibration_)) < 64000, "EEPROM exceeded!"); // 65536
 };
 
 #endif
