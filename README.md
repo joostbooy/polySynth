@@ -20,7 +20,6 @@
 - `/Src/Settings`	All the synth data
 - `/Src/Ui`				User interface to manipulate & visualize the data
 - `/Src/Engine`		Responsible for running the data & talk to the hardware drivers
-- `/Src/Disk`			Filesystem
 
 ## Credits
 - Pichenettes		https://github.com/pichenettes
