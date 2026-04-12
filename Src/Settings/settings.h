@@ -45,7 +45,7 @@ class Settings {
   }
 
   // save & load
-  bool save();
+  void save();
   bool load();
   bool eepromBusy() {
     return eepromBusy_;
@@ -77,9 +77,9 @@ class Settings {
     selectedPatch_.paste(&patch_[patchIndex_]);
   }
 
-  bool savePatch() {
+  void savePatch() {
     patch_[patchIndex_].paste(&selectedPatch_);
-    return save();
+    save();
   }
 
   bool patchHasUnsavedChanges() {
@@ -91,7 +91,7 @@ class Settings {
     return calibration_;
   }
 
-  bool saveCalibration();
+  void saveCalibration();
   bool loadCalibration();
 
   // oscilator

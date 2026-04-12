@@ -103,11 +103,8 @@ namespace CalibrationPage {
       case SAVE:
         ConfirmationPage::set("OVERWRITE CALIBRATION ?", [](int option) {
           if (option == ConfirmationPage::CONFIRM) {
-            if (settings_->saveCalibration()) {
-              MessagePainter::show("CALIBRATION SAVED");
-            } else {
-              MessagePainter::show("FAILED");
-            }
+            settings_->saveCalibration();
+            MessagePainter::show("CALIBRATION SAVED");
           }
         });
         pages_->open(Pages::CONFIRMATION_PAGE);
