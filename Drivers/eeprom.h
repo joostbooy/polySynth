@@ -25,6 +25,7 @@ class Eeprom {
 
       select();
       spiTransfer(WRITE);
+      spiTransfer(address >> 8);
       spiTransfer(address);
 
       while (size--) {
@@ -41,6 +42,7 @@ class Eeprom {
   void read(uint16_t address, uint8_t* data, size_t size) {
     select();
     spiTransfer(READ);
+    spiTransfer(address >> 8);
     spiTransfer(address);
 
     while (size--) {
