@@ -13,7 +13,7 @@ class Settings {
  public:
   static const size_t kNumVoices = 8;
   static const size_t kNumUserCc = 4;
-  static const size_t kNumPatches = 128;
+  static const size_t kNumPatches = 120;
   static const size_t kNumLfos = 2;
   static const size_t kNumEnvelopes = 2;
 
@@ -177,9 +177,10 @@ class Settings {
   Patch patch_[kNumPatches];
   Patch selectedPatch_;
 
-  static constexpr size_t kPatchStorageBlockSize = 64000 - 512;
-  static constexpr size_t kPatchStorageSize = kPatchStorageBlockSize / kNumPatches;
-  static_assert((sizeof(patch_[0])) < kPatchStorageSize, "Patch storage size exceeded!"); 
+  // Do not change !
+  static constexpr size_t kPatchStorageSize = 512;
+  static constexpr size_t kPatchStorageBlockSize = kPatchStorageSize * kNumPatches;
+  static_assert((sizeof(patch_[0])) < kPatchStorageSize, "Patch storage size exceeded!");
   static_assert(kPatchStorageBlockSize + (sizeof(calibration_)) < 64000, "EEPROM exceeded!");
 };
 
