@@ -17,22 +17,19 @@ namespace PatchPage {
   Patch patch_;
 
   enum FooterOption {
-    SAVE,
     INIT,
-    COPY,
+    SAVE,
+    AUDITION,
     NEXT,
     PREV,
+    COPY,
     PASTE,
     EDIT_NAME,
-    NEXT_2,
-    PREV_2,
-    DISPLAY_OFF,
-    AUDITION,
 
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"SAVE", "INIT", "COPY", ">", "<", "PASTE", "EDIT NAME", ">", "<", "DISPLAY OFF", "AUDITION"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"INIT", "SAVE", "AUDITION", ">", "<", "COPY", "PASTE", "EDIT NAME"};
 
   int footerOptionsOffset;
   int newIndex;
@@ -114,11 +111,6 @@ namespace PatchPage {
           engine_->addReqestBlocking(Engine::STOP_AUDITION);
         }
         break;
-      case DISPLAY_OFF:
-        if (!state) {
-          ui_->displayOff();
-        }
-        break;
       case NEXT:
         if (state) {
           footerOptionsOffset = 4;
@@ -128,16 +120,6 @@ namespace PatchPage {
         // dont switch footer options if audition is pressed
         if (state == 1 && buttons_->isPressed(Buttons::DISPLAY_D) == false) {
           footerOptionsOffset = 0;
-        }
-        break;
-      case NEXT_2:
-        if (state) {
-          footerOptionsOffset = 8;
-        }
-        break;
-      case PREV_2:
-        if (state) {
-          footerOptionsOffset = 4;
         }
         break;
       default:
