@@ -129,8 +129,8 @@ class Voice {
     if (settings_->calibration().enabled()) {
       uint16_t gain = (index_ == settings_->calibration().selectedVoice()) ? 0 : 65535;
       dac_->set(index_, 5, gain);
-      dac_->set(index_, 3, settings_->calibration().min());
-      dac_->set(index_, 7, settings_->calibration().max());
+      dac_->set(index_, 3, settings_->calibration().noteValue());
+      dac_->set(index_, 7, settings_->calibration().noteValue());
     }
   }
 
@@ -183,13 +183,13 @@ class Voice {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = cal.noteToValue(24 + osc.octaveOffset1());
+    int noteValue = cal.noteValue(24 + osc.octaveOffset1());
     int tuneValue = ((2.f * modValue) - 1.f) * cal.semiNoteValue() * 11;
 
     if (settings_->oscillator().trackNote1()) {
-      noteValue = cal.noteToValue(note_ + osc.octaveOffset1());
+      noteValue = cal.noteValue(note_ + osc.octaveOffset1());
       if (osc.slideEnable1()) {
-        int lastNoteValue = cal.noteToValue(lastNote_ + osc.octaveOffset1());
+        int lastNoteValue = cal.noteValue(lastNote_ + osc.octaveOffset1());
         noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase1_);
         slidePhase1_ += inc(osc.slideAmmount1());
         if (slidePhase1_ >= 1.f) {
@@ -197,20 +197,20 @@ class Voice {
         }
       }
     }
-    return SettingsUtils::clip(cal.min(), cal.max(), tuneValue + noteValue);
+    return SettingsUtils::clip(0, 65535, tuneValue + noteValue);
   }
 
   uint16_t calculatePitchOsc2(float modValue) {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = cal.noteToValue(24 + osc.octaveOffset2());
+    int noteValue = cal.noteValue(24 + osc.octaveOffset2());
     int tuneValue = ((2.f * modValue) - 1.f) * cal.semiNoteValue() * 11;
 
     if (settings_->oscillator().trackNote2()) {
-      noteValue = cal.noteToValue(note_ + osc.octaveOffset2());
+      noteValue = cal.noteValue(note_ + osc.octaveOffset2());
       if (osc.slideEnable2()) {
-        int lastNoteValue = cal.noteToValue(lastNote_ + osc.octaveOffset2());
+        int lastNoteValue = cal.noteValue(lastNote_ + osc.octaveOffset2());
         noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase2_);
         slidePhase2_ += inc(osc.slideAmmount2());
         if (slidePhase2_ >= 1.f) {
@@ -218,7 +218,7 @@ class Voice {
         }
       }
     }
-    return SettingsUtils::clip(cal.min(), cal.max(), tuneValue + noteValue);
+    return SettingsUtils::clip(0, 65535, tuneValue + noteValue);
   }
 
   float inc(float value) {

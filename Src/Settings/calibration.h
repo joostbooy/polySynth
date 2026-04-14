@@ -1,8 +1,8 @@
 #ifndef Calibration_h
 #define Calibration_h
 
-#include "SettingsUtils.h"
 #include "SettingsText.h"
+#include "SettingsUtils.h"
 #include "dsp.h"
 #include "fileReader.h"
 #include "fileWriter.h"
@@ -10,10 +10,13 @@
 class Calibration {
  public:
   void init() {
-    min_ = 0;
-    max_ = 65535;
     selectedVoice_ = 0;
+    selectedNote_ = 0;
     enabled_ = false;
+
+    for (size_t i = 0; i < kMaxNotes; i++) {
+      noteValue_[i] = i * (65535 / kMaxNotes);
+    }
   }
 
   void start() {
@@ -39,70 +42,64 @@ class Calibration {
     return selectedVoice_;
   }
 
-  const char *selectedVoiceText() {
+  const char* selectedVoiceText() {
     return SettingsText::intToText(selectedVoice() + 1);
   }
 
-  // Min
-  int min() {
-    return min_;
+  // selected note
+  void setSelectedNote(int note) {
+    selectedNote_ = SettingsUtils::clip(0, kMaxNotes - 1, note);
   }
 
-  // should result in -3V
-  void setMin(int value) {
-    min_ = SettingsUtils::clip(0, max_, value);
+  int selectedNote() {
+    return selectedNote_;
   }
 
-  const char* minText() {
-    return SettingsText::intToText(min());
+  const char* selectedNoteText() {
+    return SettingsText::noteToText(selectedNote_);
   }
 
-  // Max
-  int max() {
-    return max_;
+  // note value
+  void setNoteValue(uint16_t value) {
+    noteValue_[selectedNote_] = value;
   }
 
-  // should result in +7V
-  void setMax(int value) {
-    max_ = SettingsUtils::clip(min_, 65535, value);
+  uint16_t noteValue(int note) {
+    return noteValue_[SettingsUtils::clip(0, kMaxNotes - 1, note)];
   }
 
-  const char* maxText() {
-    return SettingsText::intToText(max());
-  }
-
-  uint16_t read(uint16_t value) {
-    float x = (1.f / 65535.f) * value;
-    return Dsp::cross_fade(max_, min_, x);
-  }
-
-  uint16_t noteToValue(int note) {
-    float x = (1.f / kMaxNotes) * SettingsUtils::clip(0, kMaxNotes - 1, note);
-    return Dsp::cross_fade(max_, min_, x);
+  uint16_t noteValue() {
+    return noteValue_[selectedNote_];
   }
 
   uint16_t semiNoteValue() {
-    return noteToValue(0) - noteToValue(1);
+    return noteValue(0) - noteValue(1);
+  }
+
+  const char* noteValueText() {
+    return SettingsText::intToText(noteValue());
   }
 
   // storage
   void save(FileWriter& fileWriter) {
-    fileWriter.write(min_);
-    fileWriter.write(max_);
+    for (size_t i = 0; i < kMaxNotes; i++) {
+      fileWriter.write(noteValue_[i]);
+    }
   }
 
   void load(FileReader& fileReader) {
-    fileReader.read(min_);
-    fileReader.read(max_);
+    for (size_t i = 0; i < kMaxNotes; i++) {
+      fileReader.read(noteValue_[i]);
+    }
   }
 
  private:
   bool enabled_;
   static const int kMaxVolts = 10;  // -3V / +7V
   static const int kMaxNotes = kMaxVolts * 12;
-  uint16_t min_ = 0;
-  uint16_t max_ = 65535;
   int selectedVoice_;
+  int selectedNote_;
+  uint16_t noteValue_[kMaxNotes];
 };
 
 #endif

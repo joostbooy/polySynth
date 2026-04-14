@@ -86,11 +86,11 @@ namespace CalibrationPage {
   }
 
   void onEncoder(int id, int inc) {
-    int value = inc * (buttons_->isPressed(Buttons::SHIFT) ? 50 : 1);
     if (id == 0) {
-      settings_->calibration().setMin(settings_->calibration().min() + value);
+      settings_->calibration().setSelectedNote(settings_->calibration().selectedNote() + inc);
     } else {
-      settings_->calibration().setMax(settings_->calibration().max() + value);
+      int value = inc * (buttons_->isPressed(Buttons::SHIFT) ? 50 : 1);
+      settings_->calibration().setNoteValue(settings_->calibration().noteValue() + value);
     }
   }
 
@@ -162,10 +162,10 @@ namespace CalibrationPage {
     const int rowHeight = 8;
     const int collWdith = canvas_->width() / 4;
 
-    canvas_->drawText(x, y, "MIN");
-    canvas_->drawText(x + collWdith, y, settings_->calibration().minText());
-    canvas_->drawText(x, y + rowHeight, "MAX");
-    canvas_->drawText(x + collWdith, y + rowHeight, settings_->calibration().maxText());
+    canvas_->drawText(x, y, "NOTE");
+    canvas_->drawText(x + collWdith, y, settings_->calibration().selectedNoteText());
+    canvas_->drawText(x, y + rowHeight, "NOTE VALUE");
+    canvas_->drawText(x + collWdith, y + rowHeight, settings_->calibration().noteValueText());
 
     canvas_->drawText(x, y + (rowHeight * 3), "SELECTED VCO");
     canvas_->drawText(x + collWdith, y + (rowHeight * 3), SettingsText::intToText(selectedVco_ + 1));
