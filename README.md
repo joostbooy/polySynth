@@ -3,8 +3,8 @@
 
 ## Features
 - 8 voices
-- 2 envelopes per voice
-- 2 lfo's per voice
+    * 2 envelopes
+    * 2 lfo's
 - Digital recall of all parameters
 - Modulation matrix
 
