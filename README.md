@@ -4,7 +4,18 @@
 ## Features
 - 8 voices
     * 2 envelopes
-    * 2 lfo's
+    * 2 LFO's
+    * Highpass filter
+    * Bandpass filter
+    * 2 pole lowpass filter
+    * 4 pole lowpass filter
+    * 2 VCO's
+    * VCO sync
+    * Filter & VCO FM
+    * AM
+    * Pan
+    * Overdrive
+    * Wavefolder per VCO
 - Digital recall of all parameters
 - Modulation matrix
 
