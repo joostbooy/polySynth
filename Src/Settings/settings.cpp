@@ -20,7 +20,7 @@ bool Settings::load() {
     fileReader_.start(i * kPatchStorageSize);
     patch_[i].load(fileReader_);
     fileReader_.stop();
-    
+
     if (!fileReader_.readOk()) {
       patch_[i].init();
       error = true;
@@ -53,10 +53,10 @@ bool Settings::loadCalibration() {
 
   eepromBusy_ = false;
 
-  if (fileReader_.readOk()) {
-    return true;
-  } else {
+  if (!fileReader_.readOk()) {
     calibration_.init();
     return false;
   }
+
+  return true;
 }
