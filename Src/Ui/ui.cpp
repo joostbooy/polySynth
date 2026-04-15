@@ -103,6 +103,7 @@ void Ui::process() {
 
     if ((e.type == ENCODER) || buttons_.isDisplayButton(e.id)) {
       displayTimer_ = 5000;
+      continue;
     }
 
     switch (e.type) {
