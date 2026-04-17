@@ -51,7 +51,7 @@ class Settings {
     return eepromBusy_;
   }
 
-  uint32_t current_version() {
+  uint32_t currentVersion() {
     return 0;
   }
 

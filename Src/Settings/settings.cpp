@@ -3,7 +3,7 @@
 void Settings::save(int index) {
   eepromBusy_ = true;
 
-  fileWriter_.start(index * kPatchStorageSize, current_version());
+  fileWriter_.start(index * kPatchStorageSize, currentVersion());
   patch_[index].save(fileWriter_);
   fileWriter_.stop();
 
@@ -37,7 +37,7 @@ bool Settings::load() {
 void Settings::saveCalibration() {
   eepromBusy_ = true;
 
-  fileWriter_.start(KCalibrationAddress_, current_version());
+  fileWriter_.start(KCalibrationAddress_, currentVersion());
   calibration_.save(fileWriter_);
   fileWriter_.stop();
 
