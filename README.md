@@ -36,6 +36,7 @@
 - Pichenettes		https://github.com/pichenettes
 - Chan					https://elm-chan.org/fsw/ff/00index_e.html
 - Ha Thach 			https://docs.tinyusb.org/en/latest/
+- Moritz klein  https://github.com/moritzklein89
 
 ## License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
