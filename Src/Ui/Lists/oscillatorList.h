@@ -25,6 +25,8 @@ class OscillatorList : public SettingsList {
     SLIDE_AMMOUNT_2,
     OCTAVE_OFFSET_1,
     OCTAVE_OFFSET_2,
+    NOTE_OFFSET_1,
+    NOTE_OFFSET_2,
     TUNE_1,
     TUNE_2,
     TYPE_1,
@@ -57,6 +59,8 @@ class OscillatorList : public SettingsList {
       case SLIDE_AMMOUNT_2:       return "SLIDE AMMOUNT 2";
       case OCTAVE_OFFSET_1:       return "OCTAVE OFFSET 1";
       case OCTAVE_OFFSET_2:       return "OCTAVE OFFSET 2";
+      case NOTE_OFFSET_1:         return "NOTE OFFSET 1";
+      case NOTE_OFFSET_2:         return "NOTE OFFSET 2";
       case TUNE_1:                return "TUNE 1";
       case TUNE_2:                return "TUNE 2";
       case TYPE_1:                return "TYPE 1";
@@ -89,6 +93,8 @@ class OscillatorList : public SettingsList {
       case SLIDE_AMMOUNT_2:       return oscillator.slideAmmount2Text();
       case OCTAVE_OFFSET_1:       return oscillator.octaveOffset1Text();
       case OCTAVE_OFFSET_2:       return oscillator.octaveOffset2Text();
+      case NOTE_OFFSET_1:         return oscillator.noteOffset1Text();
+      case NOTE_OFFSET_2:         return oscillator.noteOffset2Text();
       case TUNE_1:                return oscillator.tune1Text();
       case TUNE_2:                return oscillator.tune2Text();
       case TYPE_1:                return oscillator.type1Text();
@@ -158,6 +164,12 @@ class OscillatorList : public SettingsList {
         break;
       case OCTAVE_OFFSET_2:
         oscillator.setOctaveOffset2(oscillator.octaveOffset2() + (inc * 12));
+        break;
+      case NOTE_OFFSET_1:
+        oscillator.setNoteOffset1(oscillator.noteOffset1() + (inc * (shifted ? 12 : 1)));
+        break;
+      case NOTE_OFFSET_2:
+        oscillator.setNoteOffset2(oscillator.noteOffset2() + (inc * (shifted ? 12 : 1)));
         break;
       case TUNE_1:
         oscillator.setTune1(oscillator.tune1() + SettingsUtils::fInc(inc, shifted));

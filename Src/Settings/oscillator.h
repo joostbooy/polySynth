@@ -85,6 +85,8 @@ class Oscillator {
     setSlideEnable2(false);
     setOctaveOffset1(0);
     setOctaveOffset2(0);
+    setNoteOffset1(0);
+    setNoteOffset2(0);
     setTune1(0.5f);
     setTune2(0.5f);
   }
@@ -336,6 +338,19 @@ class Oscillator {
     return SettingsText::intToText(octaveOffset1());
   }
 
+  // Note offset 1
+  int noteOffset1() {
+    return noteOffset1_;
+  }
+
+  void setNoteOffset1(int value) {
+    noteOffset1_ = SettingsUtils::clip(0, 127, value);
+  }
+
+  const char* noteOffset1Text() {
+    return SettingsText::noteToText(noteOffset1());
+  }
+
   // Octave offset 2
   int octaveOffset2() {
     return octaveOffset2_;
@@ -346,7 +361,20 @@ class Oscillator {
   }
 
   const char* octaveOffset2Text() {
-    return SettingsText::intToText(octaveOffset2());
+    return trackNote2() ? "-" : SettingsText::intToText(octaveOffset2());
+  }
+
+  // Note offset 2
+  int noteOffset2() {
+    return noteOffset2_;
+  }
+
+  void setNoteOffset2(int value) {
+    noteOffset2_ = SettingsUtils::clip(0, 127, value);
+  }
+
+  const char* noteOffset2Text() {
+    return SettingsText::noteToText(noteOffset2());
   }
 
     // Tune 1
@@ -397,6 +425,8 @@ class Oscillator {
     fileWriter.write(slideEnable2_);
     fileWriter.write(octaveOffset1_);
     fileWriter.write(octaveOffset2_);
+    fileWriter.write(noteOffset1_);
+    fileWriter.write(noteOffset2_);
     fileWriter.write(tune1_);
     fileWriter.write(tune2_);
   }
@@ -422,6 +452,8 @@ class Oscillator {
     fileReader.read(slideEnable2_);
     fileReader.read(octaveOffset1_);
     fileReader.read(octaveOffset2_);
+    fileReader.read(noteOffset1_);
+    fileReader.read(noteOffset2_);
     fileReader.read(tune1_);
     fileReader.read(tune2_);
   }
@@ -444,6 +476,8 @@ class Oscillator {
     slideEnable2_ = oscillator->slideEnable2();
     octaveOffset1_ = oscillator->octaveOffset1();
     octaveOffset2_ = oscillator->octaveOffset2();
+    noteOffset1_ = oscillator->noteOffset1();
+    noteOffset2_ = oscillator->noteOffset2();
     tune1_ = oscillator->tune1();
     tune2_ = oscillator->tune2();
 
@@ -476,6 +510,8 @@ class Oscillator {
     hash.write(slideEnable2_);
     hash.write(octaveOffset1_);
     hash.write(octaveOffset2_);
+    hash.write(noteOffset1_);
+    hash.write(noteOffset2_);
     hash.write(tune1_);
     hash.write(tune2_);
   }
@@ -498,6 +534,8 @@ class Oscillator {
   float slideAmmount2_;
   int octaveOffset1_;
   int octaveOffset2_;
+  int noteOffset1_;
+  int noteOffset2_;
   float tune1_;
   float tune2_;
   Type1 type1_;
