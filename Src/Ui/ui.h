@@ -54,10 +54,6 @@ class Ui {
     return lockedPots_ & (1 << id);
   }
 
-  void displayOff() {
-    display_->turnOff();
-  }
-
  private:
   enum UnlockDirection {
     CW,
