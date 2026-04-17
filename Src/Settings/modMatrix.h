@@ -85,9 +85,6 @@ class ModMatrix {
 
   void init() {
     clear();
-    for (size_t i = 0; i < kNumUserCc; ++i) {
-      setMidiCcNumber(i, i);
-    }
   }
 
   bool read(size_t src, size_t dest) {
@@ -97,9 +94,13 @@ class ModMatrix {
   void clear() {
     std::fill(&matrix_[0], &matrix_[NUM_SOURCES], 0);
     std::fill(&destinationDepth_[0], &destinationDepth_[NUM_DESTINATIONS], 0.f);
-   
+
+    for (size_t i = 0; i < kNumUserCc; ++i) {
+      setMidiCcNumber(i, i);
+    }
+
     // envelope 1 is always tied to gain !
-    matrix_[ENVELOPE_1] |= (1 << GAIN);  
+    matrix_[ENVELOPE_1] |= (1 << GAIN);
     setDestinationDepth(GAIN, 1.f);
   }
 
