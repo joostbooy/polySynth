@@ -72,7 +72,7 @@ namespace CalibrationPage {
     settings_->amp().setAmEnable(false);
     settings_->amp().setDrive(0.f);
     settings_->amp().setPan(0.5f);
-    settings_->modMatrix().clear();
+    settings_->modMatrix().init();
     selectNextVco();
     ui_->resetAllPots();
 

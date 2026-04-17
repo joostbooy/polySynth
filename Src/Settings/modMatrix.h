@@ -84,14 +84,6 @@ class ModMatrix {
   }
 
   void init() {
-    clear();
-  }
-
-  bool read(size_t src, size_t dest) {
-    return matrix_[src] & (1 << dest);
-  }
-
-  void clear() {
     std::fill(&matrix_[0], &matrix_[NUM_SOURCES], 0);
     std::fill(&destinationDepth_[0], &destinationDepth_[NUM_DESTINATIONS], 0.f);
 
@@ -103,6 +95,11 @@ class ModMatrix {
     matrix_[ENVELOPE_1] |= (1 << GAIN);
     setDestinationDepth(GAIN, 1.f);
   }
+
+  bool read(size_t src, size_t dest) {
+    return matrix_[src] & (1 << dest);
+  }
+
 
   void toggle(size_t src, size_t dest) {
     set(src, dest, !read(src, dest));
@@ -179,7 +176,7 @@ class ModMatrix {
   }
 
   void paste(ModMatrix* modMatrix) {
-    clear();
+    init();
     
     for (size_t x = 0; x < NUM_SOURCES; ++x) {
       for (size_t y = 0; y < NUM_DESTINATIONS; ++y) {

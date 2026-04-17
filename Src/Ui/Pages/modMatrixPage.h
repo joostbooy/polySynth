@@ -102,7 +102,7 @@ namespace ModMatrixPage {
         case CLEAR:
           ConfirmationPage::set("CLEAR MATRIX ?", [](int option) {
             if (option == ConfirmationPage::CONFIRM) {
-              settings_->modMatrix().clear();
+              settings_->modMatrix().init();
             }
           });
           pages_->open(Pages::CONFIRMATION_PAGE);
