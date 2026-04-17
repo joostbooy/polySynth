@@ -22,7 +22,7 @@ namespace ConfirmationPage {
 
 	typedef void(*Callback)(int);
 	Callback callback_;
-	StringBuilderBase<32>str;
+	StringBuilderBase<64>str;
 
 	int x = 0;
 	int y = 16;
