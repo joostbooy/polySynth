@@ -85,13 +85,6 @@ class ModMatrix {
 
   void init() {
     clear();
-    matrix_[MIDI_BEND] |= (1 << TUNE_1);
-    matrix_[MIDI_BEND] |= (1 << TUNE_2);
-    matrix_[MIDI_VELOCITY] |= (1 << GAIN);
-    matrix_[ENVELOPE_1] |= (1 << GAIN);
-    matrix_[ENVELOPE_2] |= (1 << CUTOFF_1);
-    matrix_[ENVELOPE_2] |= (1 << CUTOFF_2);
-
     for (size_t i = 0; i < kNumUserCc; ++i) {
       setMidiCcNumber(i, i);
     }
