@@ -103,7 +103,9 @@ void Ui::process() {
 
     if ((e.type == ENCODER) || buttons_.isDisplayButton(e.id)) {
       displayTimer_ = 5000;
-      continue;
+      if (!display_->isOn()) {
+        display_->turnOn();
+      }
     }
 
     switch (e.type) {
@@ -144,8 +146,6 @@ void Ui::processDisplay() {
   if (displayTimer_ == 0) {
     display_->turnOff();
   } else {
-    display_->turnOn();
-
     while (display_->dmaBusy());
     displayInterval_ = 0;
     canvas_.clear();

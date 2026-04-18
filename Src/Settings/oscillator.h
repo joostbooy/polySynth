@@ -379,7 +379,7 @@ class Oscillator {
   }
 
   const char* octaveOffset2Text() {
-    return trackNote2() ? "-" : SettingsText::intToText(octaveOffset2());
+    return SettingsText::intToText(octaveOffset2());
   }
 
   // Note offset 2

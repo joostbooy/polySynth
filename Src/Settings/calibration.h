@@ -15,7 +15,7 @@ class Calibration {
     enabled_ = false;
 
     for (size_t i = 0; i < kMaxNotes; i++) {
-      noteValue_[i] = i * (65535 / kMaxNotes);
+      noteValue_[i] = 65535 - (i * (65535 / kMaxNotes));
     }
   }
 

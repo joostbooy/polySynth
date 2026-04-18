@@ -33,8 +33,9 @@ class Settings {
     }
     loadPatch(patchIndex_);
 
+    calibration_.init();
     if (!calibrationLoaded_) {
-      calibrationLoaded_ = loadCalibration();
+     // calibrationLoaded_ = loadCalibration();
     }
   }
 

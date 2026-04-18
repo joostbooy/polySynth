@@ -69,6 +69,10 @@ class Display {
     return dma_busy_;
   }
 
+  bool isOn() {
+    return isOn_;
+  }
+
   void turnOff() {
     if (isOn_) {
       isOn_ = false;
