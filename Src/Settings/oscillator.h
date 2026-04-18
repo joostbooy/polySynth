@@ -71,7 +71,7 @@ class Oscillator {
     return nullptr;
   }
 
-    const char* slideModeText(SlideMode value) {
+  const char* slideModeText(SlideMode value) {
     switch (value) {
       case OFF:     return "OFF";
       case ON:      return "ON";
