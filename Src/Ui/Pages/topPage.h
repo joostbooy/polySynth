@@ -30,9 +30,9 @@ namespace TopPage {
 
   uint8_t slideVcoSelectIndex_;
   uint8_t modTypeIndex_[ModMatrix::NUM_DESTINATIONS];
-
   uint8_t lastPotValue_[Pots::NUM_POTS];
 
+  Oscillator::SlideMode lastActiveSlideMode_[2];
 
   void init(Settings* settings, Engine* engine, Ui* ui) {
     settings_ = settings;
@@ -47,6 +47,9 @@ namespace TopPage {
     MessagePainter::init(canvas_);
     TextBufferPainter::init(canvas_);
     WindowPainter::init(canvas_);
+
+    lastActiveSlideMode_[0] = Oscillator::ON;
+    lastActiveSlideMode_[1] = Oscillator::ON;
 
     potValueFrames_ = 0;
     slideVcoSelectIndex_ = 0;
@@ -86,6 +89,14 @@ namespace TopPage {
   }
 
   void incSlideVcoSelect() {
+    if (settings_->oscillator().slideMode1() != Oscillator::OFF) {
+      lastActiveSlideMode_[0] = settings_->oscillator().slideMode1();
+    }
+
+    if (settings_->oscillator().slideMode2() != Oscillator::OFF) {
+      lastActiveSlideMode_[1] = settings_->oscillator().slideMode2();
+    }
+
     ++slideVcoSelectIndex_ %= 4;
 
     switch (slideVcoSelectIndex_) {
@@ -94,16 +105,16 @@ namespace TopPage {
         settings_->oscillator().setSlideMode2(Oscillator::OFF);
         break;
       case 1:
-        settings_->oscillator().setSlideMode1(Oscillator::ON);
+        settings_->oscillator().setSlideMode1(lastActiveSlideMode_[0]);
         settings_->oscillator().setSlideMode2(Oscillator::OFF);
         break;
       case 2:
         settings_->oscillator().setSlideMode1(Oscillator::OFF);
-        settings_->oscillator().setSlideMode2(Oscillator::ON);
+        settings_->oscillator().setSlideMode2(lastActiveSlideMode_[1]);
         break;
       case 3:
-        settings_->oscillator().setSlideMode1(Oscillator::ON);
-        settings_->oscillator().setSlideMode2(Oscillator::ON);
+        settings_->oscillator().setSlideMode1(lastActiveSlideMode_[0]);
+        settings_->oscillator().setSlideMode2(lastActiveSlideMode_[1]);
         break;
       default:
         break;
