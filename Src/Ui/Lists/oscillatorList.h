@@ -18,8 +18,8 @@ class OscillatorList : public SettingsList {
     SHAPE_2,
     MOD_DEPTH,
     MOD_SOURCE,
-    SLIDE_1,
-    SLIDE_2,
+    SLIDE_MODE_1,
+    SLIDE_MODE_2,
     LINK_SLIDE_AMMOUNT,
     SLIDE_AMMOUNT_1,
     SLIDE_AMMOUNT_2,
@@ -52,8 +52,8 @@ class OscillatorList : public SettingsList {
       case SHAPE_2:               return "SHAPE 2";
       case MOD_DEPTH:             return "MOD DEPTH";
       case MOD_SOURCE:            return "MOD SOUCRE";
-      case SLIDE_1:               return "SLIDE 1";
-      case SLIDE_2:               return "SLIDE 2";
+      case SLIDE_MODE_1:          return "SLIDE MODE 1";
+      case SLIDE_MODE_2:          return "SLIDE MODE 2";
       case LINK_SLIDE_AMMOUNT:    return "LINK SLIDE";
       case SLIDE_AMMOUNT_1:       return "SLIDE AMMOUNT 1";
       case SLIDE_AMMOUNT_2:       return "SLIDE AMMOUNT 2";
@@ -86,8 +86,8 @@ class OscillatorList : public SettingsList {
       case SHAPE_2:               return oscillator.shape2Text();
       case MOD_DEPTH:             return oscillator.modDepthText();
       case MOD_SOURCE:            return oscillator.modSourceText();
-      case SLIDE_1:               return oscillator.slideEnable1Text();
-      case SLIDE_2:               return oscillator.slideEnable2Text();
+      case SLIDE_MODE_1:          return oscillator.slideMode1Text();
+      case SLIDE_MODE_2:          return oscillator.slideMode2Text();
       case LINK_SLIDE_AMMOUNT:    return oscillator.linkSlideAmmountText();
       case SLIDE_AMMOUNT_1:       return oscillator.slideAmmount1Text();
       case SLIDE_AMMOUNT_2:       return oscillator.slideAmmount2Text();
@@ -144,11 +144,11 @@ class OscillatorList : public SettingsList {
       case MOD_SOURCE:
         oscillator.setModSource(oscillator.modSource() + inc);
         break;
-      case SLIDE_1:
-        oscillator.setSlideEnable1(inc > 0);
+      case SLIDE_MODE_1:
+        oscillator.setSlideMode1(oscillator.slideMode1() + inc);
         break;
-      case SLIDE_2:
-        oscillator.setSlideEnable2(inc > 0);
+      case SLIDE_MODE_2:
+        oscillator.setSlideMode2(oscillator.slideMode2() + inc);
         break;
       case LINK_SLIDE_AMMOUNT:
         oscillator.setLinkSlideAmmount(inc > 0);

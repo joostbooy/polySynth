@@ -198,8 +198,8 @@ class Leds {
   }
 
   // Osc 1
-  void setSlideVco1(bool state) {
-    set(6, 3, state);
+  void setSlideVco1(Oscillator::SlideMode mode) {
+    set(6, 3, mode != Oscillator::OFF);
   }
 
   void setOsc1Fm(bool state) {
@@ -279,8 +279,8 @@ class Leds {
   }
 
   // Osc 2
-  void setSlideVco2(bool state) {
-    set(7, 3, state);
+  void setSlideVco2(Oscillator::SlideMode mode) {
+    set(7, 3, mode != Oscillator::OFF);
   }
 
   void setMute2(bool state) {

@@ -29,6 +29,13 @@ class Oscillator {
     NUM_VOICE_MODES,
   };
 
+  enum SlideMode {
+    OFF,
+    ON,
+    LEGATO,
+    NUM_SLIDE_MODES,
+  };
+
   static const char* type1Text(Type1 type) {
     switch (type) {
       case SAW1:      return "SAW";
@@ -64,6 +71,17 @@ class Oscillator {
     return nullptr;
   }
 
+    const char* slideModeText(SlideMode value) {
+    switch (value) {
+      case OFF:     return "OFF";
+      case ON:      return "ON";
+      case LEGATO:  return "LEGATO";
+      default:
+        break;
+    }
+    return nullptr;
+  }
+
   void init() {
     setVoiceMode(POLY);
     setFmEnable(false);
@@ -78,11 +96,11 @@ class Oscillator {
     setTrackNote2(true);
     setModDepth(0.f);
     setModSource(0);
+    setSlideMode1(OFF);
+    setSlideMode2(OFF);
     setSlideAmmount1(0.f);
     setSlideAmmount2(0.f);
     setLinkSlideAmmount(true);
-    setSlideEnable1(false);
-    setSlideEnable2(false);
     setOctaveOffset1(0);
     setOctaveOffset2(0);
     setNoteOffset1(0);
@@ -260,30 +278,30 @@ class Oscillator {
     return SettingsText::str.write(modSource() == 0 ? "VCO 1" : "VCO 2");
   }
 
-  // Slide enablbe 1
-  bool slideEnable1() {
-    return slideEnable1_;
+  // Slide mode 1
+  SlideMode slideMode1() {
+    return slideMode1_;
   }
 
-  void setSlideEnable1(bool value) {
-    slideEnable1_ = value;
+  void setSlideMode1(int value) {
+    slideMode1_ = SlideMode(SettingsUtils::clip(0, NUM_SLIDE_MODES - 1, value));
   }
 
-  const char* slideEnable1Text() {
-    return SettingsText::boolToOnOff(slideEnable1());
+  const char* slideMode1Text() {
+    return slideModeText(slideMode1());
   }
 
-  // Slide enablbe 2
-  bool slideEnable2() {
-    return slideEnable2_;
+  // Slide mode 2
+  SlideMode slideMode2() {
+    return slideMode2_;
   }
 
-  void setSlideEnable2(bool value) {
-    slideEnable2_ = value;
+  void setSlideMode2(int value) {
+    slideMode2_ = SlideMode(SettingsUtils::clip(0, NUM_SLIDE_MODES - 1, value));
   }
 
-  const char* slideEnable2Text() {
-    return SettingsText::boolToOnOff(slideEnable2());
+  const char* slideMode2Text() {
+    return slideModeText(slideMode2());
   }
 
   // Link slide ammount
@@ -421,8 +439,8 @@ class Oscillator {
     fileWriter.write(slideAmmount1_);
     fileWriter.write(slideAmmount2_);
     fileWriter.write(linkSlideAmmount_);
-    fileWriter.write(slideEnable1_);
-    fileWriter.write(slideEnable2_);
+    fileWriter.write(slideMode1_);
+    fileWriter.write(slideMode2_);
     fileWriter.write(octaveOffset1_);
     fileWriter.write(octaveOffset2_);
     fileWriter.write(noteOffset1_);
@@ -448,8 +466,8 @@ class Oscillator {
     fileReader.read(slideAmmount1_);
     fileReader.read(slideAmmount2_);
     fileReader.read(linkSlideAmmount_);
-    fileReader.read(slideEnable1_);
-    fileReader.read(slideEnable2_);
+    fileReader.read(slideMode1_);
+    fileReader.read(slideMode2_);
     fileReader.read(octaveOffset1_);
     fileReader.read(octaveOffset2_);
     fileReader.read(noteOffset1_);
@@ -472,14 +490,14 @@ class Oscillator {
     trackNote2_ = oscillator->trackNote2();
     modDepth_ = oscillator->modDepth();
     modSource_ = oscillator->modSource();
-    slideEnable1_ = oscillator->slideEnable1();
-    slideEnable2_ = oscillator->slideEnable2();
     octaveOffset1_ = oscillator->octaveOffset1();
     octaveOffset2_ = oscillator->octaveOffset2();
     noteOffset1_ = oscillator->noteOffset1();
     noteOffset2_ = oscillator->noteOffset2();
     tune1_ = oscillator->tune1();
     tune2_ = oscillator->tune2();
+    slideMode1_ = oscillator->slideMode1();
+    slideMode2_ = oscillator->slideMode2();
 
     // Temporarily unlink slide amount so we can paste slide ammount 2
     linkSlideAmmount_ = oscillator->linkSlideAmmount();
@@ -506,14 +524,14 @@ class Oscillator {
     hash.write(slideAmmount1_);
     hash.write(slideAmmount2_);
     hash.write(linkSlideAmmount_);
-    hash.write(slideEnable1_);
-    hash.write(slideEnable2_);
     hash.write(octaveOffset1_);
     hash.write(octaveOffset2_);
     hash.write(noteOffset1_);
     hash.write(noteOffset2_);
     hash.write(tune1_);
     hash.write(tune2_);
+    hash.write(slideMode1_);
+    hash.write(slideMode2_);
   }
 
  private:
@@ -527,8 +545,6 @@ class Oscillator {
   float shape2_;
   float modDepth_;
   bool modSource_;
-  bool slideEnable1_;
-  bool slideEnable2_;
   bool linkSlideAmmount_;
   float slideAmmount1_;
   float slideAmmount2_;
@@ -541,6 +557,8 @@ class Oscillator {
   Type1 type1_;
   Type2 type2_;
   VoiceMode voiceMode_;
+  SlideMode slideMode1_;
+  SlideMode slideMode2_;
 };
 
 #endif  // Oscilator_h

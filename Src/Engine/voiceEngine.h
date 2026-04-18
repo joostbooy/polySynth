@@ -146,12 +146,21 @@ class VoiceEngine {
 
   void noteOn(int voiceIndex, MidiEngine::Event& e) {
     int playOrder = activeVoices_.size();
-    voice_[voiceIndex].noteOn(e, playOrder, lastNote_);
+    voice_[voiceIndex].noteOn(e, playOrder, lastNote_, legato());
     activeVoices_.push(voiceIndex);
     mostRecentVoice_ = voiceIndex;
     if (numRequested_ > 0) {
       --numRequested_;
     }
+  }
+
+  bool legato() {
+    for (size_t i = 0; i < Settings::kNumVoices; i++) {
+      if (voice_[i].keyPressed()) {
+        return true;
+      }
+    }
+    return false;
   }
 };
 

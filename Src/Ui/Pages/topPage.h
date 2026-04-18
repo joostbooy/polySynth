@@ -90,20 +90,20 @@ namespace TopPage {
 
     switch (slideVcoSelectIndex_) {
       case 0:
-        settings_->oscillator().setSlideEnable1(false);
-        settings_->oscillator().setSlideEnable2(false);
+        settings_->oscillator().setSlideMode1(Oscillator::OFF);
+        settings_->oscillator().setSlideMode2(Oscillator::OFF);
         break;
       case 1:
-        settings_->oscillator().setSlideEnable1(true);
-        settings_->oscillator().setSlideEnable2(false);
+        settings_->oscillator().setSlideMode1(Oscillator::ON);
+        settings_->oscillator().setSlideMode2(Oscillator::OFF);
         break;
       case 2:
-        settings_->oscillator().setSlideEnable1(false);
-        settings_->oscillator().setSlideEnable2(true);
+        settings_->oscillator().setSlideMode1(Oscillator::OFF);
+        settings_->oscillator().setSlideMode2(Oscillator::ON);
         break;
       case 3:
-        settings_->oscillator().setSlideEnable1(true);
-        settings_->oscillator().setSlideEnable2(true);
+        settings_->oscillator().setSlideMode1(Oscillator::ON);
+        settings_->oscillator().setSlideMode2(Oscillator::ON);
         break;
       default:
         break;
@@ -256,8 +256,8 @@ namespace TopPage {
     leds_->setOscModSource(p.oscillator().modSource());
     leds_->setOctaveOffset1(p.oscillator().octaveOffset1());
     leds_->setOctaveOffset2(p.oscillator().octaveOffset2());
-    leds_->setSlideVco1(p.oscillator().slideEnable1());
-    leds_->setSlideVco2(p.oscillator().slideEnable2());
+    leds_->setSlideVco1(p.oscillator().slideMode1());
+    leds_->setSlideVco2(p.oscillator().slideMode2());
 
     leds_->setFilter1Fm(p.filter().fmEnable1());
     leds_->setFilter2Fm(p.filter().fmEnable2());

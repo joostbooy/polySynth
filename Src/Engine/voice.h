@@ -22,6 +22,7 @@ class Voice {
     state_ = AVAILABLE;
     keyPressed_ = false;
     stopRequested_ = false;
+    legato_ = false;
     note_ = 60;
     lastNote_ = 60;
 
@@ -64,13 +65,14 @@ class Voice {
     return state_ == AVAILABLE;
   }
 
-  void noteOn(MidiEngine::Event& e, int playOrder, int lastNote) {
+  void noteOn(MidiEngine::Event& e, int playOrder, int lastNote, bool legato) {
     port_ = e.port;
     note_ = e.data[0];
     channel_ = e.message & 0x0F;
     velocity_ = e.data[1] * (1.f / 127.f);
     playOrder_ = playOrder;
     lastNote_ = lastNote;
+    legato_ = legato;
 
     keyPressed_ = true;
     stopRequested_ = false;
@@ -138,6 +140,7 @@ class Voice {
   int playOrder_ = 0;
   bool keyPressed_;
   bool stopRequested_;
+  bool legato_;
   uint8_t note_;
   uint8_t lastNote_;
   uint8_t port_;
@@ -188,7 +191,7 @@ class Voice {
 
     if (settings_->oscillator().trackNote1()) {
       noteValue = cal.noteValue(note_ + osc.noteOffset1() + osc.octaveOffset1());
-      if (osc.slideEnable1()) {
+      if (slideEnabled(osc.slideMode1())) {
         int lastNoteValue = cal.noteValue(lastNote_ + osc.octaveOffset1());
         noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase1_);
         slidePhase1_ += inc(osc.slideAmmount1());
@@ -209,7 +212,7 @@ class Voice {
 
     if (settings_->oscillator().trackNote2()) {
       noteValue = cal.noteValue(note_ + osc.noteOffset2() + osc.octaveOffset2());
-      if (osc.slideEnable2()) {
+      if (slideEnabled(osc.slideMode2())) {
         int lastNoteValue = cal.noteValue(lastNote_ + osc.octaveOffset2());
         noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase2_);
         slidePhase2_ += inc(osc.slideAmmount2());
@@ -223,6 +226,17 @@ class Voice {
 
   float inc(float value) {
     return LookupTablesUtils::read(lut_phase_inc, value);
+  }
+
+  bool slideEnabled(Oscillator::SlideMode mode) {
+    switch (mode) {
+      case Oscillator::OFF:     return false;
+      case Oscillator::ON:      return true;
+      case Oscillator::LEGATO:  return legato_;
+      default:
+        break;
+    }
+    return false;
   }
 };
 
