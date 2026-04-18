@@ -10,9 +10,7 @@ void Sys::init() {
   __HAL_RCC_GPIOE_CLK_ENABLE();
 
   // Periparel Clock Enable
-  __HAL_RCC_SDIO_CLK_ENABLE();
   __HAL_RCC_DMA1_CLK_ENABLE();
-  __HAL_RCC_DMA2_CLK_ENABLE();
   __HAL_RCC_ADC1_CLK_ENABLE();
   __HAL_RCC_ADC2_CLK_ENABLE();
   __HAL_RCC_SPI2_CLK_ENABLE();
@@ -26,7 +24,6 @@ void Sys::init() {
 
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
    */
@@ -56,14 +53,8 @@ void Sys::init() {
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
   HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
 
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SDIO | RCC_PERIPHCLK_CLK48;
-  PeriphClkInitStruct.Clk48ClockSelection = RCC_CLK48CLKSOURCE_PLLQ;
-  PeriphClkInitStruct.SdioClockSelection = RCC_SDIOCLKSOURCE_CLK48;
-  HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
-
   HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
   HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);          // Clock update
   HAL_NVIC_SetPriority(TIM2_IRQn, 1, 0);          // Render sample
-  HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 2, 0);	// SDIO
-  HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 3, 0);	// LCD
+  HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 2, 0);	// LCD
 }
