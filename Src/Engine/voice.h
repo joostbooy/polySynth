@@ -91,8 +91,11 @@ class Voice {
 
   void noteOff() {
     keyPressed_ = false;
-    envelopeEngine_[0].release();
-    envelopeEngine_[1].release();
+    
+    if (state_ == ACTIVE) {
+      envelopeEngine_[0].release();
+      envelopeEngine_[1].release();
+    }
   }
 
   void render() {

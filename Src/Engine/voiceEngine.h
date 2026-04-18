@@ -81,12 +81,9 @@ class VoiceEngine {
   }
 
   void noteOff(uint8_t port, uint8_t chn, uint8_t note) {
-    uint8_t count = activeVoices_.size();
-
-    for (uint8_t i = 0; i < count; ++i) {
-      uint8_t v = activeVoices_.read(i);
-      if (voice_[v].keyPressed() == true && voice_[v].port() == port && voice_[v].channel() == chn && voice_[v].note() == note) {
-        voice_[v].noteOff();
+    for (uint8_t i = 0; i < Settings::kNumVoices; ++i) {
+      if (voice_[i].keyPressed() == true && voice_[i].note() == note) {
+        voice_[i].noteOff();
       }
     }
   }
@@ -155,10 +152,8 @@ class VoiceEngine {
   }
 
   bool legato() {
-    uint8_t count = activeVoices_.size();
-    for (size_t i = 0; i < count; i++) {
-      uint8_t v = activeVoices_.read(i);
-      if (voice_[v].keyPressed()) {
+    for (size_t i = 0; i < Settings::kNumVoices; i++) {
+      if (voice_[i].keyPressed()) {
         return true;
       }
     }
