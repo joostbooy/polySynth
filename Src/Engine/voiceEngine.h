@@ -155,8 +155,10 @@ class VoiceEngine {
   }
 
   bool legato() {
-    for (size_t i = 0; i < Settings::kNumVoices; i++) {
-      if (voice_[i].keyPressed()) {
+    uint8_t count = activeVoices_.size();
+    for (size_t i = 0; i < count; i++) {
+      uint8_t v = activeVoices_.read(i);
+      if (voice_[v].keyPressed()) {
         return true;
       }
     }
