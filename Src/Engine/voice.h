@@ -195,7 +195,7 @@ class Voice {
     if (settings_->oscillator().trackNote1()) {
       noteValue = cal.noteValue(note_ + osc.noteOffset1() + osc.octaveOffset1());
       if (slideEnabled(osc.slideMode1())) {
-        int lastNoteValue = cal.noteValue(lastNote_ + osc.octaveOffset1());
+        int lastNoteValue = cal.noteValue(lastNote_ + osc.noteOffset1() + osc.octaveOffset1());
         noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase1_);
         slidePhase1_ += inc(osc.slideAmmount1());
         if (slidePhase1_ >= 1.f) {
@@ -216,7 +216,7 @@ class Voice {
     if (settings_->oscillator().trackNote2()) {
       noteValue = cal.noteValue(note_ + osc.noteOffset2() + osc.octaveOffset2());
       if (slideEnabled(osc.slideMode2())) {
-        int lastNoteValue = cal.noteValue(lastNote_ + osc.octaveOffset2());
+        int lastNoteValue = cal.noteValue(lastNote_ + osc.noteOffset2() + osc.octaveOffset2());
         noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase2_);
         slidePhase2_ += inc(osc.slideAmmount2());
         if (slidePhase2_ >= 1.f) {
