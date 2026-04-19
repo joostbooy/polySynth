@@ -89,7 +89,7 @@ namespace CalibrationPage {
     if (id == 0) {
       settings_->calibration().setSelectedNote(settings_->calibration().selectedNote() + inc);
     } else {
-      int value = inc * (buttons_->isPressed(Buttons::SHIFT) ? 50 : 1);
+      int value = (inc == 1 ? -1 : 1) * (buttons_->isPressed(Buttons::SHIFT) ? 50 : 1);
       settings_->calibration().setNoteValue(settings_->calibration().noteValue() + value);
     }
   }
