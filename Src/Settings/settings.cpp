@@ -1,6 +1,6 @@
 #include "settings.h"
 
-void Settings::save(int index) {
+bool Settings::save(int index) {
   eepromBusy_ = true;
 
   fileWriter_.start(index * kPatchStorageSize, currentVersion());
@@ -8,6 +8,8 @@ void Settings::save(int index) {
   fileWriter_.stop();
 
   eepromBusy_ = false;
+
+  return fileWriter_.writeOk();
 };
 
 bool Settings::load() {
@@ -34,7 +36,7 @@ bool Settings::load() {
   return error;
 };
 
-void Settings::saveCalibration() {
+bool Settings::saveCalibration() {
   eepromBusy_ = true;
 
   fileWriter_.start(KCalibrationAddress_, currentVersion());
@@ -42,6 +44,8 @@ void Settings::saveCalibration() {
   fileWriter_.stop();
 
   eepromBusy_ = false;
+
+  return fileWriter_.writeOk();
 }
 
 bool Settings::loadCalibration() {

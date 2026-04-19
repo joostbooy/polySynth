@@ -53,8 +53,11 @@ namespace PatchPage {
         if (state) {
           ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
             if (option == ConfirmationPage::CONFIRM) {
-              settings_->savePatch();
-              MessagePainter::show("PATCH SAVED");
+              if (settings_->savePatch()) {
+                MessagePainter::show("PATCH SAVED");
+              } else {
+                MessagePainter::show("FAILED");
+              }
             }
           });
           pages_->open(Pages::CONFIRMATION_PAGE);
