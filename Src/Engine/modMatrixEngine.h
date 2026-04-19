@@ -79,7 +79,7 @@ class ModMatrixEngine {
       case ModMatrix::TUNE_1:         return p.oscillator().tune1();
       case ModMatrix::TUNE_2:         return p.oscillator().tune2();
       case ModMatrix::VCO_MOD_DEPTH:  return p.oscillator().modDepth();
-      case ModMatrix::GAIN:           return 1.f;
+      case ModMatrix::GAIN:           return 0.f;
       case ModMatrix::PAN:            return p.amp().pan();
       case ModMatrix::DRIVE:          return p.amp().drive();
       default:
