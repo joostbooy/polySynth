@@ -11,6 +11,7 @@ class ModMatrixEngine {
     modMatrix_ = &settings->modMatrix();
     std::fill(&source_[0], &source_[ModMatrix::NUM_SOURCES], 0.f);
     std::fill(&destination_[0], &destination_[ModMatrix::NUM_DESTINATIONS], 0.f);
+    source_[ModMatrix::MIDI_BEND] = 0.5f;
   }
 
   void setEnvelope(int index, float value) {
