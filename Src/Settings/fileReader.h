@@ -1,8 +1,6 @@
 #ifndef FileReader_h
 #define FileReader_h
 
-// based on westlicht's fileReader
-
 #include "eeprom.h"
 #include "hash.h"
 
