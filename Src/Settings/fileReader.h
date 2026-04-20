@@ -22,6 +22,8 @@ class FileReader {
     address_ = address;
     numRead_ = 0;
     hash_.init();
+
+    fillBuffer();
     read(version_);
   }
 
