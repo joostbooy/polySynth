@@ -75,13 +75,15 @@ class LfoEngine {
 
     float min = lfo_->min();
     float max = lfo_->randomise() ? randomMax_ : lfo_->max();
-    float value =  min + (max - min) * x;
-    return lfo_->invert() ? 1.f - value : value;
+    float value = min + (max - min) * x;
+    filteredValue_ += (value - filteredValue_) * 0.1f;
+    return filteredValue_;
   }
 
  private:
   Lfo* lfo_;
   float phase_ = 0.f;
+  float filteredValue_ = 0.f;
   float randomMax_ = 1.f;
   int playOrder_ = 0;
   Stage stage_;
