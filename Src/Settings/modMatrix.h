@@ -100,7 +100,6 @@ class ModMatrix {
     return matrix_[src] & (1 << dest);
   }
 
-
   void toggle(size_t src, size_t dest) {
     set(src, dest, !read(src, dest));
   }
