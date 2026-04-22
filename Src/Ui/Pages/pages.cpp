@@ -3,7 +3,6 @@
 #include "emptyPage.h"
 #include "listPage.h"
 #include "confirmationPage.h"
-#include "optionListPage.h"
 #include "hardwareTestPage.h"
 #include "textInputPage.h"
 #include "lfoPage.h"
@@ -22,7 +21,6 @@
 Pages::Page* page_[Pages::NUM_PAGES] = {
 	[Pages::EMPTY_PAGE]						= &EmptyPage::page,
 	[Pages::CONFIRMATION_PAGE]				= &ConfirmationPage::page,
-	[Pages::OPTION_LIST_PAGE]				= &OptionListPage::page,
 	[Pages::HARDWARE_TEST_PAGE]				= &HardwareTestPage::page,
 	[Pages::TEXT_INPUT_PAGE]				= &TextInputPage::page,
 	[Pages::CALIBRATION_PAGE]				= &CalibrationPage::page,

@@ -293,14 +293,22 @@ namespace TopPage {
 
   const char* selectedPageText() {
     switch (selectedPage_) {
-      case Pages::LFO_PAGE:         return "LFO PAGE";
-      case Pages::MIDI_PAGE:        return "MIDI PAGE";
-      case Pages::AMP_PAGE:         return "AMP PAGE";
-      case Pages::FILTER_PAGE:      return "FILTER PAGE";
-      case Pages::ENVELOPE_PAGE:    return "ENVELOPE PAGE";
-      case Pages::OSCILLATOR_PAGE:  return "VCO PAGE";
-      case Pages::MOD_MATRIX_PAGE:  return "MOD MATRIX PAGE";
-      case Pages::PATCH_PAGE:       return "PATCH PAGE";
+      case Pages::LFO_PAGE:
+        return "LFO PAGE";
+      case Pages::MIDI_PAGE:
+        return "MIDI PAGE";
+      case Pages::AMP_PAGE:
+        return "AMP PAGE";
+      case Pages::FILTER_PAGE:
+        return "FILTER PAGE";
+      case Pages::ENVELOPE_PAGE:
+        return "ENVELOPE PAGE";
+      case Pages::OSCILLATOR_PAGE:
+        return "VCO PAGE";
+      case Pages::MOD_MATRIX_PAGE:
+        return "MOD MATRIX PAGE";
+      case Pages::PATCH_PAGE:
+        return "PATCH PAGE";
       default:
         break;
     }
@@ -352,7 +360,7 @@ namespace TopPage {
     int w = canvas_->width();
     int h = 10;
 
-    const char * name = selectedPatchName();
+    const char* name = selectedPatchName();
 
     canvas_->setFont(Font::LARGE);
     canvas_->drawText(x + 1, y, w, h, name, Canvas::LEFT, Canvas::CENTER);

@@ -7,87 +7,87 @@
 
 namespace MidiPage {
 
-	using TopPage::settings_;
-	using TopPage::engine_;
-	using TopPage::ui_;
-	using TopPage::pages_;
+  using TopPage::engine_;
+  using TopPage::pages_;
+  using TopPage::settings_;
+  using TopPage::ui_;
 
-	bool pasteable_;
-	Midi midi_;
-	MidiList midiList_;
+  bool pasteable_;
+  Midi midi_;
+  MidiList midiList_;
 
-	void clear() {
-		settings_->midi().init();
-	}
+  void clear() {
+    settings_->midi().init();
+  }
 
-	void copy() {
-		midi_.paste(&settings_->midi());
-		pasteable_ = true;
-	}
+  void copy() {
+    midi_.paste(&settings_->midi());
+    pasteable_ = true;
+  }
 
-	bool paste() {
-		if (pasteable_) {
-			settings_->midi().paste(&midi_);
-			return true;
-		}
-		return false;
-	}
+  bool paste() {
+    if (pasteable_) {
+      settings_->midi().paste(&midi_);
+      return true;
+    }
+    return false;
+  }
 
-	void monitor() {
-		pages_->open(Pages::MIDI_MONITOR_PAGE);
-	}
+  void monitor() {
+    pages_->open(Pages::MIDI_MONITOR_PAGE);
+  }
 
-	void init() {
-		pasteable_ = false;
-		midi_.init();
-		midiList_.init(engine_, settings_, ui_);
-	}
+  void init() {
+    pasteable_ = false;
+    midi_.init();
+    midiList_.init(engine_, settings_, ui_);
+  }
 
-	void enter() {
-		ListPage::setList(&midiList_);
-		ListPage::setClearCallback(&clear);
-		ListPage::setCopyCallback(&copy);
-		ListPage::setPasteCallback(&paste);
-		ListPage::setFooterCallback(&monitor);
-		ListPage::setFooterText("MONITOR");
-		ListPage::enter();
-	}
+  void enter() {
+    ListPage::setList(&midiList_);
+    ListPage::setClearCallback(&clear);
+    ListPage::setCopyCallback(&copy);
+    ListPage::setPasteCallback(&paste);
+    ListPage::setFooterCallback(&monitor);
+    ListPage::setFooterText("MONITOR");
+    ListPage::enter();
+  }
 
-	void exit()  {
-		ListPage::exit();
-	}
+  void exit() {
+    ListPage::exit();
+  }
 
-	void onButton(int id, int state) {
-		ListPage::onButton(id, state);
-	}
+  void onButton(int id, int state) {
+    ListPage::onButton(id, state);
+  }
 
-	void onEncoder(int id, int state) {
-		ListPage::onEncoder(id, state);
-	}
+  void onEncoder(int id, int state) {
+    ListPage::onEncoder(id, state);
+  }
 
-	void refreshLeds() {
-		ListPage::refreshLeds();
-	}
+  void refreshLeds() {
+    ListPage::refreshLeds();
+  }
 
-	void draw() {
-		ListPage::draw();
-	}
+  void draw() {
+    ListPage::draw();
+  }
 
-	const size_t targetFps() {
-		return 1000 / 16;
-	}
+  const size_t targetFps() {
+    return 1000 / 16;
+  }
 
-	Pages::Page page = {
-		&init,
-		&enter,
-		&exit,
-		&draw,
-		&refreshLeds,
-		&onButton,
-		&onEncoder,
-		&targetFps
-	};
+  Pages::Page page = {
+      &init,
+      &enter,
+      &exit,
+      &draw,
+      &refreshLeds,
+      &onButton,
+      &onEncoder,
+      &targetFps,
+  };
 
-};
+};  // namespace MidiPage
 
 #endif

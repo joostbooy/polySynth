@@ -3,95 +3,87 @@
 
 namespace ConfirmationPage {
 
-	using TopPage::canvas_;
-	using TopPage::pages_;
-	using TopPage::leds_;
-	using TopPage::buttons_;
+  using TopPage::buttons_;
+  using TopPage::canvas_;
+  using TopPage::leds_;
+  using TopPage::pages_;
 
-	enum Option {
-		CONFIRM,
-		CANCEL,
-		NUM_OPTIONS
-	};
+  enum Option { CONFIRM, CANCEL, NUM_OPTIONS };
 
-	const char* const option_text[NUM_OPTIONS] = {
-		"CONFIRM",
-		"CANCEL",
-	};
+  const char* const option_text[NUM_OPTIONS] = {
+      "CONFIRM",
+      "CANCEL",
+  };
 
+  typedef void (*Callback)(int);
+  Callback callback_;
+  StringBuilderBase<64> str;
 
-	typedef void(*Callback)(int);
-	Callback callback_;
-	StringBuilderBase<64>str;
+  int x = 0;
+  int y = 16;
+  int w = 0;
+  int h = 32;
 
-	int x = 0;
-	int y = 16;
-	int w = 0;
-	int h = 32;
+  void set(const char* message, Callback callback) {
+    str.write(message);
+    callback_ = callback;
+    w = canvas_->font().string_width(str.read()) + 20;
+    x = (canvas_->width() - w) / 2;
+  }
 
-	void set(const char* message, Callback callback) {
-		str.write(message);
-		callback_ = callback;
-		w = canvas_->font().string_width(str.read()) + 20;
-		x = (canvas_->width() - w) / 2;
-	}
+  void init() {
+  }
 
-	void init() {
+  void enter() {
+    if (callback_ == nullptr) {
+      pages_->close(Pages::CONFIRMATION_PAGE);
+    }
+  }
 
-	}
+  void exit() {
+    callback_ = nullptr;
+  }
 
-	void enter() {
-		if (callback_ == nullptr) {
-			pages_->close(Pages::CONFIRMATION_PAGE);
-		}
-	}
+  void onButton(int id, int state) {
+    int selected_option = buttons_->toFunction(id);
+    if (state >= 1 && selected_option >= 0 && selected_option < NUM_OPTIONS) {
+      callback_(selected_option);
+      pages_->close(Pages::CONFIRMATION_PAGE);
+    }
+  }
 
-	void exit() {
-		callback_ = nullptr;
-	}
+  void onEncoder(int id, int state) {
+  }
 
-	void onButton(int id, int state) {
-		int selected_option = buttons_->toFunction(id);
-		if (state >= 1 && selected_option >= 0 && selected_option < NUM_OPTIONS) {
-			callback_(selected_option);
-			pages_->close(Pages::CONFIRMATION_PAGE);
-		}
-	}
+  void refreshLeds() {
+  }
 
-	void onEncoder(int id, int state) {
+  void draw() {
+    canvas_->setFont(Font::SMALL);
+    canvas_->fill(x + 4, y + 4, w, h, Canvas::SUBTRACTED);
+    canvas_->frame(x, y, w, h, Canvas::WHITE);
+    canvas_->fill(x + 1, y + 1, w - 2, h - 2, Canvas::BLACK);
+    canvas_->frame(x + 4, y + 4, w - 8, h - 8, Canvas::WHITE);
+    canvas_->drawText(x, y, w, h, str.read(), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
 
-	}
+    WindowPainter::drawFooter(option_text, NUM_OPTIONS);
+  }
 
-	void refreshLeds() {
+  const size_t targetFps() {
+    return 1000 / 16;
+  }
 
-	}
+  Pages::Page page = {
+      &init,
+      &enter,
+      &exit,
+      &draw,
+      &refreshLeds,
+      &onButton,
+      &onEncoder,
+      &targetFps,
+  };
 
-	void draw() {
-		canvas_->setFont(Font::SMALL);
-		canvas_->fill(x + 4, y + 4, w, h, Canvas::SUBTRACTED);
-		canvas_->frame(x, y, w, h, Canvas::WHITE);
-		canvas_->fill(x + 1, y + 1, w - 2, h - 2, Canvas::BLACK);
-		canvas_->frame(x + 4, y + 4, w - 8, h - 8, Canvas::WHITE);
-		canvas_->drawText(x, y, w, h, str.read(), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
-
-		WindowPainter::drawFooter(option_text, NUM_OPTIONS);
-	}
-
-	const size_t targetFps() {
-		return 1000 / 16;
-	}
-
-	Pages::Page page = {
-		&init,
-		&enter,
-		&exit,
-		&draw,
-		&refreshLeds,
-		&onButton,
-		&onEncoder,
-		&targetFps
-	};
-
-};
+};  // namespace ConfirmationPage
 
 #endif

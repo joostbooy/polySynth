@@ -5,49 +5,42 @@
 
 namespace EmptyPage {
 
-	void init() {
+  void init() {
+  }
 
-	}
+  void enter() {
+  }
 
-	void enter() {
+  void exit() {
+  }
 
-	}
+  void onButton(int id, int state) {
+  }
 
-	void exit()  {
+  void onEncoder(int id, int state) {
+  }
 
-	}
+  void refreshLeds() {
+  }
 
-	void onButton(int id, int state) {
+  void draw() {
+  }
 
-	}
+  const size_t targetFps() {
+    return 1000 / 16;
+  }
 
-	void onEncoder(int id, int state) {
+  Pages::Page page = {
+      &init,
+      &enter,
+      &exit,
+      &draw,
+      &refreshLeds,
+      &onButton,
+      &onEncoder,
+      &targetFps,
+  };
 
-	}
-
-	void refreshLeds() {
-
-	}
-
-	void draw() {
-		
-	}
-
-	const size_t targetFps() {
-		return 1000 / 16;
-	}
-
-	Pages::Page page = {
-		&init,
-		&enter,
-		&exit,
-		&draw,
-		&refreshLeds,
-		&onButton,
-		&onEncoder,
-		&targetFps
-	};
-
-};
+};  // namespace EmptyPage
 
 #endif
