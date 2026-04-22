@@ -18,30 +18,26 @@ class Settings {
   static const size_t kNumEnvelopes = 2;
 
   void init(Eeprom* eeprom) {
-    eeprom_ = eeprom;
-
     fileReader_.init(eeprom);
     fileWriter_.init(eeprom);
 
     lfoIndex_ = 0;
-    patchIndex_ = 0;
     envelopeIndex_ = 0;
 
-    selectedPatch_.init();
-    for (size_t i = 0; i < kNumPatches; i++) {
-      patch(i).init();
-    }
-    loadPatch(patchIndex_);
+    initPatches();
 
     if (!calibrationLoaded_) {
       calibrationLoaded_ = loadCalibration();
     }
   }
 
-  void init() {
-    if (eeprom_ != nullptr) {
-      init(eeprom_);
+  void initPatches() {
+    patchIndex_ = 0;
+    selectedPatch_.init();
+    for (size_t i = 0; i < kNumPatches; i++) {
+      patch(i).init();
     }
+    loadPatch(patchIndex_);
   }
 
   // save & load
@@ -163,8 +159,6 @@ class Settings {
 
   FileWriter fileWriter_;
   FileReader fileReader_;
-
-  Eeprom* eeprom_ = nullptr;
 
   int lfoIndex_;
   int patchIndex_;

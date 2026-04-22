@@ -16,7 +16,7 @@ bool Settings::load() {
   bool error = false;
   eepromBusy_ = true;
 
-  init();
+  initPatches();
 
   for (size_t i = 0; i < kNumPatches; i++) {
     fileReader_.start(i * kPatchStorageSize);
@@ -31,7 +31,7 @@ bool Settings::load() {
 
   eepromBusy_ = false;
 
-  loadPatch(0);
+  loadPatch(patchIndex_);
 
   return error;
 };
