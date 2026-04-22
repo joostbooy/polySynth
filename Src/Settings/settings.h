@@ -23,7 +23,8 @@ class Settings {
 
     lfoIndex_ = 0;
     envelopeIndex_ = 0;
-
+    patchIndex_ = 0;
+    
     initPatches();
 
     if (!calibrationLoaded_) {
@@ -32,12 +33,11 @@ class Settings {
   }
 
   void initPatches() {
-    patchIndex_ = 0;
     selectedPatch_.init();
     for (size_t i = 0; i < kNumPatches; i++) {
       patch(i).init();
     }
-    loadPatch(patchIndex_);
+    loadPatch(0);
   }
 
   // save & load

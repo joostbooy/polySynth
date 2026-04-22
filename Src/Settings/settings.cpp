@@ -31,7 +31,7 @@ bool Settings::load() {
 
   eepromBusy_ = false;
 
-  loadPatch(patchIndex_);
+  loadPatch(0);
 
   return error;
 };
