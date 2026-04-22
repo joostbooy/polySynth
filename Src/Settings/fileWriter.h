@@ -26,7 +26,7 @@ class FileWriter {
     uint32_t hash = hash_.read();
     writeBuffer(&hash, sizeof(hash));
     sendBuffer();
-    writeOk_ = checkHash();
+    writeOk_ = checkHash(hash);
   }
 
   template <typename T>
@@ -65,7 +65,7 @@ class FileWriter {
     buffPos_ = 0;
   }
 
-  bool checkHash() {
+  bool checkHash(uint32_t storedHash) {
     Hash hash;
 
     hash.init();
@@ -83,7 +83,7 @@ class FileWriter {
     eeprom_->read(address_, buffer_, size);
     hash.write(buffer_, size);
 
-    return hash.read() == hash_.read();
+    return hash.read() == storedHash;
   }
 };
 
