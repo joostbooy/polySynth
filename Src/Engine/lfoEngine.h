@@ -46,28 +46,28 @@ class LfoEngine {
       skewPhase = 1.f - (phase - skewAmount) * (1.0f / (1.0f - skewAmount));
     }
 
-    float x = 0.f;
+    float wave = 0.f;
 
     switch (lfo_->type()) {
       case Lfo::LINEAR:
-        x = skewPhase;
+        wave = skewPhase;
         break;
       case Lfo::EXP_LOG:
         if (stage_ == RISING) {
-          x = LookupTablesUtils::readInterpolated(lut_exp, skewPhase);
+          wave = LookupTablesUtils::readInterpolated(lut_exp, skewPhase);
         } else {
-          x = LookupTablesUtils::readInterpolated(lut_inv_exp, skewPhase);
+          wave = LookupTablesUtils::readInterpolated(lut_inv_exp, skewPhase);
         }
         break;
       case Lfo::LOG_EXP:
         if (stage_ == RISING) {
-          x = LookupTablesUtils::readInterpolated(lut_inv_exp, skewPhase);
+          wave = LookupTablesUtils::readInterpolated(lut_inv_exp, skewPhase);
         } else {
-          x = LookupTablesUtils::readInterpolated(lut_exp, skewPhase);
+          wave = LookupTablesUtils::readInterpolated(lut_exp, skewPhase);
         }
         break;
       case Lfo::SQUARE:
-        x = phase < skewAmount ? 1.f : 0.f;
+        wave = phase < skewAmount ? 1.f : 0.f;
         break;
       default:
         break;
@@ -75,7 +75,7 @@ class LfoEngine {
 
     float min = lfo_->min();
     float max = lfo_->randomise() ? randomMax_ : lfo_->max();
-    float value = min + (max - min) * x;
+    float value = min + (max - min) * wave;
     filteredValue_ += (value - filteredValue_) * 0.1f;
     return filteredValue_;
   }
