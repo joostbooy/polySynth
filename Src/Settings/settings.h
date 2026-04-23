@@ -24,25 +24,13 @@ class Settings {
     lfoIndex_ = 0;
     envelopeIndex_ = 0;
     patchIndex_ = 0;
-    
-    initPatches();
 
-    if (!calibrationLoaded_) {
-      calibrationLoaded_ = loadCalibration();
-    }
-  }
-
-  void initPatches() {
     selectedPatch_.init();
-    for (size_t i = 0; i < kNumPatches; i++) {
-      patch(i).init();
-    }
-    loadPatch(0);
+
+    loadPatches();
+    loadCalibration();
   }
 
-  // save & load
-  bool save(int index);
-  bool load();
   bool eepromBusy() {
     return eepromBusy_;
   }
@@ -75,7 +63,7 @@ class Settings {
 
   bool savePatch() {
     patch_[patchIndex_].paste(&selectedPatch_);
-    return save(patchIndex_);
+    return savePatch(patchIndex_);
   }
 
   bool patchHasUnsavedChanges() {
@@ -170,6 +158,9 @@ class Settings {
 
   Patch patch_[kNumPatches];
   Patch selectedPatch_;
+
+  bool savePatch(int index);
+  bool loadPatches();
 
   // Do not change !
   static constexpr size_t kPatchStorageSize = 512;

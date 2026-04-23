@@ -1,6 +1,6 @@
 #include "settings.h"
 
-bool Settings::save(int index) {
+bool Settings::savePatch(int index) {
   eepromBusy_ = true;
 
   fileWriter_.start(index * kPatchStorageSize, currentVersion());
@@ -12,13 +12,12 @@ bool Settings::save(int index) {
   return fileWriter_.writeOk();
 };
 
-bool Settings::load() {
+bool Settings::loadPatches() {
   bool error = false;
   eepromBusy_ = true;
 
-  initPatches();
-
   for (size_t i = 0; i < kNumPatches; i++) {
+    patch_[i].init();
     fileReader_.start(i * kPatchStorageSize);
     patch_[i].load(fileReader_);
     fileReader_.stop();
