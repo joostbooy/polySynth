@@ -75,9 +75,7 @@ class LfoEngine {
 
     float min = lfo_->min();
     float max = lfo_->randomise() ? randomMax_ : lfo_->max();
-    float value = min + (max - min) * wave;
-    
-    return value;
+    return min + (max - min) * wave;
   }
 
  private:
