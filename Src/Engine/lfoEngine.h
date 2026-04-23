@@ -76,14 +76,13 @@ class LfoEngine {
     float min = lfo_->min();
     float max = lfo_->randomise() ? randomMax_ : lfo_->max();
     float value = min + (max - min) * wave;
-    filteredValue_ += (value - filteredValue_) * 0.1f;
-    return filteredValue_;
+    
+    return value;
   }
 
  private:
   Lfo* lfo_;
   float phase_ = 0.f;
-  float filteredValue_ = 0.f;
   float randomMax_ = 1.f;
   int playOrder_ = 0;
   Stage stage_;
@@ -97,15 +96,6 @@ class LfoEngine {
   }
 
   float nextPhase() {
-    float offsetPhase;
-
-    float offset = EngineUtils::spread(lfo_->phaseOffset(), lfo_->phaseOffsetSpread(), playOrder_);
-    if (phase_ + offset >= 1.f) {
-      offsetPhase = phase_ - (1.f - offset);
-    } else {
-      offsetPhase = phase_ + offset;
-    }
-
     phase_ += readInc();
     if (phase_ >= 1.f) {
       if (lfo_->oneShot()) {
@@ -115,7 +105,12 @@ class LfoEngine {
       }
     }
 
-    return offsetPhase;
+    float offset = EngineUtils::spread(lfo_->phaseOffset(), lfo_->phaseOffsetSpread(), playOrder_);
+    if (phase_ + offset > 1.f) {
+      return phase_ - (1.f - offset);
+    } else {
+      return phase_ + offset;
+    }
   }
 };
 
