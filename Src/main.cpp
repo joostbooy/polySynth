@@ -49,29 +49,6 @@ void render() {
   engine.render();
 }
 
-/*
-bool testEeprom() {
-  const size_t kBufferSize = 64;
-  uint8_t wData[kBufferSize];
-  uint8_t rData[kBufferSize];
-
-  for (size_t i = 0; i < kBufferSize; i++) {
-    wData[i] = Rng::u16() >> 8;
-  }
-
-  eeprom.write(0, wData, kBufferSize);
-  eeprom.read(0, rData, kBufferSize);
-
-  for (size_t i = 0; i < kBufferSize; i++) {
-    if (wData[i] != rData[i]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-*/
-
 int main(void)
 {
 	// Init drivers
