@@ -116,12 +116,14 @@ namespace PatchPage {
         break;
       case NEXT:
         if (state) {
-          footerOptionsOffset = 4;
+            // dont switch footer options if audition is pressed
+          if (buttons_->isPressed(Buttons::DISPLAY_C) == false) {
+            footerOptionsOffset = 4;
+          }
         }
         break;
       case PREV:
-        // dont switch footer options if audition is pressed
-        if (state == 1 && buttons_->isPressed(Buttons::DISPLAY_D) == false) {
+       if (state) {
           footerOptionsOffset = 0;
         }
         break;
