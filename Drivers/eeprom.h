@@ -2,6 +2,7 @@
 #define Eeprom_h
 
 #include "stm32f4xx.h"
+#include "micros.h"
 
 class Eeprom {
  public:
@@ -28,13 +29,15 @@ class Eeprom {
       spiTransfer(address >> 8);
       spiTransfer(address);
 
-      while (size--) {
+      while (size) {
+        --size;
         spiTransfer(*data++);
         if ((++address % 128) == 0) {
           break;
         }
       }
       deselect();
+      Micros::delay(5000);
       while (writeInProgress()) {}
     }
   }
