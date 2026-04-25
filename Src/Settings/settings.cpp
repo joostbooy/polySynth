@@ -50,6 +50,7 @@ bool Settings::saveCalibration() {
 bool Settings::loadCalibration() {
   eepromBusy_ = true;
 
+  calibration_.init();
   fileReader_.start(KCalibrationAddress_);
   calibration_.load(fileReader_);
   fileReader_.stop();
