@@ -189,13 +189,13 @@ class Voice {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = cal.noteValue(osc.noteOffset1() + osc.octaveOffset1());
-    int tuneValue = ((2.f * modValue) - 1.f) * cal.semiNoteValue() * 11;
+    int noteValue = cal.noteValue(60 + osc.octaveOffset1());
+    int tuneValue = ((2.f * modValue) - 1.f) * cal.semiNoteValue() * (osc.trackNote1() ? 11 : 60);
 
-    if (settings_->oscillator().trackNote1()) {
-      noteValue = cal.noteValue(note_ + osc.noteOffset1() + osc.octaveOffset1());
+    if (osc.trackNote1()) {
+      noteValue = cal.noteValue(note_ + osc.octaveOffset1());
       if (slideEnabled(osc.slideMode1())) {
-        int lastNoteValue = cal.noteValue(lastNote_ + osc.noteOffset1() + osc.octaveOffset1());
+        int lastNoteValue = cal.noteValue(lastNote_ + osc.octaveOffset1());
         noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase1_);
         slidePhase1_ += inc(osc.slideAmmount1());
         if (slidePhase1_ >= 1.f) {
@@ -210,13 +210,13 @@ class Voice {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = cal.noteValue(osc.noteOffset2() + osc.octaveOffset2());
-    int tuneValue = ((2.f * modValue) - 1.f) * cal.semiNoteValue() * 11;
+    int noteValue = cal.noteValue(60 + osc.octaveOffset2());
+    int tuneValue = ((2.f * modValue) - 1.f) * cal.semiNoteValue() * (osc.trackNote2() ? 11 : 60);
 
-    if (settings_->oscillator().trackNote2()) {
-      noteValue = cal.noteValue(note_ + osc.noteOffset2() + osc.octaveOffset2());
+    if (osc.trackNote2()) {
+      noteValue = cal.noteValue(note_ + osc.octaveOffset2());
       if (slideEnabled(osc.slideMode2())) {
-        int lastNoteValue = cal.noteValue(lastNote_ + osc.noteOffset2() + osc.octaveOffset2());
+        int lastNoteValue = cal.noteValue(lastNote_ + osc.octaveOffset2());
         noteValue = Dsp::cross_fade(lastNoteValue, noteValue, slidePhase2_);
         slidePhase2_ += inc(osc.slideAmmount2());
         if (slidePhase2_ >= 1.f) {
