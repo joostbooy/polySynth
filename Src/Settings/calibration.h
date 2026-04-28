@@ -17,6 +17,8 @@ class Calibration {
     for (size_t i = 0; i < kMaxNotes; i++) {
       noteValue_[i] = 65535 - (i * (65535 / kMaxNotes));
     }
+
+    updateSemiNoteValue();
   }
 
   void start() {
