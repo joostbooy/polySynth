@@ -3,6 +3,7 @@
 
 #include "envelope.h"
 #include "lookupTablesUtils.h"
+#include "engineUtils.h"
 
 class EnvelopeEngine {
  public:
@@ -70,7 +71,7 @@ class EnvelopeEngine {
       case DECAY:
         phase_ += readInc(envelope_->decayTime());
         if (phase_ < 1.f) {
-          sample_ = Dsp::cross_fade(1.f, envelope_->sustainLevel(), readCurve(envelope_->decayShape()));
+          sample_ = EngineUtils::crossFade(1.f, envelope_->sustainLevel(), readCurve(envelope_->decayShape()));
         } else {
           if (mode_ == Envelope::GATE) {
             phase_ = 0.f;
@@ -97,7 +98,7 @@ class EnvelopeEngine {
       case RELEASE:
         phase_ += readInc(envelope_->releaseTime());
         if (phase_ < 1.f) {
-          sample_ = Dsp::cross_fade(releaseLevel_, 0.f, readCurve(envelope_->releaseShape()));
+          sample_ = EngineUtils::crossFade(releaseLevel_, 0.f, readCurve(envelope_->releaseShape()));
         } else {
           phase_ = 0.f;
           stage_ = envelope_->loop() ? ATTACK : IDLE;

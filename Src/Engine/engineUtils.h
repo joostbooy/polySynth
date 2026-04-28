@@ -5,6 +5,11 @@
 
 namespace EngineUtils {
 
+  template <typename T>
+  static T crossFade(T a, T b, float mix) {
+    return a + (b - a) * mix;
+  }
+
   static float spread(float value, float spreadAmmount, int playOrder) {
     float spread_ = spreadAmmount * (1.f / Settings::kNumVoices) * playOrder;
     if (playOrder % 2) {
