@@ -57,8 +57,8 @@ namespace CalibrationPage {
     patch_.paste(&settings_->selectedPatch());
     settings_->oscillator().setType1(Oscillator::TRIANGLE1);
     settings_->oscillator().setType2(Oscillator::TRIANGLE2);
-    settings_->oscillator().setTune1(0.f);
-    settings_->oscillator().setTune2(0.f);
+    settings_->oscillator().setTune1(0.5f);
+    settings_->oscillator().setTune2(0.5f);
     settings_->oscillator().setShape1(0.f);
     settings_->oscillator().setShape2(0.f);
     settings_->oscillator().setFmEnable(false);
