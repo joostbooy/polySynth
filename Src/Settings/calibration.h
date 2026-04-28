@@ -73,7 +73,7 @@ class Calibration {
   }
 
   uint16_t semiNoteValue() {
-    return noteValue(0) - noteValue(1);
+    return semiNoteValue_;
   }
 
   const char* noteValueText() {
@@ -85,12 +85,14 @@ class Calibration {
     for (size_t i = 0; i < kMaxNotes; i++) {
       fileWriter.write(noteValue_[i]);
     }
+    updateSemiNoteValue();
   }
 
   void load(FileReader& fileReader) {
     for (size_t i = 0; i < kMaxNotes; i++) {
       fileReader.read(noteValue_[i]);
     }
+    updateSemiNoteValue();
   }
 
  private:
@@ -100,6 +102,11 @@ class Calibration {
   int selectedVoice_;
   int selectedNote_;
   uint16_t noteValue_[kMaxNotes];
+  uint16_t semiNoteValue_;
+
+  void updateSemiNoteValue() {
+    semiNoteValue_ = noteValue(0) - noteValue(1);
+  }
 };
 
 #endif
