@@ -3,7 +3,6 @@
 
 #include "SettingsText.h"
 #include "SettingsUtils.h"
-#include "dsp.h"
 #include "fileReader.h"
 #include "fileWriter.h"
 
@@ -35,7 +34,7 @@ class Calibration {
 
   // Selected voice
   void selectNextVoice() {
-    if (++selectedVoice_ >= 8) {
+    if (++selectedVoice_ >= 7) {
       selectedVoice_ = 0;
     }
   }

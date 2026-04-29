@@ -11,7 +11,7 @@
 
 class Settings {
  public:
-  static const size_t kNumVoices = 8;
+  static const size_t kNumVoices = 7;
   static const size_t kNumUserCc = 4;
   static const size_t kNumPatches = 120;
   static const size_t kNumLfos = 2;
