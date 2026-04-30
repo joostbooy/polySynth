@@ -131,6 +131,7 @@ namespace CalibrationPage {
             MessagePainter::show("CALIBRATION CLEARED");
           }
         });
+        pages_->open(Pages::CONFIRMATION_PAGE);
         break;
       case NEXT:
         footerOptionsOffset = 4;
