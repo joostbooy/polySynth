@@ -1,4 +1,5 @@
 #include "engine.h"
+#include "debug.h"
 
 void Engine::init(Settings* settings, Uart* uart, Usb* usb, Dac* dac) {
   dac_ = dac;
@@ -22,11 +23,13 @@ void Engine::start() {
       voiceEngine_.voice(i).lfoEngine(j).reset();
     }
   }
+  state_ = RUNNING;
 }
 
 void Engine::stop() {
   voiceEngine_.clear();
   noteQue_.clear();
+  state_ = STOPPED;
 }
 
 void Engine::noteOn(MidiEngine::Event& e) {
@@ -134,13 +137,11 @@ void Engine::processRequests() {
 
   if (requests_ & START) {
     start();
-    state_ = RUNNING;
     clearRequest(START);
   }
 
   if (requests_ & STOP) {
     stop();
-    state_ = STOPPED;
     clearRequest(STOP);
   }
 
