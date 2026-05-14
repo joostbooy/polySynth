@@ -16,13 +16,13 @@
     * Pan
     * Overdrive
     * Wavefolder per VCO
-- Digital recall of all parameters
+- Digital recall of all parameters, 100+ presets
 - Modulation matrix
 
 ## Specs
 - Cortex-M4 ARM 168mHz (STM32F4)
 - 16 bit DAC
-- 9/12V DC power
+- 12V 5A DC power
 
 ## Code structure
 - `/Drivers`			Hardware peripheral drivers
