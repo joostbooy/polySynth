@@ -105,6 +105,8 @@ class Oscillator {
     setOctaveOffset2(0);
     setTune1(0.5f);
     setTune2(0.5f);
+    setTuneSpread1(0.f);
+    setTuneSpread2(0.f);
   }
 
   // Voice mode
@@ -393,6 +395,32 @@ class Oscillator {
     return SettingsText::floatToText((tune2() * 2.f) - 1.f);
   }
 
+  // Tune spread 1
+  float tuneSpread1() {
+    return tuneSpread1_;
+  }
+
+  void setTuneSpread1(float value) {
+    tuneSpread1_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* tuneSpread1Text() {
+    return SettingsText::floatToText(tuneSpread1());
+  }
+
+  // Tune spread 2
+  float tuneSpread2() {
+    return tuneSpread2_;
+  }
+
+  void setTuneSpread2(float value) {
+    tuneSpread2_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* tuneSpread2Text() {
+    return SettingsText::floatToText(tuneSpread2());
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(voiceMode_);
@@ -417,6 +445,8 @@ class Oscillator {
     fileWriter.write(octaveOffset2_);
     fileWriter.write(tune1_);
     fileWriter.write(tune2_);
+    fileWriter.write(tuneSpread1_);
+    fileWriter.write(tuneSpread2_);
   }
 
   void load(FileReader& fileReader) {
@@ -442,6 +472,10 @@ class Oscillator {
     fileReader.read(octaveOffset2_);
     fileReader.read(tune1_);
     fileReader.read(tune2_);
+    if (fileReader.version() >= 1) {
+      fileReader.read(tuneSpread1_);
+      fileReader.read(tuneSpread2_);
+    }
   }
 
   void paste(Oscillator* oscillator) {
@@ -464,7 +498,9 @@ class Oscillator {
     tune2_ = oscillator->tune2();
     slideMode1_ = oscillator->slideMode1();
     slideMode2_ = oscillator->slideMode2();
-
+    tuneSpread1_ = oscillator->tuneSpread1();
+    tuneSpread2_ = oscillator->tuneSpread2();
+ 
     // Temporarily unlink slide amount so we can paste slide ammount 2
     linkSlideAmmount_ = oscillator->linkSlideAmmount();
     oscillator->setLinkSlideAmmount(false);
@@ -496,6 +532,8 @@ class Oscillator {
     hash.write(tune2_);
     hash.write(slideMode1_);
     hash.write(slideMode2_);
+    hash.write(tuneSpread1_);
+    hash.write(tuneSpread2_);
   }
 
  private:
@@ -516,6 +554,8 @@ class Oscillator {
   int octaveOffset2_;
   float tune1_;
   float tune2_;
+  float tuneSpread1_;
+  float tuneSpread2_;
   Type1 type1_;
   Type2 type2_;
   VoiceMode voiceMode_;

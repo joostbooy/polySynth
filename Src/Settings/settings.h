@@ -36,7 +36,7 @@ class Settings {
   }
 
   uint32_t currentVersion() {
-    return 0;
+    return 1;
   }
 
   // Patch
@@ -164,7 +164,7 @@ class Settings {
 
   // Do not change !
   static constexpr size_t kPatchStorageSize = 512;
-  static constexpr size_t KCalibrationAddress_ = 64000 - 512;
+  static constexpr size_t KCalibrationAddress_ = 64000 - 512; //2048
 
   static_assert((sizeof(patch_[0])) < kPatchStorageSize, "Patch storage size exceeded!");
   static_assert(kPatchStorageSize * kNumPatches < KCalibrationAddress_, "Patch block size exceeded!");
