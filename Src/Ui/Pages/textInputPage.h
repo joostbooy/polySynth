@@ -181,7 +181,7 @@ namespace TextInputPage {
     } else if (id == 0) {
       inc > 0 ? char_cursor_right() : char_cursor_left();
     } else if (id == 1) {
-      inc > 0 ? char_cursor_up() : char_cursor_down();
+      inc > 0 ? char_cursor_down() : char_cursor_up();
     }
   }
 
