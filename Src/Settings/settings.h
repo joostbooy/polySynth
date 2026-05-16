@@ -11,11 +11,22 @@
 
 class Settings {
  public:
+
   static const size_t kNumVoices = 6;
   static const size_t kNumUserCc = 4;
   static const size_t kNumPatches = 120;
   static const size_t kNumLfos = 2;
   static const size_t kNumEnvelopes = 2;
+
+  enum Version {
+    Version_0,
+    Version_1,  // added tune spread
+    Latest,
+  };
+
+  uint32_t currentVersion() {
+    return Latest - 1;
+  }
 
   void init(Eeprom* eeprom) {
     fileReader_.init(eeprom);
@@ -33,10 +44,6 @@ class Settings {
 
   bool eepromBusy() {
     return eepromBusy_;
-  }
-
-  uint32_t currentVersion() {
-    return 1;
   }
 
   // Patch
