@@ -85,10 +85,13 @@ namespace CalibrationPage {
   }
 
   void onEncoder(int id, int inc) {
+    bool shifted = buttons_->isPressed(Buttons::SHIFT);
+
     if (id == 0) {
-      settings_->calibration().setSelectedNote(settings_->calibration().selectedNote() + inc);
+      int value = inc * (shifted ? 12 : 1);
+      settings_->calibration().setSelectedNote(settings_->calibration().selectedNote() + value);
     } else {
-      int value = (inc == 1 ? -1 : 1) * (buttons_->isPressed(Buttons::SHIFT) ? 50 : 1);
+      int value = (inc == 1 ? -1 : 1) * (shifted ? 50 : 1);
       settings_->calibration().setNoteValue(settings_->calibration().noteValue() + value);
     }
   }
