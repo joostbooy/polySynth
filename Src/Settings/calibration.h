@@ -11,6 +11,7 @@ class Calibration {
   void init() {
     selectedVoice_ = 0;
     selectedNote_ = 0;
+    selectedVco_ = 0;
     enabled_ = false;
 
     for (size_t i = 0; i < 8; i++) {
