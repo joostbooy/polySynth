@@ -2,6 +2,7 @@
 #define Voice_h
 
 #include "dac.h"
+#include "calibration.h"
 #include "envelopeEngine.h"
 #include "lfoEngine.h"
 #include "modMatrixEngine.h"
@@ -189,14 +190,14 @@ class Voice {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = cal.noteValue(60 + osc.octaveOffset1());
+    int noteValue = noteValue1(60 + osc.octaveOffset1());
     float modValue_ = EngineUtils::spread(modValue, osc.tuneSpread1(), playOrder_);
     int tuneValue = ((2.f * modValue_) - 1.f) * cal.semiNoteValue() * (osc.trackNote1() ? 11 : 60);
 
     if (osc.trackNote1()) {
-      noteValue = cal.noteValue(note_ + osc.octaveOffset1());
+      noteValue = noteValue1(note_ + osc.octaveOffset1());
       if (slideEnabled(osc.slideMode1())) {
-        int lastNoteValue = cal.noteValue(lastNote_ + osc.octaveOffset1());
+        int lastNoteValue = noteValue1(lastNote_ + osc.octaveOffset1());
         noteValue = EngineUtils::crossFade(lastNoteValue, noteValue, slidePhase1_);
         slidePhase1_ += inc(osc.slideAmmount1());
         if (slidePhase1_ >= 1.f) {
@@ -211,14 +212,14 @@ class Voice {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = cal.noteValue(60 + osc.octaveOffset2());
+    int noteValue = noteValue2(60 + osc.octaveOffset2());
     float modValue_ = EngineUtils::spread(modValue, osc.tuneSpread2(), playOrder_);
     int tuneValue = ((2.f * modValue_) - 1.f) * cal.semiNoteValue() * (osc.trackNote2() ? 11 : 60);
 
     if (osc.trackNote2()) {
-      noteValue = cal.noteValue(note_ + osc.octaveOffset2());
+      noteValue = noteValue2(note_ + osc.octaveOffset2());
       if (slideEnabled(osc.slideMode2())) {
-        int lastNoteValue = cal.noteValue(lastNote_ + osc.octaveOffset2());
+        int lastNoteValue = noteValue2(lastNote_ + osc.octaveOffset2());
         noteValue = EngineUtils::crossFade(lastNoteValue, noteValue, slidePhase2_);
         slidePhase2_ += inc(osc.slideAmmount2());
         if (slidePhase2_ >= 1.f) {
@@ -242,6 +243,14 @@ class Voice {
         break;
     }
     return false;
+  }
+
+  uint16_t noteValue1(int note) {
+    return settings_->calibration().noteValue(index_, 0, note);
+  }
+
+  uint16_t noteValue2(int note) {
+    return settings_->calibration().noteValue(index_, 1, note);
   }
 };
 

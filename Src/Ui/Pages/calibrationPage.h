@@ -29,11 +29,11 @@ namespace CalibrationPage {
   int footerOptionsOffset;
   const char* const footer_text[NUM_FOOTER_OPTIONS] = {"SAVE", "LOAD", "CLEAR", ">", "<", "NEXT VCO", "NEXT VOICE", "CLOSE"};
 
-  int selectedVco_;
-
+  
   void selectNextVco() {
-    ++selectedVco_ %= 2;
-    switch (selectedVco_) {
+    settings_->calibration().selectNextVco();
+
+    switch (settings_->calibration().selectedVco()) {
       case 0:
         settings_->oscillator().setMuteOsc1(false);
         settings_->oscillator().setMuteOsc2(true);
@@ -51,7 +51,6 @@ namespace CalibrationPage {
   }
 
   void enter() {
-    selectedVco_ = 0;
     footerOptionsOffset = 0;
 
     patch_.paste(&settings_->selectedPatch());
@@ -172,7 +171,7 @@ namespace CalibrationPage {
     canvas_->drawText(x + collWdith, y + rowHeight, settings_->calibration().noteValueText());
 
     canvas_->drawText(x, y + (rowHeight * 3), "SELECTED VCO");
-    canvas_->drawText(x + collWdith, y + (rowHeight * 3), SettingsText::intToText(selectedVco_ + 1));
+    canvas_->drawText(x + collWdith, y + (rowHeight * 3), settings_->calibration().selectedVcoText());
 
     canvas_->drawText(x, y + (rowHeight * 4), "SELECTED VOICE");
     canvas_->drawText(x + collWdith, y + (rowHeight * 4), settings_->calibration().selectedVoiceText());
