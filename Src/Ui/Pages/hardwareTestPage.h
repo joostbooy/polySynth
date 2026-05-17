@@ -18,9 +18,9 @@ namespace HardwareTestPage {
 
   bool showProcessingTime_;
   bool showVersion_;
-  bool potsEnabled;
-  uint16_t lastPotValue[Pots::NUM_POTS];
-  uint16_t potLargerstDifference;
+  bool potsEnabled_;
+  uint16_t lastPotValue_[Pots::NUM_POTS];
+  uint16_t potLargerstDifference_;
 
   enum FooterOptions {
     TOGGLE_LEDS,
@@ -35,19 +35,19 @@ namespace HardwareTestPage {
   bool ledToggleState_;
 
   void printChange(int i, uint16_t value) {
-    if (value != lastPotValue[i]) {
-      lastPotValue[i] = value;
+    if (value != lastPotValue_[i]) {
+      lastPotValue_[i] = value;
       TextBufferPainter::write(str_.write(pots_->idText(i), " ", value));
     }
   }
 
   void prinLargestDiff(int i, uint16_t value) {
-    int diff = SettingsUtils::difference(value, lastPotValue[i]);
-    if (diff > potLargerstDifference && diff < 255) {
-      potLargerstDifference = diff;
-      TextBufferPainter::write(str_.write(potLargerstDifference));
+    int diff = SettingsUtils::difference(value, lastPotValue_[i]);
+    if (diff > potLargerstDifference_ && diff < 255) {
+      potLargerstDifference_ = diff;
+      TextBufferPainter::write(str_.write(potLargerstDifference_));
     }
-    lastPotValue[i] = value;
+    lastPotValue_[i] = value;
   }
 
   void prinAverageDiff(int i, uint16_t value) {
@@ -56,7 +56,7 @@ namespace HardwareTestPage {
     static uint32_t lastAverage = 0;
 
     if (count < 65535) {
-      sum += SettingsUtils::difference(value, lastPotValue[i]);
+      sum += SettingsUtils::difference(value, lastPotValue_[i]);
       ++count;
 
       uint32_t average = sum / count;
@@ -66,7 +66,7 @@ namespace HardwareTestPage {
       }
     }
 
-    lastPotValue[i] = value;
+    lastPotValue_[i] = value;
   }
 
   void testPots() {
@@ -89,12 +89,12 @@ namespace HardwareTestPage {
   }
 
   void enter() {
-    potsEnabled = false;
+    potsEnabled_ = false;
     showVersion_ = false;
     ledToggleState_ = true;
     TextBufferPainter::clear();
 
-    potLargerstDifference = 0;
+    potLargerstDifference_ = 0;
   }
 
   void exit() {
@@ -113,10 +113,10 @@ namespace HardwareTestPage {
             showVersion_ ^= 1;
             break;
           case ENABLE_POTS:
-            potsEnabled ^= 1;
-            if (potsEnabled) {
+            potsEnabled_ ^= 1;
+            if (potsEnabled_) {
               for (size_t i = 0; i < Pots::NUM_POTS; i++) {
-                lastPotValue[i] = pots_->read(i) * 255;
+                lastPotValue_[i] = pots_->read(i) * 255;
               }
             }
             break;
@@ -155,7 +155,7 @@ namespace HardwareTestPage {
   }
 
   void draw() {
-    if (potsEnabled) {
+    if (potsEnabled_) {
       testPots();
     }
 
