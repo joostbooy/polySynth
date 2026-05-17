@@ -179,9 +179,9 @@ namespace TextInputPage {
     if (buttons_->isPressed(Buttons::SHIFT)) {
       inc > 0 ? text_cursor_right() : text_cursor_left();
     } else if (id == 0) {
-      inc > 0 ? char_cursor_right() : char_cursor_left();
-    } else if (id == 1) {
       inc > 0 ? char_cursor_down() : char_cursor_up();
+    } else if (id == 1) {
+      inc > 0 ? char_cursor_right() : char_cursor_left();
     }
   }
 
