@@ -92,9 +92,8 @@ namespace HardwareTestPage {
     potsEnabled_ = false;
     showVersion_ = false;
     ledToggleState_ = true;
-    TextBufferPainter::clear();
-
     potLargerstDifference_ = 0;
+    TextBufferPainter::clear();
   }
 
   void exit() {
