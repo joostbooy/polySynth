@@ -28,6 +28,10 @@ class Settings {
     return Latest - 1;
   }
 
+  const char *currentVersionText() {
+    return SettingsText::str.write("VERSION ", currentVersion());
+  }
+
   void init(Eeprom* eeprom) {
     fileReader_.init(eeprom);
     fileWriter_.init(eeprom);

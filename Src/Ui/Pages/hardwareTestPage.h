@@ -17,19 +17,20 @@ namespace HardwareTestPage {
   using TopPage::str_;
 
   bool showProcessingTime_;
+  bool showVersion_;
   bool potsEnabled;
   uint16_t lastPotValue[Pots::NUM_POTS];
   uint16_t potLargerstDifference;
 
   enum FooterOptions {
     TOGGLE_LEDS,
-    TEST_SD_CARD,
+    VERSION,
     ENABLE_POTS,
     CLOSE,
     NUM_OPTIONS,
   };
 
-  const char* const footerOptionText_[NUM_OPTIONS] = {"TOGGLE LEDS", "TEST SD CARD", "ENABLE POTS", "CLOSE"};
+  const char* const footerOptionText_[NUM_OPTIONS] = {"TOGGLE LEDS", "VERSION", "ENABLE POTS", "CLOSE"};
 
   bool ledToggleState_;
 
@@ -89,6 +90,7 @@ namespace HardwareTestPage {
 
   void enter() {
     potsEnabled = false;
+    showVersion_ = false;
     ledToggleState_ = true;
     TextBufferPainter::clear();
 
@@ -107,7 +109,8 @@ namespace HardwareTestPage {
           case TOGGLE_LEDS:
             ledToggleState_ ^= 1;
             break;
-          case TEST_SD_CARD:
+          case VERSION:
+            showVersion_ ^= 1;
             break;
           case ENABLE_POTS:
             potsEnabled ^= 1;
@@ -154,6 +157,16 @@ namespace HardwareTestPage {
   void draw() {
     if (potsEnabled) {
       testPots();
+    }
+
+    if (showVersion_) {
+      int w = 84;
+      int h = 24;
+      int x = (canvas_->width() - w) / 2;
+      int y = (canvas_->height() - h) / 2;
+
+      WindowPainter::drawBox(x, y, w, h);
+      canvas_->drawText(x, y, w, h, settings_->currentVersionText(), Canvas::CENTER, Canvas::CENTER);
     }
 
     drawProcessingTime();
