@@ -159,10 +159,10 @@ namespace HardwareTestPage {
     }
 
     if (showVersion_) {
-      int w = 84;
-      int h = 24;
-      int x = (canvas_->width() - w) / 2;
-      int y = (canvas_->height() - h) / 2;
+      const int w = 84;
+      const int h = 24;
+      const int x = (canvas_->width() - w) / 2;
+      const int y = (canvas_->height() - h) / 2;
 
       WindowPainter::drawBox(x, y, w, h);
       canvas_->drawText(x, y, w, h, settings_->currentVersionText(), Canvas::CENTER, Canvas::CENTER);
