@@ -18,19 +18,26 @@ namespace CalibrationPage {
     SAVE,
     LOAD,
     CLEAR,
-    NEXT,
-    PREV,
+    NEXT_1,
+
+    PREV_1,
     NEXT_VCO,
     NEXT_VOICE,
+    NEXT_2,
+
+    PREV_2,
+    COPY,
+    PASTE,
     CLOSE,
+    
     NUM_FOOTER_OPTIONS,
   };
 
   int footerOptionsOffset;
-  const char* const footer_text[NUM_FOOTER_OPTIONS] = {"SAVE", "LOAD", "CLEAR", ">", "<", "NEXT VCO", "NEXT VOICE", "CLOSE"};
+  uint16_t copy_[120];
+  const char* const footer_text[NUM_FOOTER_OPTIONS] = {"SAVE", "LOAD", "CLEAR", ">", "<", "NEXT VCO", "NEXT VOICE", ">", "<", "COPY", "PASTE", "CLOSE"};
 
-  
-  void selectNextVco() {
+    void selectNextVco() {
     settings_->calibration().selectNextVco();
 
     switch (settings_->calibration().selectedVco()) {
@@ -135,24 +142,47 @@ namespace CalibrationPage {
         });
         pages_->open(Pages::CONFIRMATION_PAGE);
         break;
-      case NEXT:
-        footerOptionsOffset = 4;
-        break;
-      case PREV:
-        footerOptionsOffset = 0;
-        break;
       case NEXT_VCO:
         selectNextVco();
         break;
       case NEXT_VOICE:
         settings_->calibration().selectNextVoice();
         break;
-      case CLOSE:
-        pages_->close(Pages::CALIBRATION_PAGE);
-        pages_->open(Pages::PATCH_PAGE);
-        break;
-      default:
-        break;
+        case COPY:
+          for (size_t i = 0; i < 120; i++) {
+            int voice = settings_->calibration().selectedVoice();
+            int vco = settings_->calibration().selectedVco();
+            copy_[i] = settings_->calibration().noteValue(voice, vco, i);
+          }
+          MessagePainter::show("COPIED");
+          break;
+        case PASTE:
+          ConfirmationPage::set("OVERWRITE CALIBRATION ?", [](int option) {
+            if (option == ConfirmationPage::CONFIRM) {
+              settings_->calibration().paste(copy_);
+              MessagePainter::show("PASTED");
+            }
+          });
+          pages_->open(Pages::CONFIRMATION_PAGE);
+          break;
+        case CLOSE:
+          pages_->close(Pages::CALIBRATION_PAGE);
+          pages_->open(Pages::PATCH_PAGE);
+          break;
+        case NEXT_1:
+          footerOptionsOffset = 4;
+          break;
+        case PREV_1:
+          footerOptionsOffset = 0;
+          break;
+        case NEXT_2:
+          footerOptionsOffset = 8;
+          break;
+        case PREV_2:
+          footerOptionsOffset = 4;
+          break;
+        default:
+          break;
     }
   }
 

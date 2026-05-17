@@ -17,8 +17,8 @@ class Calibration {
     for (size_t i = 0; i < 8; i++) {
       for (size_t j = 0; j < kMaxNotes; j++) {
         uint16_t value = 65535 - (j * (65535 / kMaxNotes));
-        voice_[j].noteValueOsc1[j] = value;
-        voice_[j].noteValueOsc2[j] = value;
+        voice_[i].noteValueOsc1[j] = value;
+        voice_[i].noteValueOsc2[j] = value;
       }
     }
     updateSemiNoteValue();
@@ -129,6 +129,16 @@ class Calibration {
       }
     }
     updateSemiNoteValue();
+  }
+
+  void paste(uint16_t* data) {
+    for (size_t i = 0; i < kMaxNotes; i++) {
+      if (selectedVco_ == 0) {
+        voice_[selectedVoice_].noteValueOsc1[i] = *data++;
+      } else {
+        voice_[selectedVoice_].noteValueOsc2[i] = *data++;
+      }
+    }
   }
 
  private:

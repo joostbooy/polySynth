@@ -165,7 +165,7 @@ namespace HardwareTestPage {
       const int y = (canvas_->height() - h) / 2;
 
       WindowPainter::drawBox(x, y, w, h);
-      canvas_->drawText(x, y, w, h, settings_->currentVersionText(), Canvas::CENTER, Canvas::CENTER);
+      canvas_->drawText(x, y, w, h, settings_->currentVersionText(), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
     }
 
     drawProcessingTime();
