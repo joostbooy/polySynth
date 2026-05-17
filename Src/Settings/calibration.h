@@ -146,7 +146,7 @@ class Calibration {
   } voice_[8];
 
   void updateSemiNoteValue() {
-    semiNoteValue_ = noteValue(0, 0, 0) - noteValue(0, 0, 1);
+    semiNoteValue_ = noteValue(0, 0, 60) - noteValue(0, 0, 61);
   }
 };
 
