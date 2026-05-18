@@ -26,16 +26,14 @@ namespace CalibrationPage {
     NEXT_2,
 
     PREV_2,
-    COPY,
-    PASTE,
+    RECENTRE_TUNE,
     CLOSE,
     
     NUM_FOOTER_OPTIONS,
   };
 
   int footerOptionsOffset;
-  uint16_t copy_[120];
-  const char* const footer_text[NUM_FOOTER_OPTIONS] = {"SAVE", "LOAD", "CLEAR", ">", "<", "NEXT VCO", "NEXT VOICE", ">", "<", "COPY", "PASTE", "CLOSE"};
+  const char* const footer_text[NUM_FOOTER_OPTIONS] = {"SAVE", "LOAD", "CLEAR", ">", "<", "NEXT VCO", "NEXT VOICE", ">", "<", "RECENTRE TUNE", "CLOSE"};
 
     void selectNextVco() {
     settings_->calibration().selectNextVco();
@@ -148,23 +146,15 @@ namespace CalibrationPage {
       case NEXT_VOICE:
         settings_->calibration().selectNextVoice();
         break;
-        case COPY:
-          for (size_t i = 0; i < 120; i++) {
-            int voice = settings_->calibration().selectedVoice();
-            int vco = settings_->calibration().selectedVco();
-            copy_[i] = settings_->calibration().noteValue(voice, vco, i);
-          }
-          MessagePainter::show("COPIED");
-          break;
-        case PASTE:
-          ConfirmationPage::set("OVERWRITE CALIBRATION ?", [](int option) {
-            if (option == ConfirmationPage::CONFIRM) {
-              settings_->calibration().paste(copy_);
-              MessagePainter::show("PASTED");
-            }
-          });
-          pages_->open(Pages::CONFIRMATION_PAGE);
-          break;
+      case RECENTRE_TUNE: 
+      {
+        float error1 = 0.5f - ui_->pots().read(Pots::TUNE_A);
+        float error2 = 0.5f - ui_->pots().read(Pots::TUNE_B);
+        settings_->calibration().setTuneError1(error1);
+        settings_->calibration().setTuneError2(error2);
+        MessagePainter::show("FINISHED");
+      }
+       break;
         case CLOSE:
           pages_->close(Pages::CALIBRATION_PAGE);
           pages_->open(Pages::PATCH_PAGE);

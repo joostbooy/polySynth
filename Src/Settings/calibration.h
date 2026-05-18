@@ -13,6 +13,8 @@ class Calibration {
     selectedNote_ = 0;
     selectedVco_ = 0;
     enabled_ = false;
+    tuneError1_ = 0.f;
+    tuneError2_ = 0.f;
 
     for (size_t i = 0; i < 8; i++) {
       for (size_t j = 0; j < kMaxNotes; j++) {
@@ -110,6 +112,23 @@ class Calibration {
     }
   }
 
+  // Tune error
+  void setTuneError1(float value) {
+    tuneError1_ = value;
+  }
+
+  void setTuneError2(float value) {
+    tuneError2_ = value;
+  }
+
+  float tuneError1() {
+    return tuneError1_;
+  }
+
+  float tuneError2() {
+    return tuneError2_;
+  }
+
   // storage
   void save(FileWriter& fileWriter) {
     for (size_t i = 0; i < 8; i++) {
@@ -118,6 +137,8 @@ class Calibration {
         fileWriter.write(voice_[i].noteValueOsc2[j]);
       }
     }
+    fileWriter.write(tuneError1_);
+    fileWriter.write(tuneError2_);
     updateSemiNoteValue();
   }
 
@@ -128,17 +149,11 @@ class Calibration {
         fileReader.read(voice_[i].noteValueOsc2[j]);
       }
     }
-    updateSemiNoteValue();
-  }
-
-  void paste(uint16_t* data) {
-    for (size_t i = 0; i < kMaxNotes; i++) {
-      if (selectedVco_ == 0) {
-        voice_[selectedVoice_].noteValueOsc1[i] = *data++;
-      } else {
-        voice_[selectedVoice_].noteValueOsc2[i] = *data++;
-      }
+    if (fileReader.version() >= 2) {
+      fileReader.read(tuneError1_);
+      fileReader.read(tuneError2_);
     }
+    updateSemiNoteValue();
   }
 
  private:
@@ -149,6 +164,8 @@ class Calibration {
   int selectedNote_;
   int selectedVco_;
   uint16_t semiNoteValue_;
+  float tuneError1_;
+  float tuneError2_;
 
   struct Voice {
     uint16_t noteValueOsc1[kMaxNotes];

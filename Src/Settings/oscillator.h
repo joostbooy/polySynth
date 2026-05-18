@@ -3,6 +3,7 @@
 
 #include "settingsText.h"
 #include "lookupTablesUtils.h"
+#include "calibration.h"
 
 class Oscillator {
  public:
@@ -80,6 +81,10 @@ class Oscillator {
         break;
     }
     return nullptr;
+  }
+
+  static inline void init(Calibration *calibration) {
+    calibration_ = calibration;
   }
 
   void init() {
@@ -371,7 +376,7 @@ class Oscillator {
 
     // Tune 1
   float tune1() {
-    return tune1_;
+    return tune1_ + calibration_->tuneError1();
   }
 
   void setTune1(float value) {
@@ -384,7 +389,7 @@ class Oscillator {
 
     // Tune 2
   float tune2() {
-    return tune2_;
+    return tune2_ + calibration_->tuneError2();
   }
 
   void setTune2(float value) {
@@ -537,6 +542,7 @@ class Oscillator {
   }
 
  private:
+  static inline Calibration* calibration_;
   bool trackNote1_;
   bool trackNote2_;
   bool syncEnable_;

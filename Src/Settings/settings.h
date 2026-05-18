@@ -21,6 +21,7 @@ class Settings {
   enum Version {
     Version_0,
     Version_1,  // added tune spread
+    Version_2,  // added tune error
     Latest,
   };
 
@@ -40,8 +41,9 @@ class Settings {
     envelopeIndex_ = 0;
     patchIndex_ = 0;
 
+    Oscillator::init(&calibration_);
     selectedPatchOrignalState_.init();
-
+ 
     loadPatches();
     loadCalibration();
   }
