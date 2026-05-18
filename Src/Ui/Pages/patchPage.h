@@ -79,6 +79,7 @@ namespace PatchPage {
           ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
             if (option == ConfirmationPage::CONFIRM) {
               settings_->reloadSelectedPatch();
+              ui_->resetAllPots();
               MessagePainter::show("PATCH RELOADED");
             }
           });
