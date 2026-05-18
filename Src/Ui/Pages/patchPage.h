@@ -19,20 +19,24 @@ namespace PatchPage {
   enum FooterOption {
     INIT,
     SAVE,
-    AUDITION,
-    NEXT,
-    PREV,
+    RELOAD,
+    NEXT_1,
+
+    PREV_1,
     COPY,
     PASTE,
+    NEXT_2,
+
+    PREV_2,
+    AUDITION,
     EDIT_NAME,
 
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"INIT", "SAVE", "AUDITION", ">", "<", "COPY", "PASTE", "EDIT NAME"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"INIT", "SAVE", "RELOAD", ">", "<", "COPY", "PASTE", ">", "<", "AUDITION", "EDIT NAME"};
 
   int footerOptionsOffset;
-  int newIndex;
 
   void init() {
     pasteable_ = false;
@@ -68,6 +72,17 @@ namespace PatchPage {
           patch_.paste(&settings_->selectedPatch());
           pasteable_ = true;
           MessagePainter::show("PATCH COPIED");
+        }
+        break;
+      case RELOAD:
+        if (state) {
+          ConfirmationPage::set("OVERWRITE PATCH ?", [](int option) {
+            if (option == ConfirmationPage::CONFIRM) {
+              settings_->reloadSelectedPatch();
+              MessagePainter::show("PATCH RELOADED");
+            }
+          });
+          pages_->open(Pages::CONFIRMATION_PAGE);
         }
         break;
       case PASTE:
@@ -114,7 +129,22 @@ namespace PatchPage {
           engine_->addReqestBlocking(Engine::STOP_AUDITION);
         }
         break;
-      case NEXT:
+      case NEXT_1:
+        if (state) {
+          footerOptionsOffset = 4;
+        }
+        break;
+      case PREV_1:
+       if (state) {
+          footerOptionsOffset = 0;
+        }
+        break;
+      case NEXT_2:
+        if (state) {
+          footerOptionsOffset = 8;
+        }
+        break;
+      case PREV_2:
         if (state) {
             // dont switch footer options if audition is pressed
           if (buttons_->isPressed(Buttons::DISPLAY_C) == false) {
@@ -122,41 +152,21 @@ namespace PatchPage {
           }
         }
         break;
-      case PREV:
-       if (state) {
-          footerOptionsOffset = 0;
-        }
-        break;
       default:
         break;
     }
   }
 
-  void loadNewPatch() {
-    engine_->addReqestBlocking(Engine::STOP);
-
-    settings_->loadPatch(newIndex);
-    ui_->resetAllPots();
-
-    engine_->addReqestBlocking(Engine::START);
-  }
-
   void onEncoder(int id, int state) {
     int inc = buttons_->isPressed(Buttons::SHIFT) ? state * 10 : state;
     int lastIndex = settings_->patchIndex();
-    newIndex = SettingsUtils::clip(0, Settings::kNumPatches - 1, lastIndex + inc);
+    int newIndex = SettingsUtils::clip(0, Settings::kNumPatches - 1, lastIndex + inc);
 
     if (lastIndex != newIndex) {
-      if (settings_->patchHasUnsavedChanges()) {
-        ConfirmationPage::set("UNSAVED CHANGES WILL BE LOST, CONTINUE?", [](int option) {
-          if (option == ConfirmationPage::CONFIRM) {
-            loadNewPatch();
-          }
-        });
-        pages_->open(Pages::CONFIRMATION_PAGE);
-      } else {
-        loadNewPatch();
-      }
+      engine_->addReqestBlocking(Engine::STOP);
+      settings_->loadPatch(newIndex);
+      ui_->resetAllPots();
+      engine_->addReqestBlocking(Engine::START);
     }
   }
 

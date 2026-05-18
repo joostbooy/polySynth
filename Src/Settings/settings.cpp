@@ -12,6 +12,23 @@ bool Settings::savePatch(int index) {
   return fileWriter_.writeOk();
 };
 
+bool Settings::loadPatch(int index, Patch& patch) {
+  eepromBusy_ = true;
+
+  patch.init();
+  fileReader_.start(index * kPatchStorageSize);
+  patch.load(fileReader_);
+  fileReader_.stop();
+
+  eepromBusy_ = false;
+
+  if (!fileReader_.readOk()) {
+    patch.init();
+    return false;
+  }
+  return true;
+}
+
 bool Settings::loadPatches() {
   bool error = false;
   eepromBusy_ = true;

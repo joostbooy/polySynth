@@ -40,7 +40,7 @@ class Settings {
     envelopeIndex_ = 0;
     patchIndex_ = 0;
 
-    selectedPatch_.init();
+    selectedPatchOrignalState_.init();
 
     loadPatches();
     loadCalibration();
@@ -51,15 +51,7 @@ class Settings {
   }
 
   // Patch
-  Patch& patch(int index) {
-    return patch_[index];
-  }
-
   Patch& selectedPatch() {
-    return selectedPatch_;
-  }
-
-  Patch& selectedPatchOrignalState() {
     return patch_[patchIndex_];
   }
 
@@ -67,14 +59,23 @@ class Settings {
     return patchIndex_;
   }
 
+  Patch& selectedPatchOrignalState() {
+    return selectedPatchOrignalState_;
+  }
+
   void loadPatch(int index) {
     patchIndex_ = SettingsUtils::clip(0, kNumPatches - 1, index);
-    selectedPatch_.paste(&patch_[patchIndex_]);
+    loadPatch(patchIndex_, selectedPatchOrignalState_);
+  }
+
+  void reloadSelectedPatch() {
+    selectedPatch().paste(&selectedPatchOrignalState());
   }
 
   bool savePatch() {
-    patch_[patchIndex_].paste(&selectedPatch_);
-    return savePatch(patchIndex_);
+    bool writeOk = savePatch(patchIndex_);
+    selectedPatchOrignalState_.paste(&selectedPatch());
+    return writeOk;
   }
 
   bool patchHasUnsavedChanges() {
@@ -168,11 +169,12 @@ class Settings {
   Calibration calibration_;
 
   Patch patch_[kNumPatches];
-  Patch selectedPatch_;
+  Patch selectedPatchOrignalState_;
 
   bool savePatch(int index);
   bool loadPatches();
-
+  bool loadPatch(int index, Patch& patch);
+  
   // Do not change !
   static constexpr size_t kPatchStorageSize = 512;
   static constexpr size_t KCalibrationAddress_ = 65535 - 4095; 
