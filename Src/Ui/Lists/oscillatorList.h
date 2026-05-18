@@ -178,10 +178,10 @@ class OscillatorList : public SettingsList {
         oscillator.setType2(oscillator.type2() + inc);
         break;
       case TUNE_SPREAD_1:
-        oscillator.setTuneSpread1(oscillator.tuneSpread1() + inc);
+        oscillator.setTuneSpread1(oscillator.tuneSpread1() + SettingsUtils::fInc(inc, shifted));
         break;
       case TUNE_SPREAD_2:
-        oscillator.setTuneSpread2(oscillator.tuneSpread2() + inc);
+        oscillator.setTuneSpread2(oscillator.tuneSpread2() + SettingsUtils::fInc(inc, shifted));
         break;
       default:
         break;
