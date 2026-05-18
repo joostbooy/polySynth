@@ -42,8 +42,9 @@ class Settings {
     patchIndex_ = 0;
 
     Oscillator::init(&calibration_);
+    selectedPatch_.init();
     selectedPatchOrignalState_.init();
- 
+
     loadPatches();
     loadCalibration();
   }
@@ -54,7 +55,7 @@ class Settings {
 
   // Patch
   Patch& selectedPatch() {
-    return patch_[patchIndex_];
+    return selectedPatch_;
   }
 
   int patchIndex() {
@@ -66,7 +67,9 @@ class Settings {
   }
 
   void loadPatch(int index) {
+    patch_[patchIndex_].paste(&selectedPatch_);
     patchIndex_ = SettingsUtils::clip(0, kNumPatches - 1, index);
+    selectedPatch_.paste(&patch_[patchIndex_]);
     loadPatch(patchIndex_, selectedPatchOrignalState_);
   }
 
@@ -75,9 +78,9 @@ class Settings {
   }
 
   bool savePatch() {
-    bool writeOk = savePatch(patchIndex_);
-    selectedPatchOrignalState_.paste(&selectedPatch());
-    return writeOk;
+    patch_[patchIndex_].paste(&selectedPatch_);
+    selectedPatchOrignalState_.paste(&selectedPatch_);
+    return savePatch(patchIndex_);
   }
 
   bool patchHasUnsavedChanges() {
@@ -171,6 +174,7 @@ class Settings {
   Calibration calibration_;
 
   Patch patch_[kNumPatches];
+  Patch selectedPatch_;
   Patch selectedPatchOrignalState_;
 
   bool savePatch(int index);

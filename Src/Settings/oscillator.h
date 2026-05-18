@@ -499,8 +499,8 @@ class Oscillator {
     modSource_ = oscillator->modSource();
     octaveOffset1_ = oscillator->octaveOffset1();
     octaveOffset2_ = oscillator->octaveOffset2();
-    tune1_ = oscillator->tune1();
-    tune2_ = oscillator->tune2();
+    tune1_ = oscillator->tune1() - calibration_->tuneError1();
+    tune2_ = oscillator->tune2() - calibration_->tuneError2();
     slideMode1_ = oscillator->slideMode1();
     slideMode2_ = oscillator->slideMode2();
     tuneSpread1_ = oscillator->tuneSpread1();
