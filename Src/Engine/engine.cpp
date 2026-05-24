@@ -40,7 +40,7 @@ void Engine::noteOn(MidiEngine::Event& e) {
 }
 
 void Engine::noteOff(MidiEngine::Event& e) {
-  voiceEngine_.noteOff(e.port, e.message & 0x0F, e.data[0]);
+  noteQue_.write(e);
 }
 
 void Engine::pitchBend(MidiEngine::Event& e) {
@@ -171,12 +171,19 @@ void Engine::render() {
     processGates();
 
     // only use the latest notes 
-    while (noteQue_.size() > voiceEngine_.maxNotes()) {
-      noteQue_.swallow();
-    }
+  //  while (noteQue_.size() > voiceEngine_.maxNotes()) {
+  //    noteQue_.swallow();
+  //  }
 
-    while (noteQue_.readable() && voiceEngine_.available() ) {
-      voiceEngine_.assignVoice(noteQue_.read());
+    while (noteQue_.readable()) {
+      uint8_t message = noteQue_.peek().message & 0x0F;
+      if (message == MidiEngine::NOTE_OFF) {
+        voiceEngine_.noteOff(noteQue_.read());
+      } else if (message == MidiEngine::NOTE_ON && voiceEngine_.available()) {
+        voiceEngine_.assignVoice(noteQue_.read());
+      } else {
+        break;
+      }
     }
 
     voiceEngine_.render();

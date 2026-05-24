@@ -80,9 +80,9 @@ class VoiceEngine {
     }
   }
 
-  void noteOff(uint8_t port, uint8_t chn, uint8_t note) {
+  void noteOff(MidiEngine::Event e) {
     for (uint8_t i = 0; i < Settings::kNumVoices; ++i) {
-      if (voice_[i].keyPressed() == true && voice_[i].note() == note) {
+      if (voice_[i].keyPressed() == true && voice_[i].note() == e.data[0]) {
         voice_[i].noteOff();
       }
     }
