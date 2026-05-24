@@ -160,6 +160,33 @@ void Engine::processRequests() {
   }
 }
 
+void Engine::processNotes() {
+  // only use the latest notes
+  size_t count = 0;
+  size_t i = noteQue_.size();
+
+  while (i--) {
+    uint8_t message = noteQue_.peek(i).message & 0x0F;
+    if (message == MidiEngine::NOTE_ON) {
+      if (++count > voiceEngine_.maxNotes()) {
+        noteQue_.remove(i);
+      }
+    }
+  }
+
+  // handle note on/off
+  while (noteQue_.readable()) {
+    uint8_t message = noteQue_.peek().message & 0x0F;
+    if (message == MidiEngine::NOTE_OFF) {
+      voiceEngine_.noteOff(noteQue_.read());
+    } else if (message == MidiEngine::NOTE_ON && voiceEngine_.available()) {
+      voiceEngine_.assignVoice(noteQue_.read());
+    } else {
+      break;
+    }
+  }
+}
+
 // 1Khz
 void Engine::render() {
   uint32_t start = Micros::read();
@@ -169,23 +196,7 @@ void Engine::render() {
   if (state_ == RUNNING) {
     processMidi();
     processGates();
-
-    // only use the latest notes 
-  //  while (noteQue_.size() > voiceEngine_.maxNotes()) {
-  //    noteQue_.swallow();
-  //  }
-
-    while (noteQue_.readable()) {
-      uint8_t message = noteQue_.peek().message & 0x0F;
-      if (message == MidiEngine::NOTE_OFF) {
-        voiceEngine_.noteOff(noteQue_.read());
-      } else if (message == MidiEngine::NOTE_ON && voiceEngine_.available()) {
-        voiceEngine_.assignVoice(noteQue_.read());
-      } else {
-        break;
-      }
-    }
-
+    processNotes();
     voiceEngine_.render();
   }
 

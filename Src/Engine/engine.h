@@ -80,6 +80,7 @@ class Engine {
   void processRequests();
   void processMidi();
   void processGates();
+  void processNotes();
   void noteOn(MidiEngine::Event& e);
   void noteOff(MidiEngine::Event& e);
   void pitchBend(MidiEngine::Event& e);
