@@ -33,14 +33,16 @@ void Engine::stop() {
 }
 
 void Engine::noteOn(MidiEngine::Event& e) {
-  if (midiEngine_.withinKeyRange(e)) {
+  if (midiEngine_.withinKeyRange(e) && noteQue_.writeable()) {
     noteQue_.write(e);
     voiceEngine_.requestVoice();
   }
 }
 
 void Engine::noteOff(MidiEngine::Event& e) {
-  noteQue_.write(e);
+  if (noteQue_.writeable()) {
+    noteQue_.write(e);
+  }
 }
 
 void Engine::pitchBend(MidiEngine::Event& e) {
@@ -162,13 +164,14 @@ void Engine::processRequests() {
 
 void Engine::processNotes() {
   // only use the latest notes
-  size_t count = 0;
+  size_t numNotes = 0;
   size_t i = noteQue_.size();
+  size_t maxNotes = voiceEngine_.maxNotes();
 
   while (i--) {
     uint8_t message = noteQue_.peek(i).message & 0x0F;
     if (message == MidiEngine::NOTE_ON) {
-      if (++count > voiceEngine_.maxNotes()) {
+      if (++numNotes > maxNotes) {
         noteQue_.remove(i);
       }
     }
