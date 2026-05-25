@@ -68,7 +68,8 @@ class Engine {
   VoiceEngine voiceEngine_;
   MidiClockEngine midiClockEngine_;
   ModMatrixEngine modMatrixEngine_;
-  Que<MidiEngine::Event, Settings::kNumVoices * 2> noteQue_;
+  Que<MidiEngine::Event, Settings::kNumVoices> noteOnQue_;
+  Que<MidiEngine::Event, Settings::kNumVoices> noteOffQue_;
   bool gate_[2];
   bool lastGate_[2];
   MidiEngine::Event gateToNote_[2];

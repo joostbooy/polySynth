@@ -28,20 +28,21 @@ void Engine::start() {
 
 void Engine::stop() {
   voiceEngine_.clear();
-  noteQue_.clear();
+  noteOnQue_.clear();
+  noteOffQue_.clear();
   state_ = STOPPED;
 }
 
 void Engine::noteOn(MidiEngine::Event& e) {
-  if (midiEngine_.withinKeyRange(e) && noteQue_.writeable()) {
-    noteQue_.write(e);
+  if (midiEngine_.withinKeyRange(e) && noteOnQue_.writeable()) {
+    noteOnQue_.write(e);
     voiceEngine_.requestVoice();
   }
 }
 
 void Engine::noteOff(MidiEngine::Event& e) {
-  if (noteQue_.writeable()) {
-    noteQue_.write(e);
+  if (noteOffQue_.writeable()) {
+    noteOffQue_.write(e);
   }
 }
 
@@ -162,35 +163,7 @@ void Engine::processRequests() {
   }
 }
 
-void Engine::processNotes() {
-  // only use the latest notes
-  size_t numNotes = 0;
-  size_t i = noteQue_.size();
-  size_t maxNotes = voiceEngine_.maxNotes();
-
-  while (i--) {
-    uint8_t message = noteQue_.peek(i).message & 0x0F;
-    if (message == MidiEngine::NOTE_ON) {
-      if (++numNotes > maxNotes) {
-        noteQue_.remove(i);
-      }
-    }
-  }
-
-  // handle note on/off
-  while (noteQue_.readable()) {
-    uint8_t message = noteQue_.peek().message & 0x0F;
-    if (message == MidiEngine::NOTE_OFF) {
-      voiceEngine_.noteOff(noteQue_.read());
-    } else if (message == MidiEngine::NOTE_ON && voiceEngine_.available()) {
-      voiceEngine_.assignVoice(noteQue_.read());
-    } else {
-      break;
-    }
-  }
-}
-
-// 1Khz
+  // 1Khz
 void Engine::render() {
   uint32_t start = Micros::read();
 
@@ -199,7 +172,23 @@ void Engine::render() {
   if (state_ == RUNNING) {
     processMidi();
     processGates();
-    processNotes();
+
+    // only use latets notes
+    while (noteOnQue_.size() > voiceEngine_.maxNotes()) {
+      noteOnQue_.swallow();
+    }
+
+    while (noteOnQue_.readable() && voiceEngine_.available()) {
+      voiceEngine_.assignVoice(noteOnQue_.read());
+    }
+
+    // dont process note off's if we have note on's to process
+    if (noteOnQue_.size() == 0) {
+      while (noteOffQue_.readable()) {
+        voiceEngine_.noteOff(noteOffQue_.read());
+      }
+    }
+
     voiceEngine_.render();
   }
 
