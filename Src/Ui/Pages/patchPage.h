@@ -30,11 +30,12 @@ namespace PatchPage {
     PREV_2,
     AUDITION,
     EDIT_NAME,
+    PANIC,
 
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"INIT", "SAVE", "RELOAD", ">", "<", "COPY", "PASTE", ">", "<", "AUDITION", "EDIT NAME"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"INIT", "SAVE", "RELOAD", ">", "<", "COPY", "PASTE", ">", "<", "AUDITION", "EDIT NAME", "PANIC"};
 
   int footerOptionsOffset;
 
@@ -128,6 +129,12 @@ namespace PatchPage {
           engine_->addReqestBlocking(Engine::START_AUDITION);
         } else {
           engine_->addReqestBlocking(Engine::STOP_AUDITION);
+        }
+        break;
+      case PANIC:
+        if (state) {
+          engine_->addReqestBlocking(Engine::STOP);
+          engine_->addReqestBlocking(Engine::START);
         }
         break;
       case NEXT_1:
