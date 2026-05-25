@@ -135,6 +135,7 @@ namespace PatchPage {
         if (state) {
           engine_->addReqestBlocking(Engine::STOP);
           engine_->addReqestBlocking(Engine::START);
+          MessagePainter::show("ENGINE RESET");
         }
         break;
       case NEXT_1:
