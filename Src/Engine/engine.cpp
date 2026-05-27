@@ -182,7 +182,7 @@ void Engine::processNotes() {
     uint8_t message = noteQue_.peek().message & 0x0F;
     if (message == MidiEngine::NOTE_OFF) {
       voiceEngine_.noteOff(noteQue_.read());
-    } else if (message == MidiEngine::NOTE_ON && voiceEngine_.available()) {
+    } else if ((message == MidiEngine::NOTE_ON) && voiceEngine_.available()) {
       voiceEngine_.assignVoice(noteQue_.read());
     } else {
       break;
