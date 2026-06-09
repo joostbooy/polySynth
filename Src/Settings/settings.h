@@ -185,7 +185,7 @@ class Settings {
   static constexpr size_t kPatchStorageSize = 512;
   static constexpr size_t KCalibrationAddress_ = 65535 - 4095; 
 
-  static_assert((sizeof(patch_[0])) < kPatchStorageSize, "Patch storage size exceeded!");
+  static_assert(sizeof(patch_[0]) < kPatchStorageSize, "Patch storage size exceeded!");
   static_assert((kPatchStorageSize * kNumPatches) - 1 < KCalibrationAddress_, "Patch block size exceeded!");
   static_assert(KCalibrationAddress_ + (sizeof(calibration_)) < 65535, "EEPROM exceeded!");
 };
