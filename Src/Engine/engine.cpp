@@ -169,7 +169,7 @@ void Engine::processNotes() {
   size_t maxNotes = voiceEngine_.maxNotes();
 
   while (i--) {
-    uint8_t message = noteQue_.peek(i).message & 0x0F;
+    uint8_t message = noteQue_.peek(i).message & 0xF0;
     if (message == MidiEngine::NOTE_ON) {
       if (++numNotes > maxNotes) {
         noteQue_.remove(i);
@@ -179,7 +179,7 @@ void Engine::processNotes() {
 
   // handle note on/off
   while (noteQue_.readable()) {
-    uint8_t message = noteQue_.peek().message & 0x0F;
+    uint8_t message = noteQue_.peek().message & 0xF0;
     if (message == MidiEngine::NOTE_OFF) {
       voiceEngine_.noteOff(noteQue_.read());
     } else if ((message == MidiEngine::NOTE_ON) && voiceEngine_.available()) {
