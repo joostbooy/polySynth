@@ -30,12 +30,16 @@ namespace PatchPage {
     PREV_2,
     AUDITION,
     EDIT_NAME,
+    NEXT_3,
+
+    PREV_3,
     PANIC,
+    LCD_OFF,
 
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"INIT", "SAVE", "RELOAD", ">", "<", "COPY", "PASTE", ">", "<", "AUDITION", "EDIT NAME", "PANIC"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"INIT", "SAVE", "RELOAD", ">", "<", "COPY", "PASTE", ">", "<", "AUDITION", "EDIT NAME", ">", "<", "PANIC", "LCD OFF"};
 
   int footerOptionsOffset;
 
@@ -138,6 +142,11 @@ namespace PatchPage {
           MessagePainter::show("ENGINE RESET");
         }
         break;
+      case LCD_OFF:
+        if (!state) {
+          ui_->displayOff();
+        }
+        break;
       case NEXT_1:
         if (state) {
           footerOptionsOffset = 4;
@@ -159,6 +168,16 @@ namespace PatchPage {
           if (buttons_->isPressed(Buttons::DISPLAY_C) == false) {
             footerOptionsOffset = 4;
           }
+        }
+        break;
+      case NEXT_3:
+        if (state) {
+          footerOptionsOffset = 12;
+        }
+        break;
+      case PREV_3:
+        if (state) {
+          footerOptionsOffset = 8;
         }
         break;
       default:

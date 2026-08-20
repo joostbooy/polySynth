@@ -54,6 +54,12 @@ class Ui {
     return lockedPots_ & (1 << id);
   }
 
+  void displayOff() {
+    if (display_->isOn()) {
+      display_->turnOff();
+    }
+  }
+
  private:
   enum UnlockDirection {
     CW,
@@ -86,7 +92,6 @@ class Ui {
 
   uint32_t lastInterval_ = 0;
   uint32_t displayInterval_ = 0;
-  uint32_t displayTimer_;
   uint32_t lockedPots_;
   uint8_t encoderRaw_[4];
   uint8_t potUnlockDirection_[Pots::NUM_POTS];
