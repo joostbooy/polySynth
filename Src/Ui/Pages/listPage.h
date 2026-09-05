@@ -15,20 +15,26 @@ namespace ListPage {
   void (*clearCallback_)() = nullptr;
   bool (*pasteCallback_)() = nullptr;
   void (*copyCallback_)() = nullptr;
+  void (*randomiseCallback_)() = nullptr;
   void (*footerCallback_)() = nullptr;
 
   int topRow_;
   const int kMaxVisibleRows_ = 5;
 
+  int footerOptionsOffset = 0;
+
   enum Footeroptions {
     CLEAR,
     COPY,
     PASTE,
+    NEXT,
+    PREV,
+    RANDOMISE,
     CUSTOM,
     NUM_FOOTER_OPTIONS,
   };
   
-  const char* footerText[NUM_FOOTER_OPTIONS] = {"CLEAR", "COPY", "PASTE", "CUSTOM"};
+  const char* footerText[NUM_FOOTER_OPTIONS] = {"CLEAR", "COPY", "PASTE", ">", "<", "RANDOMISE", "CUSTOM"};
 
   void setList(SettingsList* list) {
     list_ = list;
@@ -44,6 +50,10 @@ namespace ListPage {
 
   void setCopyCallback(void (*callback)()) {
     copyCallback_ = callback;
+  }
+
+  void setRandomiseCallback(void (*callback)()) {
+    randomiseCallback_ = callback;
   }
 
   void setFooterCallback(void (*callback)()) {
@@ -67,6 +77,7 @@ namespace ListPage {
 
   void enter() {
     topRow_ = 0;
+    footerOptionsOffset = 0;
     list_->selectItem(0);
     list_->setMode(SettingsList::SELECT);
   }
@@ -75,6 +86,7 @@ namespace ListPage {
     clearCallback_ = nullptr;
     pasteCallback_ = nullptr;
     copyCallback_ = nullptr;
+    randomiseCallback_ = nullptr;
     footerCallback_ = nullptr;
   }
 
@@ -114,6 +126,22 @@ namespace ListPage {
               } else {
                 MessagePainter::show("FAILED! CLIPBOARD EMPTY");
               }
+            }
+          });
+          pages_->open(Pages::CONFIRMATION_PAGE);
+        }
+        break;
+      case NEXT:
+        footerOptionsOffset = 4;
+        break;
+      case PREV:
+        footerOptionsOffset = 0;
+        break;
+      case RANDOMISE:
+        if (randomiseCallback_) {
+          ConfirmationPage::set("RANOMISE SETTINGS ?", [](int option) {
+            if (option == ConfirmationPage::CONFIRM) {
+              randomiseCallback_();
             }
           });
           pages_->open(Pages::CONFIRMATION_PAGE);

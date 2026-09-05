@@ -35,11 +35,12 @@ namespace PatchPage {
     PREV_3,
     PANIC,
     LCD_OFF,
+    RANDOMISE,
 
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"INIT", "SAVE", "RELOAD", ">", "<", "COPY", "PASTE", ">", "<", "AUDITION", "EDIT NAME", ">", "<", "PANIC", "LCD OFF"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"INIT", "SAVE", "RELOAD", ">", "<", "COPY", "PASTE", ">", "<", "AUDITION", "EDIT NAME", ">", "<", "PANIC", "LCD OFF", "RANDOMISE"};
 
   int footerOptionsOffset;
 
@@ -145,6 +146,17 @@ namespace PatchPage {
       case LCD_OFF:
         if (!state) {
           ui_->displayOff();
+        }
+        break;
+      case RANDOMISE:
+        if (state) {
+          ConfirmationPage::set("RANDOMISE PATCH ?", [](int option) {
+            if (option == ConfirmationPage::CONFIRM) {
+              settings_->selectedPatch().randomise();
+              ui_->resetAllPots();
+            }
+          });
+          pages_->open(Pages::CONFIRMATION_PAGE);
         }
         break;
       case NEXT_1:

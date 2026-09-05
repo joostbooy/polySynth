@@ -7,6 +7,7 @@
 #include "settingsText.h"
 #include "settingsUtils.h"
 #include "lookupTablesUtils.h"
+#include "rng.h"
 
 class Envelope {
  public:
@@ -277,6 +278,21 @@ class Envelope {
     hash.write(sustainLevel_);
     hash.write(releaseTime_);
     hash.write(releaseShape_);
+  }
+
+  void randomise() {
+    clockSync_ = Rng::u16(0, 1);
+    mode_ = Rng::u16(0, NUM_MODES - 1);
+    attackTime_ = Rng::reciprocal();
+    attackShape_ = Rng::reciprocal();
+    decayTime_ = Rng::reciprocal();
+    decayShape_ = Rng::reciprocal();
+    holdTime_ = Rng::reciprocal();
+    sustainLevel_ = Rng::reciprocal();
+    releaseTime_ = Rng::reciprocal();
+    releaseShape_ = Rng::reciprocal();
+    loop_ = Rng::u16(0, 1);
+    invert_ = Rng::u16(0, 1);
   }
 
  private:

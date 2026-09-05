@@ -24,6 +24,11 @@ namespace LfoPage {
     ui_->resetAllPots();
   }
 
+  void randomise() {
+    settings_->selectedLfo().randomise();
+    ui_->resetAllPots();
+  }
+
   void copy() {
     lfo_.paste(&settings_->selectedLfo());
     pasteable_ = true;
@@ -67,6 +72,7 @@ namespace LfoPage {
     ListPage::setClearCallback(&clear);
     ListPage::setCopyCallback(&copy);
     ListPage::setPasteCallback(&paste);
+    ListPage::setRandomiseCallback(&randomise);
     ListPage::setFooterCallback(&resyncAll);
     ListPage::setFooterText("RESYNC");
     ListPage::enter();

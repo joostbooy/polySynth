@@ -208,6 +208,18 @@ class ModMatrix {
     }
   }
 
+  void randomise() {
+    for (size_t i = 0; i < NUM_DESTINATIONS; i++) {
+      destinationDepth_[i] = Rng::reciprocal();
+    }
+
+    for (size_t x = 0; x < NUM_SOURCES; ++x) {
+      for (size_t y = 0; y < NUM_DESTINATIONS; ++y) {
+        set(x, y, Rng::u16() & 1);
+      }
+    }
+  }
+
  private:
   uint8_t midiCcNumber_[4];
   uint32_t matrix_[NUM_SOURCES];

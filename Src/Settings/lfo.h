@@ -268,6 +268,21 @@ class Lfo {
     hash.write(oneShot_);
   }
 
+  void randomise() {
+    skew_ = Rng::reciprocal();
+    skewSpread_ = Rng::reciprocal();
+    speed_ = Rng::reciprocal();
+    min_ = Rng::reciprocal();
+    max_ = Rng::reciprocal();
+    phaseOffset_ = Rng::reciprocal();
+    phaseOffsetSpread_ = Rng::reciprocal();
+    randomMax_ = Rng::u16(0, 1);
+    clockSync_ = Rng::u16(0, 1);
+    retrigger_ = Rng::u16(0, 1);
+    oneShot_ = Rng::u16(0, 1);
+    type_ = Type(Rng::u16(0, NUM_TYPES - 1));
+  }
+
  private:
   Type type_;
   float skew_;

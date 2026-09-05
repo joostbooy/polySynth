@@ -24,6 +24,11 @@ namespace EnvelopePage {
     ui_->resetAllPots();
   }
 
+  void randomise() {
+    settings_->selectedEnvelope().randomise();
+    ui_->resetAllPots();
+  }
+
   void copy() {
     envelope_.paste(&settings_->selectedEnvelope());
     pasteable_ = true;
@@ -62,6 +67,7 @@ namespace EnvelopePage {
     ListPage::setClearCallback(&clear);
     ListPage::setCopyCallback(&copy);
     ListPage::setPasteCallback(&paste);
+    ListPage::setRandomiseCallback(&randomise);
     ListPage::enter();
   }
 

@@ -135,6 +135,17 @@ class Patch {
     return hash_.read();
   }
 
+  void randomise() {
+    lfo_[0].randomise();
+    lfo_[1].randomise();
+    oscillator_.randomise();
+    filter_.randomise();
+    envelope_[0].randomise();
+    envelope_[1].randomise();
+    modMatrix_.randomise();
+    amp_.randomise();
+  }
+
  private:
   Amp amp_;
   Lfo lfo_[2];

@@ -5,6 +5,7 @@
 #include "fileWriter.h"
 #include "settingsText.h"
 #include "settingsUtils.h"
+#include "rng.h"
 
 class Filter {
  public:
@@ -258,6 +259,20 @@ class Filter {
     hash.write(fmEnable1_);
     hash.write(fmEnable2_);
     hash.write(link_);
+  }
+
+  void randomise() {
+    cutoff1Spread_ = Rng::reciprocal();
+    cutoff2Spread_ = Rng::reciprocal();
+    type_ = Type(Rng::u16(0, NUM_FILTER_TYPES - 1));
+    routing_ = Routing(Rng::u16(0, NUM_FILTER_ROUTINGS - 1));
+    fmEnable1_ = Rng::u16(0, 1);
+    fmEnable2_ = Rng::u16(0, 1);
+    link_ = Rng::u16(0, 1);
+    cutoff1_ = Rng::reciprocal();
+    cutoff2_ = Rng::reciprocal();
+    resonace1_ = Rng::reciprocal();
+    resonace2_ = Rng::reciprocal();
   }
 
  private:

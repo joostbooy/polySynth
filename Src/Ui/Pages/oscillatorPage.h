@@ -19,6 +19,10 @@ namespace OscillatorPage {
     settings_->oscillator().init();
   }
 
+  void randomise() {
+    settings_->oscillator().randomise();
+  }
+
   void copy() {
     oscillator_.paste(&settings_->oscillator());
     pasteable_ = true;
@@ -43,6 +47,7 @@ namespace OscillatorPage {
     ListPage::setClearCallback(&clear);
     ListPage::setCopyCallback(&copy);
     ListPage::setPasteCallback(&paste);
+    ListPage::setRandomiseCallback(&randomise);
     ListPage::enter();
   }
 

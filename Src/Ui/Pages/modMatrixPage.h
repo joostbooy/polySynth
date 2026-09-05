@@ -11,6 +11,7 @@ namespace ModMatrixPage {
   using TopPage::leds_;
   using TopPage::pages_;
   using TopPage::settings_;
+  using TopPage::ui_;
 
   int src_ = 0;
   int top_src_ = 0;
@@ -29,15 +30,21 @@ namespace ModMatrixPage {
     COPY,
     PASTE,
     CLEAR,
-    NEXT,
-    PREV,
+    NEXT_1,
+
+    PREV_1,
     TOGGLE,
     SET_CC,
+    NEXT_2,
+
+    PREV_2,
     SET_DEPTH,
+    RANDOMISE,
+
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"COPY", "PASTE", "CLEAR", ">", "<", "TOGGLE", "SET CC", "SET DEPTH"};
+  const char* const footerOptionText[NUM_FOOTER_OPTIONS] = {"COPY", "PASTE", "CLEAR", ">", "<", "TOGGLE", "SET CC", ">", "<", "SET DEPTH", "RANDOMISE"};
 
   void scroll_to_source(int src) {
     src_ = SettingsUtils::clip(0, ModMatrix::NUM_SOURCES - 1, src);
@@ -117,11 +124,26 @@ namespace ModMatrixPage {
         case SET_CC:
           pages_->open(Pages::MOD_MATRIX_CC_PAGE);
           break;
-        case NEXT:
+        case RANDOMISE:
+          ConfirmationPage::set("RANDOMISE MATRIX ?", [](int option) {
+            if (option == ConfirmationPage::CONFIRM) {
+              settings_->modMatrix().randomise();
+              ui_->resetAllPots();
+            }
+          });
+          pages_->open(Pages::CONFIRMATION_PAGE);
+          break;
+        case NEXT_1:
           footerOffset_ = 4;
           break;
-        case PREV:
+        case PREV_1:
           footerOffset_ = 0;
+          break;
+        case NEXT_2:
+          footerOffset_ = 8;
+          break;
+        case PREV_2:
+          footerOffset_ = 4;
           break;
         default:
           break;

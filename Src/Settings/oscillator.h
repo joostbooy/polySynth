@@ -514,7 +514,33 @@ class Oscillator {
     oscillator->setLinkSlideAmmount(linkSlideAmmount_);
   }
 
-    void writeHash(Hash& hash) {
+  void randomise() {
+    voiceMode_ = VoiceMode(Rng::u16(0, NUM_VOICE_MODES - 1));
+    fmEnable_ = Rng::u16(0, 1);
+    muteOsc1_ = Rng::u16(0, 1);
+    muteOsc2_ = Rng::u16(0, 1);
+    shape1_ = Rng::reciprocal();
+    shape2_ = Rng::reciprocal();
+    type1_ = Type1(Rng::u16(0, NUM_TYPES1 - 1));
+    type2_ = Type2(Rng::u16(0, NUM_TYPES2 - 1));
+    syncEnable_ = Rng::u16(0, 1);
+    trackNote1_ = Rng::u16(0, 1);
+    trackNote2_ = Rng::u16(0, 1);
+    modDepth_ = Rng::reciprocal();
+    modSource_ = Rng::u16(0, 1);
+    octaveOffset1_ = (Rng::u16(0, 4) - 2) * 12;
+    octaveOffset2_ = (Rng::u16(0, 4) - 2) * 12;
+    tune1_ = Rng::reciprocal();
+    tune2_ = Rng::reciprocal();
+    slideMode1_ = SlideMode(Rng::u16(0, NUM_SLIDE_MODES - 1));
+    slideMode2_ = SlideMode(Rng::u16(0, NUM_SLIDE_MODES - 1));
+    tuneSpread1_ = Rng::reciprocal();
+    tuneSpread2_ = Rng::reciprocal();
+    slideAmmount1_ = Rng::reciprocal();
+    slideAmmount2_ = Rng::reciprocal();
+  }
+
+  void writeHash(Hash& hash) {
     hash.write(voiceMode_);
     hash.write(fmEnable_);
     hash.write(muteOsc1_);

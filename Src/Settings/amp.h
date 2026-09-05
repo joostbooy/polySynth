@@ -3,6 +3,7 @@
 
 #include "settingsText.h"
 #include "settingsUtils.h"
+#include "rng.h"
 
 class Amp {
  public:
@@ -92,6 +93,13 @@ class Amp {
     hash.write(panSpread_);
     hash.write(drive_);
     hash.write(amEnable_);
+  }
+
+  void randomise() {
+    pan_ = Rng::reciprocal();
+    panSpread_ = Rng::reciprocal();
+    drive_ = Rng::reciprocal();
+    amEnable_ = Rng::u16(0, 1);
   }
 
  private:

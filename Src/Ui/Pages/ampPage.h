@@ -20,6 +20,11 @@ namespace AmpPage {
     ui_->resetAllPots();
   }
 
+  void randomise() {
+    settings_->amp().randomise();
+    ui_->resetAllPots();
+  }
+
   void copy() {
     amp_.paste(&settings_->amp());
     pasteable_ = true;
@@ -45,6 +50,7 @@ namespace AmpPage {
     ListPage::setClearCallback(&clear);
     ListPage::setCopyCallback(&copy);
     ListPage::setPasteCallback(&paste);
+    ListPage::setRandomiseCallback(&randomise);
     ListPage::enter();
   }
 

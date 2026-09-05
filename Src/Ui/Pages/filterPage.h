@@ -20,6 +20,11 @@ namespace FilterPage {
     ui_->resetAllPots();
   }
 
+  void randomise() {
+    settings_->filter().randomise();
+    ui_->resetAllPots();
+  }
+
   void copy() {
     filter_.paste(&settings_->filter());
     pasteable_ = true;
@@ -45,6 +50,7 @@ namespace FilterPage {
     ListPage::setClearCallback(&clear);
     ListPage::setCopyCallback(&copy);
     ListPage::setPasteCallback(&paste);
+    ListPage::setRandomiseCallback(&randomise);
     ListPage::enter();
   }
 
