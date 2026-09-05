@@ -139,7 +139,7 @@ namespace ListPage {
         break;
       case RANDOMISE:
         if (randomiseCallback_) {
-          ConfirmationPage::set("RANOMISE SETTINGS ?", [](int option) {
+          ConfirmationPage::set("RANDOMISE SETTINGS ?", [](int option) {
             if (option == ConfirmationPage::CONFIRM) {
               randomiseCallback_();
             }
