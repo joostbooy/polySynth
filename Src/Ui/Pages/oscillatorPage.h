@@ -21,6 +21,7 @@ namespace OscillatorPage {
 
   void randomise() {
     settings_->oscillator().randomise();
+    ui_->resetAllPots();
   }
 
   void copy() {
