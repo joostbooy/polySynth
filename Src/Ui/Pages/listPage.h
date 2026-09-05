@@ -196,7 +196,7 @@ namespace ListPage {
     WindowPainter::drawVerticalScollbar(bar_x, y, bar_w, h, topRow_, list_->numItems(), kMaxVisibleRows_);
 
     int count = footerCallback_ ? NUM_FOOTER_OPTIONS : NUM_FOOTER_OPTIONS - 1;
-    WindowPainter::drawFooter(footerText, count);
+    WindowPainter::drawFooter(footerText, count, footerOptionsOffset);
   }
 
   const size_t targetFps() {
