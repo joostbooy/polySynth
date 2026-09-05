@@ -98,7 +98,7 @@ namespace LfoPage {
     lfo.setPhaseOffsetSpread(0.f);
     lfo.setSkewSpread(0.f);
     lfo.setClockSync(false);
-    lfo.setRandomise(false);
+    lfo.setRandomMax(false);
     lfo.setSpeed(speed);  
     lfoEngine.init(&lfo);
 

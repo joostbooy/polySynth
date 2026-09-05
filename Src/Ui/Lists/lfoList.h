@@ -19,7 +19,7 @@ public:
 		MAX,
 		PHASE_OFFSET,
 		PHASE_OFFSET_SPREAD,
-		RANDOMISE,
+		RANDOM_MAX,
 		RETRIGGER,
 		ONE_SHOT,
 
@@ -43,7 +43,7 @@ public:
 		case MAX:					return "MAX";
 		case PHASE_OFFSET:			return "PHASE OFFSET";
 		case PHASE_OFFSET_SPREAD:	return "PHASE SPREAD";
-		case RANDOMISE:				return "RANDOMISE";
+		case RANDOM_MAX:			return "RANDOM MAX";
 		case RETRIGGER:				return "RETRIGGER";
 		case ONE_SHOT:				return "ONE SHOT";
 		default:
@@ -67,7 +67,7 @@ public:
 		case MAX:					return lfo.maxText();
 		case PHASE_OFFSET:			return lfo.phaseOffsetText();
 		case PHASE_OFFSET_SPREAD:	return lfo.phaseOffsetSpreadText();
-		case RANDOMISE:				return lfo.randomiseText();
+		case RANDOM_MAX:			return lfo.randomMaxText();
 		case RETRIGGER:				return lfo.retriggerText();
 		case ONE_SHOT:				return lfo.oneShotText();
 		default:
@@ -111,8 +111,8 @@ public:
 		case PHASE_OFFSET_SPREAD:
 			lfo.setPhaseOffsetSpread(lfo.phaseOffsetSpread() + SettingsUtils::fInc(inc, shifted));
 			break;
-		case RANDOMISE:
-			lfo.setRandomise(inc > 0);
+		case RANDOM_MAX:
+			lfo.setRandomMax(inc > 0);
 			break;
 		case RETRIGGER:
 			lfo.setRetrigger(inc > 0);

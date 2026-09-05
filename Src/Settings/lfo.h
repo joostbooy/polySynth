@@ -7,6 +7,7 @@
 #include "settingsText.h"
 #include "settingsUtils.h"
 #include "lookupTablesUtils.h"
+#include "rng.h"
 
 class Lfo {
  public:
@@ -41,7 +42,7 @@ class Lfo {
     setPhaseOffset(0.0f);
     setPhaseOffsetSpread(0.0f);
     setClockSync(false);
-    setRandomise(false);
+    setRandomMax(false);
     setRetrigger(true);
     setOneShot(false);
   }
@@ -168,16 +169,16 @@ class Lfo {
   }
 
   // Randomise
-  bool randomise() {
-    return randomise_;
+  bool randomMax() {
+    return randomMax_;
   }
 
-  void setRandomise(bool value) {
-    randomise_ = value;
+  void setRandomMax(bool value) {
+    randomMax_ = value;
   }
 
-  const char* randomiseText() {
-    return SettingsText::boolToOnOff(randomise());
+  const char* randomMaxText() {
+    return SettingsText::boolToOnOff(randomMax());
   }
 
   // Retrigger
@@ -215,7 +216,7 @@ class Lfo {
     fileWriter.write(max_);
     fileWriter.write(phaseOffset_);
     fileWriter.write(phaseOffsetSpread_);
-    fileWriter.write(randomise_);
+    fileWriter.write(randomMax_);
     fileWriter.write(clockSync_);
     fileWriter.write(retrigger_);
     fileWriter.write(oneShot_);
@@ -230,7 +231,7 @@ class Lfo {
     fileReader.read(max_);
     fileReader.read(phaseOffset_);
     fileReader.read(phaseOffsetSpread_);
-    fileReader.read(randomise_);
+    fileReader.read(randomMax_);
     fileReader.read(clockSync_);
     fileReader.read(retrigger_);
     fileReader.read(oneShot_);
@@ -245,7 +246,7 @@ class Lfo {
     max_ = lfo->max();
     phaseOffset_ = lfo->phaseOffset();
     phaseOffsetSpread_ = lfo->phaseOffsetSpread();
-    randomise_ = lfo->randomise();
+    randomMax_ = lfo->randomMax();
     clockSync_ = lfo->clockSync();
     retrigger_ = lfo->retrigger();
     oneShot_ = lfo->oneShot();
@@ -261,7 +262,7 @@ class Lfo {
     hash.write(max_);
     hash.write(phaseOffset_);
     hash.write(phaseOffsetSpread_);
-    hash.write(randomise_);
+    hash.write(randomMax_);
     hash.write(clockSync_);
     hash.write(retrigger_);
     hash.write(oneShot_);
@@ -276,7 +277,7 @@ class Lfo {
   float max_;
   float phaseOffset_;
   float phaseOffsetSpread_;
-  bool randomise_;
+  bool randomMax_;
   bool clockSync_;
   bool retrigger_;
   bool oneShot_;
