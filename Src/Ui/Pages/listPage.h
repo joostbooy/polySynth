@@ -100,7 +100,7 @@ namespace ListPage {
       return;
     }
 
-    switch (buttons_->toFunction(id)) {
+    switch (buttons_->toFunction(id, footerOptionsOffset)) {
       case CLEAR:
         if (clearCallback_) {
           ConfirmationPage::set("CLEAR SETTINGS ?", [](int option) {
