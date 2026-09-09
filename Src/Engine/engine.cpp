@@ -157,6 +157,8 @@ void Engine::processRequests() {
   }
 
   if (requests_ & STOP_AUDITION) {
+    auditionEvent_.message &= ~(0xF0);
+    auditionEvent_.message |= MidiEngine::NOTE_OFF;
     noteOff(auditionEvent_);
     clearRequest(STOP_AUDITION);
   }
