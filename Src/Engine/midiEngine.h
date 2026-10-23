@@ -62,7 +62,14 @@ class MidiEngine {
 
   bool pull(Event& e) {
     while (inputQue.readable()) {
-      if (parse(inputQue.read())) {
+      uint8_t data = inputQue.read();
+      if (data >= 0xF8) {
+        e.message = data;
+        monitorQue.write(e);
+        return true;
+      }
+      
+      if (parse(data)) {
         e = event_;
         monitorQue.write(e);
         return true;

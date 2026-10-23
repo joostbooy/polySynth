@@ -28,6 +28,10 @@ class MidiClockEngine {
     return bpmFractional_;
   }
 
+  bool messageAccepted(uint8_t message) {
+    return message >= 0xF8 && midiClock_->source() == MidiClock::EXTERNAL;
+  }
+
   bool tick() {
     if (midiClock_->source() == MidiClock::INTERNAL) {
       bpm_ = midiClock_->bpm();

@@ -108,7 +108,7 @@ void Engine::processMidi() {
   MidiEngine::Event e;
 
   while (midiEngine_.pull(e)) {
-    if (midiEngine_.messageAccepted(e)) {
+    if (midiEngine_.messageAccepted(e) || midiClockEngine_.messageAccepted(e.message)) {
       switch (midiEngine_.readMessage(e)) {
         case MidiEngine::NOTE_ON:
           noteOn(e);
