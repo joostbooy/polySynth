@@ -7,6 +7,7 @@
 #include "fileWriter.h"
 #include "patch.h"
 #include "settingsUtils.h"
+#include "settingsText.h"
 #include "stringBuilder.h"
 
 class Settings {
@@ -132,6 +133,10 @@ class Settings {
     envelopeIndex_ = SettingsUtils::clip(0, kNumEnvelopes - 1, value);
   }
 
+  const char* selectedEnvelopeText() {
+    return SettingsText::intToText(envelopeIndex() + 1);
+  }
+
   // Lfo
   Lfo& lfo(int index) {
     return selectedPatch().lfo(index);
@@ -147,6 +152,10 @@ class Settings {
 
   Lfo& selectedLfo() {
     return lfo(lfoIndex_);
+  }
+
+  const char* selectedLfoText() {
+    return SettingsText::intToText(lfoIndex() + 1);
   }
 
   // mod matrix

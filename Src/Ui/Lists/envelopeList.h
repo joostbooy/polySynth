@@ -53,7 +53,7 @@ class EnvelopeList : public SettingsList {
     Envelope& envelope = settings_->selectedEnvelope();
 
     switch (item) {
-      case ENVELOPE:      return SettingsText::intToText(settings_->envelopeIndex() + 1);
+      case ENVELOPE:      return settings_->selectedEnvelopeText();
       case MODE:          return envelope.modeText();
       case CLOCK_SYNC:    return envelope.clockSyncText();
       case ATTACK_TIME:   return envelope.attackTimeText();

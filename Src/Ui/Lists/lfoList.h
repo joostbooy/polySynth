@@ -57,7 +57,7 @@ public:
 
 		switch (item)
 		{
-		case LFO:					return SettingsText::intToText(settings_->lfoIndex() + 1);
+		case LFO:					return settings_->selectedLfoText();
 		case SPEED:					return lfo.speedText();
 		case CLOCK_SYNC:			return lfo.clockSyncText();
 		case TYPE:					return lfo.typeText();
