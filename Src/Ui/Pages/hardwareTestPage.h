@@ -119,7 +119,7 @@ namespace HardwareTestPage {
               }
             }
             break;
-            case CLOSE:
+          case CLOSE:
             pages_->close(Pages::HARDWARE_TEST_PAGE);
             pages_->open(Pages::PATCH_PAGE);
             break;

@@ -87,7 +87,7 @@ class Midi {
   }
 
   void setKeyRangeHigh(int value) {
-    keyRangeLow_ = SettingsUtils::clip(keyRangeLow(), 127, value);
+    keyRangeHigh_ = SettingsUtils::clip(keyRangeLow(), 127, value);
   }
 
   const char* keyRangeHighText() {
