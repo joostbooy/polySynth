@@ -19,8 +19,8 @@ class MidiList : public SettingsList {
     MATRIX_CC_B,
     MATRIX_CC_C,
     MATRIX_CC_D,
-    GATE_TO_NOTE_1,
-    GATE_TO_NOTE_2,
+    GATE_1_TO_NOTE,
+    GATE_2_TO_NOTE,
 
     NUM_ITEMS,
   };
@@ -43,8 +43,8 @@ class MidiList : public SettingsList {
       case MATRIX_CC_B:     return "MATRIX CC B";
       case MATRIX_CC_C:     return "MATRIX CC C";
       case MATRIX_CC_D:     return "MATRIX CC D";
-      case GATE_TO_NOTE_1:  return "GATE TO NOTE 1";
-      case GATE_TO_NOTE_2:  return "GATE TO NOTE 2";
+      case GATE_1_TO_NOTE:  return "GATE 1 TO NOTE";
+      case GATE_2_TO_NOTE:  return "GATE 2 TO NOTE";
       default:
         break;
     }
@@ -69,8 +69,8 @@ class MidiList : public SettingsList {
       case MATRIX_CC_B:     return modMatrix.midiCcNumberText(1);
       case MATRIX_CC_C:     return modMatrix.midiCcNumberText(2);
       case MATRIX_CC_D:     return modMatrix.midiCcNumberText(3);
-      case GATE_TO_NOTE_1:  return midi.gateToNote1Text();
-      case GATE_TO_NOTE_2:  return midi.gateToNote2Text();
+      case GATE_1_TO_NOTE:  return midi.gateToNote1Text();
+      case GATE_2_TO_NOTE:  return midi.gateToNote2Text();
       default:
         break;
     }
@@ -133,10 +133,10 @@ class MidiList : public SettingsList {
       case MATRIX_CC_D:
         modMatrix.setMidiCcNumber(3, modMatrix.midiCcNumber(3) + (shifted ? inc * 10 : inc));
         break;
-      case GATE_TO_NOTE_1:
+      case GATE_1_TO_NOTE:
         midi.setGateToNote1(midi.gateToNote1() + (shifted ? inc * 12 : inc));
         break;
-      case GATE_TO_NOTE_2:
+      case GATE_2_TO_NOTE:
         midi.setGateToNote2(midi.gateToNote2() + (shifted ? inc * 12 : inc));
         break;
       default:
