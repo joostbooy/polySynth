@@ -7,7 +7,6 @@ class Uart {
  public:
   void init();
 
-  // MIDI 1 - USART 6
   void write(uint8_t data) {
     USART6->DR = data;
   }
