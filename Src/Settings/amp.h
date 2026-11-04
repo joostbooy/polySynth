@@ -9,7 +9,7 @@ class Amp {
  public:
   void init() {
     setPan(0.5f);
-    setPanSpread(0.01f);
+    setPanSpread(0.f);
     setDrive(0.01f);
     setAmEnable(false);
   }
