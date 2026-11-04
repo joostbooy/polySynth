@@ -8,6 +8,14 @@
 
 class Calibration {
  public:
+  static const int kMaxVolts = 10;  // -3V / +7V
+  static const int kMaxNotes = kMaxVolts * 12;
+
+  struct Voice {
+    uint16_t noteValueOsc1[kMaxNotes];
+    uint16_t noteValueOsc2[kMaxNotes];
+  };
+
   void init() {
     selectedVoice_ = 0;
     selectedNote_ = 0;
@@ -24,6 +32,10 @@ class Calibration {
       }
     }
     updateSemiNoteValue();
+  }
+
+  Voice& voice() {
+    return voice_[selectedVoice_];
   }
 
   void start() {
@@ -156,21 +168,20 @@ class Calibration {
     updateSemiNoteValue();
   }
 
+  void paste(Voice& voice) {
+    voice_[selectedVoice_] = voice;
+  }
+
  private:
+  Voice voice_[8];
+
   bool enabled_;
-  static const int kMaxVolts = 10;  // -3V / +7V
-  static const int kMaxNotes = kMaxVolts * 12;
   int selectedVoice_;
   int selectedNote_;
   int selectedVco_;
   uint16_t semiNoteValue_;
   float tuneError1_;
   float tuneError2_;
-
-  struct Voice {
-    uint16_t noteValueOsc1[kMaxNotes];
-    uint16_t noteValueOsc2[kMaxNotes];
-  } voice_[8];
 
   void updateSemiNoteValue() {
     semiNoteValue_ = noteValue(0, 0, 60) - noteValue(0, 0, 61);

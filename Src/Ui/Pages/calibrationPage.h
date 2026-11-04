@@ -13,6 +13,8 @@ namespace CalibrationPage {
   using TopPage::ui_;
 
   Patch patch_;
+  Calibration::Voice voice_;
+  bool pasteable_ = false;
 
   enum FooterOptions {
     SAVE,
@@ -26,14 +28,19 @@ namespace CalibrationPage {
     NEXT_2,
 
     PREV_2,
+    COPY,
+    PASTE,
+    NEXT_3,
+
+    PREV_3,
     RECENTRE_TUNE,
     CLOSE,
-    
+
     NUM_FOOTER_OPTIONS,
   };
 
   int footerOptionsOffset;
-  const char* const footer_text[NUM_FOOTER_OPTIONS] = {"SAVE", "LOAD", "CLEAR", ">", "<", "NEXT VCO", "NEXT VOICE", ">", "<", "RECENTRE TUNE", "CLOSE"};
+  const char* const footer_text[NUM_FOOTER_OPTIONS] = {"SAVE", "LOAD", "CLEAR", ">", "<", "NEXT VCO", "NEXT VOICE", ">", "<", "COPY", "PASTE", ">", "<", "RECENTRE TUNE", "CLOSE"};
 
     void selectNextVco() {
     settings_->calibration().selectNextVco();
@@ -146,15 +153,29 @@ namespace CalibrationPage {
       case NEXT_VOICE:
         settings_->calibration().selectNextVoice();
         break;
-      case RECENTRE_TUNE: 
-      {
+      case COPY:
+        voice_ = settings_->calibration().voice();
+        pasteable_ = true;
+        MessagePainter::show("VOICE COPIED");
+        break;
+      case PASTE:
+        if (pasteable_) {
+          ConfirmationPage::set("PASTE VOICE ?", [](int option) {
+            if (option == ConfirmationPage::CONFIRM) {
+              settings_->calibration().paste(voice_);
+              MessagePainter::show("VOICE PASTED");
+            }
+          });
+          pages_->open(Pages::CONFIRMATION_PAGE);
+        }
+        break;
+      case RECENTRE_TUNE: {
         float error1 = 0.5f - ui_->pots().read(Pots::TUNE_A);
         float error2 = 0.5f - ui_->pots().read(Pots::TUNE_B);
         settings_->calibration().setTuneError1(error1);
         settings_->calibration().setTuneError2(error2);
         MessagePainter::show("FINISHED");
-      }
-       break;
+      } break;
         case CLOSE:
           pages_->close(Pages::CALIBRATION_PAGE);
           pages_->open(Pages::PATCH_PAGE);
@@ -170,6 +191,12 @@ namespace CalibrationPage {
           break;
         case PREV_2:
           footerOptionsOffset = 4;
+          break;
+        case NEXT_3:
+          footerOptionsOffset = 12;
+          break;
+        case PREV_3:
+          footerOptionsOffset = 8;
           break;
         default:
           break;
