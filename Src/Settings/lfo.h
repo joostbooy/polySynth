@@ -34,13 +34,13 @@ class Lfo {
 
   void init() {
     setType(LINEAR);
-    setSpeed(0);
+    setSpeed(0.f);
     setSkew(0.5f);
-    setSkewSpread(0.0f);
-    setMin(0.0f);
-    setMax(1.0f);
-    setPhaseOffset(0.0f);
-    setPhaseOffsetSpread(0.0f);
+    setSkewSpread(0.f);
+    setMin(0.f);
+    setMax(1.f);
+    setPhaseOffset(0.f);
+    setPhaseOffsetSpread(0.f);
     setClockSync(false);
     setRandomMax(false);
     setRetrigger(true);

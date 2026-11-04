@@ -13,7 +13,7 @@
 class Settings {
  public:
 
-  static const size_t kNumVoices = 6;
+  static const size_t kNumVoices = 5;
   static const size_t kNumUserCc = 4;
   static const size_t kNumPatches = 120;
   static const size_t kNumLfos = 2;
@@ -171,6 +171,8 @@ class Settings {
  private:
   StringBuilderBase<63> path;
 
+  static const size_t kFileBufferSize_ = 512;
+  uint8_t fileBuffer_[kFileBufferSize_];
   FileWriter fileWriter_;
   FileReader fileReader_;
 
