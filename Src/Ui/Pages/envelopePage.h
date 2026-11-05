@@ -123,7 +123,7 @@ namespace EnvelopePage {
     int lastX;
     int lastY;
 
-    int stageX[EnvelopeEngine::NUM_STAGES] = {0};
+    int stageX[EnvelopeEngine::NUM_STAGES];
     EnvelopeEngine::Stage lastStage = EnvelopeEngine::ATTACK;
 
     // Draw envelope
@@ -174,7 +174,7 @@ namespace EnvelopePage {
   }
 
   const size_t targetFps() {
-    return 1000 / 24;
+    return 1000 / 16;
   }
 
   Pages::Page page = {
