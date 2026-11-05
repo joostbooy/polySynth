@@ -34,7 +34,7 @@ class Lfo {
 
   void init() {
     setType(LINEAR);
-    setSpeed(0.f);
+    setSpeed(0.1f);
     setSkew(0.5f);
     setSkewSpread(0.f);
     setMin(0.f);

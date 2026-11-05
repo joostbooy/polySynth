@@ -10,7 +10,7 @@ class Amp {
   void init() {
     setPan(0.5f);
     setPanSpread(0.f);
-    setDrive(0.01f);
+    setDrive(0.1f);
     setAmEnable(false);
   }
 

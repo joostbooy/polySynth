@@ -29,8 +29,8 @@ class Filter {
     setCutoff2(0.9f);
     setCutoff1Spread(0.f);
     setCutoff2Spread(0.f);
-    setResonace1(0.01f);
-    setResonace2(0.01f);
+    setResonace1(0.1f);
+    setResonace2(0.1f);
     setFmEnable1(false);
     setFmEnable2(false);
     setLink(false);
