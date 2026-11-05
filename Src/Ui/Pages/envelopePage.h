@@ -145,8 +145,8 @@ namespace EnvelopePage {
     // Draw phase
     EnvelopeEngine& e = engine_->voiceEngine().mostRecentVoice().envelopeEngine(settings_->envelopeIndex());
 
-    int x1 = 0;
-    int x2 = 0;
+    int x1 = x;
+    int x2 = x;
 
     switch (e.stage()) {
       case EnvelopeEngine::ATTACK:

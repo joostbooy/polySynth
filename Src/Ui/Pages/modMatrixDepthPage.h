@@ -11,16 +11,19 @@ namespace ModMatrixDepthPage {
   using TopPage::settings_;
 
   size_t dest_;
+  float originalDepth_;
 
   enum FooterOptions {
-    CLOSE,
+    CONFIRM,
+    CANCEL,
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionsText[NUM_FOOTER_OPTIONS] = {"CLOSE"};
+  const char* const footerOptionsText[NUM_FOOTER_OPTIONS] = {"CONFIRM", "CANCEL"};
 
   void setDestination(size_t dest) {
     dest_ = dest;
+    originalDepth_ = settings_->modMatrix().destinationDepth(dest_);
   }
 
   void init() {
@@ -35,7 +38,11 @@ namespace ModMatrixDepthPage {
   void onButton(int id, int state) {
     if (state) {
       switch (buttons_->toFunction(id)) {
-        case CLOSE:
+        case CONFIRM:
+          pages_->close(Pages::MOD_MATRIX_DEPTH_PAGE);
+          break;
+        case CANCEL:
+          settings_->modMatrix().setDestinationDepth(dest_, originalDepth_);
           pages_->close(Pages::MOD_MATRIX_DEPTH_PAGE);
           break;
         default:
