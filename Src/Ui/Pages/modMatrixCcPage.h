@@ -12,18 +12,23 @@ namespace ModMatrixCcPage {
   using TopPage::str_;
 
   enum FooterOptions {
-    CLOSE,
+    CONFIRM,
+    CANCEL,
     NUM_FOOTER_OPTIONS,
   };
 
-  const char* const footerOptionsText[NUM_FOOTER_OPTIONS] = {"CLOSE"};
+  const char* const footerOptionsText[NUM_FOOTER_OPTIONS] = {"CONFIRM", "CANCEL"};
 
   int index_ = 0;
+  int originalCcNumbers_[Settings::kNumUserCc];
 
   void init() {
   }
 
   void enter() {
+    for (size_t i = 0; i < Settings::kNumUserCc; i++) {
+      originalCcNumbers_[i] = settings_->modMatrix().midiCcNumber(i);
+    }
   }
 
   void exit() {
@@ -32,7 +37,13 @@ namespace ModMatrixCcPage {
   void onButton(int id, int state) {
     if (state) {
       switch (buttons_->toFunction(id)) {
-        case CLOSE:
+        case CONFIRM:
+          pages_->close(Pages::MOD_MATRIX_CC_PAGE);
+          break;
+        case CANCEL:
+          for (size_t i = 0; i < Settings::kNumUserCc; i++) {
+            settings_->modMatrix().setMidiCcNumber(i, originalCcNumbers_[i]);
+          }
           pages_->close(Pages::MOD_MATRIX_CC_PAGE);
           break;
         default:
