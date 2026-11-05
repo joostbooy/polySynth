@@ -123,6 +123,10 @@ namespace EnvelopePage {
     int lastX;
     int lastY;
 
+    int stageX[EnvelopeEngine::NUM_STAGES] = {0};
+    EnvelopeEngine::Stage lastStage = EnvelopeEngine::ATTACK;
+
+    // Draw envelope
     for (int x2 = 0; x2 < w; ++x2) {
       int x_ = x + x2;
       int y_ = y + (h * (1.f - envelopeEngine.next()));
@@ -131,11 +135,42 @@ namespace EnvelopePage {
       }
       lastX = x_;
       lastY = y_;
+
+      if (envelopeEngine.stage() != lastStage) {
+        stageX[envelopeEngine.stage()] = x_;
+        lastStage = envelopeEngine.stage();
+      }
     }
 
-    int index = settings_->envelopeIndex();
-    float phase = engine_->voiceEngine().mostRecentVoice().envelopeEngine(index).phase();
-    canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);
+    // Draw phase
+    EnvelopeEngine& e = engine_->voiceEngine().mostRecentVoice().envelopeEngine(settings_->envelopeIndex());
+
+    int x1 = 0;
+    int x2 = 0;
+
+    switch (e.stage()) {
+      case EnvelopeEngine::ATTACK:
+        x1 = x;
+        x2 = stageX[EnvelopeEngine::DECAY];
+        break;
+      case EnvelopeEngine::DECAY:
+        x1 = stageX[EnvelopeEngine::DECAY];
+        x2 = stageX[EnvelopeEngine::HOLD];
+        break;
+      case EnvelopeEngine::SUSTAIN:
+      case EnvelopeEngine::HOLD:
+        x1 = stageX[EnvelopeEngine::HOLD];
+        x2 = stageX[EnvelopeEngine::RELEASE];
+        break;
+      case EnvelopeEngine::RELEASE:
+        x1 = stageX[EnvelopeEngine::RELEASE];
+        x2 = x + w;
+        break;
+      default:
+        break;
+    }
+
+    canvas_->verticalLine(x1 + (x2 - x1) * e.phase(), y, h, Canvas::BLACK);
   }
 
   const size_t targetFps() {

@@ -14,6 +14,8 @@ class EnvelopeEngine {
     HOLD,
     RELEASE,
     IDLE,
+
+    NUM_STAGES,
   };
 
   void init(Envelope* envelope) {
