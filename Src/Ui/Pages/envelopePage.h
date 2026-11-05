@@ -164,7 +164,7 @@ namespace EnvelopePage {
         break;
       case EnvelopeEngine::RELEASE:
         x1 = stageX[EnvelopeEngine::RELEASE];
-        x2 = x + w;
+        x2 = stageX[EnvelopeEngine::IDLE];
         break;
       default:
         break;
