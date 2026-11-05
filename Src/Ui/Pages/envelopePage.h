@@ -136,7 +136,7 @@ namespace EnvelopePage {
       lastX = x_;
       lastY = y_;
 
-      if (envelopeEngine.stage() != lastStage) {
+      if (envelopeEngine.stage() > lastStage) {
         stageX[envelopeEngine.stage()] = x_;
         lastStage = envelopeEngine.stage();
       }
