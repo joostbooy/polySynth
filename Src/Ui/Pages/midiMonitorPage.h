@@ -96,7 +96,7 @@ namespace MidiMonitorPage {
         case MidiEngine::NOTE_ON:			      return SettingsText::noteToText(e.data[0]);
         case MidiEngine::CONTROLLER_CHANGE:	return SettingsText::intToText(e.data[0]);
         case MidiEngine::PITCH_BEND:		    return SettingsText::intToText(engine_->midiEngine().read14Bit(e));
-        default:
+        default:                            return "";
           break;
       }
     } else {
@@ -105,7 +105,7 @@ namespace MidiMonitorPage {
         case MidiEngine::NOTE_ON:		        return SettingsText::intToText(e.data[1]);
         case MidiEngine::CONTROLLER_CHANGE:	return SettingsText::intToText(e.data[1]);
         case MidiEngine::PITCH_BEND:	    	return "";
-        default:
+        default:                            return "";
           break;
       }
     }
@@ -119,7 +119,12 @@ namespace MidiMonitorPage {
         TextBufferPainter::write(str_.read());
       }
     } else {
-      str_.write(messageTypeText(e), dataText(e, 0), " ", dataText(e, 1), " ", channelText(e));
+      str_.write(messageTypeText(e));
+      str_.append(dataText(e, 0));
+      str_.append(" ");
+      str_.append(dataText(e, 1));
+      str_.append(" ");
+      str_.append(channelText(e));
       TextBufferPainter::write(str_.read());
     }
   }
