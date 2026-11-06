@@ -161,7 +161,7 @@ void Ui::process() {
   }
 
   void Ui::processPots() {
-    const float kMargin = 0.02f;
+    const float kMargin = 0.0125f;
 
     for (size_t i = 0; i < Pots::NUM_POTS; i++) {
       if (!potIsLocked(i)) {
@@ -184,70 +184,38 @@ void Ui::process() {
 
   float Ui::readPotToSetting(Patch & p, int id) {
     switch (id) {
-      case Pots::RESONANCE_B:
-        return p.filter().resonance2();
-      case Pots::RESONANCE_A:
-        return p.filter().resonance1();
-      case Pots::TUNE_A:
-        return p.oscillator().tune1();
-      case Pots::TUNE_B:
-        return p.oscillator().tune2();
-      case Pots::SHAPE_A:
-        return p.oscillator().shape1();
-      case Pots::SHAPE_B:
-        return p.oscillator().shape2();
-      case Pots::CUTOFF_A:
-        return p.filter().cutoff1();
-      case Pots::CUTOFF_B:
-        return p.filter().cutoff2();
-      case Pots::PAN:
-        return p.amp().pan();
-      case Pots::MOD_DEPTH:
-        return p.oscillator().modDepth();
-      case Pots::DRIVE:
-        return p.amp().drive();
-      case Pots::SLIDE_AMMOUNT:
-        return 1.f - p.oscillator().slideAmmount1();
-      case Pots::LFO_SKEW_1:
-        return p.lfo(0).skew();
-      case Pots::LFO_SPEED_1:
-        return p.lfo(0).speed();
-      case Pots::LFO_SKEW_2:
-        return p.lfo(1).skew();
-      case Pots::LFO_SPEED_2:
-        return p.lfo(1).speed();
-      case Pots::A_TIME_1:
-        return 1.f - p.envelope(0).attackTime();
-      case Pots::A_SHAPE_1:
-        return p.envelope(0).attackShape();
-      case Pots::D_TIME_1:
-        return 1.f - p.envelope(0).decayTime();
-      case Pots::D_SHAPE_1:
-        return p.envelope(0).decayShape();
-      case Pots::S_LEVEL_1:
-        return 1.f - p.envelope(0).sustainLevel();
-      case Pots::S_HOLD_1:
-        return p.envelope(0).holdTime();
-      case Pots::R_TIME_1:
-        return 1.f - p.envelope(0).releaseTime();
-      case Pots::R_SHAPE_1:
-        return p.envelope(0).releaseShape();
-      case Pots::A_TIME_2:
-        return 1.f - p.envelope(1).attackTime();
-      case Pots::A_SHAPE_2:
-        return p.envelope(1).attackShape();
-      case Pots::D_TIME_2:
-        return 1.f - p.envelope(1).decayTime();
-      case Pots::D_SHAPE_2:
-        return p.envelope(1).decayShape();
-      case Pots::S_LEVEL_2:
-        return 1.f - p.envelope(1).sustainLevel();
-      case Pots::S_HOLD_2:
-        return p.envelope(1).holdTime();
-      case Pots::R_TIME_2:
-        return 1.f - p.envelope(1).releaseTime();
-      case Pots::R_SHAPE_2:
-        return p.envelope(1).releaseShape();
+      case Pots::RESONANCE_B:   return p.filter().resonance2();
+      case Pots::RESONANCE_A:   return p.filter().resonance1();
+      case Pots::TUNE_A:        return p.oscillator().tune1();
+      case Pots::TUNE_B:        return p.oscillator().tune2();
+      case Pots::SHAPE_A:       return p.oscillator().shape1();
+      case Pots::SHAPE_B:       return p.oscillator().shape2();
+      case Pots::CUTOFF_A:      return p.filter().cutoff1();
+      case Pots::CUTOFF_B:      return p.filter().cutoff2();
+      case Pots::PAN:           return p.amp().pan();
+      case Pots::MOD_DEPTH:     return p.oscillator().modDepth();
+      case Pots::DRIVE:         return p.amp().drive();
+      case Pots::SLIDE_AMMOUNT: return 1.f - p.oscillator().slideAmmount1();
+      case Pots::LFO_SKEW_1:    return p.lfo(0).skew();
+      case Pots::LFO_SPEED_1:   return p.lfo(0).speed();
+      case Pots::LFO_SKEW_2:    return p.lfo(1).skew();
+      case Pots::LFO_SPEED_2:   return p.lfo(1).speed();
+      case Pots::A_TIME_1:      return 1.f - p.envelope(0).attackTime();
+      case Pots::A_SHAPE_1:     return p.envelope(0).attackShape();
+      case Pots::D_TIME_1:      return 1.f - p.envelope(0).decayTime();
+      case Pots::D_SHAPE_1:     return p.envelope(0).decayShape();
+      case Pots::S_LEVEL_1:     return 1.f - p.envelope(0).sustainLevel();
+      case Pots::S_HOLD_1:      return p.envelope(0).holdTime();
+      case Pots::R_TIME_1:      return 1.f - p.envelope(0).releaseTime();
+      case Pots::R_SHAPE_1:     return p.envelope(0).releaseShape();
+      case Pots::A_TIME_2:      return 1.f - p.envelope(1).attackTime();
+      case Pots::A_SHAPE_2:     return p.envelope(1).attackShape();
+      case Pots::D_TIME_2:      return 1.f - p.envelope(1).decayTime();
+      case Pots::D_SHAPE_2:     return p.envelope(1).decayShape();
+      case Pots::S_LEVEL_2:     return 1.f - p.envelope(1).sustainLevel();
+      case Pots::S_HOLD_2:      return p.envelope(1).holdTime();
+      case Pots::R_TIME_2:      return 1.f - p.envelope(1).releaseTime();
+      case Pots::R_SHAPE_2:     return p.envelope(1).releaseShape();
       default:
         break;
     }
