@@ -47,6 +47,7 @@ bool Settings::loadPatches() {
 
   eepromBusy_ = false;
 
+  selectedPatch_ = patch_[0];
   loadPatch(0);
 
   return error;
