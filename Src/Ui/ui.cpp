@@ -161,17 +161,19 @@ void Ui::process() {
   }
 
   void Ui::processPots() {
+    const float kMargin = 0.02f;
+
     for (size_t i = 0; i < Pots::NUM_POTS; i++) {
       if (!potIsLocked(i)) {
         writePotToSetting(i);
       } else {
         if (potUnlockDirection_[i] == CW) {
-          if (pots_.read(i) >= readPotToSetting(i)) {
+          if (pots_.read(i) >= readPotToSetting(i) - kMargin) {
             writePotToSetting(i);
             unlockPot(i);
           }
         } else if (potUnlockDirection_[i] == CCW) {
-          if (pots_.read(i) <= readPotToSetting(i)) {
+          if (pots_.read(i) <= readPotToSetting(i) + kMargin) {
             writePotToSetting(i);
             unlockPot(i);
           }
@@ -205,7 +207,7 @@ void Ui::process() {
       case Pots::DRIVE:
         return p.amp().drive();
       case Pots::SLIDE_AMMOUNT:
-        return p.oscillator().slideAmmount1();
+        return 1.f - p.oscillator().slideAmmount1();
       case Pots::LFO_SKEW_1:
         return p.lfo(0).skew();
       case Pots::LFO_SPEED_1:
@@ -215,35 +217,35 @@ void Ui::process() {
       case Pots::LFO_SPEED_2:
         return p.lfo(1).speed();
       case Pots::A_TIME_1:
-        return p.envelope(0).attackTime();
+        return 1.f - p.envelope(0).attackTime();
       case Pots::A_SHAPE_1:
         return p.envelope(0).attackShape();
       case Pots::D_TIME_1:
-        return p.envelope(0).decayTime();
+        return 1.f - p.envelope(0).decayTime();
       case Pots::D_SHAPE_1:
         return p.envelope(0).decayShape();
       case Pots::S_LEVEL_1:
-        return p.envelope(0).sustainLevel();
+        return 1.f - p.envelope(0).sustainLevel();
       case Pots::S_HOLD_1:
         return p.envelope(0).holdTime();
       case Pots::R_TIME_1:
-        return p.envelope(0).releaseTime();
+        return 1.f - p.envelope(0).releaseTime();
       case Pots::R_SHAPE_1:
         return p.envelope(0).releaseShape();
       case Pots::A_TIME_2:
-        return p.envelope(1).attackTime();
+        return 1.f - p.envelope(1).attackTime();
       case Pots::A_SHAPE_2:
         return p.envelope(1).attackShape();
       case Pots::D_TIME_2:
-        return p.envelope(1).decayTime();
+        return 1.f - p.envelope(1).decayTime();
       case Pots::D_SHAPE_2:
         return p.envelope(1).decayShape();
       case Pots::S_LEVEL_2:
-        return p.envelope(1).sustainLevel();
+        return 1.f - p.envelope(1).sustainLevel();
       case Pots::S_HOLD_2:
         return p.envelope(1).holdTime();
       case Pots::R_TIME_2:
-        return p.envelope(1).releaseTime();
+        return 1.f - p.envelope(1).releaseTime();
       case Pots::R_SHAPE_2:
         return p.envelope(1).releaseShape();
       default:
