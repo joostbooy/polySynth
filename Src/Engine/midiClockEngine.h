@@ -51,7 +51,7 @@ class MidiClockEngine {
 
     if (((++numReadings_ % 4) == 0) && isrAverage_ > 0) {
       extBpm_ = uint32_t(45000000UL * 60UL / 24UL / (kUpdatePeriod * (isrAverage_ / 4)));
-      extBpm_ = SettingsUtils::clip(MIN_BPM, MAX_BPM, extBpm_);
+      extBpm_ = SettingsUtils::clip(MIN_BPM, MAX_BPM, extBpm_ - 1);
       isrAverage_ = 0;
     }
 
