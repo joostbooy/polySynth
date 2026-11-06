@@ -101,7 +101,7 @@ class Voice {
 
   void render() {
     if (stopRequested_ == true && fadePhase_ > 0.f) {
-      fadePhase_ -= 1000.f / (SAMPLE_RATE * 50.f);
+      fadePhase_ -= 1000.f / (SAMPLE_RATE * 6.f);
       if (fadePhase_ < 0.f) {
         fadePhase_ = 0.f;
       }
@@ -120,7 +120,7 @@ class Voice {
     dac_->set(index_, 2, (1.f - data[ModMatrix::SHAPE_1]) * 65535);
     dac_->set(index_, 3, calculatePitchOsc1(1.f - data[ModMatrix::TUNE_1]));
     dac_->set(index_, 4, calculateDrive(1.f - data[ModMatrix::DRIVE]));
-    dac_->set(index_, 5, (1.f - data[ModMatrix::GAIN] * fadePhase_) * 65535);
+    dac_->set(index_, 5, calculateGain(1.f - data[ModMatrix::GAIN] * fadePhase_));
     dac_->set(index_, 6, data[ModMatrix::RESONANCE_2] * 65535);
     dac_->set(index_, 7, calculatePitchOsc2(1.f - data[ModMatrix::TUNE_2]));
     dac_->set(index_, 8, calculateCutoff1(data[ModMatrix::CUTOFF_1]));
@@ -160,6 +160,10 @@ class Voice {
   ModMatrixEngine* modMatrixEngine_;
   EnvelopeEngine envelopeEngine_[2];
   LfoEngine lfoEngine_[Settings::kNumLfos];
+
+  uint16_t calculateGain(float gain) {
+    return LookupTablesUtils::read(lut_exp, gain) * 65535;
+  }
 
   uint16_t calculateResonance1(float resonance) {
     return LookupTablesUtils::read(lut_exp, resonance) * 65535;
