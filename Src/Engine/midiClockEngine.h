@@ -14,10 +14,9 @@ class MidiClockEngine {
   }
 
   void reset() {
-    ticks = 0;
-    isrTicks_ = 0;
-    isrAverage_ = 0;
+    lastMicros_ = 0;
     tempoPhase_ = 0;
+    intervalAverage_ = 0;
   }
 
   static uint16_t bpm() {
@@ -41,21 +40,20 @@ class MidiClockEngine {
       bpmFractional_ = 0;
     }
 
-    ++isrTicks_;
     tempoPhase_ += (lut_bpm_inc[bpm_ - MIN_BPM] + lut_bpm_fractional_inc[bpmFractional_]);
     return tempoPhase_ < tempoInc_;
   }
 
   void syncBpm() {
-    isrAverage_ += isrTicks_;
+    uint32_t currentMicros = Micros::read();
+    intervalAverage_ += (currentMicros - lastMicros_);
+    lastMicros_ = currentMicros;
 
-    if (((++numReadings_ % 4) == 0) && isrAverage_ > 0) {
-      extBpm_ = uint32_t(45000000UL * 60UL / 24UL / (kUpdatePeriod * (isrAverage_ / 4)));
-      extBpm_ = SettingsUtils::clip(MIN_BPM, MAX_BPM, extBpm_ - 1);
-      isrAverage_ = 0;
+    if (((++numReadings_ % 4) == 0) && intervalAverage_ > 0) {
+      extBpm_ = (60 * 1000000) / (24 * (intervalAverage_ / 4));
+      extBpm_ = SettingsUtils::clip(MIN_BPM, MAX_BPM, extBpm_);
+      intervalAverage_ = 0;
     }
-
-    isrTicks_ = 0;
   }
 
   static float readInc(float value) {
@@ -70,7 +68,7 @@ class MidiClockEngine {
   static inline uint16_t bpmFractional_;
 
   volatile uint16_t extBpm_;
-  volatile uint32_t tempoInc_, tempoPhase_, ticks, isrTicks_, isrAverage_;
+  volatile uint32_t tempoInc_, tempoPhase_, lastMicros_, intervalAverage_;
   volatile uint8_t numReadings_ = 0;
   static const uint32_t kUpdatePeriod = 45000000UL / UPDATE_FREQ;
 

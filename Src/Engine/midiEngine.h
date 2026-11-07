@@ -34,16 +34,18 @@ class MidiEngine {
     uart_ = uart;
     midi_ = midi;
 
-    lastReceived_ = 0;
     numDataBytes_ = 0;
-    lastReceivedReady_ = false;
+    for (size_t i = 0; i < Midi::NUM_PORTS; i++) {
+      lastReceived_[i] = 0;
+      lastReceivedReady_[i] = false;
+    }
   }
 
   void poll() {
     if (uart_->readable() && inputQue.writeable()) {
-      lastReceived_ = uart_->read();
-      inputQue.write(lastReceived_);
-      lastReceivedReady_ = true;
+      lastReceived_[Midi::UART] = uart_->read();
+      inputQue.write(lastReceived_[Midi::UART]);
+      lastReceivedReady_[Midi::UART] = true;
     }
 
     if (uart_->writeable()) {
@@ -55,9 +57,9 @@ class MidiEngine {
     }
   }
 
-  void getLastReceived(uint8_t* ptr) {
-    *ptr = lastReceivedReady_ ? lastReceived_ : 0x00;
-    lastReceivedReady_ = false;
+  void getLastReceived(int port, uint8_t* ptr) {
+    *ptr = lastReceivedReady_[port] ? lastReceived_[port] : 0x00;
+    lastReceivedReady_[port] = false;
   }
 
   bool pull(Event& e) {
@@ -139,11 +141,11 @@ class MidiEngine {
   Midi* midi_;
 
   Event event_;
-  uint8_t lastReceived_;
+  uint8_t lastReceived_[Midi::NUM_PORTS];
   uint8_t lastMessage_[Midi::NUM_PORTS];
   uint8_t numDataBytes_;
 
-  bool lastReceivedReady_;
+  bool lastReceivedReady_[Midi::NUM_PORTS];
 
   Que<uint8_t, 32> inputQue;
   Que<uint8_t, 32> outputQue[Midi::NUM_PORTS];

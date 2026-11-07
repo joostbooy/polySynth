@@ -66,18 +66,20 @@ class MidiClock {
   }
 
   enum Source {
-    EXTERNAL = Midi::NUM_PORTS - 1,
+    EXTERNAL,
     INTERNAL,
 
     NUM_SOURCES
   };
 
   static const char* sourceText(int value) {
-    if (value <= EXTERNAL) {
-      return Midi::portText(value);
-    } else {
-      return "INTERNAL";
+    switch (value) {
+      case EXTERNAL:  return "EXTERNAL";
+      case INTERNAL:  return "INTERNAL";
+      default:
+        break;
     }
+    return "";
   }
 
   void init() {

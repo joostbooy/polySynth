@@ -68,7 +68,7 @@ void Engine::update() {
   midiEngine_.poll();
 
   uint8_t data = 0;
-  midiEngine_.getLastReceived(&data);
+  midiEngine_.getLastReceived(settings_->midi().portReceive(), &data);
   if (data == MidiEngine::CLOCK_PULSE) {
     midiClockEngine_.syncBpm();
   }
