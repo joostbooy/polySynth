@@ -230,7 +230,7 @@ namespace ModMatrixPage {
   }
 
   const size_t targetFps() {
-    return 1000 / 16;
+    return 16;
   }
 
   Pages::Page page = {

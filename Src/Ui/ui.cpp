@@ -127,61 +127,61 @@ void Ui::process() {
   }
 
   displayInterval_ += interval;
-  if (displayInterval_ >= (pages_.targetFps() * 1000)) {
+  if (displayInterval_ >= (1000000 / pages_.targetFps())) {
     processDisplay();
   }
 }
 
-  void Ui::processLeds() {
-    leds_.setAll(Leds::BLACK);
-    pages_.refreshLeds();
-    matrix_->setLeds(leds_.data());
-  }
+void Ui::processLeds() {
+  leds_.setAll(Leds::BLACK);
+  pages_.refreshLeds();
+  matrix_->setLeds(leds_.data());
+}
 
-  void Ui::processDisplay() {
-    while (display_->dmaBusy());
-    displayInterval_ = 0;
-    canvas_.clear();
-    pages_.draw();
-    display_->sendBuffer(canvas_.data(), canvas_.size());
-  }
+void Ui::processDisplay() {
+  while (display_->dmaBusy());
+  displayInterval_ = 0;
+  canvas_.clear();
+  pages_.draw();
+  display_->sendBuffer(canvas_.data(), canvas_.size());
+}
 
-  void Ui::processSwitches() {
-    Patch& p = settings_->selectedPatch();
-    switches_->setAmEnable(p.amp().amEnable());
-    switches_->setSync(p.oscillator().syncEnable());
-    switches_->setOsc1(p.oscillator().type1());
-    switches_->setOsc2(p.oscillator().type2());
-    switches_->setFmEnable(p.oscillator().fmEnable());
-    switches_->setMuteOsc1(p.oscillator().muteOsc1());
-    switches_->setMuteOsc2(p.oscillator().muteOsc2());
-    switches_->setVcoModSource(p.oscillator().modSource());
-    switches_->setFmFilter1Enable(p.filter().fmEnable1());
-    switches_->setFmFilter2Enable(p.filter().fmEnable2());
-    switches_->setSelectedFilter(p.filter().type(), p.filter().routing());
-  }
+void Ui::processSwitches() {
+  Patch& p = settings_->selectedPatch();
+  switches_->setAmEnable(p.amp().amEnable());
+  switches_->setSync(p.oscillator().syncEnable());
+  switches_->setOsc1(p.oscillator().type1());
+  switches_->setOsc2(p.oscillator().type2());
+  switches_->setFmEnable(p.oscillator().fmEnable());
+  switches_->setMuteOsc1(p.oscillator().muteOsc1());
+  switches_->setMuteOsc2(p.oscillator().muteOsc2());
+  switches_->setVcoModSource(p.oscillator().modSource());
+  switches_->setFmFilter1Enable(p.filter().fmEnable1());
+  switches_->setFmFilter2Enable(p.filter().fmEnable2());
+  switches_->setSelectedFilter(p.filter().type(), p.filter().routing());
+}
 
-  void Ui::processPots() {
-    const float kMargin = 0.02f;
+void Ui::processPots() {
+  const float kMargin = 0.02f;
 
-    for (size_t i = 0; i < Pots::NUM_POTS; i++) {
-      if (!potIsLocked(i)) {
-        writePotToSetting(i);
-      } else {
-        if (potUnlockDirection_[i] == CW) {
-          if (pots_.read(i) >= readPotToSetting(i) - kMargin) {
-            writePotToSetting(i);
-            unlockPot(i);
-          }
-        } else if (potUnlockDirection_[i] == CCW) {
-          if (pots_.read(i) <= readPotToSetting(i) + kMargin) {
-            writePotToSetting(i);
-            unlockPot(i);
-          }
+  for (size_t i = 0; i < Pots::NUM_POTS; i++) {
+    if (!potIsLocked(i)) {
+      writePotToSetting(i);
+    } else {
+      if (potUnlockDirection_[i] == CW) {
+        if (pots_.read(i) >= readPotToSetting(i) - kMargin) {
+          writePotToSetting(i);
+          unlockPot(i);
+        }
+      } else if (potUnlockDirection_[i] == CCW) {
+        if (pots_.read(i) <= readPotToSetting(i) + kMargin) {
+          writePotToSetting(i);
+          unlockPot(i);
         }
       }
     }
   }
+}
 
   float Ui::readPotToSetting(Patch & p, int id) {
     switch (id) {

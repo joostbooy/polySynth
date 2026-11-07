@@ -142,7 +142,7 @@ namespace LfoPage {
   }
 
   const size_t targetFps() {
-    return 1000 / 32;
+    return 32;
   }
 
   Pages::Page page = {

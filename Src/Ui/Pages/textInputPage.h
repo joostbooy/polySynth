@@ -228,7 +228,7 @@ namespace TextInputPage {
   }
 
   const size_t targetFps() {
-    return 1000 / 16;
+    return 16;
   }
 
   void draw() {
