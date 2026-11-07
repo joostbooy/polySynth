@@ -18,7 +18,7 @@ void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* displ
   switches_ = switches;
   adc_ = adc;
 
-  lastInterval_ = 0;
+  lastMicros_ = 0;
   displayInterval_ = 0;
 
   std::fill(&lastButtonState_[0], &lastButtonState_[8 * 6], 0);
@@ -116,17 +116,18 @@ void Ui::process() {
     }
   }
 
-  uint32_t interval = (Micros::read() / 1000) - lastInterval_;
+  uint32_t currentMicros = Micros::read();
+  uint32_t interval = currentMicros - lastMicros_;
+  lastMicros_ = currentMicros;
 
-  if (interval >= 1) {
-    lastInterval_ += interval;
+  if (interval >= 1000) {
     processLeds();
     processPots();
     processSwitches();
   }
 
   displayInterval_ += interval;
-  if (displayInterval_ >= pages_.targetFps()) {
+  if (displayInterval_ >= (pages_.targetFps() * 1000)) {
     processDisplay();
   }
 }

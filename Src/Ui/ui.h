@@ -90,7 +90,7 @@ class Ui {
   Switches* switches_;
   Adc* adc_;
 
-  uint32_t lastInterval_ = 0;
+  uint32_t lastMicros_ = 0;
   uint32_t displayInterval_ = 0;
   uint32_t lockedPots_;
   uint8_t encoderRaw_[4];
