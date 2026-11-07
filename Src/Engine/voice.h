@@ -34,6 +34,10 @@ class Voice {
     lfoEngine_[1].init(&settings->lfo(1));
   }
 
+  uint8_t index() {
+    return index_;
+  }
+
   uint8_t port() {
     return port_;
   }
@@ -149,8 +153,8 @@ class Voice {
   uint8_t lastNote_;
   uint8_t port_;
   uint8_t channel_;
+  uint8_t index_;
   State state_;
-  int index_;
   float velocity_;
   float fadePhase_;
   float slidePhase1_;
