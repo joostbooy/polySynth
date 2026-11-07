@@ -115,6 +115,7 @@ namespace LfoPage {
     int lastX;
     int lastY;
 
+    // draw wave
     for (int x2 = 0; x2 < w; ++x2) {
       int x_ = x + x2;
       int y_ = y + (h * (1.f - lfoEngine.next()));
@@ -125,13 +126,23 @@ namespace LfoPage {
       lastY = y_;
     }
 
+    // draw phase
+    Canvas::Color color;
     int index = settings_->lfoIndex();
-    float phase = engine_->voiceEngine().mostRecentVoice().lfoEngine(index).phase();
-    canvas_->verticalLine(x + (phase * w), y, h, Canvas::BLACK);
+
+    for (size_t i = 0; i < Settings::kNumVoices; i++) {
+      float phase = engine_->voiceEngine().voice(i).lfoEngine(index).phase();
+      if (i == engine_->voiceEngine().mostRecentVoice().index()) {
+        color = Canvas::BLACK;
+      } else {
+        color = Canvas::GRAY;
+      }
+      canvas_->verticalLine(x + (phase * w), y, h, color);
+    }
   }
 
   const size_t targetFps() {
-    return 1000 / 16;
+    return 1000 / 32;
   }
 
   Pages::Page page = {

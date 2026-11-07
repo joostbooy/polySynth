@@ -143,38 +143,48 @@ namespace EnvelopePage {
     }
 
     // Draw phase
-    EnvelopeEngine& e = engine_->voiceEngine().mostRecentVoice().envelopeEngine(settings_->envelopeIndex());
+    Canvas::Color color;
+    int index = settings_->envelopeIndex();
 
-    int x1 = x;
-    int x2 = x;
+    for (size_t i = 0; i < Settings::kNumVoices; i++) {
+      EnvelopeEngine& e = engine_->voiceEngine().voice(i).envelopeEngine(index);
+      if (i == engine_->voiceEngine().mostRecentVoice().index()) {
+        color = Canvas::BLACK;
+      } else {
+        color = Canvas::GRAY;
+      }
 
-    switch (e.stage()) {
-      case EnvelopeEngine::ATTACK:
-        x1 = x;
-        x2 = stageX[EnvelopeEngine::DECAY];
-        break;
-      case EnvelopeEngine::DECAY:
-        x1 = stageX[EnvelopeEngine::DECAY];
-        x2 = stageX[EnvelopeEngine::HOLD];
-        break;
-      case EnvelopeEngine::SUSTAIN:
-      case EnvelopeEngine::HOLD:
-        x1 = stageX[EnvelopeEngine::HOLD];
-        x2 = stageX[EnvelopeEngine::RELEASE];
-        break;
-      case EnvelopeEngine::RELEASE:
-        x1 = stageX[EnvelopeEngine::RELEASE];
-        x2 = stageX[EnvelopeEngine::IDLE];
-        break;
-      default:
-        break;
+      int x1 = x;
+      int x2 = x;
+
+      switch (e.stage()) {
+        case EnvelopeEngine::ATTACK:
+          x1 = x;
+          x2 = stageX[EnvelopeEngine::DECAY];
+          break;
+        case EnvelopeEngine::DECAY:
+          x1 = stageX[EnvelopeEngine::DECAY];
+          x2 = stageX[EnvelopeEngine::HOLD];
+          break;
+        case EnvelopeEngine::SUSTAIN:
+        case EnvelopeEngine::HOLD:
+          x1 = stageX[EnvelopeEngine::HOLD];
+          x2 = stageX[EnvelopeEngine::RELEASE];
+          break;
+        case EnvelopeEngine::RELEASE:
+          x1 = stageX[EnvelopeEngine::RELEASE];
+          x2 = stageX[EnvelopeEngine::IDLE];
+          break;
+        default:
+          break;
+      }
+
+      canvas_->verticalLine(x1 + (x2 - x1) * e.phase(), y, h, color);
     }
-
-    canvas_->verticalLine(x1 + (x2 - x1) * e.phase(), y, h, Canvas::BLACK);
   }
 
   const size_t targetFps() {
-    return 1000 / 16;
+    return 1000 / 32;
   }
 
   Pages::Page page = {
