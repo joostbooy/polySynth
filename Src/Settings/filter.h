@@ -23,7 +23,7 @@ class Filter {
   };
 
   void init() {
-    setType(HIGH_PASS);
+    setType(LOW_PASS_2_POLE);
     setRouting(SERIES);
     setCutoff1(0.9f);
     setCutoff2(0.9f);
