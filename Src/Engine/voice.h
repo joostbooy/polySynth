@@ -119,9 +119,9 @@ class Voice {
     modMatrixEngine_->setLfo(1, lfoEngine_[1].next());
     float* data = modMatrixEngine_->process();
 
-    dac_->set(index_, 0, (1.f - data[ModMatrix::SHAPE_2]) * 65535);
+    dac_->set(index_, 0, calculateShape(1.f - data[ModMatrix::SHAPE_2], 1));
     dac_->set(index_, 1, calculateVcoModDepth(data[ModMatrix::VCO_MOD_DEPTH]));
-    dac_->set(index_, 2, (1.f - data[ModMatrix::SHAPE_1]) * 65535);
+    dac_->set(index_, 2, calculateShape(1.f - data[ModMatrix::SHAPE_1], 0));
     dac_->set(index_, 3, calculatePitchOsc1(1.f - data[ModMatrix::TUNE_1]));
     dac_->set(index_, 4, calculateDrive(1.f - data[ModMatrix::DRIVE]));
     dac_->set(index_, 5, calculateGain(1.f - data[ModMatrix::GAIN] * fadePhase_));
@@ -181,6 +181,18 @@ class Voice {
     return LookupTablesUtils::read(lut_exp, modDepth) * 65535;
   }
 
+  uint16_t calculateShape(float shape, int vcoIndex) {
+    const float kPwmMin = 0.1f;
+    const float kPwmMax = 0.9f;
+    Oscillator& o = settings_->oscillator();
+
+    if ((vcoIndex == 0 && o.type1() == Oscillator::SQUARE1) || (vcoIndex == 1 && o.type2() == Oscillator::SQUARE2)) {
+      return kPwmMin + (kPwmMax - kPwmMin) * shape * 65535;
+    } else {
+      return shape * 65535;
+    }
+  }
+
   uint16_t calculatePan(float pan) {
     float pan_ = LookupTablesUtils::read(lut_exp, pan);
     return EngineUtils::spread(pan_, settings_->amp().panSpread(), playOrder_) * 65535;
@@ -200,7 +212,7 @@ class Voice {
 
     int noteValue = noteValue1(60 + osc.octaveOffset1());
     float modValue_ = EngineUtils::spread(modValue, osc.tuneSpread1(), playOrder_);
-    int tuneValue = ((2.f * modValue_) - 1.f) * cal.semiNoteValue() * (osc.trackNote1() ? 11 : 60);
+    int tuneValue = ((2.f * modValue_) - 1.f) * cal.semiNoteValue() * (osc.trackNote1() ? 11 : 36);
 
     if (osc.trackNote1()) {
       noteValue = noteValue1(note_ + osc.octaveOffset1());
@@ -222,7 +234,7 @@ class Voice {
 
     int noteValue = noteValue2(60 + osc.octaveOffset2());
     float modValue_ = EngineUtils::spread(modValue, osc.tuneSpread2(), playOrder_);
-    int tuneValue = ((2.f * modValue_) - 1.f) * cal.semiNoteValue() * (osc.trackNote2() ? 11 : 60);
+    int tuneValue = ((2.f * modValue_) - 1.f) * cal.semiNoteValue() * (osc.trackNote2() ? 11 : 36);
 
     if (osc.trackNote2()) {
       noteValue = noteValue2(note_ + osc.octaveOffset2());
