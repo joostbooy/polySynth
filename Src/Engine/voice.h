@@ -187,7 +187,7 @@ class Voice {
     Oscillator& o = settings_->oscillator();
 
     if ((vcoIndex == 0 && o.type1() == Oscillator::SQUARE1) || (vcoIndex == 1 && o.type2() == Oscillator::SQUARE2)) {
-      return kPwmMin + (kPwmMax - kPwmMin) * shape * 65535;
+      return (kPwmMin + (kPwmMax - kPwmMin) * shape) * 65535;
     } else {
       return shape * 65535;
     }
