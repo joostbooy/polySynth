@@ -181,7 +181,7 @@ class Voice {
     return LookupTablesUtils::read(lut_exp, modDepth) * 65535;
   }
 
-  uint16_t calculateShape(float shape, int vcoIndex) {
+  uint16_t calculateShape(float shape, const int vcoIndex) {
     const float kPwmMin = 0.1f;
     const float kPwmMax = 0.9f;
     Oscillator& o = settings_->oscillator();
