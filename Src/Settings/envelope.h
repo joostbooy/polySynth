@@ -135,9 +135,7 @@ class Envelope {
   }
 
   void setHoldTime(float value) {
-    if (mode() == TRIGGER) {
-      holdTime_ = SettingsUtils::clipFloat(value);
-    }
+    holdTime_ = SettingsUtils::clipFloat(value);
   }
 
   const char* holdTimeText() {
