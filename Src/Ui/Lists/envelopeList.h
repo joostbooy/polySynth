@@ -101,7 +101,9 @@ class EnvelopeList : public SettingsList {
         envelope.setSustainLevel(envelope.sustainLevel() + SettingsUtils::fInc(inc, shifted));
         break;
       case HOLD_TIME:
-        envelope.setHoldTime(envelope.holdTime() + SettingsUtils::fInc(inc, shifted));
+        if (envelope.mode() == Envelope::TRIGGER) {
+          envelope.setHoldTime(envelope.holdTime() + SettingsUtils::fInc(inc, shifted));
+        }
         break;
       case RELEASE_TIME:
         envelope.setReleaseTime(envelope.releaseTime() + SettingsUtils::fInc(inc, shifted));
