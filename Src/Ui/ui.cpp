@@ -20,6 +20,7 @@ void Ui::init(Settings* settings, Engine* engine, Matrix* matrix, Display* displ
 
   lastMicros_ = 0;
   displayInterval_ = 0;
+  processInterval_ = 0;
 
   std::fill(&lastButtonState_[0], &lastButtonState_[8 * 6], 0);
 
@@ -120,7 +121,9 @@ void Ui::process() {
   uint32_t interval = currentMicros - lastMicros_;
   lastMicros_ = currentMicros;
 
-  if (interval >= 1000) {
+  processInterval_ += interval;
+  if (processInterval_ >= 1000) {
+    processInterval_ -= 1000;
     processLeds();
     processPots();
     processSwitches();
@@ -140,7 +143,7 @@ void Ui::processLeds() {
 
 void Ui::processDisplay() {
   while (display_->dmaBusy());
-  displayInterval_ = 0;
+  displayInterval_ -= (1000000 / pages_.targetFps());
   canvas_.clear();
   pages_.draw();
   display_->sendBuffer(canvas_.data(), canvas_.size());
