@@ -198,7 +198,7 @@ void Ui::processPots() {
       case Pots::CUTOFF_B:      return p.filter().cutoff2();
       case Pots::PAN:           return p.amp().pan();
       case Pots::MOD_DEPTH:     return p.oscillator().modDepth();
-      case Pots::DRIVE:         return p.amp().drive();
+      case Pots::VCO_MIX:       return p.amp().vcoMix();
       case Pots::SLIDE_AMMOUNT: return 1.f - p.oscillator().slideAmmount1();
       case Pots::LFO_SKEW_1:    return p.lfo(0).skew();
       case Pots::LFO_SPEED_1:   return p.lfo(0).speed();
@@ -260,8 +260,8 @@ void Ui::processPots() {
       case Pots::MOD_DEPTH:
         p.oscillator().setModDepth(pots_.read(Pots::MOD_DEPTH));
         break;
-      case Pots::DRIVE:
-        p.amp().setDrive(pots_.read(Pots::DRIVE));
+      case Pots::VCO_MIX:
+        p.amp().setVcoMix(pots_.read(Pots::VCO_MIX));
         break;
       case Pots::SLIDE_AMMOUNT:
         p.oscillator().setSlideAmmount1(1.f - pots_.read(Pots::SLIDE_AMMOUNT));

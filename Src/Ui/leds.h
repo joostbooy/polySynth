@@ -80,7 +80,7 @@ class Leds {
       case Pots::MOD_DEPTH:
         set(4, 3, color);
         break;
-      case Pots::DRIVE:
+      case Pots::VCO_MIX:
         set(5, 1, color);
         break;
       case Pots::SLIDE_AMMOUNT:

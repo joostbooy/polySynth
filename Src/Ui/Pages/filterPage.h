@@ -10,6 +10,7 @@ namespace FilterPage {
   using TopPage::engine_;
   using TopPage::settings_;
   using TopPage::ui_;
+  using TopPage::canvas_;
 
   bool pasteable_;
   Filter filter_;
@@ -72,6 +73,23 @@ namespace FilterPage {
 
   void draw() {
     ListPage::draw();
+/*
+    const int x = 128;
+    const int y = 12;
+    const int h = 30;
+    const int w = 100;
+
+    int lastX = 0;
+    int lastY = 0;
+
+    for (int i = 0; i < w; i++) {
+      int x_ = i + x;
+      int y_ = 0;
+      canvas_->drawLine(lastX, lastY, x_, y_, Canvas::BLACK);
+      lastX = x_;
+      lastY = y_;
+    }
+*/
   }
 
   const size_t targetFps() {

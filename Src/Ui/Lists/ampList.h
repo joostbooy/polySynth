@@ -9,7 +9,7 @@ class AmpList : public SettingsList {
   enum Item {
     PAN,
     PAN_SPREAD,
-    DRIVE,
+    VCO_MIX,
     AM,
 
     NUM_ITEMS,
@@ -23,7 +23,7 @@ class AmpList : public SettingsList {
     switch (item) {
       case PAN:          return "PAN";
       case PAN_SPREAD:   return "PAN SPREAD";
-      case DRIVE:        return "DRIVE";
+      case VCO_MIX:      return "VCO MIX";
       case AM:           return "AM";
       default:
         break;
@@ -37,7 +37,7 @@ class AmpList : public SettingsList {
     switch (item) {
       case PAN:          return amp.panText();
       case PAN_SPREAD:   return amp.panSpreadText();
-      case DRIVE:        return amp.driveText();
+      case VCO_MIX:      return amp.vcoMixText();
       case AM:           return amp.enableAmText();
       default:
         break;
@@ -55,8 +55,8 @@ class AmpList : public SettingsList {
       case PAN_SPREAD:
         amp.setPanSpread(amp.panSpread() + SettingsUtils::fInc(inc, shifted));
         break;
-      case DRIVE:
-        amp.setDrive(amp.drive() + SettingsUtils::fInc(inc, shifted));
+      case VCO_MIX:
+        amp.setVcoMix(amp.vcoMix() + SettingsUtils::fInc(inc, shifted));
         break;
       case AM:
         amp.setAmEnable(inc > 0);
@@ -74,8 +74,8 @@ class AmpList : public SettingsList {
       case PAN:
         ui_->resetPot(Pots::PAN);
         break;
-      case DRIVE:
-        ui_->resetPot(Pots::DRIVE);
+      case VCO_MIX:
+        ui_->resetPot(Pots::VCO_MIX);
       default:
         break;
     }

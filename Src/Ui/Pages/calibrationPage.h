@@ -47,12 +47,10 @@ namespace CalibrationPage {
 
     switch (settings_->calibration().selectedVco()) {
       case 0:
-        settings_->oscillator().setMuteOsc1(false);
-        settings_->oscillator().setMuteOsc2(true);
+        settings_->amp().setVcoMix(0.f);
         break;
       case 1:
-        settings_->oscillator().setMuteOsc1(true);
-        settings_->oscillator().setMuteOsc2(false);
+        settings_->amp().setVcoMix(1.f);
         break;
       default:
         break;
@@ -81,7 +79,7 @@ namespace CalibrationPage {
     settings_->filter().setFmEnable1(false);
     settings_->filter().setFmEnable2(false);
     settings_->amp().setAmEnable(false);
-    settings_->amp().setDrive(0.f);
+    settings_->amp().setVcoMix(0.f);
     settings_->amp().setPan(0.5f);
     settings_->modMatrix().init();
     selectNextVco();

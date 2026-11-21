@@ -10,7 +10,7 @@ class Amp {
   void init() {
     setPan(0.5f);
     setPanSpread(0.f);
-    setDrive(0.1f);
+    setVcoMix(0.5f);
     setAmEnable(false);
   }
 
@@ -41,16 +41,16 @@ class Amp {
   }
 
   // Drive
-  float drive() {
-    return drive_;
+  float vcoMix() {
+    return vcoMix_;
   }
 
-  void setDrive(float value) {
-    drive_ = SettingsUtils::clipFloat(value);
+  void setVcoMix(float value) {
+    vcoMix_ = SettingsUtils::clipFloat(value);
   }
 
-  const char* driveText() {
-    return SettingsText::floatToText(drive());
+  const char* vcoMixText() {
+    return SettingsText::floatToText(vcoMix());
   }
 
   // Enable AM
@@ -70,42 +70,48 @@ class Amp {
   void save(FileWriter& fileWriter) {
     fileWriter.write(pan_);
     fileWriter.write(panSpread_);
-    fileWriter.write(drive_);
+    fileWriter.write(vcoMix_);
     fileWriter.write(amEnable_);
   }
 
   void load(FileReader& fileReader) {
     fileReader.read(pan_);
     fileReader.read(panSpread_);
-    fileReader.read(drive_);
+
+    if (fileReader.version() < 3) {
+      fileReader.skip(sizeof(float));
+    } else {
+      fileReader.read(vcoMix_);
+    }
+
     fileReader.read(amEnable_);
   }
 
   void paste(Amp* amp) {
     pan_ = amp->pan();
     panSpread_ = amp->panSpread();
-    drive_ = amp->drive();
+    vcoMix_ = amp->vcoMix();
     amEnable_ = amp->amEnable();
   }
 
   void writeHash(Hash& hash) {
     hash.write(pan_);
     hash.write(panSpread_);
-    hash.write(drive_);
+    hash.write(vcoMix_);
     hash.write(amEnable_);
   }
 
   void randomise() {
     pan_ = Rng::reciprocal();
     panSpread_ = Rng::reciprocal();
-    drive_ = Rng::reciprocal();
+    vcoMix_ = Rng::reciprocal();
     amEnable_ = Rng::u16(0, 1);
   }
 
  private:
   float pan_;
   float panSpread_;
-  float drive_;
+  float vcoMix_;
   bool amEnable_;
 };
 

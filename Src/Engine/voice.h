@@ -123,7 +123,7 @@ class Voice {
     dac_->set(index_, 1, calculateVcoModDepth(data[ModMatrix::VCO_MOD_DEPTH]));
     dac_->set(index_, 2, calculateShape(1.f - data[ModMatrix::SHAPE_1], 0));
     dac_->set(index_, 3, calculatePitchOsc1(1.f - data[ModMatrix::TUNE_1]));
-    dac_->set(index_, 4, calculateDrive(1.f - data[ModMatrix::DRIVE]));
+    dac_->set(index_, 4, calculateVcoMix(1.f - data[ModMatrix::VCO_MIX]));
     dac_->set(index_, 5, calculateGain(1.f - data[ModMatrix::GAIN] * fadePhase_));
     dac_->set(index_, 6, data[ModMatrix::RESONANCE_2] * 65535);
     dac_->set(index_, 7, calculatePitchOsc2(1.f - data[ModMatrix::TUNE_2]));
@@ -173,7 +173,7 @@ class Voice {
     return LookupTablesUtils::read(lut_exp, resonance) * 65535;
   }
 
-  uint16_t calculateDrive(float drive) {
+  uint16_t calculateVcoMix(float drive) {
     return LookupTablesUtils::read(lut_exp, drive) * 65535;
   }
 

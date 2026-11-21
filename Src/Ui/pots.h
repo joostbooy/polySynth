@@ -16,7 +16,7 @@ class Pots {
     CUTOFF_B,
     PAN,
     MOD_DEPTH,
-    DRIVE,
+    VCO_MIX,
     SLIDE_AMMOUNT,
     LFO_SKEW_1,
     LFO_SPEED_2,
@@ -54,7 +54,7 @@ class Pots {
       case CUTOFF_B:      return "CUTOFF B";
       case PAN:           return "PAN";
       case MOD_DEPTH:     return "MOD DEPTH";
-      case DRIVE:         return "DRIVE";
+      case VCO_MIX:       return "VCO MIX";
       case SLIDE_AMMOUNT: return "SLIDE AMMOUNT";
       case LFO_SKEW_1:    return "LFO SKEW 1";
       case LFO_SPEED_2:   return "LFO SPEED 2";

@@ -17,7 +17,7 @@ class ModMatrix {
     SHAPE_2,
     VCO_MOD_DEPTH,
     PAN,
-    DRIVE,
+    VCO_MIX,
 
     NUM_DESTINATIONS
   };
@@ -37,7 +37,7 @@ class ModMatrix {
       case SHAPE_2:       return "SHAPE 2";
       case VCO_MOD_DEPTH: return "VCO MOD DEPTH";
       case PAN:           return "PAN";
-      case DRIVE:         return "DRIVE";
+      case VCO_MIX:       return "VCO MIX";
       default:
         break;
     }
