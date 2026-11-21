@@ -159,16 +159,28 @@ namespace TopPage {
 
     switch (id) {
       case Buttons::TUNE_1_OCT_UP:
+        p.oscillator().setTrackNote1(true);
         p.oscillator().setOctaveOffset1(p.oscillator().octaveOffset1() + 12);
         break;
       case Buttons::TUNE_1_OCT_DOWN:
-        p.oscillator().setOctaveOffset1(p.oscillator().octaveOffset1() - 12);
+        if (p.oscillator().octaveOffset1() == -24) {
+          p.oscillator().setTrackNote1(false);
+        } else {
+          p.oscillator().setTrackNote1(true);
+          p.oscillator().setOctaveOffset1(p.oscillator().octaveOffset1() - 12);
+        }
         break;
       case Buttons::TUNE_2_OCT_UP:
+        p.oscillator().setTrackNote2(true);
         p.oscillator().setOctaveOffset2(p.oscillator().octaveOffset2() + 12);
         break;
       case Buttons::TUNE_2_OCT_DOWN:
-        p.oscillator().setOctaveOffset2(p.oscillator().octaveOffset2() - 12);
+        if (p.oscillator().octaveOffset2() == -24) {
+          p.oscillator().setTrackNote2(false);
+        } else {
+          p.oscillator().setTrackNote2(true);
+          p.oscillator().setOctaveOffset2(p.oscillator().octaveOffset2() - 12);
+        }
         break;
       case Buttons::LFO_1_TYPE:
         p.lfo(0).setType(p.lfo(0).type() + 1);
@@ -275,8 +287,8 @@ namespace TopPage {
     leds_->setOsc2Type(p.oscillator().type2());
     leds_->setOsc1Fm(p.oscillator().fmEnable());
     leds_->setOscModSource(p.oscillator().modSource());
-    leds_->setOctaveOffset1(p.oscillator().octaveOffset1());
-    leds_->setOctaveOffset2(p.oscillator().octaveOffset2());
+    leds_->setOctaveOffset1(p.oscillator().octaveOffset1(), p.oscillator().trackNote1());
+    leds_->setOctaveOffset2(p.oscillator().octaveOffset2(), p.oscillator().trackNote2());
     leds_->setSlideVco1(p.oscillator().slideMode1());
     leds_->setSlideVco2(p.oscillator().slideMode2());
 

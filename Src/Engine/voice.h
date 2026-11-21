@@ -210,9 +210,9 @@ class Voice {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = noteValue1(60 + osc.octaveOffset1());
+    int noteValue = noteValue1(60);
     float modValue_ = EngineUtils::spread(modValue, osc.tuneSpread1(), playOrder_);
-    int tuneValue = ((2.f * modValue_) - 1.f) * cal.semiNoteValue() * (osc.trackNote1() ? 11 : 36);
+    int tuneValue = ((2.f * modValue_) - 1.f) * cal.semiNoteValue() * (osc.trackNote1() ? 11 : 60);
 
     if (osc.trackNote1()) {
       noteValue = noteValue1(note_ + osc.octaveOffset1());
@@ -232,9 +232,9 @@ class Voice {
     Oscillator& osc = settings_->oscillator();
     Calibration& cal = settings_->calibration();
 
-    int noteValue = noteValue2(60 + osc.octaveOffset2());
+    int noteValue = noteValue2(60);
     float modValue_ = EngineUtils::spread(modValue, osc.tuneSpread2(), playOrder_);
-    int tuneValue = ((2.f * modValue_) - 1.f) * cal.semiNoteValue() * (osc.trackNote2() ? 11 : 36);
+    int tuneValue = ((2.f * modValue_) - 1.f) * cal.semiNoteValue() * (osc.trackNote2() ? 11 : 60);
 
     if (osc.trackNote2()) {
       noteValue = noteValue2(note_ + osc.octaveOffset2());

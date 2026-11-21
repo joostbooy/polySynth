@@ -219,7 +219,15 @@ void setOscModSource(int source) {
     set(1, 7, state);
   }
 
-  void setOctaveOffset1(int offset) {
+  void setOctaveOffset1(int offset, bool trackNote) {
+    if (!trackNote) {
+      set(1, 15, RED);
+      set(0, 15, RED);
+      set(0, 13, RED);
+      set(1, 13, RED);
+      return;
+    } 
+
     switch (offset) {
       case -24:
         set(1, 15, RED);
@@ -292,7 +300,15 @@ void setOscModSource(int source) {
     set(7, 3, mode != Oscillator::OFF);
   }
 
-  void setOctaveOffset2(int offset) {
+  void setOctaveOffset2(int offset, bool trackNote) {
+    if (!trackNote) {
+      set(3, 15, RED);
+      set(2, 15, RED);
+      set(2, 13, RED);
+      set(3, 13, RED);
+      return;
+    }
+
     switch (offset) {
       case -24:
         set(3, 15, RED);
