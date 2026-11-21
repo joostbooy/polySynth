@@ -206,7 +206,7 @@ class Leds {
     set(1, 7, state);
   }
 
-  void setMute1(bool state) {
+  void setRingModEnabled(bool state) {
     set(1, 8, state);
   }
 
@@ -283,7 +283,7 @@ class Leds {
     set(7, 3, mode != Oscillator::OFF);
   }
 
-  void setMute2(bool state) {
+  void setCarrierSelect(bool state) {
     set(2, 7, state);
   }
 

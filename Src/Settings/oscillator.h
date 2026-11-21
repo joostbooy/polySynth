@@ -93,8 +93,6 @@ class Oscillator {
     setSyncEnable(false);
     setType1(SAW1);
     setType2(SAW2);
-    setMuteOsc1(false);
-    setMuteOsc2(false);
     setShape1(0.1f);
     setShape2(0.1f);
     setTrackNote1(true);
@@ -177,32 +175,6 @@ class Oscillator {
 
   const char* syncEnableText() {
     return SettingsText::boolToOnOff(syncEnable());
-  }
-
-  // Mute Osc 1
-  bool muteOsc1() {
-    return muteOsc1_;
-  }
-
-  void setMuteOsc1(bool value) {
-    muteOsc1_ = value;
-  }
-
-  const char* muteOsc1Text() {
-    return SettingsText::boolToOnOff(muteOsc1());
-  }
-
-  // Mute Osc 2
-  bool muteOsc2() {
-    return muteOsc2_;
-  }
-
-  void setMuteOsc2(bool value) {
-    muteOsc2_ = value;
-  }
-
-  const char* muteOsc2Text() {
-    return SettingsText::boolToOnOff(muteOsc2());
   }
 
   // Shape 1
@@ -430,8 +402,6 @@ class Oscillator {
   void save(FileWriter& fileWriter) {
     fileWriter.write(voiceMode_);
     fileWriter.write(fmEnable_);
-    fileWriter.write(muteOsc1_);
-    fileWriter.write(muteOsc2_);
     fileWriter.write(shape1_);
     fileWriter.write(shape2_);
     fileWriter.write(type1_);
@@ -457,8 +427,12 @@ class Oscillator {
   void load(FileReader& fileReader) {
     fileReader.read(voiceMode_);
     fileReader.read(fmEnable_);
-    fileReader.read(muteOsc1_);
-    fileReader.read(muteOsc2_);
+
+    if (fileReader.version() < 3) {
+      fileReader.skip(sizeof(bool));
+      fileReader.skip(sizeof(bool));
+    }
+
     fileReader.read(shape1_);
     fileReader.read(shape2_);
     fileReader.read(type1_);
@@ -486,8 +460,6 @@ class Oscillator {
   void paste(Oscillator* oscillator) {
     voiceMode_ = oscillator->voiceMode();
     fmEnable_ = oscillator->fmEnable();
-    muteOsc1_ = oscillator->muteOsc1();
-    muteOsc2_ = oscillator->muteOsc2();
     shape1_ = oscillator->shape1();
     shape2_ = oscillator->shape2();
     type1_ = oscillator->type1();
@@ -517,8 +489,6 @@ class Oscillator {
   void randomise() {
     voiceMode_ = VoiceMode(Rng::u16(0, NUM_VOICE_MODES - 1));
     fmEnable_ = Rng::u16(0, 1);
-    muteOsc1_ = Rng::u16(0, 1);
-    muteOsc2_ = Rng::u16(0, 1);
     shape1_ = Rng::reciprocal();
     shape2_ = Rng::reciprocal();
     type1_ = Type1(Rng::u16(0, NUM_TYPES1 - 1));
@@ -543,8 +513,6 @@ class Oscillator {
   void writeHash(Hash& hash) {
     hash.write(voiceMode_);
     hash.write(fmEnable_);
-    hash.write(muteOsc1_);
-    hash.write(muteOsc2_);
     hash.write(shape1_);
     hash.write(shape2_);
     hash.write(type1_);
@@ -573,8 +541,6 @@ class Oscillator {
   bool trackNote2_;
   bool syncEnable_;
   bool fmEnable_;
-  bool muteOsc1_;
-  bool muteOsc2_;
   float shape1_;
   float shape2_;
   float modDepth_;

@@ -156,12 +156,18 @@ void Ui::processSwitches() {
   switches_->setOsc1(p.oscillator().type1());
   switches_->setOsc2(p.oscillator().type2());
   switches_->setFmEnable(p.oscillator().fmEnable());
-  switches_->setMuteOsc1(p.oscillator().muteOsc1());
-  switches_->setMuteOsc2(p.oscillator().muteOsc2());
   switches_->setVcoModSource(p.oscillator().modSource());
   switches_->setFmFilter1Enable(p.filter().fmEnable1());
   switches_->setFmFilter2Enable(p.filter().fmEnable2());
   switches_->setSelectedFilter(p.filter().type(), p.filter().routing());
+
+  if (p.amp().ringModEnable()) {
+    switches_->setRingModEnable(true);
+    switches_->setCarrierSelect(p.amp().carrierSelect());
+  } else {
+    switches_->setRingModEnable(false);
+    switches_->setCarrierSelect(0);
+  }
 }
 
 void Ui::processPots() {

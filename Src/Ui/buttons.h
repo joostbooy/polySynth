@@ -27,9 +27,9 @@ class Buttons {
     VCO_MOD_SOURCE          = SERIAL_ID(2, 4),
     SLIDE_VCO_SELECT        = SERIAL_ID(2, 5),
     CUTOFF_1_MOD_TYPE       = SERIAL_ID(3, 0),
-    VCO_1_MUTE              = SERIAL_ID(3, 1),
+    CARRIER_VCO_1           = SERIAL_ID(3, 1),
     CUTOFF_2_MOD_TYPE       = SERIAL_ID(3, 2),
-    VCO_2_MUTE              = SERIAL_ID(3, 3),
+    CARRIER_VCO_2           = SERIAL_ID(3, 3),
     VCO_MOD_DEPTH_MOD_TYPE  = SERIAL_ID(3, 4),
     VOLUME_MOD_TYPE         = SERIAL_ID(3, 5),
     VCF_1_TYPE              = SERIAL_ID(4, 0),
@@ -74,9 +74,9 @@ class Buttons {
       case VCO_MOD_SOURCE:          return "VCO MOD SOURCE";
       case SLIDE_VCO_SELECT:        return "SLIDE VCO SELECT";
       case CUTOFF_1_MOD_TYPE:       return "CUTOFF 1 MOD TYPE";
-      case VCO_1_MUTE:              return "VCO 1 MUTE";
+      case CARRIER_VCO_1:           return "CARRIER VCO 1";
       case CUTOFF_2_MOD_TYPE:       return "CUTOFF 2 MOD TYPE";
-      case VCO_2_MUTE:              return "VCO 2 MUTE";
+      case CARRIER_VCO_2:           return "CARRIER VCO 2";
       case VCO_MOD_DEPTH_MOD_TYPE:  return "VCO MOD DEPTH MOD TYPE";
       case VOLUME_MOD_TYPE:         return "VOLUME MOD TYPE";
       case VCF_1_TYPE:              return "VCF 1 TYPE";

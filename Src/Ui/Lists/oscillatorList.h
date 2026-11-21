@@ -46,8 +46,6 @@ class OscillatorList : public SettingsList {
       case TRACK_NOTE_2:          return "TRACK NOTE 2";
       case SYNC:                  return "SYNC";
       case FM:                    return "FM";
-      case MUTE_1:                return "MUTE 1";
-      case MUTE_2:                return "MUTE 2";
       case SHAPE_1:               return "SHAPE 1";
       case SHAPE_2:               return "SHAPE 2";
       case MOD_DEPTH:             return "MOD DEPTH";
@@ -80,8 +78,6 @@ class OscillatorList : public SettingsList {
       case TRACK_NOTE_2:          return oscillator.trackNote2Text();
       case SYNC:                  return oscillator.syncEnableText();
       case FM:                    return oscillator.fmEnableText();
-      case MUTE_1:                return oscillator.muteOsc1Text();
-      case MUTE_2:                return oscillator.muteOsc2Text();
       case SHAPE_1:               return oscillator.shape1Text();
       case SHAPE_2:               return oscillator.shape2Text();
       case MOD_DEPTH:             return oscillator.modDepthText();
@@ -125,12 +121,6 @@ class OscillatorList : public SettingsList {
         break;
       case FM:
         oscillator.setFmEnable(inc > 0);
-        break;
-      case MUTE_1:
-        oscillator.setMuteOsc1(inc > 0);
-        break;
-      case MUTE_2:
-        oscillator.setMuteOsc2(inc > 0);
         break;
       case SHAPE_1:
         oscillator.setShape1(oscillator.shape1() + SettingsUtils::fInc(inc, shifted));

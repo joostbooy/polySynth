@@ -11,6 +11,8 @@ class AmpList : public SettingsList {
     PAN_SPREAD,
     VCO_MIX,
     AM,
+    RING_MOD,
+    CARRIER_SELECT,
 
     NUM_ITEMS,
   };
@@ -21,10 +23,12 @@ class AmpList : public SettingsList {
 
   const char* itemText(int item) override {
     switch (item) {
-      case PAN:          return "PAN";
-      case PAN_SPREAD:   return "PAN SPREAD";
-      case VCO_MIX:      return "VCO MIX";
-      case AM:           return "AM";
+      case PAN:             return "PAN";
+      case PAN_SPREAD:      return "PAN SPREAD";
+      case VCO_MIX:         return "VCO MIX";
+      case AM:              return "AM";
+      case RING_MOD:        return "RING MOD";
+      case CARRIER_SELECT:  return "CARRIER SELECT";
       default:
         break;
     }
@@ -35,10 +39,12 @@ class AmpList : public SettingsList {
     Amp& amp = settings_->amp();
 
     switch (item) {
-      case PAN:          return amp.panText();
-      case PAN_SPREAD:   return amp.panSpreadText();
-      case VCO_MIX:      return amp.vcoMixText();
-      case AM:           return amp.enableAmText();
+      case PAN:             return amp.panText();
+      case PAN_SPREAD:      return amp.panSpreadText();
+      case VCO_MIX:         return amp.vcoMixText();
+      case AM:              return amp.enableAmText();
+      case RING_MOD:        return amp.ringModEnableText();
+      case CARRIER_SELECT:  return amp.carrierSelectText();
       default:
         break;
     }
@@ -60,6 +66,12 @@ class AmpList : public SettingsList {
         break;
       case AM:
         amp.setAmEnable(inc > 0);
+        break;
+      case RING_MOD:
+        amp.setRingModEnable(inc > 0);
+        break;
+      case CARRIER_SELECT:
+        amp.setCarrierSelect(inc > 0);
         break;
       default:
         break;

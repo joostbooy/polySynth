@@ -9,11 +9,11 @@ class Switches {
  public:
   void init();
 
-  void setMuteOsc1(bool state) {
+  void setRingModEnable(bool state) {
     GPIOD->BSRR = state ? GPIO_PIN_11 << 16 : GPIO_PIN_11;
   }
 
-  void setMuteOsc2(bool state) {
+  void setCarrierSelect(bool state) {
     GPIOD->BSRR = state ? GPIO_PIN_10 << 16 : GPIO_PIN_10;
   }
 
