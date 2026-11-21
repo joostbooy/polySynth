@@ -31,21 +31,34 @@ class Leds {
     set(7, 1, state);
   }
 
-  // Vco mod
-  void setOscModSource(int source) {
-    switch (source) {
-      case 0:
-        set(4, 4, RED);
-        set(5, 3, BLACK);
-        break;
-      case 1:
-        set(4, 4, BLACK);
-        set(5, 3, RED);
-        break;
-      default:
-        break;
+  void setRingMod(bool enabled, bool carrier) {
+    if (!enabled) {
+      set(1, 8, BLACK);
+      set(2, 7, BLACK);
+    } else if (carrier == 0) {
+      set(1, 8, RED);
+      set(2, 7, BLACK);
+    } else {
+      set(1, 8, BLACK);
+      set(2, 7, RED);
     }
   }
+
+// Vco mod
+void setOscModSource(int source) {
+  switch (source) {
+    case 0:
+      set(4, 4, RED);
+      set(5, 3, BLACK);
+      break;
+    case 1:
+      set(4, 4, BLACK);
+      set(5, 3, RED);
+      break;
+    default:
+      break;
+  }
+}
 
   // Pots
   void setPot(int id, Color color) {
@@ -206,10 +219,6 @@ class Leds {
     set(1, 7, state);
   }
 
-  void setRingModEnabled(bool state) {
-    set(1, 8, state);
-  }
-
   void setOctaveOffset1(int offset) {
     switch (offset) {
       case -24:
@@ -281,10 +290,6 @@ class Leds {
   // Osc 2
   void setSlideVco2(Oscillator::SlideMode mode) {
     set(7, 3, mode != Oscillator::OFF);
-  }
-
-  void setCarrierSelect(bool state) {
-    set(2, 7, state);
   }
 
   void setOctaveOffset2(int offset) {

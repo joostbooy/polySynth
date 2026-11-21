@@ -210,23 +210,23 @@ namespace TopPage {
         incModType(ModMatrix::CUTOFF_1, ModMatrix::LFO_2, ModMatrix::ENVELOPE_2);
         break;
       case Buttons::CARRIER_VCO_1:
-        p.amp().setCarrierSelect(0);
         if (p.amp().ringModEnable() == false) {
           p.amp().setRingModEnable(true);
         } else if (p.amp().carrierSelect() == 0) {
           p.amp().setRingModEnable(false);
         }
+        p.amp().setCarrierSelect(0);
         break;
       case Buttons::CUTOFF_2_MOD_TYPE:
         incModType(ModMatrix::CUTOFF_2, ModMatrix::LFO_2, ModMatrix::ENVELOPE_2);
         break;
       case Buttons::CARRIER_VCO_2:
-        p.amp().setCarrierSelect(1);
         if (p.amp().ringModEnable() == false) {
           p.amp().setRingModEnable(true);
         } else if (p.amp().carrierSelect() == 1) {
           p.amp().setRingModEnable(false);
         }
+        p.amp().setCarrierSelect(1);
         break;
       case Buttons::VCO_MOD_DEPTH_MOD_TYPE:
         incModType(ModMatrix::VCO_MOD_DEPTH, ModMatrix::LFO_1, ModMatrix::ENVELOPE_2);
@@ -268,8 +268,8 @@ namespace TopPage {
     Patch& p = settings_->selectedPatch();
 
     leds_->setAm(p.amp().amEnable());
-    leds_->setRingModEnabled(p.amp().ringModEnable());
-    leds_->setCarrierSelect(p.amp().carrierSelect());
+    leds_->setRingMod(p.amp().ringModEnable(), p.amp().carrierSelect());
+    
     leds_->setOsc2Sync(p.oscillator().syncEnable());
     leds_->setOsc1Type(p.oscillator().type1());
     leds_->setOsc2Type(p.oscillator().type2());
