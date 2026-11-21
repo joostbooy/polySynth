@@ -159,8 +159,11 @@ namespace TopPage {
 
     switch (id) {
       case Buttons::TUNE_1_OCT_UP:
-        p.oscillator().setTrackNote1(true);
-        p.oscillator().setOctaveOffset1(p.oscillator().octaveOffset1() + 12);
+        if (p.oscillator().trackNote1() == false) {
+          p.oscillator().setTrackNote1(true);
+        } else {
+          p.oscillator().setOctaveOffset1(p.oscillator().octaveOffset1() + 12);
+        }
         break;
       case Buttons::TUNE_1_OCT_DOWN:
         if (p.oscillator().octaveOffset1() == -24) {
@@ -171,8 +174,11 @@ namespace TopPage {
         }
         break;
       case Buttons::TUNE_2_OCT_UP:
-        p.oscillator().setTrackNote2(true);
-        p.oscillator().setOctaveOffset2(p.oscillator().octaveOffset2() + 12);
+        if (p.oscillator().trackNote2() == false) {
+          p.oscillator().setTrackNote2(true);
+        } else {
+          p.oscillator().setOctaveOffset2(p.oscillator().octaveOffset2() + 12);
+        }
         break;
       case Buttons::TUNE_2_OCT_DOWN:
         if (p.oscillator().octaveOffset2() == -24) {

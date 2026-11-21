@@ -11,7 +11,7 @@ namespace EngineUtils {
   }
 
   static float foldWave(float wave, float amount) {
-    float amount_ = amount * 4.f;
+    float amount_ = 1.f + (amount * 4.f);
     float out = 0.25f * ((wave * 2.0f - 1.0f) * amount_) + 0.25f;
     return 2.0f * std::fabs(out - std::roundf(out));
   }
