@@ -22,6 +22,7 @@ public:
 		RANDOM_MAX,
 		RETRIGGER,
 		ONE_SHOT,
+		FOLD,
 
 		NumItems
 	};
@@ -46,6 +47,7 @@ public:
 		case RANDOM_MAX:			return "RANDOM MAX";
 		case RETRIGGER:				return "RETRIGGER";
 		case ONE_SHOT:				return "ONE SHOT";
+		case FOLD:					return "FOLD";
 		default:
 			break;
 		}
@@ -70,6 +72,7 @@ public:
 		case RANDOM_MAX:			return lfo.randomMaxText();
 		case RETRIGGER:				return lfo.retriggerText();
 		case ONE_SHOT:				return lfo.oneShotText();
+		case FOLD:					return lfo.foldText();
 		default:
 			break;
 		}
@@ -119,6 +122,9 @@ public:
 			break;
 		case ONE_SHOT:
 			lfo.setOneShot(inc > 0);
+			break;
+		case FOLD:
+			lfo.setFold(lfo.fold() + SettingsUtils::fInc(inc, shifted));
 			break;
 		default:
 			break;

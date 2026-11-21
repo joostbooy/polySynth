@@ -45,6 +45,7 @@ class Lfo {
     setRandomMax(false);
     setRetrigger(true);
     setOneShot(false);
+    setFold(1.f);
   }
 
   // Type
@@ -207,6 +208,19 @@ class Lfo {
     return SettingsText::boolToOnOff(oneShot());
   }
 
+  // Fold
+  float fold() {
+    return fold_;
+  }
+
+  void setFold(float value) {
+    fold_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* foldText() {
+    return SettingsText::floatToText(fold());
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(skew_);
@@ -221,6 +235,7 @@ class Lfo {
     fileWriter.write(retrigger_);
     fileWriter.write(oneShot_);
     fileWriter.write(type_);
+    fileWriter.write(fold_);
   }
 
   void load(FileReader& fileReader) {
@@ -236,6 +251,10 @@ class Lfo {
     fileReader.read(retrigger_);
     fileReader.read(oneShot_);
     fileReader.read(type_);
+
+    if (fileReader.version() >= 3) {
+      fileReader.read(fold_);
+    }
   }
 
   void paste(Lfo* lfo) {
@@ -251,6 +270,7 @@ class Lfo {
     retrigger_ = lfo->retrigger();
     oneShot_ = lfo->oneShot();
     type_ = lfo->type();
+    fold_ = lfo->fold();
   }
 
   void writeHash(Hash& hash) {
@@ -266,6 +286,7 @@ class Lfo {
     hash.write(clockSync_);
     hash.write(retrigger_);
     hash.write(oneShot_);
+    hash.write(fold_);
   }
 
   void randomise() {
@@ -281,6 +302,7 @@ class Lfo {
     retrigger_ = Rng::u16(0, 1);
     oneShot_ = Rng::u16(0, 1);
     type_ = Type(Rng::u16(0, NUM_TYPES - 1));
+    fold_ = Rng::reciprocal();
   }
 
  private:
@@ -292,6 +314,7 @@ class Lfo {
   float max_;
   float phaseOffset_;
   float phaseOffsetSpread_;
+  float fold_;
   bool randomMax_;
   bool clockSync_;
   bool retrigger_;

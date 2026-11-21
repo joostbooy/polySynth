@@ -10,6 +10,12 @@ namespace EngineUtils {
     return a + (b - a) * mix;
   }
 
+  static float foldWave(float wave, float amount) {
+    float amount_ = amount * 4.f;
+    float out = 0.25f * ((wave * 2.0f - 1.0f) * amount_) + 0.25f;
+    return 2.0f * std::fabs(out - std::roundf(out));
+  }
+
   static float spread(float value, float spreadAmmount, int playOrder) {
     float spread_ = spreadAmmount * (1.f / Settings::kNumVoices) * playOrder;
     if (playOrder % 2) {

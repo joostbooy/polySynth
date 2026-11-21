@@ -75,7 +75,7 @@ class LfoEngine {
 
     float min = lfo_->min();
     float max = lfo_->randomMax() ? randomMax_ : lfo_->max();
-    return min + (max - min) * wave;
+    return min + (max - min) * EngineUtils::foldWave(wave, lfo_->fold());
   }
 
  private:
