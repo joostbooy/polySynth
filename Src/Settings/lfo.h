@@ -45,7 +45,7 @@ class Lfo {
     setRandomMax(false);
     setRetrigger(true);
     setOneShot(false);
-    setFold(1.f);
+    setFold(0.f);
   }
 
   // Type
