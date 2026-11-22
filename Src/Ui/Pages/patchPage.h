@@ -219,6 +219,24 @@ namespace PatchPage {
     str_.write(settings_->patchIndex() + 1, " ", settings_->selectedPatch().name());
     canvas_->drawText(0, 0, canvas_->width(), 54, str_.read(), Canvas::CENTER, Canvas::CENTER);
 
+    // Draw active voices
+    const int boxSize = 10;
+    const int margin = 2;
+    const int totalW = (boxSize + margin) * Settings::kNumVoices;
+    const int x = (canvas_->width() - totalW) / 2;
+    const int y = canvas_->height() - 10 - (boxSize + margin);
+
+    for (size_t i = 0; i < Settings::kNumVoices; i++) {
+      int x_ = x + (i * (boxSize + margin));
+      canvas_->fill(x_, y, boxSize, boxSize, Canvas::BLACK);
+      canvas_->drawText(x_, y, boxSize, boxSize, str_.write(i + 1), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
+
+      if (engine_->voiceEngine().voice(i).isAvailable() == false) {
+        canvas_->fill(x_, y, boxSize - 2, boxSize - 2, Canvas::INVERTED);
+      }
+    }
+
+    // Footer
     WindowPainter::drawFooter(footerOptionText, NUM_FOOTER_OPTIONS, footerOptionsOffset);
   }
 
