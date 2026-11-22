@@ -216,6 +216,7 @@ namespace PatchPage {
   void draw() {
     canvas_->setFont(Font::SMALL);
 
+    // Patch name
     str_.write(settings_->patchIndex() + 1, " ", settings_->selectedPatch().name());
     canvas_->drawText(0, 0, canvas_->width(), 54, str_.read(), Canvas::CENTER, Canvas::CENTER);
 
