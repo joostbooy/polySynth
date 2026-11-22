@@ -229,8 +229,8 @@ namespace PatchPage {
 
     for (size_t i = 0; i < Settings::kNumVoices; i++) {
       int x_ = x + (i * (boxSize + margin));
-      canvas_->fill(x_, y, boxSize, boxSize, Canvas::BLACK);
-      canvas_->drawText(x_, y, boxSize, boxSize, str_.write(i + 1), Canvas::CENTER, Canvas::CENTER, Canvas::WHITE);
+      canvas_->frame(x_, y, boxSize, boxSize, Canvas::BLACK);
+      canvas_->drawText(x_, y, boxSize, boxSize, str_.write(i + 1), Canvas::CENTER, Canvas::CENTER, Canvas::BLACK);
 
       if (engine_->voiceEngine().voice(i).isAvailable() == false) {
         canvas_->fill(x_, y, boxSize - 2, boxSize - 2, Canvas::INVERTED);
