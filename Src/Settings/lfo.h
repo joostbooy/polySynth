@@ -46,7 +46,7 @@ class Lfo {
     setRetrigger(true);
     setOneShot(false);
     setFold(0.f);
-    setDelay(0.f);
+    setDelay(1.f);
   }
 
   // Type
