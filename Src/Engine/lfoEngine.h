@@ -19,6 +19,7 @@ class LfoEngine {
 
   void reset() {
     phase_ = 0.f;
+    delayPhase_ = 0.f;
     randomMax_ = Rng::reciprocal(lfo_->min(), lfo_->max());
   }
 
@@ -85,20 +86,26 @@ class LfoEngine {
  private:
   Lfo* lfo_;
   float phase_ = 0.f;
+  float delayPhase_ = 0.f;
   float randomMax_ = 1.f;
   int playOrder_ = 0;
   Stage stage_;
 
-  float readInc() {
+  float readInc(float value) {
     if (lfo_->clockSync()) {
-      return MidiClockEngine::readInc(lfo_->speed());
+      return MidiClockEngine::readInc(value);
     } else {
-      return LookupTablesUtils::read(lut_phase_inc, lfo_->speed());
+      return LookupTablesUtils::read(lut_phase_inc, value);
     }
   }
 
   float nextPhase() {
-    phase_ += readInc();
+    delayPhase_ += readInc(lfo_->delay());
+    if (delayPhase_ >= 1.f) {
+      delayPhase_ = 1.f;
+      phase_ += readInc(lfo_->speed());
+    }
+
     if (phase_ >= 1.f) {
       if (lfo_->oneShot()) {
         phase_ = 1.f;

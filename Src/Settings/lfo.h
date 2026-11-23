@@ -46,6 +46,7 @@ class Lfo {
     setRetrigger(true);
     setOneShot(false);
     setFold(0.f);
+    setDelay(0.f);
   }
 
   // Type
@@ -221,6 +222,23 @@ class Lfo {
     return SettingsText::floatToText(fold());
   }
 
+  // Delay
+  float delay() {
+    return delay_;
+  }
+
+  void setDelay(float value) {
+    delay_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* delayText() {
+    if (clockSync()) {
+      return MidiClock::tempoText(delay());
+    } else {
+      return SettingsText::phaseIncToMilis(LookupTablesUtils::read(lut_phase_inc, delay()));
+    }
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(skew_);
@@ -236,6 +254,7 @@ class Lfo {
     fileWriter.write(oneShot_);
     fileWriter.write(type_);
     fileWriter.write(fold_);
+    fileWriter.write(delay_);
   }
 
   void load(FileReader& fileReader) {
@@ -254,6 +273,7 @@ class Lfo {
 
     if (fileReader.version() >= 3) {
       fileReader.read(fold_);
+      fileReader.read(delay_);
     }
   }
 
@@ -271,6 +291,7 @@ class Lfo {
     oneShot_ = lfo->oneShot();
     type_ = lfo->type();
     fold_ = lfo->fold();
+    delay_ = lfo->delay();
   }
 
   void writeHash(Hash& hash) {
@@ -287,6 +308,7 @@ class Lfo {
     hash.write(retrigger_);
     hash.write(oneShot_);
     hash.write(fold_);
+    hash.write(delay_);
   }
 
   void randomise() {
@@ -303,6 +325,7 @@ class Lfo {
     oneShot_ = Rng::u16(0, 1);
     type_ = Type(Rng::u16(0, NUM_TYPES - 1));
     fold_ = Rng::reciprocal();
+    delay_ = Rng::reciprocal();
   }
 
  private:
@@ -315,6 +338,7 @@ class Lfo {
   float phaseOffset_;
   float phaseOffsetSpread_;
   float fold_;
+  float delay_;
   bool randomMax_;
   bool clockSync_;
   bool retrigger_;

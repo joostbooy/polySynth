@@ -23,6 +23,7 @@ public:
 		RETRIGGER,
 		ONE_SHOT,
 		FOLD,
+		DELAY,
 
 		NumItems
 	};
@@ -48,6 +49,7 @@ public:
 		case RETRIGGER:				return "RETRIGGER";
 		case ONE_SHOT:				return "ONE SHOT";
 		case FOLD:					return "FOLD";
+		case DELAY:					return "DELAY";
 		default:
 			break;
 		}
@@ -73,6 +75,7 @@ public:
 		case RETRIGGER:				return lfo.retriggerText();
 		case ONE_SHOT:				return lfo.oneShotText();
 		case FOLD:					return lfo.foldText();
+		case DELAY:					return lfo.delayText();
 		default:
 			break;
 		}
@@ -125,6 +128,9 @@ public:
 			break;
 		case FOLD:
 			lfo.setFold(lfo.fold() + SettingsUtils::fInc(inc, shifted));
+			break;
+		case DELAY:
+			lfo.setDelay(lfo.delay() + SettingsUtils::fInc(inc, shifted));
 			break;
 		default:
 			break;
