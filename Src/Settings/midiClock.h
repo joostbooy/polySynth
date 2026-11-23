@@ -28,6 +28,7 @@ class MidiClock {
     _1_64_DOTTED,
     _1_64_WHOLE,
     _1_64_TRIPLET,
+    NONE,
 
     NUM_TEMPOS
   };
@@ -55,6 +56,7 @@ class MidiClock {
       case _1_64_DOTTED:	return "1/64 D";
       case _1_64_WHOLE:		return "1/64";
       case _1_64_TRIPLET:	return "1/64 T";
+      case NONE:	        return "NONE";
       default:
         break;
     }

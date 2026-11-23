@@ -58,7 +58,11 @@ class MidiClockEngine {
 
   static float readInc(float value) {
     int index = value * (MidiClock::NUM_TEMPOS - 1);
-    return lut_beat_length_inc[bpm_ - MIN_BPM] * incMultiplier(index);
+    if (index == MidiClock::NONE) {
+      return 1.f;
+    } else {
+      return lut_beat_length_inc[bpm_ - MIN_BPM] * incMultiplier(index);
+    }
   }
 
  private:

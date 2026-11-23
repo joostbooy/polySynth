@@ -60,13 +60,14 @@ tables.append(values.astype('float32'))
 ________________________'''
 name = 'phase_inc'
 
-phase_table_size = 256
+phase_table_size = 255
 freq_min = 0.05
 freq_max = 250.0
 
 freq_inc_min = freq_min / sample_rate
 freq_inc_max = freq_max / sample_rate
 steps = numpy.geomspace(freq_inc_min, freq_inc_max, phase_table_size)
+steps = numpy.append(steps, 1.0)           
 
 tables.append('float ' + name)
 tables.append(steps.astype('float32'))
