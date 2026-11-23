@@ -121,7 +121,7 @@ class EnvelopeList : public SettingsList {
         envelope.setInvert(inc > 0);
         break;
       case DELAY:
-        envelope.setDelay(envelope.delay() + SettingsUtils::fInc(inc, shifted));
+        envelope.setDelay(envelope.delay() + SettingsUtils::fInc(inc == 1 ? -1 : 1, shifted));
         break;
       default:
         break;

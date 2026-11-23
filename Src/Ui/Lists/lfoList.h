@@ -130,7 +130,7 @@ public:
 			lfo.setFold(lfo.fold() + SettingsUtils::fInc(inc, shifted));
 			break;
 		case DELAY:
-			lfo.setDelay(lfo.delay() + SettingsUtils::fInc(inc, shifted));
+			lfo.setDelay(lfo.delay() + SettingsUtils::fInc(inc == 1 ? -1 : 1, shifted));
 			break;
 		default:
 			break;
