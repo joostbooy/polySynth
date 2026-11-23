@@ -22,11 +22,13 @@ class EnvelopeEngine {
     envelope_ = envelope;
     stage_ = IDLE;
     phase_ = 0.f;
+    delayPhase_ = 0.f;
     sample_ = 0.f;
   }
 
   void attack() {
     phase_ = 0.0f;
+    delayPhase_ = 0.0f;
     sample_ = 0.0f;
     stage_ = ATTACK;
     mode_ = envelope_->mode();
@@ -62,12 +64,16 @@ class EnvelopeEngine {
         sample_ = 0.f;
         break;
       case ATTACK:
-        phase_ += readInc(envelope_->attackTime());
-        if (phase_ < 1.f) {
-          sample_ = readCurve(envelope_->attackShape());
-        } else {
-          phase_ = 0.f;
-          stage_ = DECAY;
+        delayPhase_ += readInc(envelope_->delay());
+        if (delayPhase_ >= 1.f) {
+          delayPhase_ = 1.f;
+          phase_ += readInc(envelope_->attackTime());
+          if (phase_ < 1.f) {
+            sample_ = readCurve(envelope_->attackShape());
+          } else {
+            phase_ = 0.f;
+            stage_ = DECAY;
+          }
         }
         break;
       case DECAY:
@@ -116,6 +122,7 @@ class EnvelopeEngine {
  private:
   Stage stage_;
   float phase_;
+  float delayPhase_;
   float sample_;
   float releaseLevel_;
 

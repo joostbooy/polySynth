@@ -23,7 +23,7 @@ class Settings {
     Version_0,
     Version_1,  // added tune spread
     Version_2,  // added tune error
-    Version_3,  // added LFO fold, ring mod carier select, ring mod on/off, vco mix, delay, removed mute vco 1 & 2, drive
+    Version_3,  // added LFO fold, ring mod carier select, ring mod on/off, vco mix, env & LFO delay, removed mute vco 1 & 2, drive
     Latest,
   };
 

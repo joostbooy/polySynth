@@ -41,6 +41,7 @@ class Envelope {
     setReleaseShape(0.5f);
     setLoop(false);
     setInvert(false);
+    setDelay(1.f);
   }
 
   // Clock sync
@@ -217,6 +218,23 @@ class Envelope {
     return SettingsText::boolToOnOff(invert());
   }
 
+  // Release shape
+  float delay() {
+    return delay_;
+  }
+
+  void setDelay(float value) {
+    delay_ = SettingsUtils::clipFloat(value);
+  }
+
+  const char* delayText() {
+    if (clockSync()) {
+      return MidiClock::tempoText(delay());
+    } else {
+      return SettingsText::phaseIncToMilis(readPhaseInc(delay()));
+    }
+  }
+
   // Storage
   void save(FileWriter& fileWriter) {
     fileWriter.write(clockSync_);
@@ -231,6 +249,7 @@ class Envelope {
     fileWriter.write(releaseShape_);
     fileWriter.write(loop_);
     fileWriter.write(invert_);
+    fileWriter.write(delay_);
   }
 
   void load(FileReader& fileReader) {
@@ -246,6 +265,10 @@ class Envelope {
     fileReader.read(releaseShape_);
     fileReader.read(loop_);
     fileReader.read(invert_);
+
+    if (fileReader.version() >= 3) {
+      fileReader.read(delay_);
+    }
   }
 
   void paste(Envelope* envelope) {
@@ -261,6 +284,7 @@ class Envelope {
     releaseShape_ = envelope->releaseShape();
     loop_ = envelope->loop();
     invert_ = envelope->invert();
+    delay_ = envelope->delay();
   }
 
   void writeHash(Hash& hash) {
@@ -276,6 +300,7 @@ class Envelope {
     hash.write(sustainLevel_);
     hash.write(releaseTime_);
     hash.write(releaseShape_);
+    hash.write(delay_);
   }
 
   void randomise() {
@@ -291,6 +316,7 @@ class Envelope {
     releaseShape_ = Rng::reciprocal();
     loop_ = Rng::u16(0, 1);
     invert_ = Rng::u16(0, 1);
+    delay_ = Rng::reciprocal();
   }
 
  private:
@@ -306,6 +332,7 @@ class Envelope {
   float sustainLevel_;
   float releaseTime_;
   float releaseShape_;
+  float delay_;
 
   float readPhaseInc(float value) {
     return LookupTablesUtils::read(lut_phase_inc, value);

@@ -20,6 +20,7 @@ class EnvelopeList : public SettingsList {
     RELEASE_SHAPE,
     LOOP,
     INVERT,
+    DELAY,
 
     NUM_ITEMS,
   };
@@ -43,6 +44,7 @@ class EnvelopeList : public SettingsList {
       case RELEASE_SHAPE: return "RELEASE SHAPE";
       case LOOP:          return "LOOP";
       case INVERT:        return "INVERT";
+      case DELAY:         return "DELAY";
       default:
         break;
     }
@@ -66,6 +68,7 @@ class EnvelopeList : public SettingsList {
       case RELEASE_SHAPE: return envelope.releaseShapeText();
       case LOOP:          return envelope.loopText();
       case INVERT:        return envelope.invertText();
+      case DELAY:         return envelope.delayText();
       default:
         break;
     }
@@ -116,6 +119,9 @@ class EnvelopeList : public SettingsList {
         break;
       case INVERT:
         envelope.setInvert(inc > 0);
+        break;
+      case DELAY:
+        envelope.setDelay(envelope.delay() + SettingsUtils::fInc(inc, shifted));
         break;
       default:
         break;
