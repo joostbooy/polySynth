@@ -19,12 +19,12 @@ class LfoEngine {
 
   void reset() {
     phase_ = 0.f;
-    delayPhase_ = 0.f;
     randomMax_ = Rng::reciprocal(lfo_->min(), lfo_->max());
   }
 
   void retrigger(int playOrder) {
     playOrder_ = playOrder;
+    delayPhase_ = 0.f;
     if (lfo_->retrigger()) {
       reset();
     }
