@@ -71,7 +71,7 @@ namespace FilterPage {
     ListPage::refreshLeds();
   }
 
-  float gainDb(Filter::Type type, float freqHz, float cutoffHz, float resonance) {
+  float gainDb(int type, float freqHz, float cutoffHz, float resonance) {
     float r = freqHz / cutoffHz;
     float a = 1.0f - r * r;
     float b = r / resonance;
@@ -81,9 +81,7 @@ namespace FilterPage {
       case Filter::LOW_PASS_2_POLE: return -10.0f * std::log10(twoPole);
       case Filter::HIGH_PASS:       return 10.0f * std::log10((r * r) / (1.0f + r * r));
       case Filter::BAND_PASS:       return 10.0f * std::log10((b * b) / twoPole);
-      //     case Filter::LowPass4: {
-      //       return -20.0f * std::log10(twoPole);  // two identical 2-pole stages in series
-      //    }
+      case 3: /* 4PLP */            return -20.0f * std::log10(twoPole); 
       default:
         break;
     }
@@ -94,32 +92,47 @@ namespace FilterPage {
     ListPage::draw();
 
     const int x = 128;
-    const int y = 12;
-    const int h = 30;
     const int w = 100;
+    const int h = 18;
+    const int yFilter1 = 12;
+    const int yFilter2 = 12 + h + 2;
+
+    int lastX[2] = {x, x};
+    int lastY[2] = {yFilter1 + h, yFilter2 + h};
 
     const float minDb = -48.0f;
     const float maxDb = 24.0f;
 
-    int lastX = 0;
-    int lastY = 0;
-
     Filter& f = settings_->filter();
 
     for (int i = 0; i < w; ++i) {
+      // Filter 1
       float freq = 20.0f * std::pow(1000.0f, (float)i / (w - 1));  // 20 Hz .. 20 kHz
       float res = gainDb(f.type(), freq, f.cutoff1() * 60.f, f.resonance1() * 4.f);
       float db = std::clamp(res, minDb, maxDb);
 
       int x_ = x + i;
-      int y_ = y + (int)(h * (maxDb - db) / (maxDb - minDb));  // top = +24 dB
+      int y_ = yFilter1 + (int)(h * (maxDb - db) / (maxDb - minDb));  // top = +24 dB
 
       if (i > 0) {
-        canvas_->drawLine(lastX, lastY, x_, y_, Canvas::BLACK);
+        canvas_->drawLine(lastX[0], lastY[0], x_, y_, Canvas::BLACK);
       }
 
-      lastX = x_;
-      lastY = y_;
+      lastX[0] = x_;
+      lastY[0] = y_;
+
+      // Filter 2
+      res = gainDb(3, freq, f.cutoff2() * 60.f, f.resonance2() * 4.f);
+      db = std::clamp(res, minDb, maxDb);
+
+      y_ = yFilter2 + (int)(h * (maxDb - db) / (maxDb - minDb));  // top = +24 dB
+
+      if (i > 0) {
+        canvas_->drawLine(lastX[1], lastY[1], x_, y_, Canvas::BLACK);
+      }
+
+      lastX[1] = x_;
+      lastY[1] = y_;
     }
   }
 
