@@ -233,7 +233,7 @@ namespace PatchPage {
       canvas_->drawText(x_, y, boxSize, boxSize, str_.write(i + 1), Canvas::CENTER, Canvas::CENTER, Canvas::BLACK);
 
       if (engine_->voiceEngine().voice(i).isAvailable() == false) {
-        canvas_->fill(x_, y, boxSize - 2, boxSize - 2, Canvas::INVERTED);
+        canvas_->fill(x_ + 1, y + 1, boxSize - 2, boxSize - 2, Canvas::INVERTED);
       }
     }
 
