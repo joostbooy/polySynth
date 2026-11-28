@@ -173,8 +173,8 @@ class Voice {
     return LookupTablesUtils::read(lut_exp, resonance) * 65535;
   }
 
-  uint16_t calculateVcoMix(float drive) {
-    return LookupTablesUtils::read(lut_exp, drive) * 65535;
+  uint16_t calculateVcoMix(float mix) {
+    return LookupTablesUtils::read(lut_exp, mix) * 65535;
   }
 
   uint16_t calculateVcoModDepth(float modDepth) {
